@@ -517,22 +517,21 @@ window.addEventListener("popstate",()=>{ if(S.det) closeDetail(true); });
 function priceChart(x){ const M={}; ((S.hist||{})[x.code]||[]).forEach(p=>{ if(typeof p.p==="number"&&p.p>0) M[p.d]=p.p; }); const td=dayKey(Date.now()); (x._h||[]).forEach(([d,v])=>{ if(v>0&&d<=td) M[d]=v; });
   let h=Object.keys(M).sort().map(d=>({d,p:M[d]})); const PER=[["1A",31],["3A",92],["6A",183],["1Y",366]], cp=S.chartP||"3A";
   const pd=x.priceDate?(String(x.priceDate)>td?td:String(x.priceDate)):null; if(x.price&&pd){ if(h.length&&h[h.length-1].d>=pd) h[h.length-1].p=Number(x.price); else h.push({d:pd,p:Number(x.price)}); }
-  // fonlarda günlük geçmiş ~6 hafta: daha eski dönemler için dönem getirilerinden hesaplanan noktalar (1 yıl, 6 ay, 3 ay, 1 ay önce)
-  let est=false; const first0=h.length?h[0].d:""; if(x.price>0&&pd&&h.length){ const first=h[0].d, base=Date.parse(pd); [["y1",365],["m6",182],["m3",91],["m1",30]].forEach(([k,dd])=>{ const r=Number(x[k]); if(x[k]==null||!isFinite(r)||r<=-100) return;
-      const d=new Date(base-dd*864e5).toISOString().slice(0,10); if(d<first){ h.unshift({d,p:Number(x.price)/(1+r/100),e:1}); est=true; } }); h.sort((a,b)=>a.d<b.d?-1:1); }
-  if(h.length){ const lim=new Date(Date.parse(h[h.length-1].d)-(PER.find(z=>z[0]===cp)||PER[1])[1]*864e5).toISOString().slice(0,10); const f=h.filter(p=>p.d>=lim); if(f.length>=2) h=f; }
+  let lim=""; if(h.length){ lim=new Date(Date.parse(h[h.length-1].d)-(PER.find(z=>z[0]===cp)||PER[1])[1]*864e5).toISOString().slice(0,10); const f=h.filter(p=>p.d>=lim); if(f.length>=2) h=f; }
+  // veri seçilen dönemden kısaysa eksen yine dönemin başından başlar, eksik kısım boş kalır (uydurma yok)
+  const short=h.length>=2&&lim&&h[0].d>lim;
   const pb=`<div class="cper">${PER.map(([k])=>`<button class="${k===cp?"on":""}" data-cp="${k}">${k}</button>`).join("")}</div>`;
   if(h.length<2) return `${pb}<div class="chart empty"><p class="note">Fiyat geçmişi yükleniyor; birazdan görünecek.</p></div>`;
   const v=h.map(p=>p.p), mn=Math.min(...v), mx=Math.max(...v), rg=(mx-mn)||mx*0.01||1, W=320, H=140;
-  const t0=Date.parse(h[0].d), t1=Date.parse(h[h.length-1].d), X=i=>((Date.parse(h[i].d)-t0)/((t1-t0)||1)*W).toFixed(1), Y=y=>(H-8-(y-mn)/rg*(H-16)).toFixed(1);
+  const t0=Date.parse(short?lim:h[0].d), t1=Date.parse(h[h.length-1].d), X=i=>((Date.parse(h[i].d)-t0)/((t1-t0)||1)*W).toFixed(1), Y=y=>(H-8-(y-mn)/rg*(H-16)).toFixed(1);
   const pts=v.map((y,i)=>`${X(i)},${Y(y)}`).join(" "), up=v[v.length-1]>=v[0], col=up?"var(--up)":"var(--down)";
   const dg=n=>n<10?4:2;
-  return `${pb}<div class="chart" data-h="${esc(JSON.stringify(h.map(p=>[p.d,lr(p.p,6),p.e?1:0])))}" data-mn="${mn}" data-rg="${rg}" data-dg="${dg(mx)}" data-col="${col}"><div class="cax"><span class="num">${num(mx,dg(mx))}</span><span class="num">${num(mn,dg(mn))}</span></div>
-    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Fiyat grafiği"><polygon points="0,${H} ${pts} ${W},${H}" fill="${col}" opacity=".14"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
-    <div class="cdates small muted"><span>${esc(fmtDate(h[0].d)+(h[0].d.slice(0,4)!==h[h.length-1].d.slice(0,4)?" "+h[0].d.slice(0,4):""))}</span><span>${esc(fmtDate(h[h.length-1].d))}</span></div>${est&&h[0].d<first0?'<p class="note small">Eski kısım günlük değil; dönem getirilerinden hesaplandı.</p>':""}</div>`; }
+  return `${pb}<div class="chart" data-h="${esc(JSON.stringify(h.map(p=>[p.d,lr(p.p,6)])))}" data-mn="${mn}" data-rg="${rg}" data-dg="${dg(mx)}" data-col="${col}" data-t0="${t0}"><div class="cax"><span class="num">${num(mx,dg(mx))}</span><span class="num">${num(mn,dg(mn))}</span></div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Fiyat grafiği"><polygon points="${X(0)},${H} ${pts} ${W},${H}" fill="${col}" opacity=".14"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
+    <div class="cdates small muted"><span>${esc(fmtDate(short?lim:h[0].d)+((short?lim:h[0].d).slice(0,4)!==h[h.length-1].d.slice(0,4)?" "+(short?lim:h[0].d).slice(0,4):""))}</span><span>${esc(fmtDate(h[h.length-1].d))}</span></div>${short?`<p class="note small">Fiyat geçmişi ${esc(fmtDate(h[0].d))} tarihinden başlıyor; öncesi için veri yok.</p>`:""}</div>`; }
 /* Grafiğe dokununca: en yakın günün fiyatı üstte, tarihi altta; parmak kaydırılınca izler */
 function chartTouch(ch){ let H; try{ H=JSON.parse(ch.dataset.h); }catch(_){ return; } if(!H||H.length<2) return;
-  const sv=ch.querySelector("svg"), mn=+ch.dataset.mn, rg=+ch.dataset.rg, dg=+ch.dataset.dg, t0=Date.parse(H[0][0]), t1=Date.parse(H[H.length-1][0]), T=H.map(p=>Date.parse(p[0]));
+  const sv=ch.querySelector("svg"), mn=+ch.dataset.mn, rg=+ch.dataset.rg, dg=+ch.dataset.dg, t0=+ch.dataset.t0||Date.parse(H[0][0]), t1=Date.parse(H[H.length-1][0]), T=H.map(p=>Date.parse(p[0]));
   const cd=ch.querySelector(".cdates"), cd0=cd?cd.innerHTML:"", ov=document.createElement("div"); ov.className="cx"; ov.hidden=true; ov.style.color=ch.dataset.col;
   ov.innerHTML='<i class="cl"></i><b class="cdot"></b><span class="cv num"></span>'; ch.appendChild(ov);
   const [ln,dot,lab]=ov.children, fd=d=>new Date(d+"T12:00:00").toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"});
@@ -541,7 +540,7 @@ function chartTouch(ch){ let H; try{ H=JSON.parse(ch.dataset.h); }catch(_){ retu
     const px=oL+(T[bi]-t0)/((t1-t0)||1)*r.width, py=oT+(140-8-(p[1]-mn)/rg*(140-16))/140*r.height;
     ln.style.cssText=`left:${px}px;top:${oT}px;height:${r.height}px`; dot.style.cssText=`left:${px}px;top:${py}px`;
     lab.textContent=num(p[1],dg); lab.style.left=Math.max(40,Math.min(ch.clientWidth-40,px))+"px"; lab.style.top=Math.max(0,Math.min(py-40,oT+r.height-60))+"px";
-    if(cd) cd.innerHTML=`<span class="cdsel">${esc(fd(p[0]))}${p[2]?" · tahmini":""}</span>`; ov.hidden=false; };
+    if(cd) cd.innerHTML=`<span class="cdsel">${esc(fd(p[0]))}</span>`; ov.hidden=false; };
   const hide=()=>{ ov.hidden=true; if(cd) cd.innerHTML=cd0; };
   sv.style.touchAction="pan-y"; let down=false;
   sv.addEventListener("pointerdown",e=>{ down=true; show(e); });
@@ -1314,7 +1313,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-22";
+const UI_VERSION="2026.10.31-23";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
