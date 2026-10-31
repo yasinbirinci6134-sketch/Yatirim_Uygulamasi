@@ -476,7 +476,7 @@ function exitTxt(x){ const w=String(x.exitWhy||"Puanı düştü").replace(/[;,.]
 function listRow(t,x){
   const k=t+":"+x.code, W=t==="s"?S.watch:t==="f"?S.fwatch:S.fxwatch, mine=W.includes(x.code);
   const dg=t==="f"?6:(x.price<10?4:2), m1=typeof x.m1==="number"?x.m1:null, w=m1==null?0:Math.min(100,Math.abs(m1)/15*100);
-  const stale=t==="s"?staleB(x.fundAt,7,"Bilanço ve hedef fiyat bilgisi 7 günden eski"):t==="f"?staleB(x.priceDate,5,"Fiyat 5 günden eski"):staleB(x.priceDate,4,"Fiyat 4 günden eski");
+  const stale=t==="s"?staleB([x.fundAt,x.finAt].filter(Boolean).sort().pop(),7,"Bilanço ve hedef fiyat bilgisi 7 günden eski"):t==="f"?staleB(x.priceDate,5,"Fiyat 5 günden eski"):staleB(x.priceDate,4,"Fiyat 4 günden eski");
   return `<div class="fund lrow x" data-k="${esc(k)}">
     <div class="sbadge xh${sCls(x.score,t)}">${x.score!=null?num(x.score,0):"–"}</div>
     <div class="lmid xh"><div class="lt"><span class="code">${esc(x.code)}</span>${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${mine?'<span class="mine">EKLEDİĞİN</span>':""}${stale}</div>
@@ -1291,7 +1291,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-17";
+const UI_VERSION="2026.10.31-18";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1510,7 +1510,7 @@ function formulaScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.c
     if(!n(p.momentum)) p.momentum=SCORE.momentum(x,B,PM.momentum)??Math.round(PM.momentum/2);
     const hb=n(x.haber)?C(Math.round(x.haber),-4,4):0; x.parts=p; x.score=Math.round(C(SCORE.sum(p)+hb,0,100)); x._src=src; if(!x._ai) x.auto=true;
     if(roe!=null) x.roe=lr(roe,1); if(fk!=null) x.fk=lr(fk,2); if(pb!=null) x.pddd=lr(pb,2); if(mcap) x.mcapBn=lr(mcap/1e9,1);
-    if(fin){ if(n(fin.npG)) x.profitGrowth=lr(fin.npG,1); if(n(fin.revG)) x.salesGrowth=lr(fin.revG,1); x.finPeriod=fin.period; } });
+    if(fin){ if(n(fin.npG)) x.profitGrowth=lr(fin.npG,1); if(n(fin.revG)) x.salesGrowth=lr(fin.revG,1); x.finPeriod=fin.period; if(fin.at) x.finAt=fin.at; } });
   // sinyaller (kurallardaki gibi)
   const st=(M.stocks||[]).filter(x=>n(x.score)), top=new Set([...st].sort((a,b)=>b.score-a.score).slice(0,Math.max(1,Math.ceil(st.length*0.3))).map(x=>x.code));
   st.forEach(x=>{ const kapNeg=kapAgir(x);
