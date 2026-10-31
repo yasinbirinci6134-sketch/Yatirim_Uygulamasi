@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-9";
+const UI_VERSION="2026.10.31-10";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1561,6 +1561,8 @@ if(window.__standalone){
   renderFresh=function(){ const dot=$("dot"), txt=$("freshText"), btn=$("refreshBtn"); if(!txt) return;
     if(btn){ btn.hidden=!OWN(); btn.textContent="Güncelleme iste"; }
     if(!S.market){ dot.className="dot"; txt.textContent=S.ready?"Veri bekleniyor… (internet gerekli)":"Yükleniyor…"; return; }
+    // Üst satır yalnızca bağlantı sorunu varken görünür (fiyatlar zaten sürekli yenileniyor; analiz zamanı Bugün ekranında)
+    const fr=$("fresh"); if(fr) fr.hidden=!LIVE.err;
     const la=S.live?.at; dot.className="dot "+(LIVE.busy?"busy":LIVE.err?"":"ok");
     txt.innerHTML=`<button class="linkbtn fr" id="frBtn" aria-label="Fiyatları yenile">Analiz ${esc(fmtTime(S.market.updatedAt))} · Fiyat ${LIVE.busy?"yenileniyor…":la?esc(fmtTime(la)):"—"}${LIVE.err?' <span class="down">· bağlantı yok</span>':""}</button>`;
     $("frBtn").onclick=()=>{ liveRefresh(null,true); window.__pullRemote?.(); }; };
@@ -1657,10 +1659,12 @@ if(window.__standalone){
         toast(n+" kayıt geri yüklendi."); bk.querySelector("#impTxt").value=""; };
       const ap=add(`<h3 style="margin:8px 0 4px">Uygulama</h3><p class="note" style="margin:0">Sürüm ${has("appVersionName")?esc(A.appVersionName()):"?"} · arayüz ${esc(UI_VERSION)}${has("uiSource")&&A.uiSource()==="file"?" (güncellendi)":""}. Arayüz güncellemeleri kendiliğinden gelir.</p>
         <div class="row" style="justify-content:flex-start"><button class="btn ghost sm" id="apChk" style="margin-left:0">Güncellemeleri denetle</button><button class="btn ghost sm" id="apShare">Uygulamayı paylaş</button></div>
-        <label style="display:flex;gap:8px;align-items:flex-start;margin-top:8px"><input type="checkbox" id="ownChk" ${OWN()?"checked":""}><span>Bu telefon uygulamanın sahibine ait <span class="note">(üstte "Güncelleme iste" düğmesi çıkar; Claude hesabı ister)</span></span></label>`);
+        ${OWN()?`<div class="row" style="justify-content:flex-start"><button class="btn sm" id="apReq" style="margin-left:0">Yapay zekâ güncellemesi iste</button></div>`:""}
+        <label style="display:flex;gap:8px;align-items:flex-start;margin-top:8px"><input type="checkbox" id="ownChk" ${OWN()?"checked":""}><span>Bu telefon uygulamanın sahibine ait <span class="note">(burada "Yapay zekâ güncellemesi iste" düğmesi çıkar; Claude hesabı ister)</span></span></label>`);
       ap.querySelector("#apChk").onclick=()=>apkCheck(true);
       ap.querySelector("#apShare").onclick=()=>{ const t=`Yatırım uygulaması (Android): https://github.com/${REPO}/releases/latest — sayfadaki Yatirim.apk dosyasını indirip kur.`; if(has("share")) A.share(t,"Yatırım uygulaması"); };
       ap.querySelector("#ownChk").onchange=e=>{ ls("fp-owner",e.target.checked?"1":"0"); renderFresh(); };
+      ap.querySelector("#apReq")?.addEventListener("click",()=>$("refreshBtn").click());
       return r; }; }
 
   /* ===================== YENİ TASARIM (APK) ===================== */
