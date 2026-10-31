@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-11";
+const UI_VERSION="2026.10.31-12";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1302,8 +1302,10 @@ function lbuild(o,dp){ if(!o||!o.ser?.length||!(o.price>0)) return null; const {
   const pc=b=>b>0?lr((price/b-1)*100):null, prev=[...ser].reverse().find(p=>dayKey(p.t)<dk);
   const y0=Date.UTC(new Date(pt+TR).getUTCFullYear(),0,1)-TR, yr=ser.filter(p=>p.t>=pt-365*day), mo=ser.filter(p=>p.t>=pt-31*day);
   const mlo=Math.min(price,...mo.map(p=>p.l??p.c)), mhi=Math.max(price,...mo.map(p=>p.h??p.c));
+  const lrs=[]; for(let i=1;i<yr.length;i++) if(yr[i-1].c>0&&yr[i].c>0) lrs.push(Math.log(yr[i].c/yr[i-1].c));
+  const mu=lrs.reduce((s,v)=>s+v,0)/(lrs.length||1), vol=lrs.length>20?Math.sqrt(lrs.reduce((s,v)=>s+(v-mu)**2,0)/(lrs.length-1))*Math.sqrt(252)*100:null;
   return { price:lr(price,dp), priceDate:dk, d1:prev?pc(prev.c):null, w1:pc(at(pt-7*day)), m1:pc(at(pt-30*day)), m3:pc(at(pt-91*day)), m6:pc(at(pt-182*day)), ytd:pc(at(y0-1)), y1:pc(at(pt-365*day)),
-    low1y:lr(Math.min(price,...yr.map(p=>p.l??p.c)),dp), high1y:lr(Math.max(price,...yr.map(p=>p.h??p.c)),dp), mLow:lr(mlo,dp), mHigh:lr(mhi,dp) }; }
+    low1y:lr(Math.min(price,...yr.map(p=>p.l??p.c)),dp), high1y:lr(Math.max(price,...yr.map(p=>p.h??p.c)),dp), mLow:lr(mlo,dp), mHigh:lr(mhi,dp), _vol:vol!=null?lr(vol,1):null }; }
 async function lyahoo(sym){
   if(!LIVE.primed){ LIVE.primed=true; await nget("GET","https://fc.yahoo.com").catch(()=>{}); }   // Yahoo çerezi
   const path="/v8/finance/chart/"+encodeURIComponent(sym)+"?range=1y&interval=1d"; let o;
@@ -1330,7 +1332,8 @@ async function lfvt(code){ const o=await nget("GET","https://fvt.com.tr/fonlar/y
   const f=d.fund, r=d.returns||{}, N=v=>{ const x=parseFloat(v); return isFinite(x)?x:null; }, price=N(f.fiyat); if(!(price>0)) return null;
   const tv=N(f.toplamDeger), inv=N(f.yatirimci), fee=N(f.yonetimUcret), rk=N(f.risk);
   return { price, priceDate:f.sonGuncelleme?dayKey(new Date(f.sonGuncelleme).getTime()):null, d1:N(f.getiri), w1:N(r.haftalikGetiri), m1:N(r.aylikGetiri), m3:N(r.ucAylikGetiri), m6:N(r.altiAylikGetiri), ytd:N(r.ytdGetiri), y1:N(r.birYillikGetiri),
-    sizeBn:tv>0?lr(tv/1e9,2):null, investors:inv>0?inv:null, fee:fee>0?fee:null, riskValue:rk>0?rk:null, name:f.fonAdi||null }; }
+    sizeBn:tv>0?lr(tv/1e9,2):null, investors:inv>0?inv:null, fee:fee>0?fee:null, riskValue:rk>0?rk:null, name:f.fonAdi||null,
+    cat:/para piyasas/i.test(f.kategori||"")?"para":/altın|kıymetli/i.test(f.kategori||"")?"altin":/hisse/i.test(f.kategori||"")?"hisse":"diger" }; }
 /* Ne zaman yeniden çekilmeli: borsa açıkken 5 dk'da bir; kapalıyken kapanıştan sonra bir kez (veri 15 dk gecikmeli). Döviz hafta içi açık. Fon fiyatı günde bir açıklanır. */
 const fxClosed=now=>{ const wd=new Date(now+TR).getUTCDay(); return wd===6||wd===0; };
 function fxLastClose(){ const l=new Date(Date.now()+TR), back=(l.getUTCDay()+1)%7; return Date.UTC(l.getUTCFullYear(),l.getUTCMonth(),l.getUTCDate()-back)-TR; }
@@ -1349,13 +1352,16 @@ async function liveRefresh(kinds,manual){
   LIVE.busy=true; renderFresh();
   const now=new Date().toISOString(), P=S.live||{}, L={...P, at:now, stocks:{...(P.stocks||{})}, funds:{...(P.funds||{})}, fx:{...(P.fx||{})}, idx:{...(P.idx||{})}}, cnt=[], bad=[];
   const run=async(arr,key,kind,lbl,fn,n)=>{ if(!arr.length) return; const r=await lpool(arr,n,fn); let k=0;
-    arr.forEach((x,i)=>{ if(r[i]?.price){ const v={...r[i],at:now}; if(!x.local) delete v.name; L[key][x.code]=v; k++; } });
+    arr.forEach((x,i)=>{ if(r[i]?.price){ const v={...r[i],at:now}; if(!x.local){ delete v.name; delete v.cat; } L[key][x.code]=v; k++; } });
     cnt.push(`${lbl} ${k}/${arr.length}`); if(k) L[kind+"At"]=now; if(k<arr.length) bad.push(lbl); };
   try{
     const jobs=[];
     if(kinds.includes("hisse")){
       jobs.push(lyahoo("XU100.IS").then(o=>{ const b=lbuild(o,0); if(b) L.idx.XU100={...b,at:now}; }).catch(()=>{}));
-      jobs.push(run(S.market.stocks||[],"stocks","hisse","Hisse",x=>lyahoo(x.code+".IS").then(o=>{ const r=lbuild(o,x.price<10?4:2); if(r&&o.name) r.name=o.name; return r; }),5)); }
+      jobs.push(run(S.market.stocks||[],"stocks","hisse","Hisse",x=>lyahoo(x.code+".IS").then(async o=>{ const r=lbuild(o,x.price<10?4:2); if(r&&o.name) r.name=o.name;
+        if(r&&x.local){ const pv=P.stocks?.[x.code]; if(pv?.fvtAt&&Date.now()-new Date(pv.fvtAt).getTime()<24*3600e3) Object.assign(r,{sermaye:pv.sermaye,netKar:pv.netKar,ozsermaye:pv.ozsermaye,ff:pv.ff,fvtAt:pv.fvtAt,name:pv.name||r.name});
+          else { try{ const f=await lfvtStock(x.code); if(f) Object.assign(r,{...f,name:f.name||r.name}); }catch(_){} } }
+        return r; }),5)); }
     if(kinds.includes("doviz")) jobs.push(run(S.market.fx||[],"fx","doviz","Döviz",x=>lfx(x.code),4));
     if(kinds.includes("fon")) jobs.push(run(S.market.funds||[],"funds","fon","Fon",x=>lfvt(x.code),3));
     await Promise.all(jobs);
@@ -1390,6 +1396,43 @@ async function liveTick(){ if(LIVE.busy||LIVE.ticking||!S.live||!S.market||!LIVE
     if(ch){ L.at=new Date().toISOString(); applyLive(); renderAll(); }
   }catch(e){} finally{ LIVE.ticking=false; } }
 setInterval(()=>{ if(!document.hidden) liveTick(); },10e3);
+/* Otomatik puan: yapay zekânın incelemediği (yalnız bu telefonda takip edilen) kalemler için kurallardaki formüllerle, ücretsiz verilerle */
+async function lfvtStock(code){ const o=await nget("GET","https://fvt.com.tr/hisseler/yerli/"+encodeURIComponent(code)); const d=fvtDetail(o.body); if(!d) return null;
+  const N=v=>{ const x=parseFloat(v); return isFinite(x)?x:null; };
+  return { sermaye:N(d.sermaye), netKar:N(d.netKar), ozsermaye:N(d.ozsermaye), ff:N(d.dolasimPayYuzde), name:String(d.hisseAdi||"").trim()||null, fvtAt:new Date().toISOString() }; }
+function autoScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.clamp, PM={...SCORE.MAX,...(M.partsMax||{})}, sc=(p)=>{ for(const k of Object.keys(p)) p[k]=Math.round(p[k]*PM[k]/SCORE.MAX[k]); return p; };
+  const pf=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isFinite(x)?x:null; }, ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v;
+  const infl=pf(ind("Beklenen enflasyon (12 ay)"))??pf(ind("Yıllık enflasyon"))??25, rate=pf(ind("Beklenen faiz (12 ay)"))??pf(ind("Politika faizi"));
+  const B=S.live?.idx?.XU100||M.bist||null;
+  const pubSt=(M.stocks||[]).filter(x=>!x.local&&n(x.score)), cut=pubSt.length?[...pubSt].sort((a,b)=>b.score-a.score)[Math.max(0,Math.ceil(pubSt.length*0.3)-1)].score:60;
+  (M.stocks||[]).filter(x=>x.local&&x.price>0).forEach(x=>{ const p={};
+    const mcap=x.sermaye>0?x.price*x.sermaye:null, fk=mcap&&n(x.netKar)&&x.netKar!==0?mcap/x.netKar:null, pddd=mcap&&x.ozsermaye>0?mcap/x.ozsermaye:null, roe=n(x.netKar)&&x.ozsermaye>0?x.netKar/x.ozsermaye*100:null;
+    if(roe==null) p.karlilik=15; else { const r=roe-infl; let v=r>=8?24+Math.min(6,(r-8)/2):r>=0?15+r:r>=-8?14+r*6/8:Math.max(0,7+(r+8)*0.35); if(roe<12) v=Math.min(v,9); p.karlilik=Math.round(v); }
+    if(fk==null) p.deger=10; else if(fk<=0) p.deger=4; else { let v=fk<8?20-fk*0.6:fk<15?14-(fk-8)*5/7:fk<25?8-(fk-15)*0.3:Math.max(1,4-(fk-25)*0.1); if(pddd!=null&&pddd<1) v+=2; if(roe!=null&&roe<infl&&fk<8) v=Math.min(v,8); p.deger=Math.round(C(v,0,20)); }
+    p.saglamlik=Math.min(15,(mcap==null?3:mcap>=100e9?6:mcap>=20e9?4:2)+(!n(x._vol)?3:x._vol<35?5:x._vol<55?3:1)+(x.ff==null?2:x.ff>=20?4:0));
+    p.analist=5; sc(p); p.momentum=SCORE.momentum(x,B,PM.momentum)??Math.round(PM.momentum/2);
+    x.parts=p; x.score=Math.round(SCORE.sum(p)); x.auto=true;
+    if(fk!=null) x.fk=lr(fk,2); if(pddd!=null) x.pddd=lr(pddd,2); if(roe!=null) x.roe=lr(roe,1); if(mcap) x.mcapBn=lr(mcap/1e9,1); if(x.ff!=null) x.freeFloat=x.ff; if(n(x._vol)) x.vol=lr(x._vol/Math.sqrt(252),2);
+    x.signal=x.score<42?"uzak":(x.score>=60&&x.score>=cut&&p.karlilik>=10*PM.karlilik/30&&!(x.m3<0&&x.y1<0))?"al":"izle";
+    x.why=x.why||"Bu puan telefonda formülle hesaplandı: "+[roe!=null?`özsermaye kârlılığı %${num(roe,1)}`:null,fk!=null&&fk>0?`F/K ${num(fk,1)}`:fk!=null?"şirket zararda":null].filter(Boolean).join(", ")+"."; });
+  const pubF=(M.funds||[]).filter(f=>!f.local), avg=(cat,k)=>{ const a=pubF.filter(f=>f.cat===cat&&n(f[k])).map(f=>f[k]); return a.length?a.reduce((s,v)=>s+v,0)/a.length:null; };
+  (M.funds||[]).filter(f=>f.local&&f.price>0).forEach(f=>{ const p={}, cat=f.cat||"diger";
+    const per=["m1","m3","m6","y1"].map(k=>[f[k],avg(cat,k)]).filter(([a,b])=>n(a)&&n(b));
+    if(!per.length) p.getiri=15; else { const k=per.filter(([a,b])=>a>=b).length/per.length, mag=per.reduce((s,[a,b])=>s+C(0.5+(a-b)/(cat==="para"?1.5:10)),0)/per.length;
+      let g=0.6*k+0.4*mag; if(n(f.y1)&&f.y1-infl>0) g=Math.min(1,g+0.1);
+      const ay=avg(cat,"y1"), a6=avg(cat,"m6"), a1=avg(cat,"m1"), a3=avg(cat,"m3");
+      if(((n(f.m1)&&n(a1)&&f.m1>=a1)||(n(f.m3)&&n(a3)&&f.m3>=a3))&&n(f.y1)&&n(ay)&&f.y1<ay&&n(f.m6)&&n(a6)&&f.m6<a6) g=Math.min(g,0.5);
+      p.getiri=Math.round(g*30); }
+    { const lo=cat==="para"?1:1.5, hi=cat==="para"?2:2.5; p.maliyet=!n(f.fee)?10:Math.round(f.fee<=lo?20:f.fee>=hi?6:20-(f.fee-lo)/(hi-lo)*14); }
+    p.risk=!n(f.riskValue)?12:[0,25,22,19,16,12,9,6][Math.min(7,Math.max(1,Math.round(f.riskValue)))];
+    p.kalite=(!n(f.sizeBn)?4:f.sizeBn>=10?8:f.sizeBn>=1?5:2)+(!n(f.investors)?3:f.investors>=10000?7:f.investors>=1000?4:1);
+    p.uyum=5; sc(p); f.parts=p; f.score=Math.round(SCORE.sum(p)); f.auto=true;
+    f.why=f.why||`Bu puan telefonda formülle hesaplandı: yıllık ücret %${num(f.fee,2)}, risk ${f.riskValue??"–"}/7.`; });
+  const ale=(M.funds||[]).find(f=>f.code==="ALE"), MM=ale?{m1:ale.m1,m3:ale.m3,y1:ale.y1}:null;
+  (M.fx||[]).filter(x=>x.local&&x.price>0).forEach(x=>{ const p={fxdeger:7,makro:10,fxrisk:!n(x._vol)?5:x._vol<15?9:x._vol<25?7:x._vol<35?5:3}; sc(p);
+    p.trend=SCORE.trend(x,MM,PM.trend)??Math.round(PM.trend/2); p.tasima=SCORE.tasima(x,rate,null,PM.tasima)??Math.round(12*PM.tasima/25);
+    x.parts=p; x.score=Math.round(SCORE.sum(p)); x.auto=true; x.signal=x.score>=62?"al":x.score<42?"uzak":"izle"; });
+}
 /*SCORE:BEGIN — fiyata bağlı puan parçaları; uygulama canlı fiyatla, yapay zekâ günlük güncellemede aynı kodla hesaplar (tools/score.js) */
 const SCORE={
   clamp:(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),
@@ -1454,7 +1497,8 @@ const SCORE={
 /*SCORE:END*/
 
 /* Detaydaki Puan sekmesi: yapay zekânın günlük puanından farkı açıkla */
-function liveNote(x){ const a=x?._ai; if(!a||typeof a.score!=="number"||a.score===x.score) return "";
+function liveNote(x){ if(x?.auto) return `<p class="small muted" style="margin:6px 0 0">Otomatik puan: bu kalemi yapay zekâ incelemedi; puan telefonda, kurallardaki formüllerle güncel fiyat ve şirket/fon verilerinden hesaplandı. Haber, KAP ve analist yorumu içermez.</p>`;
+  const a=x?._ai; if(!a||typeof a.score!=="number"||a.score===x.score) return "";
   return `<p class="small muted" style="margin:6px 0 0">Güncel fiyatla hesaplandı: yapay zekânın bugünkü puanı ${a.score}${a.signal&&a.signal!==x.signal?" ("+esc(SIG[a.signal]||a.signal)+")":""} idi. Fiyata bağlı parçalar (momentum, analist hedefi, trend, taşıma) anlık fiyatla yeniden hesaplanır; diğerleri günlük analizden gelir.</p>`; }
 /* Canlı fiyatları yapay zekânın yazdığı verinin üstüne koy (yalnız daha yeniyse), göstergeleri ve fiyata bağlı puanları güncelle */
 function applyLive(){ const L=S.live, M=S.market; if(!M) return;
@@ -1470,7 +1514,8 @@ function applyLive(){ const L=S.live, M=S.market; if(!M) return;
       const u=(M.fx||[]).find(x=>x.code==="USD"); if(u?.price&&L.fx?.USD) set("Dolar/TL",u.price.toLocaleString("tr-TR",{minimumFractionDigits:2,maximumFractionDigits:2}),u.d1);
       const g=(M.fx||[]).find(x=>x.code==="GAU"); if(g?.price&&L.fx?.GAU) set("Gram altın",g.price.toLocaleString("tr-TR",{maximumFractionDigits:0})+" TL",g.d1); } }
   const B=L?.idx?.XU100||M.bist||null;
-  try{ SCORE.apply(M,{B}); }catch(e){ console.error(e); } }
+  try{ SCORE.apply(M,{B}); }catch(e){ console.error(e); }
+  try{ autoScore(M); }catch(e){ console.error(e); } }
 /* APK'da hızlı güncelleme bedava canlı çekimdir; yapay zekâ ile hızlı güncelleme yalnız tarayıcıda */
 { const _rq=requestQuick; requestQuick=function(kind){ return LIVE.ok() ? liveRefresh([kind],true) : _rq(kind); }; }
 try{ if(typeof autoQuick==="function"){ const _aq=autoQuick; autoQuick=function(){ return LIVE.ok() ? false : _aq.apply(this,arguments); }; } }catch(_){}
@@ -1807,7 +1852,8 @@ if(window.__standalone){
   { const b=$("t-gundem")?.querySelector("span"); if(b) b.textContent="Bugün"; }
 
   /* Puan halkası: listedeki rozetler doluluk oranını gösterir */
-  { const o=listRow; listRow=function(t,x){ return o.apply(this,arguments).replace('<div class="sbadge','<div style="--p:'+(Number(x.score)||0)+'" class="sbadge'); }; }
+  { const o=listRow; listRow=function(t,x){ let s=o.apply(this,arguments).replace('<div class="sbadge','<div style="--p:'+(Number(x.score)||0)+'" class="sbadge');
+      if(x.auto) s=s.replace('<span class="code">'+esc(x.code)+'</span>','<span class="code">'+esc(x.code)+'</span><span class="sig" style="background:var(--accent-soft);color:var(--accent);border-color:transparent">OTOMATİK</span>'); return s; }; }
 
   const tl0=v=>"₺"+Math.round(v).toLocaleString("tr-TR"), sg=v=>(v>=0?"+":"−");
   const chg=(v,d=2)=>v==null||isNaN(v)?"":`<span class="hm-chg ${v>=0?"up":"down"}">${v>=0?"▲":"▼"} %${Math.abs(v).toLocaleString("tr-TR",{maximumFractionDigits:d})}</span>`;
