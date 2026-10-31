@@ -2,7 +2,7 @@
 <script>/* açılış: son Bugün ekranının kopyasını hemen göster; gerçek ekran hazır olunca kalkar */
 try{ var B=window.YatirimApp&&JSON.parse(localStorage.getItem("fp-boot")||"null"); if(B&&B.html&&B.v===1){ window.__boot=B; if(B.cls) document.documentElement.className=B.cls;
   var st=document.createElement("style"); st.id="bootcss"; st.textContent=B.css+"\n#bootshot{position:fixed;inset:0;z-index:9999;overflow:hidden;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body,system-ui);box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}"; document.body.appendChild(st);
-  var d=document.createElement("div"); d.id="bootshot"; d.setAttribute("aria-hidden","true"); d.innerHTML=B.html; document.documentElement.appendChild(d); } }catch(e){}   /* body dışında: sayfadaki aramalar (querySelector) gerçek ekranı bulur */
+  var d=document.createElement("div"); d.id="bootshot"; d.setAttribute("aria-hidden","true"); if(B.pad) d.style.padding=B.pad; if(B.font) d.style.font=B.font; d.innerHTML=B.html; document.documentElement.appendChild(d); } }catch(e){}   /* body dışında: sayfadaki aramalar (querySelector) gerçek ekranı bulur */
 window.__bootOff=function(){ var a=document.getElementById("bootshot"), b=document.getElementById("bootcss"); if(a) a.remove(); if(b) b.remove(); };</script>
 <title>Yatırım Tavsiyesi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -1322,7 +1322,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-4";
+const UI_VERSION="2026.11.01-5";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -2238,7 +2238,7 @@ if(window.__standalone){
       bd.querySelectorAll("script,style,link,[hidden],#det,.scrim,.sheet,.toast,.upbar,#bootshot,#gtip").forEach(e=>e.remove());
       const html=bd.innerHTML.replace(/\sid="[^"]*"/g,""); if(html.length>150000) return;
       const css=[...document.querySelectorAll("style:not(#bootcss)")].map(s=>s.textContent).join("\n");
-      localStorage.setItem("fp-boot",JSON.stringify({v:1,cls:document.documentElement.className.replace(/\bscrolled\b/,"").trim(),css,html})); }catch(_){} }
+      const cs=getComputedStyle(document.body); localStorage.setItem("fp-boot",JSON.stringify({v:1,pad:cs.padding,font:cs.font,cls:document.documentElement.className.replace(/\bscrolled\b/,"").trim(),css,html})); }catch(_){} }
   setTimeout(()=>window.__bootOff&&window.__bootOff(),4000);
   // Detay > Puan: kısa vade puanı
   { const o=drawDetail; drawDetail=function(){ const r=o.apply(this,arguments); try{ if(S.det?.t==="s"&&S.det.tab==="puan"){ const x=detItem("s",S.det.c), s=x&&shortFor(x.code,x), c=document.querySelector("#det .dwrap > section.card"); if(x?.scan&&c) c.insertAdjacentHTML("afterbegin",`<p class=\"small muted\" style=\"margin:0 0 8px\">${x._loaded?"Bu hisse listende değil. Takibe alırsan her gün izlenir.":"Veriler yükleniyor…"}</p>`);
