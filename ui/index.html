@@ -528,8 +528,10 @@ function priceChart(x){ const M={}; ((S.hist||{})[x.code]||[]).forEach(p=>{ if(t
   const dg=n=>n<1?6:n<100?4:2, chg=(v[v.length-1]/v[0]-1)*100;
   return `${pb}<div class="chart" data-h="${esc(JSON.stringify(h.map(p=>[p.d,lr(p.p,6)])))}" data-mn="${mn}" data-rg="${rg}" data-dg="${dg(mx)}" data-col="${col}" data-t0="${t0}"><div class="chead"><span><small>${esc(fmtDate(h[0].d))}</small><b class="num">${num(v[0],dg(v[0]))}</b></span><span class="chg num ${cls(chg)}">${arr(chg)}${pc(chg)}</span><span class="r"><small>${esc(fmtDate(h[h.length-1].d))}</small><b class="num">${num(v[v.length-1],dg(v[v.length-1]))}</b></span></div>
     <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Fiyat grafiği"><polygon points="${X(0)},${H} ${pts} ${W},${H}" fill="${col}" opacity=".14"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
-    <div class="cdates small muted"><span>${esc(fmtDate(short?lim:h[0].d)+((short?lim:h[0].d).slice(0,4)!==h[h.length-1].d.slice(0,4)?" "+(short?lim:h[0].d).slice(0,4):""))}</span><span>${esc(fmtDate(h[h.length-1].d))}</span></div>${short?`<p class="note small">Fiyat geçmişi ${esc(fmtDate(h[0].d))} tarihinden başlıyor; öncesi için veri yok.</p>`:""}</div>`; }
+    <div class="cdates small muted"><span>${esc(fmtDate(short?lim:h[0].d)+((short?lim:h[0].d).slice(0,4)!==h[h.length-1].d.slice(0,4)?" "+(short?lim:h[0].d).slice(0,4):""))}</span><span>${esc(fmtDate(h[h.length-1].d))}</span></div>${short?`<p class="note small">Fiyat geçmişi ${esc(fmtDate(h[0].d))} tarihinden başlıyor; öncesi için veri yok.${fhNote(x)}</p>`:""}</div>`; }
 /* Grafiğe dokununca: en yakın günün fiyatı üstte, tarihi altta; parmak kaydırılınca izler */
+function fhNote(x){ if(typeof FH==="undefined"||!(S.market?.funds||[]).some(f=>f.code===x.code)) return ""; const v=FH.d[x.code];
+  if(FH.busy&&!v?.h) return " TEFAS'tan 1 yıllık geçmiş alınıyor…"; if(v&&!v.h) return " TEFAS'tan geçmiş alınamadı; yeniden denenecek."; if(!v&&FH.err) return " TEFAS'a bağlanılamadı ("+esc(FH.err.slice(0,60))+")."; return ""; }
 function chartTouch(ch){ let H; try{ H=JSON.parse(ch.dataset.h); }catch(_){ return; } if(!H||H.length<2) return;
   const sv=ch.querySelector("svg"), mn=+ch.dataset.mn, rg=+ch.dataset.rg, dg=+ch.dataset.dg, t0=+ch.dataset.t0||Date.parse(H[0][0]), t1=Date.parse(H[H.length-1][0]), T=H.map(p=>Date.parse(p[0]));
   const hd=ch.querySelector(".chead"), hd0=hd?hd.innerHTML:"", cd=ch.querySelector(".cdates"), cd0=cd?cd.innerHTML:"", ov=document.createElement("div"); ov.className="cx"; ov.hidden=true; ov.style.color=ch.dataset.col;
@@ -1315,7 +1317,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-26";
+const UI_VERSION="2026.10.31-27";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1330,10 +1332,12 @@ async function ltefas(code){
     {"Content-Type":"application/json",Accept:"application/json, text/plain, */*",Origin:"https://www.tefas.gov.tr",Referer:"https://www.tefas.gov.tr/tr/"});
   let j={}; try{ j=JSON.parse(o.body||"{}"); }catch(_){}
   return (j.resultList||[]).map(p=>[String(p.tarih||"").slice(0,10),Number(p.fiyat)]).filter(z=>z[0]&&z[1]>0).sort((a,b)=>a[0]<b[0]?-1:1); }
-async function fhRefresh(){ if(FH.busy||!LIVE.ok()||!S.market) return;
-  const old=v=>!v||Date.now()-v.at>(v.h?.length?7*864e5:6*3600e3), need=(S.market.funds||[]).filter(x=>x&&x.code&&old(FH.d[x.code])); if(!need.length) return;
+async function fhRefresh(){ if(FH.busy||!LIVE.ok()||!S.market||Date.now()-(FH.failAt||0)<5*60e3) return;
+  const old=v=>!v||Date.now()-v.at>(v.h?.length?7*864e5:30*60e3), need=(S.market.funds||[]).filter(x=>x&&x.code&&old(FH.d[x.code])); if(!need.length) return;
   FH.busy=true;
-  try{ for(const x of need){ let h=[]; try{ h=await ltefas(x.code); }catch(_){}
+  try{ for(const x of need){ let h=[];
+      // bağlantı/izin hatası: kaydetme, 5 dk sonra yeniden dene (eski uygulama sürümünde adres izinli değildi)
+      try{ h=await ltefas(x.code); }catch(e){ FH.failAt=Date.now(); FH.err=String(e&&e.message||e); LIVE.tefasPrimed=false; break; }
       if(!h.length) LIVE.tefasPrimed=false; FH.d[x.code]={at:Date.now(),h:h.length?h:(FH.d[x.code]?.h||null)}; fhSave();
       if(h.length&&S.det&&S.det.c===x.code) drawDetail(); await new Promise(r=>setTimeout(r,9000)); } }
   finally{ FH.busy=false; } }
@@ -1398,7 +1402,7 @@ async function liveRefresh(kinds,manual){
   // Elle yenilemede fonlar yalnız 30 dk'dan eskiyse çekilir (fon fiyatı günde bir açıklanır; her sayfa ~200 KB)
   const fonOld=()=>{ const a=S.live?.fonAt; return !a||Date.now()-new Date(a).getTime()>30*60e3||liveDue("fon"); };
   kinds=kinds||(manual?["hisse","doviz",...(fonOld()?["fon"]:[])]:["hisse","fon","doviz"].filter(liveDue));
-  if(!kinds.length) return true;
+  if(!kinds.length){ setTimeout(()=>fhRefresh().catch(()=>{}),1500); return true; }
   LIVE.busy=true; renderFresh();
   const now=new Date().toISOString(), P=S.live||{}, L={...P, at:now, stocks:{...(P.stocks||{})}, funds:{...(P.funds||{})}, fx:{...(P.fx||{})}, idx:{...(P.idx||{})}}, cnt=[], bad=[];
   const run=async(arr,key,kind,lbl,fn,n)=>{ if(!arr.length) return; const r=await lpool(arr,n,fn); let k=0;
