@@ -1,8 +1,11 @@
 plugins { id 'com.android.application' }
+def run = (System.getenv('GITHUB_RUN_NUMBER') ?: '1').toInteger()
 android {
   namespace 'com.yasin.yatirimapp'
   compileSdk 34
-  defaultConfig { applicationId 'com.yasin.yatirimapp'; minSdk 26; targetSdk 34; versionCode 3; versionName '1.2' }
+  defaultConfig { applicationId 'com.yasin.yatirimapp'; minSdk 26; targetSdk 34; versionCode run; versionName "1.${run}" }
+  // Arayüz tek kaynaktan: ui/index.html (uygulama ayrıca GitHub'dan günceller)
+  sourceSets { main { assets.srcDirs = ['../ui'] } }
   signingConfigs { release { storeFile file('release.p12'); storeType 'pkcs12'; storePassword System.getenv('KEYSTORE_PASSWORD'); keyAlias 'yatirim'; keyPassword System.getenv('KEYSTORE_PASSWORD') } }
   buildTypes { release { minifyEnabled false; signingConfig signingConfigs.release } }
   compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
