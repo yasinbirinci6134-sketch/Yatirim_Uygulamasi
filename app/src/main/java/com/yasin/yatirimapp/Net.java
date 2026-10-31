@@ -25,7 +25,7 @@ final class Net {
     return h.equals("query1.finance.yahoo.com") || h.equals("query2.finance.yahoo.com") || h.equals("fc.yahoo.com")
         || h.equals("fvt.com.tr") || h.equals("www.fvt.com.tr")
         || h.equals("raw.githubusercontent.com") || h.equals("api.github.com")
-        || h.equals("www.isyatirim.com.tr");
+        || h.equals("www.isyatirim.com.tr") || h.equals("www.tefas.gov.tr");
   }
 
   static JSONObject req(String method, String url, String body, String headers) {
