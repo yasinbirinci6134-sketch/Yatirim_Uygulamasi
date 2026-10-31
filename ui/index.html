@@ -342,6 +342,27 @@ details.removed summary{cursor:pointer;font:600 13px var(--f-body);color:var(--m
   let sa=false; try{ sa=!!(window.YatirimApp && YatirimApp.standalone && YatirimApp.standalone()); }catch(_){}
   if(!sa) return;
   window.__standalone=true;
+  /* Otomatik yedek: portföy, takip listeleri ve ayarlar ayrıca telefonun kendi deposunda (bildirim ayarlarının yanında) tutulur.
+     WebView deposu bir açılışta boş gelirse ya da son yazılanları kaybetmişse veriler buradan geri gelir. */
+  try{ const KEYS=["db:col/data/users/local","db:config/watchlist","db:config/fundwatch","db:config/fxwatch","db:config/app","fp-theme","fp-layout","fp-pf","fp-owner","fp-ownunlock","fp-autoq","fp-plan","fp-hmode"], MAIN=KEYS[0];
+    const LS=window.localStorage, _set=Storage.prototype.setItem, _rem=Storage.prototype.removeItem;
+    const ncfg=()=>{ try{ const o=JSON.parse(YatirimApp.getNotify()||"{}"); return o&&typeof o==="object"&&!Array.isArray(o)?o:null; }catch(_){ return null; } };
+    const items=v=>{ try{ return Object.values(JSON.parse(v||"{}")||{}).filter(d=>d&&(d.kind==="trade"||d.kind==="portfolio")).length; }catch(_){ return 0; } };
+    { const c=ncfg(), bk=c&&c.bk;
+      if(bk&&bk.k&&bk.k[MAIN]){ const seq=+(LS.getItem("fp-bkseq")||0);
+        if(LS.getItem(MAIN)==null||(+bk.seq||0)>seq){ for(const k of KEYS) if(k in bk.k) _set.call(LS,k,bk.k[k]); _set.call(LS,"fp-bkseq",String(+bk.seq||0)); window.__bkRestored=1; } } }
+    let t=0; const save=()=>{ clearTimeout(t); t=setTimeout(()=>{ try{
+      const k={}; for(const x of KEYS){ const v=LS.getItem(x); if(v!=null) k[x]=v; }
+      if(!k[MAIN]) return;
+      const c=ncfg(); if(!c) return; const old=c.bk&&c.bk.k?c.bk:null;
+      if(old&&JSON.stringify(old.k)===JSON.stringify(k)) return;
+      if(old&&items(old.k[MAIN])>0&&items(k[MAIN])===0) return;   /* portföy birden boş göründüyse (depo sorunu olabilir) iyi yedeği ezme */
+      const seq=Math.max(+(LS.getItem("fp-bkseq")||0),+old?.seq||0)+1;
+      c.bk={seq,at:new Date().toISOString(),k}; YatirimApp.setNotify(JSON.stringify(c)); _set.call(LS,"fp-bkseq",String(seq));
+    }catch(_){} },1500); };
+    Storage.prototype.setItem=function(k,v){ _set.call(this,k,v); try{ if(this===LS&&KEYS.includes(k)) save(); }catch(_){} };
+    Storage.prototype.removeItem=function(k){ _rem.call(this,k); try{ if(this===LS&&KEYS.includes(k)) save(); }catch(_){} };
+    setTimeout(save,3000); }catch(_){}
   const RAW="https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/data/";
   const ld=p=>{ try{ const v=localStorage.getItem("db:"+p); return v?JSON.parse(v):null; }catch(_){ return null; } };
   const sv=(p,v)=>{ try{ v==null?localStorage.removeItem("db:"+p):localStorage.setItem("db:"+p,JSON.stringify(v)); }catch(_){} };
@@ -1336,7 +1357,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-12";
+const UI_VERSION="2026.11.01-13";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -2251,7 +2272,7 @@ if(window.__standalone){
         bindSt(card); prefetchScan(top.map(i=>i.code)); card.querySelector("#hmShort")?.addEventListener("click",()=>{ S.hmode="kisa"; S.tab="hisse"; showTab(); renderHisse(); window.scrollTo({top:0}); }); }
       card.querySelectorAll("[data-gm]").forEach(b=>b.onclick=()=>{ S.gmode=b.dataset.gm; renderGundem(); });
       if(S.market){ window.__bootOff&&window.__bootOff(); clearTimeout(window.__bootT); window.__bootT=setTimeout(saveBoot,1500); } return r; }; }
-  function saveBoot(){ try{ if(S.tab!=="gundem"||S.det||!S.market||window.scrollY>2||S.gmode==="kisa") return;   /* açılış hep "Uzun" ile gelir */
+  function saveBoot(){ try{ if(S.tab!=="gundem"||S.det||!S.market||window.scrollY>2||S.gmode==="kisa"||document.getElementById("fresh")?.hidden===false) return;   /* açılış hep "Uzun" ile gelir */
       /* animasyon sürerken ölçme (konum kayar) */
       if(document.getAnimations&&document.getAnimations().some(x=>x.playState==="running"&&isFinite(x.effect?.getTiming?.().iterations))&&(saveBoot.n=(saveBoot.n||0)+1)<8){ clearTimeout(window.__bootT); window.__bootT=setTimeout(saveBoot,400); return; }
       const bd=document.body.cloneNode(true);
@@ -2293,6 +2314,7 @@ if(window.__standalone){
   // Veri bu katman yüklenmeden gelmiş olabilir: yeni görünümle (puan halkası, Bugün ekranı) hemen yeniden çiz
   try{ if(S.market) renderAll(); }catch(e){ console.error(e); }
   renderFresh(); setTimeout(()=>apkCheck(false),4000);
+  if(window.__bkRestored) setTimeout(()=>toast("Portföy ve ayarlar telefondaki yedekten geri yüklendi.",4000),900);
   try{ A.ready&&A.ready(); }catch(_){}
 }
 </script>
