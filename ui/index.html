@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-10";
+const UI_VERSION="2026.10.31-11";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1559,7 +1559,7 @@ if(window.__standalone){
 
   /* Tazelik satırı: analiz zamanı (yapay zekâ, günde bir) + fiyat zamanı (canlı). Dokununca fiyatları yeniler. */
   renderFresh=function(){ const dot=$("dot"), txt=$("freshText"), btn=$("refreshBtn"); if(!txt) return;
-    if(btn){ btn.hidden=!OWN(); btn.textContent="Güncelleme iste"; }
+    if(btn) btn.hidden=true;   // sahip için üstte "Analiz iste" düğmesi var
     if(!S.market){ dot.className="dot"; txt.textContent=S.ready?"Veri bekleniyor… (internet gerekli)":"Yükleniyor…"; return; }
     // Üst satır yalnızca bağlantı sorunu varken görünür (fiyatlar zaten sürekli yenileniyor; analiz zamanı Bugün ekranında)
     const fr=$("fresh"); if(fr) fr.hidden=!LIVE.err;
@@ -1628,44 +1628,94 @@ if(window.__standalone){
           A.setAlarms(JSON.stringify([...getAl(),{id:Date.now(),c,t,op,p,on:true,at:Date.now()}])); toast(`${c} için alarm kuruldu: ${op===">"?"≥":"≤"} ${fmtP(p)}`); close(); }); }; };
     document.body.append(scrim,sh); draw(); };
 
-  /* Ayarlar: APK'ya özel bölümler (yapay zekâ ile açılış güncellemesi burada yok) */
-  { const _os=openSettings; openSettings=function(){ const r=_os.apply(this,arguments); const sh=[...document.querySelectorAll(".sheet")].pop(); if(!sh) return r;
-      [...sh.querySelectorAll("h3")].forEach(h=>{ if(/Açılışta otomatik/.test(h.textContent)){ let n=h.nextElementSibling; h.remove(); for(let i=0;i<2&&n;i++){ const nx=n.nextElementSibling; n.remove(); n=nx; } } });
-      const row=sh.querySelector(".row:last-child"), add=html=>{ const d=document.createElement("div"); d.innerHTML=html; row.before(d); return d; };
-      const cfg=getCfg(), ns=has("notifyStatus")?A.notifyStatus():"yok";
-      const nb=add(`<h3 style="margin:8px 0 4px">Bildirimler</h3>${ns==="yok"?`<p class="note" style="margin:0">Bildirimler için uygulamanın yeni sürümünü kur.</p>`:`
-        <p class="note" style="margin:0">Uygulama kapalıyken de yaklaşık yarım saatte bir kontrol edilir.${ns!=="on"?' <b>Bildirim izni kapalı.</b>':""}</p>
-        <label style="display:flex;gap:8px;margin:6px 0"><input type="checkbox" data-nt="daily" ${cfg.daily?"checked":""}><span>Günün analizi hazır olunca (hafta içi akşam)</span></label>
-        <label style="display:flex;gap:8px;margin:6px 0"><input type="checkbox" data-nt="exit" ${cfg.exit?"checked":""}><span>Elimdeki ya da takip ettiğim bir hisse listeden çıkacaksa</span></label>
-        <label style="display:flex;gap:8px;margin:6px 0"><input type="checkbox" data-nt="alarms" ${cfg.alarms!==false?"checked":""}><span>Fiyat alarmlarım (kalem detayındaki 🔔 ile kurulur)</span></label>
-        <div id="alList"></div>`}`);
-      const drawAl=()=>{ const el=nb.querySelector("#alList"); if(!el) return; const al=getAl();
-        el.innerHTML=al.length?al.map(a=>`<div class="alrow"><span class="grow ${a.on===false?"off":""}"><b>${esc(a.c)}</b> ${a.op===">"?"≥":"≤"} ${fmtP(a.p)}${a.on===false?(a.hitAt?" · gerçekleşti":" · kapalı"):""}</span><button class="linkbtn" data-adel="${a.id}">Sil</button></div>`).join(""):"";
-        el.querySelectorAll("[data-adel]").forEach(b=>b.onclick=()=>{ A.setAlarms(JSON.stringify(getAl().filter(a=>String(a.id)!==b.dataset.adel))); drawAl(); }); };
-      drawAl();
-      nb.querySelectorAll("[data-nt]").forEach(c=>c.onchange=()=>{ const k=c.dataset.nt, v=c.checked, save=()=>{ const g=getCfg(); g[k]=v; A.setNotify(JSON.stringify(g)); };
-        if(v) withNotify(ok=>{ if(ok) save(); else c.checked=false; }); else save(); });
-      const bk=add(`<h3 style="margin:8px 0 4px">Yedek</h3><p class="note" style="margin:0">Portföyün ve takip listen yalnızca bu telefonda durur. Yedeği kendine gönder (WhatsApp, e-posta, Drive); telefon değişirse buraya yapıştırarak geri yüklersin.</p>
-        <div class="row" style="justify-content:flex-start"><button class="btn ghost sm" id="bkShare" style="margin-left:0">Yedeği paylaş</button><button class="btn ghost sm" id="bkOpen">Yedeği geri yükle</button></div>
-        <div id="bkBox" hidden><textarea id="impTxt" style="width:100%;height:70px;margin-top:4px" placeholder="Yedek metnini ya da eski uygulamadaki 'Portföyü kopyala' metnini yapıştır"></textarea><div class="row" style="justify-content:flex-start"><button class="btn sm" id="impBtn" style="margin-left:0">Geri yükle</button></div></div>`);
-      bk.querySelector("#bkShare").onclick=()=>{ const txt=JSON.stringify({yatirim:1,at:new Date().toISOString(),items:[...S.pfs,...S.trades].map(x=>({...x})),watch:{s:S.watch,f:S.fwatch,x:S.fxwatch}});
-        if(has("share")) A.share(txt,"Yatırım yedeği"); else { navigator.clipboard?.writeText(txt).then(()=>toast("Yedek kopyalandı."),()=>toast("Kopyalanamadı.")); } };
-      bk.querySelector("#bkOpen").onclick=()=>{ const b=bk.querySelector("#bkBox"); b.hidden=!b.hidden; };
-      bk.querySelector("#impBtn").onclick=async()=>{ let o; try{ o=JSON.parse(bk.querySelector("#impTxt").value.trim()); }catch(_){ toast("Metin okunamadı; tamamını yapıştırdığından emin ol."); return; }
+  /* Ayarlar: telefon ayarları gibi gruplu liste (tema, bildirimler, yedek, uygulama) */
+  { const ss=document.createElement("style"); ss.textContent=`
+      .st{max-height:94vh;padding:0 16px calc(18px + env(safe-area-inset-bottom,0px));background:var(--bg)}
+      .st>*{flex-shrink:0}
+      .st-top{position:sticky;top:0;z-index:2;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:6px 2px 10px}
+      .st-top h2{margin:0;font:800 24px var(--f-display);letter-spacing:-.02em}
+      .st-x{all:unset;cursor:pointer;width:36px;height:36px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:16px;box-shadow:var(--sh)}
+      .st-h{font:800 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 6px 6px}
+      .st-g{background:var(--card);border-radius:18px;box-shadow:var(--sh);overflow:hidden}
+      .st-r{display:flex;align-items:center;gap:12px;min-height:52px;padding:8px 14px;border-top:1px solid var(--line);font:600 15px var(--f-body);cursor:pointer}
+      .st-r:first-child{border-top:0}
+      .st-r:active{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+      .st-r .tx{flex:1;min-width:0}
+      .st-r .tx small{display:block;font:500 12.5px/1.35 var(--f-body);color:var(--muted);margin-top:2px}
+      .st-r .ch{color:var(--muted);font-size:20px;line-height:1}
+      .st-r .vl{color:var(--muted);font:600 13.5px var(--f-body)}
+      .st-ic{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;font-size:16px;flex:none;background:var(--accent-soft)}
+      .sw{appearance:none;-webkit-appearance:none;flex:none;width:46px;height:28px;border-radius:999px;background:var(--line);position:relative;cursor:pointer;transition:background .2s;margin:0}
+      .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+      .sw:checked{background:var(--accent)} .sw:checked::after{transform:translateX(18px)}
+      .st-seg{display:flex;background:var(--bg);border-radius:10px;padding:3px;gap:2px}
+      .st-seg button{all:unset;cursor:pointer;padding:6px 10px;border-radius:8px;font:700 12.5px var(--f-body);color:var(--muted)}
+      .st-seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+      .st-sw{display:flex;gap:10px}
+      .st-sw button{all:unset;cursor:pointer;width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
+      .st-sw button.on{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--ink)}
+      .st-warn{background:color-mix(in srgb,var(--warn) 14%,var(--card));color:var(--ink)}
+      .st-foot{text-align:center;font:500 12px var(--f-body);color:var(--muted);margin:16px 0 4px}
+      .st textarea{width:100%;box-sizing:border-box;height:84px;margin:0;border-radius:12px;font:500 13px var(--f-body)}
+      .aibtn{all:unset;cursor:pointer;height:40px;padding:0 14px;border-radius:999px;background:var(--accent);color:#fff;font:700 13px var(--f-body);display:flex;align-items:center;gap:6px;box-shadow:var(--sh)}`;
+    document.head.appendChild(ss); }
+  openSettings=function(){
+    document.querySelectorAll(".st,.st-scrim").forEach(e=>e.remove());
+    const scrim=document.createElement("div"); scrim.className="scrim st-scrim"; scrim.style.zIndex=80;
+    const sh=document.createElement("div"); sh.className="sheet st"; sh.style.zIndex=81; sh.setAttribute("role","dialog");
+    const close=()=>{ scrim.remove(); sh.remove(); }; scrim.onclick=close;
+    const sw=(id,on)=>`<input type="checkbox" class="sw" id="${id}" ${on?"checked":""}>`;
+    const draw=()=>{ const cfg=getCfg(), ns=has("notifyStatus")?A.notifyStatus():"yok", al=has("getAlarms")?getAl():[];
+      sh.innerHTML=`<div class="st-top"><h2>Ayarlar</h2><button class="st-x" data-c aria-label="Kapat">✕</button></div>
+        <div class="st-h">Görünüm</div><div class="st-g">
+          <div class="st-r" style="cursor:default"><span class="st-ic">🌓</span><span class="tx">Tema</span><div class="st-seg">${[["auto","Otomatik"],["light","Açık"],["dark","Koyu"]].map(([k,l])=>`<button data-th="${k}" class="${TH.mode===k?"on":""}">${l}</button>`).join("")}</div></div>
+          <div class="st-r" style="cursor:default"><span class="st-ic">🎨</span><span class="tx">Renk</span><div class="st-sw">${ACC.map(([k,l,c])=>`<button data-ac="${k}" class="${TH.acc===k?"on":""}" aria-label="${l}" style="background:${c}"></button>`).join("")}</div></div>
+          <div class="st-r" data-ly><span class="st-ic">🧩</span><span class="tx">Sekme ve kart düzeni<small>Sırayı değiştir, istemediklerini gizle</small></span><span class="ch">›</span></div></div>
+        <div class="st-h">Bildirimler</div><div class="st-g">
+          ${ns==="yok"?`<div class="st-r st-warn" style="cursor:default"><span class="tx">Bildirimler için uygulamanın yeni sürümünü kur.</span></div>`:`
+          ${ns!=="on"?`<div class="st-r st-warn" data-perm><span class="st-ic">🔕</span><span class="tx">Bildirim izni kapalı<small>Açmak için dokun</small></span><span class="ch">›</span></div>`:""}
+          <label class="st-r"><span class="st-ic">📊</span><span class="tx">Günün analizi hazır olunca<small>Hafta içi sabah ve akşam</small></span>${sw("nDaily",cfg.daily)}</label>
+          <label class="st-r"><span class="st-ic">⚠️</span><span class="tx">Elimdeki hisse listeden çıkacaksa</span>${sw("nExit",cfg.exit)}</label>
+          <label class="st-r"><span class="st-ic">🔔</span><span class="tx">Fiyat alarmları<small>Kalem detayındaki 🔔 ile kurulur</small></span>${sw("nAl",cfg.alarms!==false)}</label>
+          ${al.map(a=>`<div class="st-r" style="cursor:default"><span class="st-ic" style="background:none">↳</span><span class="tx ${a.on===false?"muted":""}"><b>${esc(a.c)}</b> ${a.op===">"?"≥":"≤"} ${fmtP(a.p)}${a.on===false?(a.hitAt?" · gerçekleşti":" · kapalı"):""}</span><button class="linkbtn" data-adel="${a.id}">Sil</button></div>`).join("")}`}</div>
+        <div class="st-h">Yedek</div><div class="st-g">
+          <div class="st-r" data-bk><span class="st-ic">📤</span><span class="tx">Yedeği paylaş<small>Portföyün ve takip listen yalnız bu telefonda durur; yedeği kendine gönder</small></span><span class="ch">›</span></div>
+          <div class="st-r" data-bo><span class="st-ic">📥</span><span class="tx">Yedeği geri yükle</span><span class="ch">›</span></div>
+          <div class="st-r" id="bkBox" hidden style="cursor:default;flex-direction:column;align-items:stretch"><textarea id="impTxt" placeholder="Yedek metnini yapıştır"></textarea><button class="btn" id="impBtn">Geri yükle</button></div></div>
+        <div class="st-h">Uygulama</div><div class="st-g">
+          <div class="st-r" data-up><span class="st-ic">⬆️</span><span class="tx">Güncellemeleri denetle</span><span class="vl">${has("appVersionName")?esc(A.appVersionName()):""}</span><span class="ch">›</span></div>
+          <div class="st-r" data-sh><span class="st-ic">🔗</span><span class="tx">Uygulamayı paylaş</span><span class="ch">›</span></div>
+          <label class="st-r"><span class="st-ic">👤</span><span class="tx">Bu telefon benim<small>Üstte puan ve haber güncellemesini isteme düğmesi çıkar (Claude hesabı gerekir)</small></span>${sw("own",OWN())}</label></div>
+        <div class="st-foot">Arayüz ${esc(UI_VERSION)}${has("uiSource")&&A.uiSource()==="file"?" · güncellendi":""}</div>`;
+      const q=s=>sh.querySelector(s);
+      q("[data-c]").onclick=close;
+      sh.querySelectorAll("[data-th]").forEach(b=>b.onclick=()=>{ TH.mode=b.dataset.th; saveTheme(); draw(); });
+      sh.querySelectorAll("[data-ac]").forEach(b=>b.onclick=()=>{ TH.acc=b.dataset.ac; saveTheme(); draw(); });
+      q("[data-ly]").onclick=()=>{ close(); openLayout(); };
+      q("[data-perm]")?.addEventListener("click",()=>withNotify(()=>draw()));
+      const tg=(id,k)=>{ const c=q("#"+id); if(!c) return; c.onchange=()=>{ const v=c.checked, save=()=>{ const g=getCfg(); g[k]=v; A.setNotify(JSON.stringify(g)); };
+        if(v) withNotify(ok=>{ if(ok) save(); else c.checked=false; draw(); }); else save(); }; };
+      tg("nDaily","daily"); tg("nExit","exit"); tg("nAl","alarms");
+      sh.querySelectorAll("[data-adel]").forEach(b=>b.onclick=()=>{ A.setAlarms(JSON.stringify(getAl().filter(a=>String(a.id)!==b.dataset.adel))); draw(); });
+      q("[data-bk]").onclick=()=>{ const txt=JSON.stringify({yatirim:1,at:new Date().toISOString(),items:[...S.pfs,...S.trades].map(x=>({...x})),watch:{s:S.watch,f:S.fwatch,x:S.fxwatch}}); if(has("share")) A.share(txt,"Yatırım yedeği"); };
+      q("[data-bo]").onclick=()=>{ const b=q("#bkBox"); b.hidden=!b.hidden; };
+      q("#impBtn").onclick=async()=>{ let o; try{ o=JSON.parse(q("#impTxt").value.trim()); }catch(_){ toast("Metin okunamadı; tamamını yapıştırdığından emin ol."); return; }
         if(!o||o.yatirim!==1||!Array.isArray(o.items)){ toast("Bu metin portföy yedeği değil."); return; }
         let n=0; for(const it of o.items){ if(!it||!it.id) continue; const {id,...d}=it; await tradesCol().doc(id).set(d); if(d.kind==="prefs"){ try{ loadPrefs(d); }catch(_){} } else n++; }
         const W=o.watch||{}, mg=(a,b)=>[...new Set([...(a||[]),...(b||[])])];
         if(W.s?.length) await saveWatch(mg(S.watch,W.s)); if(W.f?.length) await saveFundWatch(mg(S.fwatch,W.f)); if(W.x?.length) await saveFxWatch(mg(S.fxwatch,W.x));
-        toast(n+" kayıt geri yüklendi."); bk.querySelector("#impTxt").value=""; };
-      const ap=add(`<h3 style="margin:8px 0 4px">Uygulama</h3><p class="note" style="margin:0">Sürüm ${has("appVersionName")?esc(A.appVersionName()):"?"} · arayüz ${esc(UI_VERSION)}${has("uiSource")&&A.uiSource()==="file"?" (güncellendi)":""}. Arayüz güncellemeleri kendiliğinden gelir.</p>
-        <div class="row" style="justify-content:flex-start"><button class="btn ghost sm" id="apChk" style="margin-left:0">Güncellemeleri denetle</button><button class="btn ghost sm" id="apShare">Uygulamayı paylaş</button></div>
-        ${OWN()?`<div class="row" style="justify-content:flex-start"><button class="btn sm" id="apReq" style="margin-left:0">Yapay zekâ güncellemesi iste</button></div>`:""}
-        <label style="display:flex;gap:8px;align-items:flex-start;margin-top:8px"><input type="checkbox" id="ownChk" ${OWN()?"checked":""}><span>Bu telefon uygulamanın sahibine ait <span class="note">(burada "Yapay zekâ güncellemesi iste" düğmesi çıkar; Claude hesabı ister)</span></span></label>`);
-      ap.querySelector("#apChk").onclick=()=>apkCheck(true);
-      ap.querySelector("#apShare").onclick=()=>{ const t=`Yatırım uygulaması (Android): https://github.com/${REPO}/releases/latest — sayfadaki Yatirim.apk dosyasını indirip kur.`; if(has("share")) A.share(t,"Yatırım uygulaması"); };
-      ap.querySelector("#ownChk").onchange=e=>{ ls("fp-owner",e.target.checked?"1":"0"); renderFresh(); };
-      ap.querySelector("#apReq")?.addEventListener("click",()=>$("refreshBtn").click());
-      return r; }; }
+        toast(n+" kayıt geri yüklendi."); close(); };
+      q("[data-up]").onclick=()=>apkCheck(true);
+      q("[data-sh]").onclick=()=>{ if(has("share")) A.share(`Yatırım uygulaması (Android): https://github.com/${REPO}/releases/latest — sayfadaki Yatirim.apk dosyasını indirip kur.`,"Yatırım uygulaması"); };
+      q("#own").onchange=e=>{ ls("fp-owner",e.target.checked?"1":"0"); aiBtn(); };
+    };
+    document.body.append(scrim,sh); draw(); };
+  /* Üstte sahip için "Analiz iste": puan ve haberleri yapay zekâya yeniden hazırlatır (Claude bağlantılı eski uygulamayı açar) */
+  function aiBtn(){ let b=$("aiBtn"); const brand=document.querySelector(".brand"); if(!brand) return;
+    if(!OWN()){ b?.remove(); return; }
+    if(!b){ b=document.createElement("button"); b.id="aiBtn"; b.className="aibtn"; b.innerHTML="✦ Analiz iste"; b.onclick=()=>$("refreshBtn").click();
+      const g=$("setBtn"); const wrap=document.createElement("div"); wrap.style.cssText="display:flex;gap:8px;align-items:center"; g.parentNode.insertBefore(wrap,g); wrap.append(b,g); } }
+  aiBtn();
 
   /* ===================== YENİ TASARIM (APK) ===================== */
   { const lk=document.createElement("link"); lk.rel="stylesheet"; lk.href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap"; document.head.appendChild(lk); }
