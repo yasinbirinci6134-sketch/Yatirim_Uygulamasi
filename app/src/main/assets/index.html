@@ -1390,7 +1390,7 @@ if(window.__standalone){
   const OLD="https://claude.ai/artifact/KGLuNpASfKJZT1QXGir68H";
   const OWN=()=>{ try{ return localStorage.getItem("fp-owner")==="1"; }catch(_){ return false; } };
   const _rf=renderFresh; renderFresh=function(){ const r=_rf.apply(this,arguments); const b=$("refreshBtn"); if(b){ b.hidden=!OWN(); b.textContent="Güncelleme iste"; } return r; };
-  $("refreshBtn").onclick=()=>YatirimApp.openUrl(OLD);
+  $("refreshBtn").onclick=()=>{ YatirimApp.openUrl(OLD+"#guncelle"); toast("Claude uygulaması açılıyor; güncelleme orada başlar, bitince veriler buraya da gelir."); };
   const _os=openSettings; openSettings=function(){ const r=_os.apply(this,arguments); const sh=[...document.querySelectorAll(".sheet")].pop();
     const row=sh?.querySelector(".row:last-child"); if(row){ const d=document.createElement("div");
       d.innerHTML=`<h3 style="margin:8px 0 4px">Bu telefon</h3><label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox" id="ownChk" ${OWN()?"checked":""}><span>Yapay zekâ güncellemesini isteme düğmesini göster <span class="note">(yalnız uygulamanın sahibi içindir; Claude hesabı ister)</span></span></label>`;
