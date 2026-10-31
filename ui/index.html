@@ -1291,7 +1291,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-19";
+const UI_VERSION="2026.10.31-20";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1717,7 +1717,8 @@ if(window.__standalone){
   /* Alt bant: yeni arayüz hazır / yeni APK var */
   function banner(id,html,go){ if($(id)) return; const b=document.createElement("div"); b.id=id; b.className="upbar";
     b.innerHTML=`<span>${html}</span><button aria-label="Kapat">✕</button>`; b.onclick=e=>{ if(e.target.tagName==="BUTTON"){ b.remove(); return; } b.remove(); go(); }; document.body.appendChild(b); }
-  window.__uiUpdateReady=()=>banner("uiUp","Uygulamanın yeni sürümü hazır · <b>Yenile</b>",()=>A.applyUpdate());
+  // açılıştan hemen sonra geldiyse (ekranla henüz uğraşılmıyorsa) sormadan uygula; değilse şerit göster, arka plandan dönüşte uygulama kendisi uygular
+  window.__uiUpdateReady=()=>{ if(performance.now()<10000&&!S.det&&!document.querySelector(".sheet")) A.applyUpdate(); else banner("uiUp","Uygulamanın yeni sürümü hazır · <b>Yenile</b>",()=>A.applyUpdate()); };
   async function apkCheck(manual){ if(!has("appVersion")) return;
     if(!manual&&Date.now()-(+ls("fp-apkchk")||0)<20*3600e3) return; ls("fp-apkchk",String(Date.now()));
     try{ const o=await nget("GET","https://api.github.com/repos/"+REPO+"/releases/latest",null,{"Accept":"application/vnd.github+json"}); const j=JSON.parse(o.body);

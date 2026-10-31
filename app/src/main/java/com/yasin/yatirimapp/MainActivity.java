@@ -30,11 +30,13 @@ public class MainActivity extends Activity {
   static final String BASE = "https://yatirim.app/";
   static final String OLD_APP = "https://claude.ai/artifact/KGLuNpASfKJZT1QXGir68H";
   static final String UI_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/main/ui/index.html";
+  // GitHub API: önbelleği kısa (raw ~5 dk bekletir); ETag ile 304 dönen istekler kota yemez
+  static final String UI_API = "https://api.github.com/repos/yasinbirinci6134-sketch/Yatirim_Uygulamasi/contents/ui/index.html?ref=main";
   static final String MARK = "<!--yatirim-ui-->";
   static final java.util.concurrent.ExecutorService NET = java.util.concurrent.Executors.newFixedThreadPool(6);
   static final java.util.concurrent.ConcurrentHashMap<String, String> RES = new java.util.concurrent.ConcurrentHashMap<>();
   final Handler ui = new Handler(Looper.getMainLooper());
-  WebView web; boolean ready, checked; long lastCheck; String source = "asset", curSha = ""; String pendingOpen;
+  WebView web; boolean ready, checked; long lastCheck, stoppedAt; String source = "asset", curSha = ""; String pendingOpen;
 
   SharedPreferences up() { return getSharedPreferences("ui", MODE_PRIVATE); }
   File uiFile() { return new File(getFilesDir(), "ui.html"); }
@@ -81,13 +83,15 @@ public class MainActivity extends Activity {
     if (checked) return; checked = true; lastCheck = System.currentTimeMillis();
     NET.execute(() -> {
       try {
-        JSONObject h = new JSONObject(); String et = up().getString("etag", null); if (et != null && uiFile().exists()) h.put("If-None-Match", et);
-        JSONObject r = Net.req("GET", UI_URL, null, h.toString());
-        if (!r.optBoolean("ok") || r.optInt("code") != 200) return;
+        JSONObject h = new JSONObject(); String et = up().getString("etag2", null); if (et != null && uiFile().exists()) h.put("If-None-Match", et);
+        h.put("Accept", "application/vnd.github.raw");
+        JSONObject r = Net.req("GET", UI_API, null, h.toString());
+        if (r.optInt("code") == 304) return;
+        if (!r.optBoolean("ok") || r.optInt("code") != 200) { r = Net.req("GET", UI_URL + "?t=" + (System.currentTimeMillis() / 60000), null, "{}"); if (!r.optBoolean("ok") || r.optInt("code") != 200) return; r.remove("etag"); }
         String body = r.optString("body"), s = sha(body);
         if (!body.contains(MARK) || !body.contains("</html>") || s.equals(curSha) || s.equals(up().getString("bad", ""))) return;
         try (FileOutputStream o = new FileOutputStream(newFile())) { o.write(body.getBytes("UTF-8")); }
-        if (r.has("etag")) up().edit().putString("etag", r.optString("etag")).apply();
+        if (r.has("etag")) up().edit().putString("etag2", r.optString("etag")).apply();
         ui.post(() -> web.evaluateJavascript("window.__uiUpdateReady&&__uiUpdateReady()", null));
       } catch (Exception e) {}
     });
@@ -206,10 +210,14 @@ public class MainActivity extends Activity {
     }
   }
 
-  // Uygulama arka plandan dönünce de arayüz güncellemesini denetle (en çok 10 dakikada bir)
+  @Override protected void onStop() { super.onStop(); stoppedAt = System.currentTimeMillis(); }
+
+  // Arka plandan dönünce: indirilmiş yeni arayüz varsa uygula (30 sn+ uzak kalındıysa), yoksa en çok dakikada bir denetle
   @Override protected void onResume() {
     super.onResume();
-    if (ready && System.currentTimeMillis() - lastCheck > 10 * 60 * 1000L) { checked = false; checkUi(); }
+    long now = System.currentTimeMillis();
+    if (ready && stoppedAt > 0 && now - stoppedAt > 30 * 1000L && newFile().exists()) { checked = true; lastCheck = now; load(); return; }
+    if (ready && now - lastCheck > 60 * 1000L) { checked = false; checkUi(); }
   }
 
   @Override public void onBackPressed() { if (web.canGoBack()) web.goBack(); else moveTaskToBack(true); }
