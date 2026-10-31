@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-13";
+const UI_VERSION="2026.10.31-14";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1462,6 +1462,8 @@ async function lanalyst(code){ const c=await lcrumb(); if(!c) return null;
   const r=JSON.parse(o.body)?.quoteSummary?.result?.[0]; if(!r) return null; const f=r.financialData||{}, raw=v=>v&&typeof v==="object"?v.raw:v;
   const tr=r.recommendationTrend?.trend||[], sh=t=>{ if(!t) return null; const n=(t.strongBuy||0)+(t.buy||0)+(t.hold||0)+(t.sell||0)+(t.strongSell||0); return n?((t.strongBuy||0)+(t.buy||0))/n:null; };
   return { tgt:raw(f.targetMeanPrice)||null, tgtN:raw(f.numberOfAnalystOpinions)||0, buy0:sh(tr.find(t=>t.period==="0m")), buy1:sh(tr.find(t=>t.period==="-1m")), roeY:raw(f.returnOnEquity)!=null?raw(f.returnOnEquity)*100:null, at:new Date().toISOString() }; }
+// ağır olumsuz KAP: yapay zekânın "kapAgir" alanı; eski veride puanı ≥42 iken "uzak" verilmişse
+const kapAgir=x=>typeof x.kapAgir==="boolean"?x.kapAgir:(x._ai?.signal==="uzak"&&typeof x._ai.score==="number"&&x._ai.score>=42);
 const HOLD=new Set(["KCHOL","SAHOL","DOHOL","ALARK","TKFEN","AGHOL","GLYHO","ENKAI"]);
 /* Hisse puanı formülle: kârlılık, değer, sağlamlık, analist (momentum SCORE'da). Veri yoksa yapay zekânın değeri kalır; o da yoksa nötr. */
 function formulaScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.clamp, PM={...SCORE.MAX,...(M.partsMax||{})}, F=S.live?.fin||{}, Q=S.live?.an||{};
@@ -1492,7 +1494,7 @@ function formulaScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.c
     // sağlamlık
     if(fin||x.local){ const ff=x.ff??x.freeFloat; let v=(mcap==null?3:mcap>=100e9?6:mcap>=20e9?4:2)+(!n(x._vol)?3:x._vol<35?5:x._vol<55?3:1)+(ff==null?2:ff>=20?4:0);
       if(fin&&!fin.bank&&n(fin.netDebt)&&n(fin.ebitda)&&fin.ebitda>0&&fin.netDebt/fin.ebitda>3) v-=3;
-      if(x._ai?.signal==="uzak"&&n(x._ai.score)&&x._ai.score>=42) v-=3;   // ağır olumsuz KAP (yapay zekâ işaretledi)
+      if(kapAgir(x)) v-=3;   // ağır olumsuz KAP (yapay zekâ işaretledi)
       p.saglamlik=Math.round(C(v,0,15)*PM.saglamlik/15); src.saglamlik=1; }
     // analist
     if(an&&an.tgt>0&&an.tgtN>=2){ const up=(an.tgt/x.price-1)*100; let v=SCORE.anBase(up);
@@ -1501,12 +1503,12 @@ function formulaScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.c
       p.analist=Math.round(C(v,0,10)*PM.analist/10); src.analist=1; x.target=lr(an.tgt,2); x.targetN=an.tgtN; x.targetUpside=lr(up,1); }
     else if(an&&!an.tgtN&&!n(ai.analist)) p.analist=Math.round(5*PM.analist/10);
     if(!n(p.momentum)) p.momentum=SCORE.momentum(x,B,PM.momentum)??Math.round(PM.momentum/2);
-    x.parts=p; x.score=Math.round(SCORE.sum(p)); x._src=src; if(!x._ai) x.auto=true;
+    const hb=n(x.haber)?C(Math.round(x.haber),-4,4):0; x.parts=p; x.score=Math.round(C(SCORE.sum(p)+hb,0,100)); x._src=src; if(!x._ai) x.auto=true;
     if(roe!=null) x.roe=lr(roe,1); if(fk!=null) x.fk=lr(fk,2); if(pb!=null) x.pddd=lr(pb,2); if(mcap) x.mcapBn=lr(mcap/1e9,1);
     if(fin){ if(n(fin.npG)) x.profitGrowth=lr(fin.npG,1); if(n(fin.revG)) x.salesGrowth=lr(fin.revG,1); x.finPeriod=fin.period; } });
   // sinyaller (kurallardaki gibi)
   const st=(M.stocks||[]).filter(x=>n(x.score)), top=new Set([...st].sort((a,b)=>b.score-a.score).slice(0,Math.max(1,Math.ceil(st.length*0.3))).map(x=>x.code));
-  st.forEach(x=>{ const ai=x._ai||{}, kapNeg=ai.signal==="uzak"&&n(ai.score)&&ai.score>=42;
+  st.forEach(x=>{ const kapNeg=kapAgir(x);
     x.signal=(x.score<42||kapNeg)?"uzak":(x.score>=60&&top.has(x.code)&&(x.parts?.karlilik??0)>=10*PM.karlilik/30&&!(x.m3<0&&x.y1<0))?"al":"izle"; });
 }
 /*SCORE:BEGIN — fiyata bağlı puan parçaları; uygulama canlı fiyatla, yapay zekâ günlük güncellemede aynı kodla hesaplar (tools/score.js) */
