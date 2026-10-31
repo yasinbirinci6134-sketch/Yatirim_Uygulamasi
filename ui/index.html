@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-8";
+const UI_VERSION="2026.10.31-9";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1335,8 +1335,8 @@ async function lfvt(code){ const o=await nget("GET","https://fvt.com.tr/fonlar/y
 const fxClosed=now=>{ const wd=new Date(now+TR).getUTCDay(); return wd===6||wd===0; };
 function fxLastClose(){ const l=new Date(Date.now()+TR), back=(l.getUTCDay()+1)%7; return Date.UTC(l.getUTCFullYear(),l.getUTCMonth(),l.getUTCDate()-back)-TR; }
 function liveDue(k){ const at=S.live?.[k+"At"], t=at?new Date(at).getTime():0, now=Date.now();
-  if(k==="hisse") return marketOpen() ? now-t>5*60e3 : t < lastClose()+20*60e3;
-  if(k==="doviz") return !fxClosed(now) ? now-t>5*60e3 : t < fxLastClose()+20*60e3;
+  if(k==="hisse") return marketOpen() ? now-t>15*60e3 : t < lastClose()+20*60e3;   // açıkken anlık fiyat ayrıca 10 sn'de bir gelir
+  if(k==="doviz") return !fxClosed(now) ? now-t>15*60e3 : t < fxLastClose()+20*60e3;
   if(k==="fon") return t < fundPoint() || now-t > 12*3600e3;
   return true; }
 async function liveRefresh(kinds,manual){
@@ -1366,6 +1366,30 @@ async function liveRefresh(kinds,manual){
   finally{ LIVE.busy=false; renderFresh(); }
   return true; }
 
+/* Uygulama açıkken 10 sn'de bir anlık fiyat: Yahoo'nun toplu servisi, tek istekte 20 kalem (bir yıllık geçmiş 15 dk'da bir ayrıca yenilenir) */
+async function lspark(syms){ const out={};
+  for(let i=0;i<syms.length;i+=20){ const part=syms.slice(i,i+20);
+    const o=await nget("GET","https://query1.finance.yahoo.com/v7/finance/spark?symbols="+part.map(encodeURIComponent).join(",")+"&range=1d&interval=1d");
+    (JSON.parse(o.body)?.spark?.result||[]).forEach(r=>{ const m=r.response?.[0]?.meta; if(m&&m.regularMarketPrice>0) out[r.symbol]={p:m.regularMarketPrice,d1:typeof m.regularMarketChangePercent==="number"?m.regularMarketChangePercent:(m.previousClose>0?(m.regularMarketPrice/m.previousClose-1)*100:null),t:(m.regularMarketTime||0)*1000}; }); }
+  return out; }
+async function liveTick(){ if(LIVE.busy||LIVE.ticking||!S.live||!S.market||!LIVE.ok()) return; const now=Date.now(), st=marketOpen(), fo=!fxClosed(now); if(!st&&!fo) return;
+  const ae=document.activeElement; if(ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)) return; if(document.querySelector(".sheet")) return;
+  const fxs=c=>LFX[c]||(/^[A-Z]{3}$/.test(c)?[c+"TRY=X"]:null);
+  LIVE.ticking=true;
+  try{ const syms=[]; if(st){ (S.market.stocks||[]).forEach(x=>syms.push(x.code+".IS")); syms.push("XU100.IS"); }
+    if(fo) (S.market.fx||[]).forEach(x=>{ const d=fxs(x.code); if(d){ syms.push(d[0]); if(d[1]) syms.push(d[1]); } });
+    if(!syms.length) return; const q=await lspark([...new Set(syms)]), L=S.live; let ch=0;
+    const upd=(map,code,p,d1,t,dp)=>{ const v=map?.[code]; if(!v||!(p>0)||!(v.price>0)) return; const np=lr(p,dp); if(np===v.price&&(d1==null||lr(d1)===v.d1)) return;
+      const r=p/v.price; ["w1","m1","m3","m6","ytd","y1"].forEach(k=>{ if(typeof v[k]==="number") v[k]=lr(((1+v[k]/100)*r-1)*100); });
+      v.price=np; if(d1!=null) v.d1=lr(d1); if(v.low1y>0&&p<v.low1y) v.low1y=np; if(v.high1y>0&&p>v.high1y) v.high1y=np; if(v.mLow>0&&p<v.mLow) v.mLow=np; if(v.mHigh>0&&p>v.mHigh) v.mHigh=np;
+      if(t) v.priceDate=dayKey(t); v.at=new Date().toISOString(); ch++; };
+    if(st){ (S.market.stocks||[]).forEach(x=>{ const a=q[x.code+".IS"]; if(a) upd(L.stocks,x.code,a.p,a.d1,a.t,x.price<10?4:2); }); const b=q["XU100.IS"]; if(b) upd(L.idx,"XU100",b.p,b.d1,b.t,0); }
+    if(fo) (S.market.fx||[]).forEach(x=>{ const d=fxs(x.code), a=d&&q[d[0]]; if(!a) return;
+      if(d.length===1) upd(L.fx,x.code,a.p,a.d1,a.t,4);
+      else { const u=q[d[1]]; if(u) upd(L.fx,x.code,a.p*u.p*d[2],a.d1!=null&&u.d1!=null?((1+a.d1/100)*(1+u.d1/100)-1)*100:null,Math.max(a.t,u.t),x.code==="GAG"?4:2); } });
+    if(ch){ L.at=new Date().toISOString(); applyLive(); renderAll(); }
+  }catch(e){} finally{ LIVE.ticking=false; } }
+setInterval(()=>{ if(!document.hidden) liveTick(); },10e3);
 /*SCORE:BEGIN — fiyata bağlı puan parçaları; uygulama canlı fiyatla, yapay zekâ günlük güncellemede aynı kodla hesaplar (tools/score.js) */
 const SCORE={
   clamp:(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),
