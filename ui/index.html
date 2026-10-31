@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-4";
+const UI_VERSION="2026.10.31-5";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1492,7 +1492,7 @@ if(window.__standalone){
   const ls=(k,v)=>{ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(_){ return null; } };
   const OWN=()=>ls("fp-owner")==="1";
   const st=document.createElement("style"); st.textContent=`
-    .fr{font:inherit;color:inherit;padding:0;text-align:left}
+    .fr{font:inherit;color:inherit;padding:0;text-align:left;text-decoration:none!important;background:none;border:0}
     .ptr{position:fixed;left:50%;top:6px;width:38px;height:38px;margin-left:-19px;border-radius:50%;background:var(--card);box-shadow:0 2px 10px rgba(0,0,0,.18);display:grid;place-items:center;font:600 20px var(--f-body);color:var(--accent);z-index:60;opacity:0;transform:translateY(-48px);transition:opacity .15s}
     .ptr.spin{animation:ptrs 0.8s linear infinite}@keyframes ptrs{to{rotate:360deg}}
     .upbar{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:70;background:var(--accent);color:#fff;border-radius:14px;padding:12px 14px;font:500 14px var(--f-body);box-shadow:0 6px 20px rgba(0,0,0,.25);display:flex;justify-content:space-between;gap:10px}
@@ -1500,6 +1500,39 @@ if(window.__standalone){
     .alrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}.alrow:first-child{border-top:0}
     .alrow .grow{flex:1}.alrow .off{opacity:.55}`;
   document.head.appendChild(st);
+  /* Uygulama hissi: dokunma geri bildirimi, seçilemeyen metin, akıcı geçişler, Material tarzı alt menü */
+  document.documentElement.classList.add("apk");
+  const nat=document.createElement("style"); nat.textContent=`
+    html.apk{-webkit-tap-highlight-color:transparent}
+    html.apk body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+    html.apk input,html.apk textarea{-webkit-user-select:text;user-select:text}
+    html.apk header{transition:box-shadow .2s}
+    html.apk.scrolled header{box-shadow:0 6px 14px -10px rgba(0,0,0,.35)}
+    html.apk h1{font-size:21px}
+    html.apk .fresh{font-size:12px}
+    /* alt menü: seçili sekmede ikonun arkasında hap şekli */
+    html.apk nav.tabs button svg{box-sizing:content-box;padding:3px 16px;border-radius:16px;transition:background .2s}
+    html.apk nav.tabs button[aria-selected="true"] svg{background:var(--accent-soft)}
+    html.apk nav.tabs button[aria-selected="true"]{font-weight:700}
+    /* basılı durum */
+    html.apk .lrow,html.apk .fund,html.apk .aitem,html.apk .ni,html.apk .mv{transition:background .12s}
+    html.apk .lrow:active,html.apk .fund:active,html.apk .aitem:active,html.apk .ni:active,html.apk .mv:active{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+    html.apk .btn,html.apk .chips button,html.apk .seg button,html.apk nav.tabs button,html.apk .rowbtn{transition:transform .08s,background .15s}
+    html.apk .btn:active,html.apk .chips button:active,html.apk .seg button:active,html.apk nav.tabs button:active{transform:scale(.96)}
+    /* geçişler */
+    @keyframes apkIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    @keyframes apkSlide{from{transform:translateX(28%);opacity:.4}to{transform:none;opacity:1}}
+    @keyframes apkUp{from{transform:translateY(40px);opacity:.3}to{transform:none;opacity:1}}
+    html.apk main:not([hidden]){animation:apkIn .2s ease-out}
+    html.apk #det{animation:apkSlide .22s cubic-bezier(.2,.8,.2,1)}
+    html.apk .sheet{animation:apkUp .22s cubic-bezier(.2,.8,.2,1);border-radius:20px 20px 0 0}
+    html.apk .sheet::before{content:"";display:block;width:36px;height:4px;border-radius:2px;background:var(--line);margin:-4px auto 10px}
+    html.apk .scrim{animation:apkIn .2s}
+    /* bildirim balonu alt menünün üstünde */
+    html.apk .toast{bottom:calc(76px + env(safe-area-inset-bottom,0px));border-radius:12px;max-width:calc(100% - 32px);text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+    @media (prefers-reduced-motion:reduce){html.apk main:not([hidden]),html.apk #det,html.apk .sheet,html.apk .scrim{animation:none}}`;
+  document.head.appendChild(nat);
+  addEventListener("scroll",()=>document.documentElement.classList.toggle("scrolled",window.scrollY>4),{passive:true});
 
   /* Tazelik satırı: analiz zamanı (yapay zekâ, günde bir) + fiyat zamanı (canlı). Dokununca fiyatları yeniler. */
   renderFresh=function(){ const dot=$("dot"), txt=$("freshText"), btn=$("refreshBtn"); if(!txt) return;
