@@ -2,7 +2,7 @@
 <title>Yatırım Tavsiyesi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 [hidden]{display:none!important}
 html,body{overscroll-behavior:none} body{margin:0}
@@ -1317,7 +1317,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-33";
+const UI_VERSION="2026.11.01-1";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1777,7 +1777,7 @@ showTab(); renderAll();
       S.trades = all.filter(d=>d.kind==="trade").sort((a,b)=>String(b.buyDate||b.at).localeCompare(String(a.buyDate||a.at)));
       S.pfs = all.filter(d=>d.kind==="portfolio").sort((a,b)=>String(a.createdAt).localeCompare(String(b.createdAt)));
       const held=[...new Set(S.trades.filter(t=>t.status!=="closed").map(t=>t.code))].sort();
-      if(held.join()!==(S.heldSent||"")){ S.heldSent=held.join(); db.doc("config/held").set({codes:held}).catch(()=>{}); } renderSanal(); renderHisse(); renderOneri(); });
+      if(held.join()!==(S.heldSent||"")){ S.heldSent=held.join(); db.doc("config/held").set({codes:held}).catch(()=>{}); } renderSanal(); renderHisse(); renderOneri(); renderGundem(); });
   }
   setInterval(renderFresh, 60e3);
 })();
