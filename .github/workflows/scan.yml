@@ -1,0 +1,27 @@
+# Bu dal deponun varsayılan dalı olduğu için zamanlanmış görevler buradan çalışır; kod main dalından alınır.
+name: Kısa vade taraması
+on:
+  schedule:
+    - cron: '25 15 * * 1-5'   # 18:25 TR, borsa kapanışından sonra
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: scan, cancel-in-progress: false }
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Tara
+        run: node tools/short.js /tmp/short.json
+      - name: scan dalına yaz
+        run: |
+          cd /tmp && rm -rf out && mkdir out && cd out && git init -q && git checkout -q -b scan
+          cp /tmp/short.json short.json
+          git config user.name yatirim-bot; git config user.email yatirim-bot@users.noreply.github.com
+          git add short.json && git commit -qm tarama
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" scan
