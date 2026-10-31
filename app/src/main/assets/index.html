@@ -1394,6 +1394,15 @@ if(window.__standalone){
   const _os=openSettings; openSettings=function(){ const r=_os.apply(this,arguments); const sh=[...document.querySelectorAll(".sheet")].pop();
     const row=sh?.querySelector(".row:last-child"); if(row){ const d=document.createElement("div");
       d.innerHTML=`<h3 style="margin:8px 0 4px">Bu telefon</h3><label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox" id="ownChk" ${OWN()?"checked":""}><span>Yapay zekâ güncellemesini isteme düğmesini göster <span class="note">(yalnız uygulamanın sahibi içindir; Claude hesabı ister)</span></span></label>`;
+      const im=document.createElement("div");
+      im.innerHTML=`<h3 style="margin:8px 0 4px">Portföyü içe aktar</h3><p class="note" style="margin:0">Claude'daki uygulamada Ayarlar → "Portföyü kopyala"ya bas, metni buraya yapıştır.</p><textarea id="impTxt" style="width:100%;height:70px;margin-top:4px" placeholder="Kopyaladığın metni yapıştır"></textarea><div class="row" style="justify-content:flex-start"><button class="btn ghost sm" id="impBtn" style="margin-left:0">İçe aktar</button></div>`;
+      row.before(im);
+      im.querySelector("#impBtn").onclick=async()=>{ let o; try{ o=JSON.parse(im.querySelector("#impTxt").value.trim()); }catch(_){ toast("Metin okunamadı; tamamını yapıştırdığından emin ol."); return; }
+        if(!o||o.yatirim!==1||!Array.isArray(o.items)){ toast("Bu metin portföy verisi değil."); return; }
+        let n=0; for(const it of o.items){ if(!it||!it.id) continue; const {id,...d}=it; await tradesCol().doc(id).set(d); n++; }
+        const W=o.watch||{}, mg=(a,b)=>[...new Set([...(a||[]),...(b||[])])];
+        if(W.s?.length) await saveWatch(mg(S.watch,W.s)); if(W.f?.length) await saveFundWatch(mg(S.fwatch,W.f)); if(W.x?.length) await saveFxWatch(mg(S.fxwatch,W.x));
+        toast(n+" kayıt aktarıldı."); im.querySelector("#impTxt").value=""; };
       row.before(d); d.querySelector("#ownChk").onchange=e=>{ try{ localStorage.setItem("fp-owner",e.target.checked?"1":"0"); }catch(_){} renderFresh(); }; }
     return r; };
   document.addEventListener("visibilitychange",()=>{ if(!document.hidden) window.__pullRemote?.(); });
