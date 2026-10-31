@@ -1291,7 +1291,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-18";
+const UI_VERSION="2026.10.31-19";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1343,6 +1343,8 @@ async function lfvt(code){ const o=await nget("GET","https://fvt.com.tr/fonlar/y
 const fxClosed=now=>{ const wd=new Date(now+TR).getUTCDay(); return wd===6||wd===0; };
 function fxLastClose(){ const l=new Date(Date.now()+TR), back=(l.getUTCDay()+1)%7; return Date.UTC(l.getUTCFullYear(),l.getUTCMonth(),l.getUTCDate()-back)-TR; }
 function liveDue(k){ const at=S.live?.[k+"At"], t=at?new Date(at).getTime():0, now=Date.now();
+  // fiyat geçmişi (grafik) olmayan önbellek: bir kez yeniden çek
+  const map=S.live?.[k==="hisse"?"stocks":k==="fon"?"funds":"fx"]; if(map&&Object.values(map).some(v=>v&&v.price&&!v._h)){ LIVE.hTry=LIVE.hTry||{}; if(!(now-(LIVE.hTry[k]||0)<30*60e3)){ LIVE.hTry[k]=now; return true; } }
   if(k==="hisse") return marketOpen() ? now-t>15*60e3 : t < lastClose()+20*60e3;   // açıkken anlık fiyat ayrıca 10 sn'de bir gelir
   if(k==="doviz") return !fxClosed(now) ? now-t>15*60e3 : t < fxLastClose()+20*60e3;
   if(k==="fon") return t < fundPoint() || now-t > 12*3600e3;
