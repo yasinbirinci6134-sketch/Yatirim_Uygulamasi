@@ -1,0 +1,20 @@
+name: probe
+on:
+  push:
+    branches: [probe]
+permissions:
+  contents: write
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: e2e
+        run: |
+          npm i -q playwright@1.47.2 >/dev/null 2>&1 && npx playwright install --with-deps chromium >/dev/null 2>&1
+          test -f e2e.js && (node e2e.js > e2e.log 2>&1 || echo FAIL >> e2e.log) || true
+          git config user.name yatirim-bot; git config user.email yatirim-bot@users.noreply.github.com
+          git add -A && git commit -qm r && git push -q origin probe
