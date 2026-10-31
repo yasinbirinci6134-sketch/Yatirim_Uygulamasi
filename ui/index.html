@@ -551,7 +551,7 @@ function chartTouch(ch){ let H; try{ H=JSON.parse(ch.dataset.h); }catch(_){ retu
     let bi=0; for(let i=1;i<T.length;i++) if(Math.abs(T[i]-tt)<Math.abs(T[bi]-tt)) bi=i; const p=H[bi];
     const px=oL+(T[bi]-t0)/((t1-t0)||1)*r.width, py=oT+(140-8-(p[1]-mn)/rg*(140-16))/140*r.height;
     ln.style.cssText=`left:${px}px;top:${oT}px;height:${r.height}px`; dot.style.cssText=`left:${px}px;top:${py}px`;
-    { const last=H[H.length-1][1], c=last>0?(last/p[1]-1)*100:null; lab.innerHTML=`${num(p[1],dg)}${c!=null&&p!==H[H.length-1]?`<small class="${cls(c)}">bugüne ${pc(c,1)}</small>`:""}`; } lab.style.left=Math.max(40,Math.min(ch.clientWidth-40,px))+"px"; lab.style.top=Math.max(0,Math.min(py-(lab.offsetHeight||40)-12,oT+r.height-60))+"px";
+    lab.textContent=num(p[1],dg); lab.style.left=Math.max(40,Math.min(ch.clientWidth-40,px))+"px"; lab.style.top=Math.max(0,Math.min(py-(lab.offsetHeight||40)-12,oT+r.height-60))+"px";
     if(cd) cd.innerHTML=`<span class="cdsel">${esc(fd(p[0]))}</span>`;
     ov.hidden=false; };
   const hide=()=>{ ov.hidden=true; if(cd) cd.innerHTML=cd0; if(hd) hd.innerHTML=hd0; };
@@ -1326,7 +1326,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-10";
+const UI_VERSION="2026.11.01-11";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
