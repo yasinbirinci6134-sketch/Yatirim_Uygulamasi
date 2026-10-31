@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-5";
+const UI_VERSION="2026.10.31-6";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1341,12 +1341,12 @@ function liveDue(k){ const at=S.live?.[k+"At"], t=at?new Date(at).getTime():0, n
   return true; }
 async function liveRefresh(kinds,manual){
   if(!LIVE.ok()||!S.market) return false;
-  if(LIVE.busy){ if(manual) toast("Fiyatlar zaten çekiliyor…"); return true; }
+  if(LIVE.busy) return true;
   // Elle yenilemede fonlar yalnız 30 dk'dan eskiyse çekilir (fon fiyatı günde bir açıklanır; her sayfa ~200 KB)
   const fonOld=()=>{ const a=S.live?.fonAt; return !a||Date.now()-new Date(a).getTime()>30*60e3||liveDue("fon"); };
   kinds=kinds||(manual?["hisse","doviz",...(fonOld()?["fon"]:[])]:["hisse","fon","doviz"].filter(liveDue));
-  if(!kinds.length){ if(manual) toast("Fiyatlar güncel."); return true; }
-  LIVE.busy=true; renderFresh(); if(manual) toast("Fiyatlar çekiliyor…",1500);
+  if(!kinds.length) return true;
+  LIVE.busy=true; renderFresh();
   const now=new Date().toISOString(), P=S.live||{}, L={...P, at:now, stocks:{...(P.stocks||{})}, funds:{...(P.funds||{})}, fx:{...(P.fx||{})}, idx:{...(P.idx||{})}}, cnt=[], bad=[];
   const run=async(arr,key,kind,lbl,fn,n)=>{ if(!arr.length) return; const r=await lpool(arr,n,fn); let k=0;
     arr.forEach((x,i)=>{ if(r[i]?.price){ const v={...r[i],at:now}; if(!x.local) delete v.name; L[key][x.code]=v; k++; } });
@@ -1361,8 +1361,7 @@ async function liveRefresh(kinds,manual){
     await Promise.all(jobs);
     S.live=L; LIVE.err=bad.length&&cnt.every(c=>/ 0\//.test(c))?"Fiyatlar alınamadı":null; applyLive(); renderAll();
     try{ await S.db?.doc("market/live").set(L); }catch(e){}
-    if(manual) toast("Fiyatlar güncellendi: "+cnt.join(" · ")+(kinds.includes("hisse")||kinds.includes("doviz")?" (hisse/döviz 15 dk gecikmeli)":""));
-    else if(LIVE.err) toast("Fiyatlar alınamadı; internet bağlantını kontrol et. Son bilinen fiyatlar gösteriliyor.");
+    if(LIVE.err) toast("Fiyatlar alınamadı; internet bağlantını kontrol et. Son bilinen fiyatlar gösteriliyor.");
   }catch(e){ LIVE.err="Fiyatlar alınamadı"; toast("Fiyatlar alınamadı: "+(e?.message||"hata")); }
   finally{ LIVE.busy=false; renderFresh(); }
   return true; }

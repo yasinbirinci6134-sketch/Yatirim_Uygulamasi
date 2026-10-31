@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
   static final java.util.concurrent.ExecutorService NET = java.util.concurrent.Executors.newFixedThreadPool(6);
   static final java.util.concurrent.ConcurrentHashMap<String, String> RES = new java.util.concurrent.ConcurrentHashMap<>();
   final Handler ui = new Handler(Looper.getMainLooper());
-  WebView web; boolean ready, checked; String source = "asset", curSha = ""; String pendingOpen;
+  WebView web; boolean ready, checked; long lastCheck; String source = "asset", curSha = ""; String pendingOpen;
 
   SharedPreferences up() { return getSharedPreferences("ui", MODE_PRIVATE); }
   File uiFile() { return new File(getFilesDir(), "ui.html"); }
@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
   }
 
   void checkUi() {
-    if (checked) return; checked = true;
+    if (checked) return; checked = true; lastCheck = System.currentTimeMillis();
     NET.execute(() -> {
       try {
         JSONObject h = new JSONObject(); String et = up().getString("etag", null); if (et != null && uiFile().exists()) h.put("If-None-Match", et);
@@ -204,6 +204,12 @@ public class MainActivity extends Activity {
     @JavascriptInterface public void setAlarms(String json) {
       try { new JSONArray(json); NotifyJob.prefs(MainActivity.this).edit().putString("alarms", json).apply(); NotifyJob.schedule(MainActivity.this); } catch (Exception e) {}
     }
+  }
+
+  // Uygulama arka plandan dönünce de arayüz güncellemesini denetle (en çok 10 dakikada bir)
+  @Override protected void onResume() {
+    super.onResume();
+    if (ready && System.currentTimeMillis() - lastCheck > 10 * 60 * 1000L) { checked = false; checkUi(); }
   }
 
   @Override public void onBackPressed() { if (web.canGoBack()) web.goBack(); else moveTaskToBack(true); }
