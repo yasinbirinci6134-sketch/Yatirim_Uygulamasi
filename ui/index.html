@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-6";
+const UI_VERSION="2026.10.31-7";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1639,6 +1639,172 @@ if(window.__standalone){
       ap.querySelector("#ownChk").onchange=e=>{ ls("fp-owner",e.target.checked?"1":"0"); renderFresh(); };
       return r; }; }
 
+  /* ===================== YENİ TASARIM (APK) ===================== */
+  { const lk=document.createElement("link"); lk.rel="stylesheet"; lk.href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap"; document.head.appendChild(lk); }
+  const ds=document.createElement("style"); ds.textContent=`
+    html.apk{--f-display:"Manrope",system-ui,sans-serif;--f-body:"Manrope",system-ui,sans-serif;--f-num:"Manrope",system-ui,sans-serif;--r:20px;
+      --sh:0 1px 2px color-mix(in srgb,var(--ink) 5%,transparent),0 8px 24px -12px color-mix(in srgb,var(--ink) 18%,transparent)}
+    html.apk body{background:var(--bg);font-family:var(--f-body)}
+    html.apk .num,html.apk .lp{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+    /* üst çubuk: sekmeye göre büyük başlık, kaydırınca küçülür */
+    html.apk header{padding:calc(10px + env(safe-area-inset-top,0px)) 0 8px;gap:4px;background:var(--bg)}
+    html.apk .brand h1{font:800 28px/1.15 var(--f-display);letter-spacing:-.02em;transition:font-size .18s}
+    html.apk .brand h1 span{color:inherit}
+    html.apk.scrolled .brand h1{font-size:20px}
+    html.apk #setBtn{width:40px;height:40px;border-radius:50%;background:var(--card);box-shadow:var(--sh);display:grid;place-items:center;font-size:18px;color:var(--ink);text-decoration:none}
+    html.apk .fresh{font-size:12px;font-weight:600}
+    html.apk.scrolled .fresh{display:none}
+    /* alt menü: buzlu cam */
+    html.apk nav.tabs{background:color-mix(in srgb,var(--card) 82%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:0;box-shadow:0 -1px 0 color-mix(in srgb,var(--ink) 7%,transparent)}
+    html.apk nav.tabs button{font:700 10.5px var(--f-body)}
+    /* kartlar: kenarlıksız, yumuşak gölge, büyük köşe */
+    html.apk .card{border:0;border-radius:var(--r);box-shadow:var(--sh);padding:16px}
+    html.apk .card h2{font:800 17px var(--f-display);letter-spacing:-.01em}
+    html.apk .card h3{font:700 15px var(--f-display)}
+    html.apk .btn{border-radius:14px;font-weight:700}
+    html.apk .chips button{border-radius:999px;font-weight:700}
+    html.apk .seg{border:0;box-shadow:var(--sh);border-radius:14px}
+    html.apk .seg button{border-radius:11px;font-weight:700}
+    html.apk input[type=search],html.apk input[type=number],html.apk input[type=text],html.apk textarea,html.apk select{border-radius:12px}
+    /* puan halkası */
+    html.apk .sbadge{--c:var(--muted);width:44px;height:44px;border-radius:50%;font:800 15px var(--f-num);color:var(--ink);
+      background:radial-gradient(closest-side,var(--card) 78%,transparent 80% 100%),conic-gradient(var(--c) calc(var(--p,0)*1%),color-mix(in srgb,var(--c) 14%,var(--card)) 0)}
+    html.apk .sbadge.hi{--c:var(--up)} html.apk .sbadge.mid{--c:var(--warn)} html.apk .sbadge.lo{--c:var(--down)}
+    html.apk .lrow{padding-block:12px}
+    html.apk .lrow .lp{font:800 16px var(--f-num)}
+    /* ---- Bugün ekranı ---- */
+    html.apk main{min-width:0;max-width:100%}
+    .hm-tiles,.hm-cal{contain:inline-size}
+    .hm{display:flex;flex-direction:column;gap:14px;padding-bottom:8px;min-width:0;max-width:100%}
+    .hm>*{min-width:0}
+    .hm-hi{font:600 13px var(--f-body);color:var(--muted);margin:2px 2px -6px}
+    .hm-pf{border-radius:24px;padding:18px;color:#fff;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 55%,#000));box-shadow:0 14px 30px -14px color-mix(in srgb,var(--accent) 70%,transparent);display:flex;flex-direction:column;gap:6px;cursor:pointer}
+    .hm-pf .l{font:700 12px var(--f-body);opacity:.8;letter-spacing:.06em;text-transform:uppercase}
+    .hm-pf .v{font:800 34px/1.1 var(--f-num);letter-spacing:-.02em}
+    .hm-pf .r{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+    .hm-pill{background:rgba(255,255,255,.16);border-radius:999px;padding:5px 10px;font:700 12.5px var(--f-body)}
+    .hm-empty{border:2px dashed color-mix(in srgb,var(--accent) 40%,var(--line));border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:8px}
+    .hm-do{display:flex;flex-direction:column;gap:12px}
+    .hm-do .t{display:flex;align-items:center;gap:10px}
+    .hm-ic{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:18px;flex:none}
+    .hm-step{display:flex;gap:10px;align-items:flex-start;font:500 14.5px/1.45 var(--f-body);min-width:0}
+    .hm-step span{min-width:0;overflow-wrap:anywhere}
+    .hm-step b{flex:none;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font:800 12px var(--f-body);display:grid;place-items:center;margin-top:1px}
+    .hm-bar{display:flex;height:12px;border-radius:999px;overflow:hidden;gap:2px}
+    .hm-leg{display:flex;flex-wrap:wrap;gap:6px 12px;font:600 12.5px var(--f-body)}
+    .hm-leg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:0}
+    .hm-tiles{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 8px;max-width:100%}
+    .hm-tiles::-webkit-scrollbar{display:none}
+    .hm-tile{flex:0 0 auto;min-width:118px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:3px}
+    .hm-tile .k{font:700 11.5px var(--f-body);color:var(--muted)}
+    .hm-tile .v{font:800 19px var(--f-num);letter-spacing:-.02em}
+    .hm-chg{font:700 12px var(--f-num)}
+    .hm-sec{display:flex;justify-content:space-between;align-items:baseline;margin:6px 2px -4px}
+    .hm-sec h2{font:800 18px var(--f-display);margin:0;letter-spacing:-.01em}
+    .hm-sec button{all:unset;cursor:pointer;color:var(--accent);font:700 13px var(--f-body)}
+    .hm-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line);cursor:pointer}
+    .hm-row:first-child{border-top:0}
+    .hm-row .hg{flex:1;min-width:0}
+    .hm-row .hg b{display:block;font:700 14px var(--f-body)}
+    .hm-row .hg span{display:block;font:500 12.5px var(--f-body);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hm-dot{width:10px;height:10px;border-radius:50%;flex:none}
+    .hm-cal{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 8px;max-width:100%}
+    .hm-cal::-webkit-scrollbar{display:none}
+    .hm-ev{flex:0 0 auto;width:200px;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:var(--sh)}
+    .hm-ev .d{font:800 13px var(--f-body);color:var(--accent)}
+    .hm-ev p{margin:4px 0 0;font:500 13px/1.4 var(--f-body)}
+    .hm-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+    .hm-mini{background:var(--card);border-radius:20px;padding:14px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:6px;cursor:pointer}
+    .hm-mini .k{font:800 14px var(--f-display)}
+    .hm-mini p{margin:0;font:500 12.5px/1.45 var(--f-body);color:var(--muted);display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+    .hm-mini .go{font:700 12.5px var(--f-body);color:var(--accent);margin-top:auto}
+    .nsheet p{font:500 14.5px/1.5 var(--f-body);margin:4px 0 10px}
+    .nsheet .nlab{font:800 12px var(--f-body);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}`;
+  document.head.appendChild(ds);
+
+  /* Sekmeye göre büyük başlık */
+  const TITLE={gundem:"Bugün",oneri:"Fonlar",hisse:"Hisseler",doviz:"Döviz ve altın",sanal:"Portföyüm",piyasa:"Piyasa"};
+  { const h1=document.querySelector(".brand h1"), st=$("setBtn"); if(st) st.textContent="⚙";
+    const o=showTab; showTab=function(){ const r=o.apply(this,arguments); if(h1) h1.textContent=TITLE[S.tab]||"Yatırım"; return r; }; }
+  { const b=$("t-gundem")?.querySelector("span"); if(b) b.textContent="Bugün"; }
+
+  /* Puan halkası: listedeki rozetler doluluk oranını gösterir */
+  { const o=listRow; listRow=function(t,x){ return o.apply(this,arguments).replace('<div class="sbadge','<div style="--p:'+(Number(x.score)||0)+'" class="sbadge'); }; }
+
+  const tl0=v=>"₺"+Math.round(v).toLocaleString("tr-TR"), sg=v=>(v>=0?"+":"−");
+  const chg=(v,d=2)=>v==null||isNaN(v)?"":`<span class="hm-chg ${v>=0?"up":"down"}">${v>=0?"▲":"▼"} %${Math.abs(v).toLocaleString("tr-TR",{maximumFractionDigits:d})}</span>`;
+  const typeOf=c=>(S.market?.stocks||[]).some(x=>x.code===c)?"s":(S.market?.funds||[]).some(x=>x.code===c)?"f":(S.market?.fx||[]).some(x=>x.code===c)?"x":null;
+  const greet=()=>{ const h=new Date().getHours(); return h<6?"İyi geceler":h<12?"Günaydın":h<18?"İyi günler":"İyi akşamlar"; };
+  const sentences=t=>String(clean(t||"")).split(/(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ0-9])/).map(s=>s.trim()).filter(Boolean);
+  const CCOL={para:"var(--para)",altin:"var(--gold)",hisse:"var(--stock)",gumus:"#8a8f98",doviz:"#6b5aa6",diger:"var(--muted)"};
+
+  function openNews(n){ const scrim=document.createElement("div"); scrim.className="scrim"; const sh=document.createElement("div"); sh.className="sheet nsheet"; sh.setAttribute("role","dialog");
+    scrim.style.zIndex=80; sh.style.zIndex=81; const close=()=>{ scrim.remove(); sh.remove(); }; scrim.onclick=close;
+    sh.innerHTML=`<h2 style="margin:0 0 4px">${esc(n.title)}</h2><div class="small muted" style="margin-bottom:10px">${esc(fmtDate(n.date)||"")}${n.source?" · "+esc(n.source):""}</div>
+      ${n.what?`<div class="nlab">Ne oldu?</div><p>${esc(n.what)}</p>`:""}${n.meaning?`<div class="nlab">Benim için ne anlama geliyor?</div><p>${esc(n.meaning)}</p>`:""}
+      ${(n.affects||[]).length?`<div class="nlab">Neyi etkiler?</div>${n.affects.map(f=>`<p style="margin:4px 0"><span class="${(NEF[f.effect]||NEF.mixed)[1]}">${(NEF[f.effect]||NEF.mixed)[0]}</span> <b>${esc(NCAT[f.cat]||f.cat)}</b> — ${esc(f.why||"")}</p>`).join("")}`:""}
+      <div class="row">${n.url?`<button class="btn ghost" data-u>Habere git</button>`:""}<button class="btn" data-c>Kapat</button></div>`;
+    sh.querySelector("[data-c]").onclick=close; sh.querySelector("[data-u]")?.addEventListener("click",()=>A.openUrl(n.url));
+    document.body.append(scrim,sh); }
+
+  /* Bugün: portföy özeti → bugün ne yapmalı → piyasa → dikkat → görünüm → takvim → haberler */
+  renderGundem=function(){ const v=$("v-gundem"), m=S.market; if(!v) return;
+    if(!m){ v.innerHTML=`<div class="hm"><section class="card empty">${S.ready?"Veriler yükleniyor… İlk açılışta internet gerekir.":"Yükleniyor…"}</section></div>`; return; }
+    const a=m.advice||{}, I=k=>(m.indicators||[]).find(i=>i.k===k);
+    const pn=s=>{ const x=parseFloat(String(s||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isNaN(x)?null:x; };
+    const nchg=s=>{ const mm=String(s||"").match(/([+−-])\s*%?\s*([\d,]+)/); return mm?(mm[1]==="+"?1:-1)*parseFloat(mm[2].replace(",",".")):null; };
+    // portföy
+    const open=S.trades.filter(t=>t.status!=="closed"); let val=0, cost=0, today=0;
+    open.forEach(t=>{ const f=asset(t.code), cur=f?.price??t.price, u=t.units||t.amount/t.price, vv=u*cur; val+=vv; cost+=t.amount; if(typeof f?.d1==="number") today+=vv-vv/(1+f.d1/100); });
+    const pnl=val-cost, pnlP=cost?pnl/cost*100:0, todP=val?today/(val-today)*100:0;
+    const pfHtml=open.length?`<div class="hm-pf" id="hmPf" role="button"><span class="l">Portföyüm</span><span class="v">${tl0(val)}</span>
+        <div class="r"><span class="hm-pill">Bugün ${sg(today)}${tl0(Math.abs(today)).slice(1)} ₺ · ${sg(todP)}%${Math.abs(todP).toLocaleString("tr-TR",{maximumFractionDigits:2})}</span><span class="hm-pill">Toplam ${sg(pnl)}${tl0(Math.abs(pnl)).slice(1)} ₺ · ${sg(pnlP)}%${Math.abs(pnlP).toLocaleString("tr-TR",{maximumFractionDigits:1})}</span></div></div>`
+      :`<div class="hm-empty"><b style="font:800 16px var(--f-display)">Portföyünü ekle</b><span class="muted" style="font-size:13.5px">Aldığın fon ve hisseleri gir; ne kadar kazandığını ve ne yapman gerektiğini burada gör.</span><button class="btn" id="hmPfAdd" style="align-self:flex-start;flex:none">Portföye git</button></div>`;
+    // bugün ne yapmalı
+    const steps=sentences(a.summary).slice(0,3), it=(a.short?.items||[]).filter(i=>Number(i.weight)>0);
+    const doHtml=`<section class="card hm-do"><div class="t"><span class="hm-ic">🧭</span><div><h2 style="margin:0">Bugün ne yapmalı?</h2><span class="small muted">${esc(updLbl())} analizi</span></div></div>
+      ${steps.map((s,i)=>`<div class="hm-step"><b>${i+1}</b><span>${esc(s)}</span></div>`).join("")}
+      ${it.length?`<div><div class="small muted" style="font-weight:700;margin-bottom:6px">Önerilen dağılım · ${esc(a.short?.horizon||"kısa vade")}</div>
+        <div class="hm-bar">${it.map(i=>{ const f=asset(i.code); return `<span style="flex:${Number(i.weight)};background:${CCOL[f?.cat||"para"]||"var(--muted)"}"></span>`; }).join("")}</div>
+        <div class="hm-leg" style="margin-top:8px">${it.map(i=>{ const f=asset(i.code); return `<span><i style="background:${CCOL[f?.cat||"para"]||"var(--muted)"}"></i>${esc(i.code)} %${esc(i.weight)}</span>`; }).join("")}</div></div>
+        <button class="btn ghost" id="hmPlan" style="flex:none">Fon önerilerini gör</button>`:""}</section>`;
+    // piyasa kutucukları
+    const pf=pn(I("Politika faizi")?.v), inf=pn(I("Yıllık enflasyon")?.v), re=pf!=null&&inf!=null?pf-inf:null;
+    const tile=(k,vv,d,code,t)=>vv?`<div class="hm-tile" ${code?`data-od="${t}:${code}"`:""}><span class="k">${k}</span><span class="v num">${esc(String(vv).replace(/\s*TL$/,""))}</span>${d!=null?chg(d):`<span class="hm-chg muted">&nbsp;</span>`}</div>`:"";
+    const fxp=c=>(m.fx||[]).find(x=>x.code===c);
+    const tiles=[tile("BIST 100",I("BIST 100")?.v,nchg(I("BIST 100")?.note)), tile("Dolar/TL",I("Dolar/TL")?.v,nchg(I("Dolar/TL")?.note),"USD","x"),
+      tile("Gram altın",I("Gram altın")?.v,nchg(I("Gram altın")?.note),"GAU","x"), fxp("EUR")?tile("Euro/TL",num(fxp("EUR").price,2),fxp("EUR").d1,"EUR","x"):"",
+      re!=null?`<div class="hm-tile"><span class="k g" data-g="Reel faiz">Reel faiz</span><span class="v num ${re>=0?"up":"down"}">${re>=0?"+":""}%${re.toLocaleString("tr-TR",{maximumFractionDigits:1})}</span><span class="hm-chg muted">${re>=0?"TL'de kazandırıyor":"TL eriyor"}</span></div>`:"",
+      tile("Politika faizi",I("Politika faizi")?.v,null)].join("");
+    // dikkat: elindekilerde çıkış uyarısı, uzak dur ya da sert düşüş
+    const held=[...new Set(open.map(t=>t.code))], watch=[...new Set([...S.watch,...S.fwatch,...S.fxwatch])];
+    const al=[...held,...watch.filter(c=>!held.includes(c))].map(c=>({c,t:typeOf(c),x:asset(c),h:held.includes(c)})).filter(o=>o.x).map(o=>{ const x=o.x;
+      const why=x.exitAt?"Listeden çıkabilir: "+String(x.exitWhy||"puanı düştü"):x.signal==="uzak"?"Puanı zayıf ("+num(x.score,0)+"), uzak durulması öneriliyor":typeof x.d1==="number"&&x.d1<=-3?"Bugün sert düştü ("+pc(x.d1,1)+")":typeof x.d1==="number"&&x.d1>=4?"Bugün sert yükseldi ("+pc(x.d1,1)+")":null;
+      return why?{...o,why}:null; }).filter(Boolean).slice(0,5);
+    const alHtml=al.length?`<div class="hm-sec"><h2>Dikkat</h2></div><section class="card" style="padding-block:6px">${al.map(o=>`<div class="hm-row" data-od="${o.t}:${o.c}"><span class="hm-dot" style="background:${/sert yüksel/.test(o.why)?"var(--up)":"var(--down)"}"></span><div class="hg"><b>${esc(o.c)}${o.h?' <span class="small muted">· elinde</span>':""}</b><span>${esc(o.why)}</span></div><span class="muted">›</span></div>`).join("")}</section>`:"";
+    // görünüm kartları
+    const mini=(k,t,tab)=>t?`<div class="hm-mini" data-tab="${tab}"><span class="k">${k}</span><p>${esc(clean(t))}</p><span class="go">Listeye git ›</span></div>`:"";
+    const twoHtml=(a.stocks?.summary||a.fx?.summary)?`<div class="hm-two">${mini("Hisse görünümü",a.stocks?.summary,"hisse")}${mini("Döviz ve altın",a.fx?.summary,"doviz")}</div>`:"";
+    // takvim
+    const cal=(a.watch||[]).map(w=>{ const i=w.indexOf(": "); const d=i>0&&i<24?w.slice(0,i):"", t=i>0&&i<24?w.slice(i+1).trim():w; return `<div class="hm-ev"><span class="d">${esc(d||"Yakında")}</span><p>${esc(t)}</p></div>`; }).join("");
+    // haberler
+    const news=m.news||[], showAll=S._allNews;
+    const nrow=(n,i)=>`<div class="hm-row" data-nw="${i}"><span class="hm-dot" style="background:${n.impact==="yuksek"?"var(--down)":n.impact==="dusuk"?"var(--line)":"var(--warn)"}"></span><div class="hg"><b style="white-space:normal">${esc(n.title)}</b><span>${esc(fmtDate(n.date)||"")}${n.source?" · "+esc(n.source):""}${(n.affects||[]).length?" · "+n.affects.map(f=>(NEF[f.effect]||NEF.mixed)[0].split(" ")[0]+" "+(NCAT[f.cat]||f.cat).split(" ")[0]).join(", "):""}</span></div><span class="muted">›</span></div>`;
+    v.innerHTML=`<div class="hm"><div class="hm-hi">${greet()} · ${new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long",weekday:"long"})}</div>
+      ${pfHtml}${doHtml}
+      <div class="hm-sec"><h2>Piyasa</h2><span class="small muted">${S.live?.at?"canlı · "+esc(fmtTime(S.live.at)):""}</span></div><div class="hm-tiles">${tiles}</div>
+      ${alHtml}${twoHtml}
+      ${cal?`<div class="hm-sec"><h2>Takvim</h2></div><div class="hm-cal">${cal}</div>`:""}
+      ${news.length?`<div class="hm-sec"><h2>Haberler</h2>${news.length>4?`<button id="hmAllN">${showAll?"Daha az":"Tümü ("+news.length+")"}</button>`:""}</div><section class="card" style="padding-block:6px">${news.slice(0,showAll?99:4).map(nrow).join("")}</section>`:""}
+    </div>`;
+    const go=tab=>{ S.tab=tab; showTab(); window.scrollTo({top:0}); };
+    $("hmPf")?.addEventListener("click",()=>go("sanal")); $("hmPfAdd")?.addEventListener("click",()=>go("sanal")); $("hmPlan")?.addEventListener("click",()=>go("oneri"));
+    $("hmAllN")?.addEventListener("click",()=>{ S._allNews=!S._allNews; renderGundem(); });
+    v.querySelectorAll("[data-od]").forEach(e=>e.addEventListener("click",()=>{ const [t,c]=e.dataset.od.split(":"); if(t&&c&&detItem(t,c)) openDetail(t,c); }));
+    v.querySelectorAll("[data-tab]").forEach(e=>e.addEventListener("click",()=>go(e.dataset.tab)));
+    v.querySelectorAll("[data-nw]").forEach(e=>e.addEventListener("click",()=>openNews(news[+e.dataset.nw])));
+  };
+  { const h1=document.querySelector(".brand h1"); if(h1) h1.textContent=TITLE[S.tab]||"Bugün"; }
   document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ window.__pullRemote?.(); apkCheck(false); } });
   setInterval(()=>{ if(!document.hidden&&S.ready&&S.market&&LIVE.ok()) liveRefresh(null,false); },60e3);   // açıkken: borsa açıksa 5 dk'da bir
   renderFresh(); setTimeout(()=>apkCheck(false),4000);
