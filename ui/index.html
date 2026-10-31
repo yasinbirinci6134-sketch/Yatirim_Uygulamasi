@@ -749,13 +749,13 @@ function perfBlock(x){
     return `<span>${l}</span><span class="track"><i class="${v>=0?"p":"n"}" style="width:${w}%"></i></span><span class="v num ${cls(v)}">${pc(v,1)}</span>`}).join("")}</div>`;
 }
 function partsBlock(parts){ if(!parts) return "";
-  const L={deger:["Değerleme",20],karlilik:["Kalite ve kârlılık",30],saglamlik:["Risk ve sağlamlık",15],momentum:["Momentum ve trend",25],analist:["Analist ve haber",10],getiri:["Getiri tutarlılığı",30],maliyet:["Maliyet (ücret)",20],risk:["Risk kontrolü",25],kalite:["Kalite",15],uyum:["Ortama uyum",10],tasima:["Taşıma (TL faizine göre)",25],trend:["Trend",30],fxdeger:["Değerleme",15],makro:["Makro ve risk ortamı",20],fxrisk:["Oynaklık",10]};
+  const L={deger:["Değerleme",25],karlilik:["Kalite ve kârlılık",20],saglamlik:["Risk ve sağlamlık",15],momentum:["Momentum ve trend",30],analist:["Analist ve haber",10],getiri:["Getiri tutarlılığı",30],maliyet:["Maliyet (ücret)",20],risk:["Risk kontrolü",25],kalite:["Kalite",15],uyum:["Ortama uyum",10],tasima:["Taşıma (TL faizine göre)",25],trend:["Trend",30],fxdeger:["Değerleme",15],makro:["Makro ve risk ortamı",20],fxrisk:["Oynaklık",10]};
   return `<div class="parts">${Object.entries(parts).map(([k,v])=>{const n=(L[k]||[k])[0], mx=Number(S.market?.partsMax?.[k])||(L[k]||[0,100])[1];return `<span class="g">${n}</span><span class="pb"><i style="width:${Math.max(0,Math.min(100,v/mx*100))}%"></i></span><span class="num">${num(v,0)}/${mx}</span>`}).join("")}</div>`; }
 
 const NOTE={deger:["fiyatı ucuz","fiyatı pahalı"],karlilik:["kârlı","kârlılığı zayıf"],saglamlik:["şirket sağlam","yapısı riskli"],momentum:["yükselişte","son aylarda zayıf"],analist:["analistler olumlu","analist desteği az"],
  getiri:["getirisi istikrarlı","getirisi zayıf"],maliyet:["ücreti düşük","ücreti yüksek"],risk:["az dalgalanır","çok dalgalanır"],kalite:["büyük ve köklü","küçük fon"],uyum:["ortam destekliyor","ortam desteklemiyor"],
  tasima:["TL faizini geçebilir","TL faizi daha çok kazandırıyor"],trend:["yükselişte","düşüşte"],fxdeger:["fiyatı makul","fiyatı yüksek"],makro:["ortam destekliyor","ortam desteklemiyor"],fxrisk:["sakin seyrediyor","çok dalgalı"]};
-const PMX={deger:20,karlilik:30,saglamlik:15,momentum:25,analist:10,getiri:30,maliyet:20,risk:25,kalite:15,uyum:10,tasima:25,trend:30,fxdeger:15,makro:20,fxrisk:10};
+const PMX={deger:25,karlilik:20,saglamlik:15,momentum:30,analist:10,getiri:30,maliyet:20,risk:25,kalite:15,uyum:10,tasima:25,trend:30,fxdeger:15,makro:20,fxrisk:10};
 function scoreNote(x){ const p=x?.parts; if(!p) return "";
   const r=Object.entries(p).filter(([k,v])=>NOTE[k]&&typeof v==="number").map(([k,v])=>[k,v/(Number(S.market?.partsMax?.[k])||PMX[k])]).sort((a,b)=>b[1]-a[1]);
   if(!r.length) return ""; const g=r.filter(([,v])=>v>=0.7).slice(0,2).map(([k])=>NOTE[k][0]), z=r.filter(([,v])=>v<=0.4).slice(-2).reverse().map(([k])=>NOTE[k][1]);
@@ -791,7 +791,7 @@ function renderHisse(){
     ${allocBlock(a?.short)}
     ${allocBlock(a?.long)}
     <section class="card"><details><summary class="code" style="cursor:pointer">Puan nasıl hesaplanıyor?</summary>
-      <p class="why" style="margin-top:8px">Her hisse 100 üzerinden puanlanır. <b>Kalite ve kârlılık (30):</b> enflasyondan arındırılmış (reel) özsermaye kârlılığı, reel kâr ve satış büyümesi, nakit akışı, borçluluk, bedelli sermaye artırımı (Piotroski F-skoru mantığı). Borsa İstanbul araştırmalarında getiriyi en iyi açıklayan ölçüt. <b>Momentum ve trend (25):</b> son 12 ay (son ay hariç) ve 3 aylık getirinin BIST 100'e göre gücü. <b>Değerleme (20):</b> F/K, PD/DD sektöre ve kârlılığa göre; bankada PD/DD özsermaye kârlılığıyla birlikte okunur. Ucuz ama kârı eriyen şirket "değer tuzağı" sayılır, puanı kırpılır. <b>Risk ve sağlamlık (15):</b> düşük oynaklık, büyüklük, halka açıklık, borç, olumsuz KAP. <b>Analist ve haber (10):</b> hedef fiyatlar araştırmalara göre 12 ayda ancak ≈%26 oranında tuttuğu ve iyimser olduğu için yarıya indirilerek kullanılır; hedeflerin yukarı/aşağı revize edilmesi ve beklenti üstü bilanço daha önemlidir. "Alınabilir": puan 60+ VE listedeki en iyi %30 içinde; "Uzak dur": 42 altı ya da ağır olumsuz KAP (SPK tedbiri, kayyum, konkordato); arası "İzle". Fonlarda bantlar: 70+ güçlü, 45–69 orta, 45 altı zayıf. Bankada değerleme ileriye dönük kârlılık ve beklenen faizle, holdingde net aktif değer iskontosuyla yapılır; reel kârlılık beklenen enflasyona göre ölçülür. Verisi eksik ölçüt yarım puan alır (ne ödül ne ceza). <b>Trend filtresi:</b> 3 ay ve 1 yıl getirisi ikisi de eksi olan hisse "Alınabilir" olamaz ve kısa vade önerisine girmez. Kârlılığı zayıf (10'un altı) hisse de "Alınabilir" olamaz. Risk; volatilite, halka açıklık, şirket büyüklüğü ve sektöre göre 1–5 verilir.</p></details></section>
+      <p class="why" style="margin-top:8px">Her hisse 100 üzerinden puanlanır. <b>Kalite ve kârlılık (20):</b> enflasyondan arındırılmış (reel) özsermaye kârlılığı, reel kâr ve satış büyümesi, nakit akışı, borçluluk, bedelli sermaye artırımı (Piotroski F-skoru mantığı). <b>Momentum ve trend (30):</b> son 12 ay (son ay hariç) ve 3 aylık getirinin BIST 100'e göre gücü. <b>Değerleme (25):</b> F/K, PD/DD sektöre ve kârlılığa göre; bankada PD/DD özsermaye kârlılığıyla birlikte okunur. Ucuz ama kârı eriyen şirket "değer tuzağı" sayılır, puanı kırpılır. <b>Risk ve sağlamlık (15):</b> düşük oynaklık, büyüklük, halka açıklık, borç, olumsuz KAP. <b>Analist ve haber (10):</b> hedef fiyatlar araştırmalara göre 12 ayda ancak ≈%26 oranında tuttuğu ve iyimser olduğu için yarıya indirilerek kullanılır; hedeflerin yukarı/aşağı revize edilmesi ve beklenti üstü bilanço daha önemlidir. "Alınabilir": puan 60+ VE listedeki en iyi %30 içinde; "Uzak dur": 42 altı ya da ağır olumsuz KAP (SPK tedbiri, kayyum, konkordato); arası "İzle". Fonlarda bantlar: 70+ güçlü, 45–69 orta, 45 altı zayıf. Bankada değerleme ileriye dönük kârlılık ve beklenen faizle, holdingde net aktif değer iskontosuyla yapılır; reel kârlılık beklenen enflasyona göre ölçülür. Verisi eksik ölçüt yarım puan alır (ne ödül ne ceza). <b>Trend filtresi:</b> 3 ay ve 1 yıl getirisi ikisi de eksi olan hisse "Alınabilir" olamaz ve kısa vade önerisine girmez. Kârlılığı zayıf (10'un altı) hisse de "Alınabilir" olamaz. Risk; volatilite, halka açıklık, şirket büyüklüğü ve sektöre göre 1–5 verilir.</p></details></section>
     <section class="card"><div class="horizon"><h2>Hisseler <span class="small muted">${st.length}</span></h2>${quickBtn("hisse")}</div>
       ${lfBar("hisse","Hisse ara: kod ya da şirket")}
       ${S.db?`<form id="addForm" class="addrow"><input id="addCode" placeholder="Hisse ekle (ör. TTRAK)" maxlength="6" autocomplete="off" aria-label="Hisse kodu"><button class="btn" type="submit">Ekle</button></form>`:""}
@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-14";
+const UI_VERSION="2026.10.31-15";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1579,7 +1579,11 @@ function liveNote(x){ if(x?.auto) return `<p class="small muted" style="margin:6
   const a=x?._ai; if(!a||typeof a.score!=="number"||a.score===x.score) return "";
   return `<p class="small muted" style="margin:6px 0 0">Güncel fiyatla hesaplandı: yapay zekânın bugünkü puanı ${a.score}${a.signal&&a.signal!==x.signal?" ("+esc(SIG[a.signal]||a.signal)+")":""} idi. Fiyata bağlı parçalar (momentum, analist hedefi, trend, taşıma) anlık fiyatla yeniden hesaplanır; diğerleri günlük analizden gelir.</p>`; }
 /* Canlı fiyatları yapay zekânın yazdığı verinin üstüne koy (yalnız daha yeniyse), göstergeleri ve fiyata bağlı puanları güncelle */
+// Hisse bölüm ağırlıkları geçmiş testiyle (BIST 100, 2017–2026, 6 ay sonraki getiri) ayarlandı: değerleme ve momentum daha güçlü çıktı
+const STOCK_W={karlilik:20,deger:25,momentum:30,saglamlik:15,analist:10};
 function applyLive(){ const L=S.live, M=S.market; if(!M) return;
+  if(!M._w){ const old={...SCORE.MAX,...(M.partsMax||{})}; (M.stocks||[]).forEach(x=>{ if(!x.parts) return; for(const k in STOCK_W) if(typeof x.parts[k]==="number"&&old[k]&&old[k]!==STOCK_W[k]) x.parts[k]=Math.round(x.parts[k]*STOCK_W[k]/old[k]);
+      x.score=Math.round(Object.values(x.parts).reduce((s,v)=>s+(typeof v==="number"?v:0),0)); }); M.partsMax={...(M.partsMax||{}),...STOCK_W}; M._w=1; }
   if(L){ const ap=(arr,map,qk)=>{ let any=false; (arr||[]).forEach(x=>{ const v=map?.[x.code]; if(!v) return;
         if(x.priceDate && v.priceDate && v.priceDate<x.priceDate) return;
         if(x.priceDate===v.priceDate && x.updatedAt && v.at && v.at<x.updatedAt) return;
