@@ -1317,7 +1317,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-31";
+const UI_VERSION="2026.10.31-32";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1341,6 +1341,20 @@ async function fhRefresh(){ if(FH.busy||!LIVE.ok()||!S.market||Date.now()-(FH.fa
       if(!h.length) LIVE.tefasPrimed=false; FH.d[x.code]={at:Date.now(),h:h.length?h:(FH.d[x.code]?.h||null)}; fhSave();
       if(h.length&&S.det&&S.det.c===x.code) drawDetail(); await new Promise(r=>setTimeout(r,9000)); } }
   finally{ FH.busy=false; } }
+/* Kısa vade taraması: her iş günü kapanıştan sonra GitHub'da BIST 100 için üretilir (tools/short.js); telefonda 30 dk'da bir yoklanır */
+const SH={ d:(()=>{ try{ return JSON.parse(localStorage.getItem("fp-short")||"null"); }catch(_){ return null; } })(), at:0, busy:false, cache:null };
+async function shortRefresh(force){ if(SH.busy||!LIVE.ok()) return; if(!force&&Date.now()-SH.at<30*60e3) return; SH.busy=true; SH.at=Date.now();
+  try{ const o=await nget("GET","https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/scan/short.json?t="+Math.floor(Date.now()/600000));
+    let j=null; try{ j=JSON.parse(o.body||"null"); }catch(_){}
+    if(j&&Array.isArray(j.items)&&j.items.length>=40&&(!SH.d||String(j.at)>=String(SH.d.at))){ const ch=!SH.d||j.at!==SH.d.at; SH.d=j; SH.cache=null; try{ localStorage.setItem("fp-short",JSON.stringify(j)); }catch(_){} if(ch) renderAll(); } }
+  catch(_){} finally{ SH.busy=false; } }
+/* Bir hissenin kısa vade puanı: taramada varsa oradan; yoksa (ör. kendi eklediğin hisse) telefondaki 1 yıllık fiyatlarla aynı formül, BIST 100'e göre sıralanır */
+function shortFor(code,x){ const d=SH.d; if(!d||!code) return null; if(!SH.cache) SH.cache={}; if(code in SH.cache) return SH.cache[code];
+  const it=d.items.find(i=>i.code===code); let r=null;
+  if(it) r={score:it.score,tags:it.tags||[],f:it.f,price:it.price,name:it.name,date:it.date};
+  else { const hh=(x?._h||S.live?.stocks?.[code]?._h||[]).map(z=>z[1]).filter(v=>v>0); if(x?.price>0&&hh.length) hh[hh.length-1]=x.price; const f=SHORT.feat(hh);
+    if(f){ const F=d.items.map(i=>i.f), C=d.items.map(i=>i.cv); r={score:SHORT.score(SHORT.comp(f,F),C),tags:SHORT.tags(f,F),f,price:x?.price,name:x?.name}; } }
+  SH.cache[code]=r; return r; }
 async function lpool(list,n,fn){ const out=new Array(list.length); let i=0;
   await Promise.all(Array.from({length:Math.min(n,list.length)},async()=>{ while(i<list.length){ const k=i++; try{ out[k]=await fn(list[k]); }catch(e){ out[k]=null; } } })); return out; }
 const lr=(v,d=2)=>v==null||!isFinite(v)?null:Math.round(v*10**d)/10**d;
@@ -1402,7 +1416,7 @@ async function liveRefresh(kinds,manual){
   // Elle yenilemede fonlar yalnız 30 dk'dan eskiyse çekilir (fon fiyatı günde bir açıklanır; her sayfa ~200 KB)
   const fonOld=()=>{ const a=S.live?.fonAt; return !a||Date.now()-new Date(a).getTime()>30*60e3||liveDue("fon"); };
   kinds=kinds||(manual?["hisse","doviz",...(fonOld()?["fon"]:[])]:["hisse","fon","doviz"].filter(liveDue));
-  if(!kinds.length){ setTimeout(()=>fhRefresh().catch(()=>{}),1500); return true; }
+  if(!kinds.length){ setTimeout(()=>{ fhRefresh().catch(()=>{}); shortRefresh().catch(()=>{}); },1500); return true; }
   LIVE.busy=true; renderFresh();
   const now=new Date().toISOString(), P=S.live||{}, L={...P, at:now, stocks:{...(P.stocks||{})}, funds:{...(P.funds||{})}, fx:{...(P.fx||{})}, idx:{...(P.idx||{})}}, cnt=[], bad=[];
   const run=async(arr,key,kind,lbl,fn,n)=>{ if(!arr.length) return; const r=await lpool(arr,n,fn); let k=0;
@@ -1423,7 +1437,7 @@ async function liveRefresh(kinds,manual){
     if(kinds.includes("doviz")) jobs.push(run(S.market.fx||[],"fx","doviz","Döviz",x=>lfx(x.code),4));
     if(kinds.includes("fon")) jobs.push(run(S.market.funds||[],"funds","fon","Fon",x=>lfvt(x.code),3));
     await Promise.all(jobs);
-    S.live=L; LIVE.err=bad.length&&cnt.every(c=>/ 0\//.test(c))?"Fiyatlar alınamadı":null; applyLive(); renderAll(); setTimeout(()=>fhRefresh().catch(()=>{}),1500);
+    S.live=L; LIVE.err=bad.length&&cnt.every(c=>/ 0\//.test(c))?"Fiyatlar alınamadı":null; applyLive(); renderAll(); setTimeout(()=>{ fhRefresh().catch(()=>{}); shortRefresh().catch(()=>{}); },1500);
     try{ await S.db?.doc("market/live").set(L); }catch(e){}
     if(LIVE.err) toast("Fiyatlar alınamadı; internet bağlantını kontrol et. Son bilinen fiyatlar gösteriliyor.");
   }catch(e){ LIVE.err="Fiyatlar alınamadı"; toast("Fiyatlar alınamadı: "+(e?.message||"hata")); }
@@ -1615,6 +1629,37 @@ function buildAdvice(M){ const n=v=>typeof v==="number"&&isFinite(v), F=S.live?.
   const mkX=AIa=>norm(FX.map(x=>({x,w:x.score-30,why:why(x,oldWhy(AIa,x.code))})),0.6);
   fa.short={...(aF.short||{}),horizon:aF.short?.horizon||"1–3 ay",items:mkX(aF.short)}; fa.long={...(aF.long||{}),horizon:aF.long?.horizon||"1 yıl ve üstü",items:mkX(aF.long)};
 }
+/*SHORT:BEGIN — kısa vade puanı (2–4 hafta). Geçmiş testte (BIST 100, 2017–2026) işe yarayan göstergeler: 1 yıllık yükseliş (son ay hariç),
+   200 günlük ortalamaya uzaklık, ortalamaların sıralanışı, RSI, 1 yıllık aralıktaki yer, son 3 ayın zirvesine yakınlık ve düşük oynaklık.
+   Hacim artışı, sıkışma-kırılım, MACD ve "aşırı satım" (düşeni alma) işe yaramadı; kullanılmaz. Yalnız kapanış fiyatları gerekir.
+   Uygulama (telefonda) ve günlük GitHub taraması (tools/short.js) aynı kodu kullanır. */
+const SHORT={
+  KEYS:["r252x21","ma200","trend","rsi","pos52","dd60"], NEG:["vol20"],
+  feat(c){ const n=(c||[]).length; if(n<210) return null; const i=n-1, K=Math.min(252,n-1);
+    const sma=k=>{ let s=0; for(let j=i-k+1;j<=i;j++) s+=c[j]; return s/k; }, ma20=sma(20), ma50=sma(50), ma200=sma(200);
+    let ag=0,al=0; for(let j=1;j<=i;j++){ const ch=c[j]-c[j-1], g=Math.max(0,ch), lo=Math.max(0,-ch); if(j<=14){ ag+=g/14; al+=lo/14; } else { ag=(ag*13+g)/14; al=(al*13+lo)/14; } }
+    const rsi=al?100-100/(1+ag/al):100;
+    let hi=-Infinity, lo=Infinity, hi60=-Infinity; for(let j=i-1;j>=i-K+1;j--){ hi=Math.max(hi,c[j]); lo=Math.min(lo,c[j]); if(j>=i-60) hi60=Math.max(hi60,c[j]); }
+    const lr=[]; for(let j=i-19;j<=i;j++) lr.push(Math.log(c[j]/c[j-1])); const mu=lr.reduce((s,x)=>s+x,0)/lr.length, vol20=Math.sqrt(lr.reduce((s,x)=>s+(x-mu)**2,0)/(lr.length-1));
+    return { r252x21:c[i-21]/c[i-K]-1, ma200:c[i]/ma200-1, trend:(c[i]>ma20)+(ma20>ma50)+(ma50>ma200), rsi, pos52:hi>lo?(c[i]-lo)/(hi-lo):0.5,
+      dd60:c[i]/Math.max(hi60,c[i])-1, vol20, r21:c[i]/c[i-21]-1, r63:c[i]/c[i-63]-1 }; },
+  // evrendeki (U) dağılıma göre bileşik değer 0–1: göstergelerin yüzdelik sıralarının ortalaması
+  comp(f,U){ const pr=(k,v)=>{ let b=0,e=0; for(const u of U){ if(u[k]<v) b++; else if(u[k]===v) e++; } return U.length?(b+e/2)/U.length:0.5; };
+    let s=0; for(const k of SHORT.KEYS) s+=pr(k,f[k]); for(const k of SHORT.NEG) s+=1-pr(k,f[k]); return s/(SHORT.KEYS.length+SHORT.NEG.length); },
+  // 0–100 puan: bileşik değerin evrendeki bileşik değerler arasındaki yüzdelik sırası
+  score(cv,C){ let b=0,e=0; for(const x of C){ if(x<cv) b++; else if(x===cv) e++; } return C.length?Math.round((b+e/2)/C.length*100):50; },
+  // piyasa: BIST 100 son kapanışı 50 günlük ortalamasının üstündeyse yükseliş eğilimi (geçmişte avantaj bu dönemlerde belirgindi)
+  market(c){ const n=(c||[]).length; if(n<60) return null; let s=0; for(let j=n-50;j<n;j++) s+=c[j]; const ma50=s/50; return { up:c[n-1]>ma50, dist:c[n-1]/ma50-1 }; },
+  // en belirleyici 2–3 gösterge (evrendeki yüzdelik sırasına göre), sade dille
+  tags(f,U){ if(!f||!U||!U.length) return []; const pr=k=>U.filter(u=>u[k]<f[k]).length/U.length;
+    const L={r252x21:["son 1 yılda piyasadan güçlü","son 1 yılda piyasadan zayıf"],ma200:["uzun vadeli ortalamasının üstünde","uzun vadeli ortalamasının altında"],
+      trend:["yükseliş düzeninde","düşüş düzeninde"],rsi:["son haftalarda alıcılı","son haftalarda satıcılı"],pos52:["1 yıllık aralığının üst kısmında","1 yılın dibine yakın"],
+      dd60:["son 3 ayın zirvesine yakın","son 3 ayın zirvesinden uzak"],vol20:["sakin seyrediyor","çok dalgalı"]};
+    const s=Object.keys(L).map(k=>[k,k==="vol20"?1-pr(k):pr(k)]);
+    const hi=s.filter(([,p])=>p>=0.7).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([k])=>L[k][0]), lo=s.filter(([,p])=>p<=0.3).sort((a,b)=>a[1]-b[1]).slice(0,2).map(([k])=>L[k][1]);
+    return [...hi,...lo].slice(0,3); }
+};
+/*SHORT:END*/
 /*SCORE:BEGIN — fiyata bağlı puan parçaları; uygulama canlı fiyatla, yapay zekâ günlük güncellemede aynı kodla hesaplar (tools/score.js) */
 const SCORE={
   clamp:(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),
@@ -1683,7 +1728,7 @@ function liveNote(x){ return x?.finPeriod?`<p class="small muted" style="margin:
 /* Canlı fiyatları yapay zekânın yazdığı verinin üstüne koy (yalnız daha yeniyse), göstergeleri ve fiyata bağlı puanları güncelle */
 // Hisse bölüm ağırlıkları geçmiş testiyle (BIST 100, 2017–2026, 6 ay sonraki getiri) ayarlandı: değerleme ve momentum daha güçlü çıktı
 const STOCK_W={karlilik:20,deger:25,momentum:30,saglamlik:15,analist:10};
-function applyLive(){ const L=S.live, M=S.market; if(!M) return;
+function applyLive(){ const L=S.live, M=S.market; if(!M) return; SH.cache=null;
   if(!M._w){ const old={...SCORE.MAX,...(M.partsMax||{})}; (M.stocks||[]).forEach(x=>{ if(typeof x.score==="number") x._s0=x.score; if(!x.parts) return; for(const k in STOCK_W) if(typeof x.parts[k]==="number"&&old[k]&&old[k]!==STOCK_W[k]) x.parts[k]=Math.round(x.parts[k]*STOCK_W[k]/old[k]);
       x.score=Math.round(Object.values(x.parts).reduce((s,v)=>s+(typeof v==="number"?v:0),0)); }); M.partsMax={...(M.partsMax||{}),...STOCK_W}; M._w=1; }
   if(L){ const ap=(arr,map,qk)=>{ let any=false; (arr||[]).forEach(x=>{ const v=map?.[x.code]; if(!v) return;
@@ -2120,6 +2165,66 @@ if(window.__standalone){
   { const h1=document.querySelector(".brand h1"); if(h1) h1.textContent=TITLE[S.tab]||"Bugün"; }
   document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ window.__pullRemote?.(); apkCheck(false); } });
   setInterval(()=>{ if(!document.hidden&&S.ready&&S.market&&LIVE.ok()) liveRefresh(null,false); },60e3);   // açıkken: borsa açıksa 5 dk'da bir
+  /* ---------- Kısa vade (2–4 hafta): Hisse sekmesinde ve Bugün kartında "Uzun vade / Kısa vade" seçimi ---------- */
+  const stMarket=()=>{ const hh=S.live?.idx?.XU100?._h; if(hh&&hh.length>60){ const c=hh.map(z=>z[1]); const xp=S.live.idx.XU100.price; if(xp>0) c[c.length-1]=xp; return SHORT.market(c); } return SH.d?.market||null; };
+  const stCls=s=>s>=80?" hi":s<20?" lo":" mid";
+  const stRow=it=>{ const inL=(S.market?.stocks||[]).some(x=>x.code===it.code), r21=typeof it.f?.r21==="number"?it.f.r21*100:null;
+    return `<div class="fund lrow st-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div>
+      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
+      ${(it.tags||[]).length?`<div class="st-tags">${it.tags.map(esc).join(" · ")}</div>`:""}</div>
+      <div class="right"><div class="num lp">${it.price>0?Number(it.price).toLocaleString("tr-TR",{maximumFractionDigits:it.price<10?4:2}):"–"}</div>${r21!=null?`<div class="small num ${cls(r21)}">1 ay ${pc(r21,1)}</div>`:""}</div></div>`; };
+  const mkText=mk=>!mk?"":mk.up?`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} üstünde. Kısa vadeli alım için ortam uygun; yine de küçük tutarla gir.`
+    :`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} altında. Geçmişte böyle dönemlerde kısa vadeli alımlar kazandırmadı; şimdilik izlemek, piyasa toparlanınca girmek daha iyi.`;
+  function shortView(){ const d=SH.d, mk=stMarket();
+    if(!d) return `<section class="card empty">Kısa vade listesi yükleniyor… (internet gerekir)</section>`;
+    const strong=d.items.filter(i=>i.score>=80).slice(0,15), weak=d.items.filter(i=>i.score<20).sort((a,b)=>a.score-b.score).slice(0,10);
+    const mine=(S.market?.stocks||[]).map(x=>{ const s=shortFor(x.code,x); return s?{code:x.code,name:x.name,price:x.price,score:s.score,tags:s.tags,f:s.f}:null; }).filter(Boolean).sort((a,b)=>b.score-a.score);
+    return `${mk?`<section class="card st-mk ${mk.up?"up":"down"}"><b>${mk.up?"Piyasa yükseliş eğiliminde":"Piyasa düşüş eğiliminde"}</b><p>${esc(mkText(mk))}</p></section>`:""}
+      <section class="card"><div class="horizon"><h2>Kısa vadede güçlü</h2><span class="small muted">BIST 100 · ${esc(fmtDate(d.asOf)||"")}</span></div>
+        ${strong.map(stRow).join("")||`<div class="empty">Şu an güçlü aday yok.</div>`}</section>
+      ${mine.length?`<section class="card"><div class="horizon"><h2>Senin listendekiler</h2><span class="small muted">kısa vade puanı</span></div>${mine.map(stRow).join("")}</section>`:""}
+      ${weak.length?`<section class="card"><details><summary class="code" style="cursor:pointer">Kısa vadede zayıf olanlar (${weak.length})</summary><p class="small muted" style="margin:6px 0">Bunlarda kısa vadeli alımdan kaçın.</p>${weak.map(stRow).join("")}</details></section>`:""}
+      <section class="card"><h3 style="margin-top:0">Nasıl kullanılır?</h3>
+        <p class="why">Kısa vade puanı (0–100) hissenin son aylardaki gidişini BIST 100'deki diğer hisselerle karşılaştırır: son 1 yılda piyasadan güçlü mü, uzun vadeli ortalamasının üstünde mi, 1 yıllık fiyat aralığının neresinde, ne kadar dalgalı. 80 ve üstü en iyi %20'dir.</p>
+        <p class="why"><b>Kural:</b> Birikiminin küçük bir kısmıyla (en fazla %10) gir, en fazla 1 ay tut, aldığın fiyattan %8 düşerse sat. Piyasa düşüş eğilimindeyken girme.</p>
+        <p class="why"><b>Geçmişte nasıl çalıştı (2017–2026):</b> Puanı 80 ve üstü olan hisseler sonraki 1 ayda BIST 100'ü ortalama %0,3 ile %1,7 arasında geçti; puanı 20'nin altındakiler geride kaldı. Ama tek tek işlemlerin yaklaşık yarısı yine endeksin gerisinde kaldı; piyasa düşüşteyken avantaj neredeyse yoktu. Bir olasılıktır, garanti değildir.</p></section>`; }
+  function openShortSheet(code){ const it=SH.d?.items.find(i=>i.code===code)||(()=>{ const x=(S.market?.stocks||[]).find(z=>z.code===code), s=x&&shortFor(code,x); return s?{code,name:x.name,price:x.price,score:s.score,tags:s.tags,f:s.f}:null; })(); if(!it) return;
+    const f=it.f||{}, P=v=>typeof v==="number"?pc(v*100,1):"–", inL=(S.market?.stocks||[]).some(x=>x.code===code), W=S.watch.includes(code);
+    const scrim=document.createElement("div"); scrim.className="scrim"; const sh=document.createElement("div"); sh.className="sheet nsheet"; sh.setAttribute("role","dialog"); scrim.style.zIndex=80; sh.style.zIndex=81;
+    const close=()=>{ scrim.remove(); sh.remove(); }; scrim.onclick=close;
+    sh.innerHTML=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div><div><h2 style="margin:0">${esc(code)}</h2><div class="small muted">${esc(it.name||"")}</div></div></div>
+      ${(it.tags||[]).length?`<p style="margin:6px 0">${it.tags.map(esc).join(" · ")}</p>`:""}
+      <div class="dlist">${[["Fiyat",it.price>0?num(it.price,it.price<10?4:2):"–"],["1 ay",P(f.r21)],["3 ay",P(f.r63)],["1 yıllık aralıktaki yeri",typeof f.pos52==="number"?"%"+num(f.pos52*100,0):"–"],["Uzun vadeli ortalamaya (200 gün) uzaklık",P(f.ma200)],["Son 3 ayın zirvesine uzaklık",P(f.dd60)]].map(([k,v])=>`<div class="drow"><span>${esc(k)}</span><b class="num">${v}</b></div>`).join("")}</div>
+      <p class="small muted" style="margin:10px 0 0">${it.score>=80?"Kısa vadede güçlü (en iyi %20).":it.score<20?"Kısa vadede zayıf (en kötü %20); alımdan kaçın.":"Kısa vadede ortalama."} Kural: küçük tutarla gir, en fazla 1 ay tut, %8 düşerse sat.</p>
+      <div class="row">${inL?`<button class="btn ghost" data-dt>Ayrıntılar</button>`:W?"":`<button class="btn ghost" data-w>Takibe al</button>`}<button class="btn" data-c>Kapat</button></div>`;
+    sh.querySelector("[data-c]").onclick=close; sh.querySelector("[data-dt]")?.addEventListener("click",()=>{ close(); openDetail("s",code); });
+    sh.querySelector("[data-w]")?.addEventListener("click",async()=>{ if(await saveWatch([...S.watch,code])){ toast(code+" takibe alındı; tüm analizi birazdan gelir."); close(); } });
+    document.body.append(scrim,sh); }
+  const bindSt=v=>v.querySelectorAll("[data-st]").forEach(e=>e.addEventListener("click",()=>{ const c=e.dataset.st; if((S.market?.stocks||[]).some(x=>x.code===c)&&!e.closest(".st-view")) openDetail("s",c); else openShortSheet(c); }));
+  { const o=renderHisse; renderHisse=function(){ const v=$("v-hisse"); if(!v) return o.apply(this,arguments);
+      const seg=`<div class="seg hseg" role="tablist">${[["uzun","Uzun vade"],["kisa","Kısa vade"]].map(([k,l])=>`<button data-hm="${k}" class="${(S.hmode||"uzun")===k?"on":""}" aria-selected="${(S.hmode||"uzun")===k}">${l}</button>`).join("")}</div>`;
+      let r; if((S.hmode||"uzun")!=="kisa"){ r=o.apply(this,arguments); v.insertAdjacentHTML("afterbegin",seg); } else { v.innerHTML=seg+`<div class="st-view">${shortView()}</div>`; bindSt(v); }
+      v.querySelectorAll("[data-hm]").forEach(b=>b.onclick=()=>{ S.hmode=b.dataset.hm; try{ localStorage.setItem("fp-hmode",S.hmode); }catch(_){} renderHisse(); }); return r; };
+    try{ S.hmode=localStorage.getItem("fp-hmode")||"uzun"; }catch(_){} }
+  { const o=renderGundem; renderGundem=function(){ const r=o.apply(this,arguments); const card=document.querySelector("#v-gundem .hm-do"); if(!card) return r;
+      const gm=S.gmode||"uzun"; card.querySelector(".t")?.insertAdjacentHTML("beforeend",`<div class="seg hseg sm" role="tablist">${[["uzun","Uzun"],["kisa","Kısa"]].map(([k,l])=>`<button data-gm="${k}" class="${gm===k?"on":""}">${l}</button>`).join("")}</div>`);
+      if(gm==="kisa"){ const t=card.querySelector(".t"); [...card.children].forEach(ch=>{ if(ch!==t) ch.remove(); }); const mk=stMarket(), d=SH.d;
+        const top=d?d.items.slice(0,3):[];
+        card.insertAdjacentHTML("beforeend",!d?`<p class="muted">Kısa vade listesi yükleniyor…</p>`:`${mk?`<div class="hm-step"><b>${mk.up?"↑":"↓"}</b><span>${mk.up?"Piyasa yükseliş eğiliminde; kısa vadeli alım için ortam uygun.":"Piyasa düşüş eğiliminde; şu an kısa vadeli alım önerilmiyor. Aşağıdakiler, piyasa toparlanınca ilk bakılacaklar."}</span></div>`:""}
+          <div>${top.map(it=>`<div class="hm-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div><div class="hg"><b>${esc(it.code)} <span style="display:inline;font-weight:500;color:var(--muted)">${esc(it.name||"")}</span></b><span>${esc((it.tags||[]).join(" · "))}</span></div>${typeof it.f?.r21==="number"?`<span class="num small ${cls(it.f.r21*100)}">1 ay ${pc(it.f.r21*100,1)}</span>`:""}</div>`).join("")}</div>
+          <p class="small muted" style="margin:0">Kural: küçük tutarla gir, en fazla 1 ay tut, %8 düşerse sat.</p>
+          <button class="btn ghost" id="hmShort" style="flex:none">Kısa vade listesini gör</button>`);
+        bindSt(card); card.querySelector("#hmShort")?.addEventListener("click",()=>{ S.hmode="kisa"; S.tab="hisse"; showTab(); renderHisse(); window.scrollTo({top:0}); }); }
+      card.querySelectorAll("[data-gm]").forEach(b=>b.onclick=()=>{ S.gmode=b.dataset.gm; renderGundem(); }); return r; }; }
+  // Detay > Puan: kısa vade puanı
+  { const o=drawDetail; drawDetail=function(){ const r=o.apply(this,arguments); try{ if(S.det?.t==="s"&&S.det.tab==="puan"){ const x=detItem("s",S.det.c), s=x&&shortFor(x.code,x), c=document.querySelector("#det .dscore")?.closest("section");
+        if(s&&c) c.insertAdjacentHTML("beforeend",`<div class="st-det"><div style="--p:${s.score}" class="sbadge${stCls(s.score)}">${s.score}</div><div><b>Kısa vade puanı</b><div class="small muted">${s.score>=80?"Kısa vadede güçlü (en iyi %20)":s.score<20?"Kısa vadede zayıf (en kötü %20)":"Kısa vadede ortalama"}${(s.tags||[]).length?" · "+esc(s.tags.join(" · ")):""}</div></div></div>`); } }catch(e){ console.error(e); } return r; }; }
+  { const st=document.createElement("style"); st.textContent=`.hseg{margin:0 0 12px} .hseg.sm{margin:0 0 0 auto;flex:none;padding:3px} .hseg.sm button{padding:6px 10px;font-size:12.5px}
+    .st-mk{border-left:4px solid var(--up)} .st-mk.down{border-left-color:var(--down)} .st-mk b{font:800 16px var(--f-display)} .st-mk p{margin:6px 0 0;color:var(--muted)}
+    .st-tags{font:500 12.5px var(--f-body);color:var(--muted);margin-top:3px} .st-row{cursor:pointer}
+    .st-det{display:flex;align-items:center;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)} .st-det .sbadge,.hm-do .sbadge{flex:none}
+    .nsheet .dlist .drow{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}`; document.head.appendChild(st); }
+  shortRefresh().catch(()=>{});
   // Veri bu katman yüklenmeden gelmiş olabilir: yeni görünümle (puan halkası, Bugün ekranı) hemen yeniden çiz
   try{ if(S.market) renderAll(); }catch(e){ console.error(e); }
   renderFresh(); setTimeout(()=>apkCheck(false),4000);
