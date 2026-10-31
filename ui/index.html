@@ -1322,7 +1322,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-3";
+const UI_VERSION="2026.11.01-4";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -2054,6 +2054,9 @@ if(window.__standalone){
     .hm-pf .v{font:800 34px/1.1 var(--f-num);letter-spacing:-.02em}
     .hm-pf .r{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
     .hm-pill{background:rgba(255,255,255,.16);border-radius:999px;padding:5px 10px;font:700 12.5px var(--f-body)}
+    .hm-pfs{display:grid;grid-template-columns:1fr 1fr;margin-top:10px;padding-top:12px;border-top:1px solid rgba(255,255,255,.22)}
+    .hm-pfs>div{display:flex;flex-direction:column;gap:1px;min-width:0} .hm-pfs>div+div{padding-left:14px;border-left:1px solid rgba(255,255,255,.22)}
+    .hm-pfs .k{font:600 12px var(--f-body);opacity:.8} .hm-pfs .n{font:800 18px/1.2 var(--f-num);white-space:nowrap} .hm-pfs .p{font:600 12.5px var(--f-num);opacity:.85} .hm-pfs .n i{font-style:normal;font-size:11px;margin-right:5px;vertical-align:2px;opacity:.9}
     .hm-empty{border:2px dashed color-mix(in srgb,var(--accent) 40%,var(--line));border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:8px}
     .hm-do{display:flex;flex-direction:column;gap:12px}
     .hm-do .t{display:flex;align-items:center;gap:10px}
@@ -2130,7 +2133,7 @@ if(window.__standalone){
     open.forEach(t=>{ const f=asset(t.code), cur=f?.price??t.price, u=t.units||t.amount/t.price, vv=u*cur; val+=vv; cost+=t.amount; if(typeof f?.d1==="number") today+=vv-vv/(1+f.d1/100); });
     const pnl=val-cost, pnlP=cost?pnl/cost*100:0, todP=val?today/(val-today)*100:0;
     const pfHtml=open.length?`<div class="hm-pf" id="hmPf" role="button"><span class="l">Portföyüm</span><span class="v">${tl0(val)}</span>
-        <div class="r"><span class="hm-pill">Bugün ${sg(today)}${tl0(Math.abs(today)).slice(1)} ₺ · ${sg(todP)}%${Math.abs(todP).toLocaleString("tr-TR",{maximumFractionDigits:2})}</span><span class="hm-pill">Toplam ${sg(pnl)}${tl0(Math.abs(pnl)).slice(1)} ₺ · ${sg(pnlP)}%${Math.abs(pnlP).toLocaleString("tr-TR",{maximumFractionDigits:1})}</span></div></div>`
+        <div class="hm-pfs">${[["Bugün",today,todP,2],["Toplam kâr/zarar",pnl,pnlP,1]].map(([k,v,p,d])=>`<div><span class="k">${k}</span><span class="n">${v>0?"<i>▲</i>":v<0?"<i>▼</i>":""}${sg(v)}${tl0(Math.abs(v)).slice(1)} ₺</span><span class="p">${sg(p)}%${Math.abs(p).toLocaleString("tr-TR",{maximumFractionDigits:d})}</span></div>`).join("")}</div></div>`
       :`<div class="hm-empty"><b style="font:800 16px var(--f-display)">Portföyünü ekle</b><span class="muted" style="font-size:13.5px">Aldığın fon ve hisseleri gir; ne kadar kazandığını ve ne yapman gerektiğini burada gör.</span><button class="btn" id="hmPfAdd" style="align-self:flex-start;flex:none">Portföye git</button></div>`;
     // bugün ne yapmalı
     const steps=sentences(a.summary).slice(0,3), it=(a.short?.items||[]).filter(i=>Number(i.weight)>0);
