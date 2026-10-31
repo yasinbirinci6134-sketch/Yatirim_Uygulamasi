@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-3";
+const UI_VERSION="2026.10.31-4";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1595,7 +1595,7 @@ if(window.__standalone){
       bk.querySelector("#bkOpen").onclick=()=>{ const b=bk.querySelector("#bkBox"); b.hidden=!b.hidden; };
       bk.querySelector("#impBtn").onclick=async()=>{ let o; try{ o=JSON.parse(bk.querySelector("#impTxt").value.trim()); }catch(_){ toast("Metin okunamadı; tamamını yapıştırdığından emin ol."); return; }
         if(!o||o.yatirim!==1||!Array.isArray(o.items)){ toast("Bu metin portföy yedeği değil."); return; }
-        let n=0; for(const it of o.items){ if(!it||!it.id) continue; const {id,...d}=it; await tradesCol().doc(id).set(d); n++; }
+        let n=0; for(const it of o.items){ if(!it||!it.id) continue; const {id,...d}=it; await tradesCol().doc(id).set(d); if(d.kind==="prefs"){ try{ loadPrefs(d); }catch(_){} } else n++; }
         const W=o.watch||{}, mg=(a,b)=>[...new Set([...(a||[]),...(b||[])])];
         if(W.s?.length) await saveWatch(mg(S.watch,W.s)); if(W.f?.length) await saveFundWatch(mg(S.fwatch,W.f)); if(W.x?.length) await saveFxWatch(mg(S.fxwatch,W.x));
         toast(n+" kayıt geri yüklendi."); bk.querySelector("#impTxt").value=""; };
