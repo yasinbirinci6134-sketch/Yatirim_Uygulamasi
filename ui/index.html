@@ -1317,7 +1317,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-27";
+const UI_VERSION="2026.10.31-28";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1840,7 +1840,7 @@ if(window.__standalone){
       .st-warn{background:color-mix(in srgb,var(--warn) 14%,var(--card));color:var(--ink)}
       .st-foot{text-align:center;font:500 12px var(--f-body);color:var(--muted);margin:16px 0 4px}
       .st textarea{width:100%;box-sizing:border-box;height:84px;margin:0;border-radius:12px;font:500 13px var(--f-body)}
-      .aibtn{all:unset;cursor:pointer;height:40px;padding:0 14px;border-radius:999px;background:var(--accent);color:#fff;font:700 13px var(--f-body);display:flex;align-items:center;gap:6px;box-shadow:var(--sh)}`;
+      .aibtn{all:unset;cursor:pointer;height:34px;padding:0 12px;border-radius:999px;background:var(--accent);color:#fff;font:700 13px/1 var(--f-body);display:flex;align-items:center;gap:5px;box-shadow:var(--sh);white-space:nowrap;flex-shrink:0}`;
     document.head.appendChild(ss); }
   openSettings=function(){
     document.querySelectorAll(".st,.st-scrim").forEach(e=>e.remove());
@@ -1868,7 +1868,7 @@ if(window.__standalone){
         <div class="st-h">Uygulama</div><div class="st-g">
           <div class="st-r" data-up><span class="st-ic">⬆️</span><span class="tx">Güncellemeleri denetle</span><span class="vl">${has("appVersionName")?esc(A.appVersionName()):""}</span><span class="ch">›</span></div>
           <div class="st-r" data-sh><span class="st-ic">🔗</span><span class="tx">Uygulamayı paylaş</span><span class="ch">›</span></div>
-          <label class="st-r"><span class="st-ic">👤</span><span class="tx">Bu telefon benim<small>Üstte puan ve haber güncellemesini isteme düğmesi çıkar (Claude hesabı gerekir)</small></span>${sw("own",OWN())}</label></div>
+          <label class="st-r" id="ownRow"${OWN()||ls("fp-ownunlock")==="1"?"":" hidden"}><span class="st-ic">👤</span><span class="tx">Bu telefon benim<small>Üstte puan ve haber güncellemesini isteme düğmesi çıkar (Claude hesabı gerekir)</small></span>${sw("own",OWN())}</label></div>
         <div class="st-foot">Arayüz ${esc(UI_VERSION)}${has("uiSource")&&A.uiSource()==="file"?" · güncellendi":""}</div>`;
       const q=s=>sh.querySelector(s);
       q("[data-c]").onclick=close;
@@ -1891,12 +1891,13 @@ if(window.__standalone){
       q("[data-up]").onclick=()=>apkCheck(true);
       q("[data-sh]").onclick=()=>{ if(has("share")) A.share(`Yatırım uygulaması (Android): https://github.com/${REPO}/releases/latest — sayfadaki Yatirim.apk dosyasını indirip kur.`,"Yatırım uygulaması"); };
       q("#own").onchange=e=>{ ls("fp-owner",e.target.checked?"1":"0"); aiBtn(); };
+      { let n=0; const f=q(".st-foot"); if(f) f.onclick=()=>{ if(++n>=7){ ls("fp-ownunlock","1"); const r=q("#ownRow"); if(r) r.hidden=false; } }; }
     };
     document.body.append(scrim,sh); draw(); };
   /* Üstte sahip için "Analiz iste": puan ve haberleri yapay zekâya yeniden hazırlatır (Claude bağlantılı eski uygulamayı açar) */
   function aiBtn(){ let b=$("aiBtn"); const brand=document.querySelector(".brand"); if(!brand) return;
     if(!OWN()){ b?.remove(); return; }
-    if(!b){ b=document.createElement("button"); b.id="aiBtn"; b.className="aibtn"; b.innerHTML="✦ Analiz iste"; b.onclick=()=>$("refreshBtn").click();
+    if(!b){ b=document.createElement("button"); b.id="aiBtn"; b.className="aibtn"; b.innerHTML="✦ Analiz"; b.onclick=()=>$("refreshBtn").click();
       const g=$("setBtn"); const wrap=document.createElement("div"); wrap.style.cssText="display:flex;gap:8px;align-items:center"; g.parentNode.insertBefore(wrap,g); wrap.append(b,g); } }
   aiBtn();
 
@@ -1909,7 +1910,8 @@ if(window.__standalone){
     html.apk .num,html.apk .lp{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
     /* üst çubuk: sekmeye göre büyük başlık, kaydırınca küçülür */
     html.apk header{padding:calc(10px + env(safe-area-inset-top,0px)) 0 8px;gap:4px;background:var(--bg)}
-    html.apk .brand h1{font:800 28px/1.15 var(--f-display);letter-spacing:-.02em;transition:font-size .18s}
+    html.apk .brand h1{font:800 28px/1.15 var(--f-display);letter-spacing:-.02em;transition:font-size .18s;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    html.apk .brand:has(#aiBtn) h1{font-size:24px}
     html.apk .brand h1 span{color:inherit}
     html.apk.scrolled .brand h1{font-size:20px}
     html.apk #setBtn{width:40px;height:40px;border-radius:50%;background:var(--card);box-shadow:var(--sh);display:grid;place-items:center;font-size:18px;color:var(--ink);text-decoration:none}
