@@ -218,7 +218,7 @@ nav.tabs button[aria-selected="true"] svg{stroke-width:2.3}
 .seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
 .seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px var(--f-body);padding:9px 6px;border-radius:9px;cursor:pointer}
 .seg button.on{background:var(--accent);color:var(--card)}
-.chart{position:relative} .chart svg{display:block;width:100%;height:150px} .chart.empty{padding:28px 4px;text-align:center}
+.chart{position:relative} .cper{display:flex;gap:6px;margin-bottom:10px} .cper button{flex:1;border:0;border-radius:10px;padding:7px 0;font:inherit;font-size:13px;font-weight:700;background:var(--line,rgba(127,127,127,.15));color:inherit;opacity:.75} .cper button.on{background:var(--accent);color:#0b1a14;opacity:1} .chart svg{display:block;width:100%;height:150px} .chart.empty{padding:28px 4px;text-align:center}
 .cax{position:absolute;right:0;top:0;bottom:22px;display:flex;flex-direction:column;justify-content:space-between;font-size:11px;color:var(--muted);pointer-events:none;text-align:right}
 .cdates{display:flex;justify-content:space-between;margin-top:4px}
 .range{margin-top:14px} .rtrack{position:relative;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--down),var(--line) 50%,var(--up));margin:6px 0 4px;opacity:.85}
@@ -514,14 +514,17 @@ function openDetail(t,c){ if(!detItem(t,c)) return; subNews(c); S.det={t,c,tab:(
   drawDetail(); el.scrollTop=0; }
 function closeDetail(fromPop){ const el=$("det"); if(el) el.remove(); $("gtip")?.remove(); document.body.classList.remove("noscroll"); S.det=null; if(!fromPop){ try{ if(history.state?.det) history.back(); }catch(e){} } }
 window.addEventListener("popstate",()=>{ if(S.det) closeDetail(true); });
-function priceChart(x){ const h=((S.hist||{})[x.code]||[]).filter(p=>typeof p.p==="number"&&p.p>0).map(p=>({d:p.d,p:p.p}));
-  if(x.price&&x.priceDate&&(!h.length||String(x.priceDate)>String(h[h.length-1].d))) h.push({d:x.priceDate,p:Number(x.price)});
-  if(h.length<2) return `<div class="chart empty"><p class="note">Fiyat grafiği her tam güncellemede bir gün ekler; birkaç gün içinde dolacak.</p></div>`;
+function priceChart(x){ const M={}; ((S.hist||{})[x.code]||[]).forEach(p=>{ if(typeof p.p==="number"&&p.p>0) M[p.d]=p.p; }); const td=dayKey(Date.now()); (x._h||[]).forEach(([d,v])=>{ if(v>0&&d<=td) M[d]=v; });
+  let h=Object.keys(M).sort().map(d=>({d,p:M[d]})); const PER=[["1A",31],["3A",92],["6A",183],["1Y",366]], cp=S.chartP||"3A";
+  const pd=x.priceDate?(String(x.priceDate)>td?td:String(x.priceDate)):null; if(x.price&&pd){ if(h.length&&h[h.length-1].d>=pd) h[h.length-1].p=Number(x.price); else h.push({d:pd,p:Number(x.price)}); }
+  if(h.length){ const lim=new Date(Date.parse(h[h.length-1].d)-(PER.find(z=>z[0]===cp)||PER[1])[1]*864e5).toISOString().slice(0,10); const f=h.filter(p=>p.d>=lim); if(f.length>=2) h=f; }
+  const pb=`<div class="cper">${PER.map(([k])=>`<button class="${k===cp?"on":""}" data-cp="${k}">${k}</button>`).join("")}</div>`;
+  if(h.length<2) return `${pb}<div class="chart empty"><p class="note">Fiyat geçmişi yükleniyor; birazdan görünecek.</p></div>`;
   const v=h.map(p=>p.p), mn=Math.min(...v), mx=Math.max(...v), rg=(mx-mn)||mx*0.01||1, W=320, H=140;
   const X=i=>(i/(h.length-1)*W).toFixed(1), Y=y=>(H-8-(y-mn)/rg*(H-16)).toFixed(1);
   const pts=v.map((y,i)=>`${X(i)},${Y(y)}`).join(" "), up=v[v.length-1]>=v[0], col=up?"var(--up)":"var(--down)";
   const dg=n=>n<10?4:2;
-  return `<div class="chart"><div class="cax"><span class="num">${num(mx,dg(mx))}</span><span class="num">${num(mn,dg(mn))}</span></div>
+  return `${pb}<div class="chart"><div class="cax"><span class="num">${num(mx,dg(mx))}</span><span class="num">${num(mn,dg(mn))}</span></div>
     <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Fiyat grafiği"><polygon points="0,${H} ${pts} ${W},${H}" fill="${col}" opacity=".14"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
     <div class="cdates small muted"><span>${esc(fmtDate(h[0].d))}</span><span>${esc(fmtDate(h[h.length-1].d))}</span></div></div>`; }
 function rangeBar(x){ const lo=Number(x.low1y), hi=Number(x.high1y), p=Number(x.price); if(!(lo>0&&hi>lo&&p>0)) return "";
@@ -554,7 +557,7 @@ function drawDetail(){ const el=$("det"); if(!el||!S.det) return; const {t,c}=S.
      <div class="dbadges">${x.score!=null?`<span class="score${sCls(x.score,t)}">${num(x.score,0)}</span>`:""}${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${watched?'<span class="mine">EKLEDİĞİN</span>':""}</div></div>
      <div class="dprice"><div class="num">${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div></div>
    <div class="seg dtabs" role="tablist">${[["veri","Veriler"],["puan","Puan"],["haber","Haberler"]].map(([k,l])=>`<button role="tab" data-dt="${k}" class="${tab===k?"on":""}" aria-selected="${tab===k}">${l}</button>`).join("")}</div>
-   ${tab==="veri"?`<section class="card">${perfBlock(x)||'<p class="note">Dönemsel getiri yok.</p>'}${rangeBar(x)}</section><section class="card dlist">${detRows(t,x)}</section>`:""}
+   ${tab==="veri"?`<section class="card">${priceChart(x)}</section><section class="card">${perfBlock(x)||'<p class="note">Dönemsel getiri yok.</p>'}${rangeBar(x)}</section><section class="card dlist">${detRows(t,x)}</section>`:""}
    ${tab==="puan"?`<section class="card">${x.score!=null?`<div class="dscore"><span class="score${sCls(x.score,t)}">${num(x.score,0)}</span><span class="small muted">/ 100</span></div>`:""}${scoreNote(x)}${liveNote(x)}
      ${x.exitAt?`<p class="exitw">⚠ ${esc(exitTxt(x))}</p>`:""}
      ${x.why?`<p class="why" style="margin-top:8px">${esc(x.why)}</p>`:""}${partsBlock(x.parts)}${histBlock(c)}</section>`:""}
@@ -562,6 +565,7 @@ function drawDetail(){ const el=$("det"); if(!el||!S.det) return; const {t,c}=S.
   </div>
   <div class="dbar">${S.db&&S.uid?`<button class="btn" data-dbuy>Portföye ekle</button>`:""}${S.db?`<button class="btn ghost" data-dwatch>${watched?"Takipten çıkar":"Takibe al"}</button>`:""}${window.openAlarm?`<button class="btn ghost" data-dalarm aria-label="Fiyat alarmı" style="flex:0 0 auto">🔔</button>`:""}</div>`;
   el.querySelector("[data-back]").onclick=()=>closeDetail();
+  el.querySelectorAll("[data-cp]").forEach(b=>b.onclick=()=>{ S.chartP=b.dataset.cp; drawDetail(); });
   el.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{ S.det.tab=b.dataset.dt; $("gtip")?.remove(); drawDetail(); });
   const bb=el.querySelector("[data-dbuy]"); if(bb) bb.onclick=()=>openBuy(c);
   const bw=el.querySelector("[data-dwatch]"); if(bw) bw.onclick=async()=>{ const next=watched?W.filter(k=>k!==c):[...W,c];
@@ -1287,7 +1291,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-15";
+const UI_VERSION="2026.10.31-17";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1305,7 +1309,7 @@ function lbuild(o,dp){ if(!o||!o.ser?.length||!(o.price>0)) return null; const {
   const lrs=[]; for(let i=1;i<yr.length;i++) if(yr[i-1].c>0&&yr[i].c>0) lrs.push(Math.log(yr[i].c/yr[i-1].c));
   const mu=lrs.reduce((s,v)=>s+v,0)/(lrs.length||1), vol=lrs.length>20?Math.sqrt(lrs.reduce((s,v)=>s+(v-mu)**2,0)/(lrs.length-1))*Math.sqrt(252)*100:null;
   return { price:lr(price,dp), priceDate:dk, d1:prev?pc(prev.c):null, w1:pc(at(pt-7*day)), m1:pc(at(pt-30*day)), m3:pc(at(pt-91*day)), m6:pc(at(pt-182*day)), ytd:pc(at(y0-1)), y1:pc(at(pt-365*day)),
-    low1y:lr(Math.min(price,...yr.map(p=>p.l??p.c)),dp), high1y:lr(Math.max(price,...yr.map(p=>p.h??p.c)),dp), mLow:lr(mlo,dp), mHigh:lr(mhi,dp), _vol:vol!=null?lr(vol,1):null }; }
+    low1y:lr(Math.min(price,...yr.map(p=>p.l??p.c)),dp), high1y:lr(Math.max(price,...yr.map(p=>p.h??p.c)),dp), mLow:lr(mlo,dp), mHigh:lr(mhi,dp), _vol:vol!=null?lr(vol,1):null, _h:yr.map(p=>[dayKey(p.t),lr(p.c,dp)]) }; }
 async function lyahoo(sym){
   if(!LIVE.primed){ LIVE.primed=true; await nget("GET","https://fc.yahoo.com").catch(()=>{}); }   // Yahoo çerezi
   const path="/v8/finance/chart/"+encodeURIComponent(sym)+"?range=1y&interval=1d"; let o;
@@ -1332,6 +1336,7 @@ async function lfvt(code){ const o=await nget("GET","https://fvt.com.tr/fonlar/y
   const f=d.fund, r=d.returns||{}, N=v=>{ const x=parseFloat(v); return isFinite(x)?x:null; }, price=N(f.fiyat); if(!(price>0)) return null;
   const tv=N(f.toplamDeger), inv=N(f.yatirimci), fee=N(f.yonetimUcret), rk=N(f.risk);
   return { price, priceDate:f.sonGuncelleme?dayKey(new Date(f.sonGuncelleme).getTime()):null, d1:N(f.getiri), w1:N(r.haftalikGetiri), m1:N(r.aylikGetiri), m3:N(r.ucAylikGetiri), m6:N(r.altiAylikGetiri), ytd:N(r.ytdGetiri), y1:N(r.birYillikGetiri),
+    _h:(d.priceHistory||[]).map(p=>[String(p.tarih||"").slice(0,10),N(p.fiyat)]).filter(z=>z[0]&&z[1]>0).sort((a,b)=>a[0]<b[0]?-1:1).filter((z,i,a)=>!i||z[0]!==a[i-1][0]),
     sizeBn:tv>0?lr(tv/1e9,2):null, investors:inv>0?inv:null, fee:fee>0?fee:null, riskValue:rk>0?rk:null, name:f.fonAdi||null,
     cat:/para piyasas/i.test(f.kategori||"")?"para":/altın|kıymetli/i.test(f.kategori||"")?"altin":/hisse/i.test(f.kategori||"")?"hisse":"diger" }; }
 /* Ne zaman yeniden çekilmeli: borsa açıkken 5 dk'da bir; kapalıyken kapanıştan sonra bir kez (veri 15 dk gecikmeli). Döviz hafta içi açık. Fon fiyatı günde bir açıklanır. */
