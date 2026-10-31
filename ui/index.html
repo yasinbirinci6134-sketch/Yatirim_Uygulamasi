@@ -1287,7 +1287,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-7";
+const UI_VERSION="2026.10.31-8";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1807,6 +1807,8 @@ if(window.__standalone){
   { const h1=document.querySelector(".brand h1"); if(h1) h1.textContent=TITLE[S.tab]||"Bugün"; }
   document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ window.__pullRemote?.(); apkCheck(false); } });
   setInterval(()=>{ if(!document.hidden&&S.ready&&S.market&&LIVE.ok()) liveRefresh(null,false); },60e3);   // açıkken: borsa açıksa 5 dk'da bir
+  // Veri bu katman yüklenmeden gelmiş olabilir: yeni görünümle (puan halkası, Bugün ekranı) hemen yeniden çiz
+  try{ if(S.market) renderAll(); }catch(e){ console.error(e); }
   renderFresh(); setTimeout(()=>apkCheck(false),4000);
   try{ A.ready&&A.ready(); }catch(_){}
 }
