@@ -1,4 +1,9 @@
 <!doctype html><!--yatirim-ui--><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<script>/* açılış: son Bugün ekranının kopyasını hemen göster; gerçek ekran hazır olunca kalkar */
+try{ var B=window.YatirimApp&&JSON.parse(localStorage.getItem("fp-boot")||"null"); if(B&&B.html&&B.v===1){ window.__boot=B; if(B.cls) document.documentElement.className=B.cls;
+  var st=document.createElement("style"); st.id="bootcss"; st.textContent=B.css+"\n#bootshot{position:fixed;inset:0;z-index:9999;overflow:hidden;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body,system-ui);box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}"; document.body.appendChild(st);
+  var d=document.createElement("div"); d.id="bootshot"; d.setAttribute("aria-hidden","true"); d.innerHTML=B.html; document.documentElement.appendChild(d); } }catch(e){}   /* body dışında: sayfadaki aramalar (querySelector) gerçek ekranı bulur */
+window.__bootOff=function(){ var a=document.getElementById("bootshot"), b=document.getElementById("bootcss"); if(a) a.remove(); if(b) b.remove(); };</script>
 <title>Yatırım Tavsiyesi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1317,7 +1322,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-1";
+const UI_VERSION="2026.11.01-3";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1751,7 +1756,10 @@ function applyLive(){ const L=S.live, M=S.market; if(!M) return; SH.cache=null;
 { const _rq=requestQuick; requestQuick=function(kind){ return LIVE.ok() ? liveRefresh([kind],true) : _rq(kind); }; }
 try{ if(typeof autoQuick==="function"){ const _aq=autoQuick; autoQuick=function(){ return LIVE.ok() ? false : _aq.apply(this,arguments); }; } }catch(_){}
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden && S.ready && LIVE.ok() && S.market) liveRefresh(null,false); });
-function renderAll(){ renderFresh(); renderDoviz(); renderGundem(); renderOneri(); renderHisse(); renderSanal(); renderPiyasa(); if(S.det) drawDetail(); }
+// Önce açık sekmeyi çiz (ekran hemen dolsun), gizli sekmeleri hemen ardından
+function renderAll(){ renderFresh(); const T={gundem:()=>renderGundem(),oneri:()=>renderOneri(),hisse:()=>renderHisse(),doviz:()=>renderDoviz(),sanal:()=>renderSanal(),piyasa:()=>renderPiyasa()}, cur=T[S.tab]?S.tab:"gundem";
+  try{ T[cur](); }catch(e){ console.error(e); } if(S.det) drawDetail();
+  clearTimeout(renderAll._t); renderAll._t=setTimeout(()=>{ for(const k in T) if(k!==cur) try{ T[k](); }catch(e){ console.error(e); } },30); }
 showTab(); renderAll();
 
 /* ---------- Bağlantılar ---------- */
@@ -1858,8 +1866,14 @@ if(window.__standalone){
   /* Alt bant: yeni arayüz hazır / yeni APK var */
   function banner(id,html,go){ if($(id)) return; const b=document.createElement("div"); b.id=id; b.className="upbar";
     b.innerHTML=`<span>${html}</span><button aria-label="Kapat">✕</button>`; b.onclick=e=>{ if(e.target.tagName==="BUTTON"){ b.remove(); return; } b.remove(); go(); }; document.body.appendChild(b); }
-  // açılıştan hemen sonra geldiyse (ekranla henüz uğraşılmıyorsa) sormadan uygula; değilse şerit göster, arka plandan dönüşte uygulama kendisi uygular
-  window.__uiUpdateReady=()=>{ if(performance.now()<10000&&!S.det&&!document.querySelector(".sheet")) A.applyUpdate(); else banner("uiUp","Uygulamanın yeni sürümü hazır · <b>Yenile</b>",()=>A.applyUpdate()); };
+  // Yeni sürüm indiyse kendiliğinden uygula: detay/pencere açıkken, yazı yazarken ya da son 4 sn içinde dokunulduysa bekle; açık sekme korunur
+  document.addEventListener("pointerdown",()=>{ window.__lastTouch=Date.now(); },true);
+  const tryApply=()=>{ const busy=S.det||document.querySelector(".sheet,.scrim")||/INPUT|TEXTAREA/.test(document.activeElement?.tagName||"")||Date.now()-(window.__lastTouch||0)<4000;
+    if(busy){ setTimeout(tryApply,2000); return; }
+    try{ localStorage.setItem("fp-restore",JSON.stringify({tab:S.tab,hmode:S.hmode,gmode:S.gmode,y:window.scrollY,at:Date.now()})); }catch(_){} A.applyUpdate(); };
+  window.__uiUpdateReady=()=>{ if(window.__upPending) return; window.__upPending=true; tryApply(); };
+  // açıkken de 2 dakikada bir yeni sürüm var mı bak (uygulama 1.10 ve sonrası)
+  setInterval(()=>{ if(!document.hidden&&has("checkUpdate")) try{ A.checkUpdate(); }catch(_){} },120e3);
   async function apkCheck(manual){ if(!has("appVersion")) return;
     if(!manual&&Date.now()-(+ls("fp-apkchk")||0)<20*3600e3) return; ls("fp-apkchk",String(Date.now()));
     try{ const o=await nget("GET","https://api.github.com/repos/"+REPO+"/releases/latest",null,{"Accept":"application/vnd.github+json"}); const j=JSON.parse(o.body);
@@ -2215,7 +2229,14 @@ if(window.__standalone){
           <p class="small muted" style="margin:0">Kural: küçük tutarla gir, en fazla 1 ay tut, %8 düşerse sat.</p>
           <button class="btn ghost" id="hmShort" style="flex:none">Kısa vade listesini gör</button>`);
         bindSt(card); card.querySelector("#hmShort")?.addEventListener("click",()=>{ S.hmode="kisa"; S.tab="hisse"; showTab(); renderHisse(); window.scrollTo({top:0}); }); }
-      card.querySelectorAll("[data-gm]").forEach(b=>b.onclick=()=>{ S.gmode=b.dataset.gm; renderGundem(); }); return r; }; }
+      card.querySelectorAll("[data-gm]").forEach(b=>b.onclick=()=>{ S.gmode=b.dataset.gm; renderGundem(); });
+      if(S.market){ window.__bootOff&&window.__bootOff(); clearTimeout(window.__bootT); window.__bootT=setTimeout(saveBoot,1500); } return r; }; }
+  function saveBoot(){ try{ if(S.tab!=="gundem"||S.det||!S.market) return; const bd=document.body.cloneNode(true);
+      bd.querySelectorAll("script,style,link,[hidden],#det,.scrim,.sheet,.toast,.upbar,#bootshot,#gtip").forEach(e=>e.remove());
+      const html=bd.innerHTML.replace(/\sid="[^"]*"/g,""); if(html.length>150000) return;
+      const css=[...document.querySelectorAll("style:not(#bootcss)")].map(s=>s.textContent).join("\n");
+      localStorage.setItem("fp-boot",JSON.stringify({v:1,cls:document.documentElement.className.replace(/\bscrolled\b/,"").trim(),css,html})); }catch(_){} }
+  setTimeout(()=>window.__bootOff&&window.__bootOff(),4000);
   // Detay > Puan: kısa vade puanı
   { const o=drawDetail; drawDetail=function(){ const r=o.apply(this,arguments); try{ if(S.det?.t==="s"&&S.det.tab==="puan"){ const x=detItem("s",S.det.c), s=x&&shortFor(x.code,x), c=document.querySelector("#det .dwrap > section.card"); if(x?.scan&&c) c.insertAdjacentHTML("afterbegin",`<p class=\"small muted\" style=\"margin:0 0 8px\">${x._loaded?"Bu hisse listende değil. Takibe alırsan her gün izlenir.":"Veriler yükleniyor…"}</p>`);
         if(s&&c) c.insertAdjacentHTML("beforeend",`<div class="st-det"><div style="--p:${s.score}" class="sbadge${stCls(s.score)}">${s.score}</div><div><b>Kısa vade puanı</b> <span class="small muted">(BIST 100 içindeki sırası)</span><div class="small muted">${s.score>=80?"Kısa vadede güçlü (en iyi %20)":s.score<20?"Kısa vadede zayıf (en kötü %20)":"Kısa vadede ortalama"}${stMarket()&&!stMarket().up&&s.score>=80?"; piyasa düşüşte, şimdilik alım önerilmez":""}${(s.tags||[]).length?" · "+esc(s.tags.join(" · ")):""}</div></div></div>`); } }catch(e){ console.error(e); } return r; }; }
@@ -2225,6 +2246,8 @@ if(window.__standalone){
     .st-det{display:flex;align-items:center;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)} .st-det .sbadge,.hm-do .sbadge{flex:none}
     .nsheet .dlist .drow{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--line)}`; document.head.appendChild(st); }
   shortRefresh().catch(()=>{});
+  // güncelleme sonrası açık sekmeye dön
+  try{ const r=JSON.parse(localStorage.getItem("fp-restore")||"null"); if(r){ localStorage.removeItem("fp-restore"); if(Date.now()-r.at<60e3){ if(r.hmode) S.hmode=r.hmode; if(r.gmode) S.gmode=r.gmode; if(r.tab&&r.tab!==S.tab){ S.tab=r.tab; showTab(); } setTimeout(()=>window.scrollTo(0,r.y||0),400); setTimeout(()=>toast("Uygulama güncellendi"),600); } } }catch(_){}
   // Veri bu katman yüklenmeden gelmiş olabilir: yeni görünümle (puan halkası, Bugün ekranı) hemen yeniden çiz
   try{ if(S.market) renderAll(); }catch(e){ console.error(e); }
   renderFresh(); setTimeout(()=>apkCheck(false),4000);

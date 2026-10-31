@@ -166,6 +166,7 @@ public class MainActivity extends Activity {
     @JavascriptInterface public String uiSource() { return source; }
     @JavascriptInterface public void applyUpdate() { ui.post(() -> { checked = true; load(); }); }
     @JavascriptInterface public void reload() { ui.post(() -> load()); }
+    @JavascriptInterface public void checkUpdate() { ui.post(() -> { if (ready && System.currentTimeMillis() - lastCheck > 60 * 1000L) { checked = false; MainActivity.this.checkUi(); } }); }
     @JavascriptInterface public void openUrl(final String url) { ui.post(() -> open(url)); }
     @JavascriptInterface public void share(final String text, final String title) {
       ui.post(() -> { try { Intent i = new Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text);
