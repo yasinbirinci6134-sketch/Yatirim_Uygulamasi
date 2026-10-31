@@ -816,7 +816,7 @@ function renderHisse(){
   v.innerHTML = `
     ${a?.summary?`<section class="card"><h3>Borsa görüşü · ${esc(updLbl())}</h3><p class="summary clamp${xo("hsum")}" data-k="hsum">${esc(clean(a.summary))}</p></section>`:""}
     ${(()=>{ const pk=[...st.filter(x=>x.pick)].sort((a,b)=>String(b.pickAt).localeCompare(String(a.pickAt)));
-      return pk.length?`<section class="card"><div class="horizon"><h2>Keşifler</h2><span class="small muted">Claude'un listeye eklediği hisseler</span></div>
+      return pk.length?`<section class="card"><div class="horizon"><h2>Keşifler</h2><span class="small muted">Listeye yeni eklenen hisseler</span></div>
         ${pk.map(x=>x.isFund?`<div class="fund"><div><span class="code">${esc(x.code)}</span> <span class="score${sCls(x.score,"f")}">${num(x.score,0)}</span> ${pickBadge(x)}<div class="name">${esc(x.name)} · fon</div></div><div class="right"><div class="num">${num(x.price,6)}</div><div class="small num ${cls(x.y1)}">1 yıl ${pc(x.y1,0)}</div></div></div>`:stockRow(x)).join("")}</section>`:""; })()}
     ${allocBlock(a?.short)}
     ${allocBlock(a?.long)}
@@ -1161,9 +1161,9 @@ YALNIZCA şu JSON'u döndür:
 items tl toplamı + cash = ${amount}.
 VERİ: ${JSON.stringify(ctx)}`;
     try{ const out=await S.sample(prompt,{modelTier:"default",cache:false}); const t=out.text||""; res=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1)); }
-    catch(e){ res=null; if(e?.code==="not_granted") toast("Claude'a sorma izni verilmedi; kural tabanlı öneri gösteriliyor."); }
+    catch(e){ res=null; if(e?.code==="not_granted") toast("Kural tabanlı öneri gösteriliyor."); }
   }
-  if(!res) res={verdict:amount?"yatir":"kademeli", reason:"Uygulamanın kurallarına ve mevcut dağılımına göre hesaplandı (Claude yorumu alınamadı).", positions:[], items:base, cash:0};
+  if(!res) res={verdict:amount?"yatir":"kademeli", reason:"Uygulamanın kurallarına ve mevcut dağılımına göre hesaplandı.", positions:[], items:base, cash:0};
   const posMap=Object.fromEntries((res.positions||[]).map(p=>[String(p.code||"").toUpperCase(),p]));
   const positions=[...new Set(rows.map(r=>r.code))].map(c=>{ const r=rows.find(x=>x.code===c), p=posMap[c];
     if(p&&ACT[p.action]) return {code:c,k:ACT[p.action][0],label:ACT[p.action][1],why:p.why||""};
@@ -1317,7 +1317,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.10.31-28";
+const UI_VERSION="2026.10.31-30";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1565,6 +1565,53 @@ function formulaScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.c
   st.forEach(x=>{ const kapNeg=kapAgir(x);
     x.signal=(x.score<42||kapNeg)?"uzak":(x.score>=60&&top.has(x.code)&&(x.parts?.karlilik??0)>=10*PM.karlilik/30&&!(x.m3<0&&x.y1<0))?"al":"izle"; });
 }
+
+/* Önerilen dağılımlar telefonda, güncel puanlarla ve kurallarla kurulur (yorum metinleri günlük analizden kalır).
+   Kurallar: hisse kısa vade puan ≥50, uzun vade ≥45; "uzak dur" girmez; 3 ay ve 1 yıl getirisi ikisi eksi olan kısa vadeye girmez;
+   tek kalem en çok %35 (kendi bölümü içinde), banka ya da holding grubu en çok %40; fonda kısa vade puan ≥45, uzun vadede <45 en çok %10;
+   faiz enflasyonun üstündeyse para piyasası ağırlıklı, borsa zayıfsa hisse payı düşük; puanı yakın (≤5) iki fon varsa ikisine bölünür. */
+function buildAdvice(M){ const n=v=>typeof v==="number"&&isFinite(v), F=S.live?.fin||{};
+  if(!M.advice) M.advice={}; if(!M._advAI) M._advAI=JSON.parse(JSON.stringify(M.advice||{}));
+  const AI=M._advAI, oldWhy=(arr,c)=>(arr?.items||[]).find(i=>i.code===c)?.why;
+  const pf=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isFinite(x)?x:null; }, ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v;
+  const rate=pf(ind("Politika faizi")), infl=pf(ind("Yıllık enflasyon"))??pf(ind("Beklenen enflasyon (12 ay)")), realPos=rate!=null&&infl!=null?rate>infl:true;
+  const B=S.live?.idx?.XU100||M.bist||{}, weak=n(B.y1)&&n(B.m3)&&infl!=null?(B.y1<infl&&B.m3<0):false;
+  const why=(x,ai)=>{ if(ai) return ai; const p=x.parts||{}, r=Object.entries(p).filter(([k,v])=>NOTE[k]&&n(v)).map(([k,v])=>[k,v/((M.partsMax||{})[k]||PMX[k])]).sort((a,b)=>b[1]-a[1]).filter(([,v])=>v>=0.6).slice(0,2).map(([k])=>NOTE[k][0]);
+    return r.length?(r.join(", ").replace(/^./,c=>c.toLocaleUpperCase("tr"))+"."):"Listede puanı en yüksekler arasında."; };
+  // ağırlıkları tam sayıya yuvarla, toplam 100
+  const norm=(list,cap,grp,gcap)=>{ if(!list.length) return []; let w=list.map(z=>Math.max(1,z.w)); const T=()=>w.reduce((s,v)=>s+v,0);
+    for(let it=0;it<20;it++){ const t=T(); w=w.map(v=>v/t); let ex=0, free=[];
+      w=w.map((v,i)=>{ if(v>cap){ ex+=v-cap; return cap; } free.push(i); return v; });
+      if(grp){ const G={}; list.forEach((z,i)=>{ const g=grp(z); if(g) (G[g]=G[g]||[]).push(i); }); for(const g in G){ const s=G[g].reduce((a,i)=>a+w[i],0); if(s>gcap){ const k=gcap/s; G[g].forEach(i=>{ ex+=w[i]*(1-k); w[i]*=k; }); free=free.filter(i=>!G[g].includes(i)); } } }
+      if(ex<1e-6||!free.length) break; const fs=free.reduce((a,i)=>a+w[i],0)||1; free.forEach(i=>w[i]+=ex*w[i]/fs); }
+    const t=T(); let r=w.map(v=>Math.floor(v/t*100)), rest=100-r.reduce((s,v)=>s+v,0); const ord=w.map((v,i)=>[v/t*100-r[i],i]).sort((a,b)=>b[0]-a[0]); for(let k=0;k<rest;k++) r[ord[k%ord.length][1]]++;
+    return list.map((z,i)=>({code:z.x.code, weight:r[i], why:z.why})).filter(z=>z.weight>0).sort((a,b)=>b.weight-a.weight); };
+  // hisseler
+  const ST=(M.stocks||[]).filter(x=>n(x.score)&&x.signal!=="uzak"), grp=x=>F[x.code]?.bank?"banka":(HOLD.has(x.code)||/holding/i.test(x.name||""))?"holding":null;
+  const pickS=(min,short)=>ST.filter(x=>x.score>=min&&(!short||(n(x.m3)&&n(x.y1)&&!(x.m3<0&&x.y1<0)))).sort((a,b)=>b.score-a.score).slice(0,5);
+  const mkS=(min,short,AIa)=>norm(pickS(min,short).map(x=>({x,w:x.score-40,why:why(x,oldWhy(AIa,x.code)),g:grp(x)})),0.35,z=>z.g,0.4);
+  const sa=M.advice.stocks=M.advice.stocks||{}; const aS=AI.stocks||{};
+  sa.short={...(aS.short||{}),horizon:aS.short?.horizon||"1–3 ay",items:mkS(50,true,aS.short)}; sa.long={...(aS.long||{}),horizon:aS.long?.horizon||"1 yıl ve üstü",items:mkS(45,false,aS.long)};
+  // fonlar: önce türlere pay, sonra türün en iyisine
+  const FU=(M.funds||[]).filter(x=>n(x.score)&&x.cat), cats=["para","altin","hisse","diger"];
+  const share=short=>short?(realPos?{para:60,altin:15,hisse:weak?10:20,diger:15}:{para:35,altin:25,hisse:weak?15:25,diger:15})
+                          :(realPos?{para:40,altin:20,hisse:weak?25:30,diger:10}:{para:25,altin:25,hisse:weak?30:35,diger:15});
+  const mkF=(short,AIa)=>{ const sh=share(short), out=[]; let moved=0;
+    cats.forEach(c=>{ const L=FU.filter(x=>x.cat===c).sort((a,b)=>b.score-a.score); let ok=L.filter(x=>x.score>=45);
+      if(!ok.length&&!short&&L.length&&c!=="para"){ out.push({x:L[0],w:Math.min(10,sh[c]),why:why(L[0],oldWhy(AIa,L[0].code))}); moved+=sh[c]-Math.min(10,sh[c]); return; }
+      if(!ok.length){ moved+=sh[c]; return; }
+      const two=ok.length>1&&ok[0].score-ok[1].score<=5?ok.slice(0,2):ok.slice(0,1);
+      two.forEach(x=>out.push({x,w:sh[c]/two.length,why:why(x,oldWhy(AIa,x.code)),c})); });
+    if(moved){ const P=out.filter(z=>z.c==="para"); if(P.length) P.forEach(z=>z.w+=moved/P.length); else out.forEach(z=>z.w+=moved/out.length); }
+    return norm(out,1,null,1); };
+  M.advice.short={...(AI.short||{}),title:AI.short?.title||"Kısa vade",horizon:AI.short?.horizon||"1–3 ay",items:mkF(true,AI.short)};
+  M.advice.long={...(AI.long||{}),title:AI.long?.title||"Uzun vade",horizon:AI.long?.horizon||"1 yıl ve üstü",items:mkF(false,AI.long)};
+  // döviz/altın: "uzak dur" olmayan en iyi 3, tek kalem en çok %60
+  // ons altın gram altınla aynı varlık (TL'li yatırımcı gram alır); ikisi birden girmez
+  const FX=(M.fx||[]).filter(x=>n(x.score)&&x.signal!=="uzak").sort((a,b)=>b.score-a.score).filter((x,i,a)=>!(x.code==="XAU"&&a.some(y=>y.code==="GAU"))&&!(x.code==="XAG"&&a.some(y=>y.code==="GAG"))).slice(0,3), aF=AI.fx||{}, fa=M.advice.fx=M.advice.fx||{};
+  const mkX=AIa=>norm(FX.map(x=>({x,w:x.score-30,why:why(x,oldWhy(AIa,x.code))})),0.6);
+  fa.short={...(aF.short||{}),horizon:aF.short?.horizon||"1–3 ay",items:mkX(aF.short)}; fa.long={...(aF.long||{}),horizon:aF.long?.horizon||"1 yıl ve üstü",items:mkX(aF.long)};
+}
 /*SCORE:BEGIN — fiyata bağlı puan parçaları; uygulama canlı fiyatla, yapay zekâ günlük güncellemede aynı kodla hesaplar (tools/score.js) */
 const SCORE={
   clamp:(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),
@@ -1629,9 +1676,7 @@ const SCORE={
 /*SCORE:END*/
 
 /* Detaydaki Puan sekmesi: yapay zekânın günlük puanından farkı açıkla */
-function liveNote(x){ if(x?.auto) return `<p class="small muted" style="margin:6px 0 0">Otomatik puan: bu kalemi yapay zekâ incelemedi; puan telefonda, kurallardaki formüllerle güncel fiyat ve şirket/fon verilerinden hesaplandı. Haber, KAP ve analist yorumu içermez.</p>`;
-  const a=x?._ai; if(!a||typeof a.score!=="number"||a.score===x.score) return "";
-  return `<p class="small muted" style="margin:6px 0 0">Güncel fiyatla hesaplandı: yapay zekânın bugünkü puanı ${a.score}${a.signal&&a.signal!==x.signal?" ("+esc(SIG[a.signal]||a.signal)+")":""} idi. Fiyata bağlı parçalar (momentum, analist hedefi, trend, taşıma) anlık fiyatla yeniden hesaplanır; diğerleri günlük analizden gelir.</p>`; }
+function liveNote(x){ return x?.finPeriod?`<p class="small muted" style="margin:6px 0 0">Puan güncel fiyat ve ${esc(String(x.finPeriod).replace("/"," / "))} dönemi bilançosuyla hesaplandı.</p>`:""; }
 /* Canlı fiyatları yapay zekânın yazdığı verinin üstüne koy (yalnız daha yeniyse), göstergeleri ve fiyata bağlı puanları güncelle */
 // Hisse bölüm ağırlıkları geçmiş testiyle (BIST 100, 2017–2026, 6 ay sonraki getiri) ayarlandı: değerleme ve momentum daha güçlü çıktı
 const STOCK_W={karlilik:20,deger:25,momentum:30,saglamlik:15,analist:10};
@@ -1652,7 +1697,8 @@ function applyLive(){ const L=S.live, M=S.market; if(!M) return;
   const B=L?.idx?.XU100||M.bist||null;
   try{ SCORE.apply(M,{B}); }catch(e){ console.error(e); }
   try{ autoScore(M); }catch(e){ console.error(e); }
-  try{ formulaScore(M); }catch(e){ console.error(e); } }
+  try{ formulaScore(M); }catch(e){ console.error(e); }
+  try{ buildAdvice(M); }catch(e){ console.error(e); } }
 /* APK'da hızlı güncelleme bedava canlı çekimdir; yapay zekâ ile hızlı güncelleme yalnız tarayıcıda */
 { const _rq=requestQuick; requestQuick=function(kind){ return LIVE.ok() ? liveRefresh([kind],true) : _rq(kind); }; }
 try{ if(typeof autoQuick==="function"){ const _aq=autoQuick; autoQuick=function(){ return LIVE.ok() ? false : _aq.apply(this,arguments); }; } }catch(_){}
@@ -1748,7 +1794,7 @@ if(window.__standalone){
     const la=S.live?.at; dot.className="dot "+(LIVE.busy?"busy":LIVE.err?"":"ok");
     txt.innerHTML=`<button class="linkbtn fr" id="frBtn" aria-label="Fiyatları yenile">Analiz ${esc(fmtTime(S.market.updatedAt))} · Fiyat ${LIVE.busy?"yenileniyor…":la?esc(fmtTime(la)):"—"}${LIVE.err?' <span class="down">· bağlantı yok</span>':""}</button>`;
     $("frBtn").onclick=()=>{ liveRefresh(null,true); window.__pullRemote?.(); }; };
-  $("refreshBtn").onclick=()=>{ A.openUrl(OLD+"#guncelle"); toast("Claude uygulaması açılıyor; güncelleme orada başlar, bitince veriler buraya da gelir."); };
+  $("refreshBtn").onclick=()=>{ A.openUrl(OLD+"#guncelle"); toast("Analiz başlatılıyor; bitince veriler buraya da gelir."); };
 
   /* Aşağı çekip yenileme */
   (()=>{ const ind=document.createElement("div"); ind.className="ptr"; ind.textContent="↻"; document.body.appendChild(ind);
@@ -1868,7 +1914,7 @@ if(window.__standalone){
         <div class="st-h">Uygulama</div><div class="st-g">
           <div class="st-r" data-up><span class="st-ic">⬆️</span><span class="tx">Güncellemeleri denetle</span><span class="vl">${has("appVersionName")?esc(A.appVersionName()):""}</span><span class="ch">›</span></div>
           <div class="st-r" data-sh><span class="st-ic">🔗</span><span class="tx">Uygulamayı paylaş</span><span class="ch">›</span></div>
-          <label class="st-r" id="ownRow"${OWN()||ls("fp-ownunlock")==="1"?"":" hidden"}><span class="st-ic">👤</span><span class="tx">Bu telefon benim<small>Üstte puan ve haber güncellemesini isteme düğmesi çıkar (Claude hesabı gerekir)</small></span>${sw("own",OWN())}</label></div>
+          <label class="st-r" id="ownRow"${OWN()||ls("fp-ownunlock")==="1"?"":" hidden"}><span class="st-ic">👤</span><span class="tx">Bu telefon benim<small>Üstte analiz isteme düğmesi çıkar</small></span>${sw("own",OWN())}</label></div>
         <div class="st-foot">Arayüz ${esc(UI_VERSION)}${has("uiSource")&&A.uiSource()==="file"?" · güncellendi":""}</div>`;
       const q=s=>sh.querySelector(s);
       q("[data-c]").onclick=close;
@@ -1993,7 +2039,7 @@ if(window.__standalone){
 
   /* Puan halkası: listedeki rozetler doluluk oranını gösterir */
   { const o=listRow; listRow=function(t,x){ let s=o.apply(this,arguments).replace('<div class="sbadge','<div style="--p:'+(Number(x.score)||0)+'" class="sbadge');
-      if(x.auto) s=s.replace('<span class="code">'+esc(x.code)+'</span>','<span class="code">'+esc(x.code)+'</span><span class="sig" style="background:var(--accent-soft);color:var(--accent);border-color:transparent">OTOMATİK</span>'); return s; }; }
+      return s; }; }
 
   const tl0=v=>"₺"+Math.round(v).toLocaleString("tr-TR"), sg=v=>(v>=0?"+":"−");
   const chg=(v,d=2)=>v==null||isNaN(v)?"":`<span class="hm-chg ${v>=0?"up":"down"}">${v>=0?"▲":"▼"} %${Math.abs(v).toLocaleString("tr-TR",{maximumFractionDigits:d})}</span>`;
