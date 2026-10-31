@@ -2,7 +2,7 @@
 <script>/* açılış: son Bugün ekranının kopyasını hemen göster; gerçek ekran hazır olunca kalkar */
 try{ var B=window.YatirimApp&&JSON.parse(localStorage.getItem("fp-boot")||"null"); if(B&&B.html&&B.v===1){ window.__boot=B; if(B.cls) document.documentElement.className=B.cls; if(B.attr) for(var k in B.attr) document.documentElement.setAttribute(k,B.attr[k]);
   var st=document.createElement("style"); st.id="bootcss"; st.textContent=B.css+"\n#bootshot{position:fixed;inset:0;z-index:9999;overflow:hidden;background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body,system-ui);box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}"; document.body.appendChild(st);
-  var d=document.createElement("div"); d.id="bootshot"; d.setAttribute("aria-hidden","true"); if(B.pad) d.style.padding=B.pad; if(B.font) d.style.font=B.font; d.innerHTML=B.html; document.documentElement.appendChild(d); } }catch(e){}   /* body dışında: sayfadaki aramalar (querySelector) gerçek ekranı bulur */
+  var d=document.createElement("div"); d.id="bootshot"; d.setAttribute("aria-hidden","true"); if(B.pad){ d.style.padding=B.pad; d.style.paddingTop="calc("+(B.pad.split(" ")[0]||"0px")+" + env(safe-area-inset-top,0px))"; } if(B.font) d.style.font=B.font; d.innerHTML=B.html; document.documentElement.appendChild(d); } }catch(e){}   /* body dışında: sayfadaki aramalar (querySelector) gerçek ekranı bulur */
 window.__bootOff=function(){ var a=document.getElementById("bootshot"), b=document.getElementById("bootcss"); if(a) a.remove(); if(b) b.remove(); };</script>
 <title>Yatırım Tavsiyesi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
