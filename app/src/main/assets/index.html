@@ -1,0 +1,1403 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Yatırım Tavsiyesi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+[hidden]{display:none!important}
+html,body{overscroll-behavior:none} body{margin:0}
+/* Tek sütun, telefon öncelikli: üstte tazelik şeridi, sekmeler, altta kartlar */
+:root{
+  --bg:#F2F4F1; --card:#FFFFFF; --ink:#13211C; --muted:#5D6B66; --line:#D9E0DB;
+  --accent:#0F6B57; --accent-soft:#E2EFEA; --para:#1A8A70; --gold:#A8731A; --gold-soft:#F5EBD8;
+  --stock:#3D5A9E; --stock-soft:#E4E9F5; --up:#17794A; --down:#B1352C; --warn:#9A6A12;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-num:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1513; --card:#16201D; --ink:#E4ECE8; --muted:#94A39D; --line:#25332F;
+  --accent:#43B898; --accent-soft:#183A31; --para:#43B898; --gold:#D8A445; --gold-soft:#3A2F17;
+  --stock:#8FA9E6; --stock-soft:#1E2A45; --up:#4FC585; --down:#E8736A; --warn:#E0B04E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1513; --card:#16201D; --ink:#E4ECE8; --muted:#94A39D; --line:#25332F;
+  --accent:#43B898; --accent-soft:#183A31; --para:#43B898; --gold:#D8A445; --gold-soft:#3A2F17;
+  --stock:#8FA9E6; --stock-soft:#1E2A45; --up:#4FC585; --down:#E8736A; --warn:#E0B04E; color-scheme:dark}
+:root[data-accent="mavi"]{--accent:#2F5BB7;--accent-soft:#E3EAF8}
+:root[data-accent="mor"]{--accent:#6B46B0;--accent-soft:#EEE8F8}
+:root[data-accent="turuncu"]{--accent:#B5541C;--accent-soft:#F8E8DD}
+:root[data-accent="gri"]{--accent:#3E4A52;--accent-soft:#E6EAEC}
+:root[data-theme="dark"][data-accent="mavi"]{--accent:#7FA2F0;--accent-soft:#1C2A47}
+:root[data-theme="dark"][data-accent="mor"]{--accent:#B49AF0;--accent-soft:#2C2142}
+:root[data-theme="dark"][data-accent="turuncu"]{--accent:#F0995E;--accent-soft:#3F2617}
+:root[data-theme="dark"][data-accent="gri"]{--accent:#A9B6BE;--accent-soft:#263036}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme="light"])[data-accent="mavi"]{--accent:#7FA2F0;--accent-soft:#1C2A47}
+:root:not([data-theme="light"])[data-accent="mor"]{--accent:#B49AF0;--accent-soft:#2C2142}
+:root:not([data-theme="light"])[data-accent="turuncu"]{--accent:#F0995E;--accent-soft:#3F2617}
+:root:not([data-theme="light"])[data-accent="gri"]{--accent:#A9B6BE;--accent-soft:#263036}}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:560px;margin:0 auto;padding-block:0 48px;display:flex;flex-direction:column;gap:16px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:20px 8px;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+h1{font:700 26px/1.1 var(--f-display);margin:0;letter-spacing:-.01em}
+h1 span{color:var(--accent)}
+.fresh{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.dot.ok{background:var(--up)} .dot.busy{background:var(--warn);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.dot.busy{animation:none}}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);font:600 12.5px var(--f-body);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.tabs button{border:0;background:none;padding:9px 4px;border-radius:9px;font:600 14px var(--f-body);color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--card)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h2{font:700 19px/1.2 var(--f-display);margin:0}
+h3{font:600 13px var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.muted{color:var(--muted)} .small{font-size:13px}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+.up{color:var(--up)} .down{color:var(--down)}
+.summary{font-size:15.5px;line-height:1.55;margin:0}
+.horizon{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.alloc{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--line)}
+.alloc i{display:block;height:100%}
+.alloc-row{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start}
+.pct{font:500 15px var(--f-num);min-width:44px}
+.why{font-size:14px;color:var(--muted);margin:0}
+.code{font:600 14px var(--f-body)}
+.chip{display:inline-block;font:600 11px var(--f-body);letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:999px}
+.c-para{background:var(--accent-soft);color:var(--accent)} .c-altin{background:var(--gold-soft);color:var(--gold)} .c-hisse{background:var(--stock-soft);color:var(--stock)}
+.bar-diger{background:var(--muted)} .c-diger{background:var(--line);color:var(--ink)}
+.bar-para{background:var(--para)} .bar-altin{background:var(--gold)} .bar-hisse{background:var(--stock)} .bar-gumus{background:#8a8f98} .bar-doviz{background:#6b5aa6}
+.c-gumus{background:#e9eaec;color:#5b6068} .c-doviz{background:#ece8f6;color:#5b4b96}
+ul.plain{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.ind{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ind div{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.ind b{font:500 17px var(--f-num)}
+.ind span{font-size:12px;color:var(--muted)}
+.fund{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding-block:12px;border-top:1px solid var(--line)}
+.fund:first-of-type{border-top:0;padding-top:0}
+.fund .name{font-size:13px;color:var(--muted);min-width:0}
+.fund .right{text-align:right}
+.rets{grid-column:1/-1;display:flex;gap:14px;font-size:12.5px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--card);font:600 14px var(--f-body);padding:9px 14px;border-radius:10px;cursor:pointer}
+.btn.ghost{background:none;color:var(--accent)}
+.btn.sm{padding:5px 10px;font-size:13px;margin-left:auto}
+.btn:disabled{opacity:.5;cursor:default}
+.total{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+.total b{font:500 26px var(--f-num)}
+.trade{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding-block:12px;border-top:1px solid var(--line)}
+.trade:first-of-type{border-top:0;padding-top:0}
+.trade .acts{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end}
+.empty{text-align:center;padding:24px 8px;color:var(--muted)}
+.sheet{position:fixed;inset:auto 0 0;z-index:20;background:var(--card);border-top:1px solid var(--line);border-radius:16px 16px 0 0;
+  padding:18px max(16px,env(safe-area-inset-left,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px));
+  box-shadow:0 -10px 30px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:12px;max-width:560px;margin:0 auto}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:19}
+input[type=number],textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font:16px var(--f-body)}
+.quick{display:flex;gap:8px;flex-wrap:wrap}
+.quick button{border:1px solid var(--line);background:none;color:var(--ink);border-radius:999px;padding:5px 12px;font:500 13px var(--f-num);cursor:pointer}
+.row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.answer{white-space:pre-wrap;font-size:14.5px;margin:0}
+.note{font-size:12.5px;color:var(--muted);margin:0}
+a{color:var(--accent)}
+.sig{display:inline-block;font:600 11px var(--f-body);letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid currentColor}
+.sig-al{color:var(--up)} .sig-izle{color:var(--warn)} .sig-uzak{color:var(--down)}
+.risk{display:inline-flex;gap:2px;align-items:center;font-size:12px;color:var(--muted)}
+.risk i{width:6px;height:10px;border-radius:2px;background:var(--line)} .risk i.on{background:var(--ink)}
+.alloc i + i{border-left:2px solid var(--card)}
+.addrow{display:flex;gap:8px} .addrow input{flex:1;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:9px 12px;font:16px var(--f-body);text-transform:uppercase}
+.stock .why{grid-column:1/-1}
+.pick{font:600 10px var(--f-body);letter-spacing:.04em;padding:1px 6px;border-radius:999px;background:var(--gold-soft);color:var(--gold)}
+.mine{font:600 11px var(--f-body);color:var(--accent)}
+.rowbtn{border:1px solid var(--line);background:none;color:var(--muted);border-radius:8px;width:30px;height:28px;font-size:15px;cursor:pointer;line-height:1}
+.rowbtn.spin{animation:rot 1s linear infinite;color:var(--warn)} @keyframes rot{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.rowbtn.spin{animation:none}}
+.score{font:600 13px var(--f-num);padding:2px 8px;border-radius:8px;background:var(--accent-soft);color:var(--accent)}
+details.more{grid-column:1/-1} details.more summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:600}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.metrics div{display:flex;flex-direction:column;font-size:11.5px;color:var(--muted)} .metrics b{font:500 14px var(--f-num);color:var(--ink)}
+.parts{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;margin-top:10px;font-size:12.5px}
+.parts .pb{height:6px;border-radius:3px;background:var(--line);overflow:hidden} .parts .pb i{display:block;height:100%;background:var(--accent)}
+.perf{display:grid;grid-template-columns:52px 1fr 64px;gap:6px 8px;align-items:center;margin-top:10px;font-size:12.5px}
+.perf .track{position:relative;height:14px;background:linear-gradient(var(--line),var(--line)) center/1px 100% no-repeat}
+.perf .track i{position:absolute;top:2px;bottom:2px;border-radius:3px}
+.perf .track i.p{left:50%;background:var(--up)} .perf .track i.n{right:50%;background:var(--down)}
+.perf .v{text-align:right}
+.pfbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap} .pfbar .btn.sm{margin-left:0}
+select{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:9px 10px;font:15px var(--f-body);max-width:100%}
+.pfbar select{flex:1;min-width:140px;font-weight:600}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.formgrid label{display:flex;flex-direction:column;gap:4px;font-size:13px;min-width:0}
+.formgrid label:nth-child(-n+2){grid-column:1/-1}
+.formgrid input,.formgrid select{width:100%}
+.sheet{max-height:92vh;overflow:auto}
+.adv{display:inline-block;font:600 11px var(--f-body);text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:999px;border:1px solid currentColor;margin-left:4px}
+.adv-ekle{color:var(--up)} .adv-kal{color:var(--muted)} .adv-cik{color:var(--down)} .adv-kar{color:var(--warn)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:30}
+/* Kompakt görünüm */
+body{font-size:14px;line-height:1.45}
+.wrap{gap:12px;padding-block:0 40px}
+header{gap:8px;padding-block:14px 6px}
+h1{font-size:22px} h2{font-size:16px} h3{font-size:11.5px}
+.card{padding:12px 14px;gap:10px;border-radius:12px}
+.tabs button{padding:7px 1px;font-size:12px}
+.summary{font-size:14px}
+.clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
+.clamp.open{display:block}
+.ind{gap:8px} .ind div{padding:7px 10px} .ind b{font-size:15px}
+.fund,.trade{padding-block:9px}
+.x{cursor:pointer}
+.x:not(.open) > :not(.xh){display:none}
+.x .xh{min-width:0}
+.x > .xh.right::after{content:"";}
+.x.open{background:color-mix(in srgb,var(--accent-soft) 70%,transparent);border-radius:12px;padding:10px 10px;margin:4px -4px;border-top-color:transparent}
+.x.open + .x{border-top-color:transparent}
+.aitem{display:grid;grid-template-columns:44px 1fr;gap:2px 10px;align-items:baseline;padding-block:4px}
+.aitem .why{grid-column:2}
+.more{grid-column:1/-1}
+.name{font-size:12px}
+.code{font-size:13.5px}
+.sig{font-size:10px;padding:1px 6px}
+.score{font-size:11.5px;padding:1px 6px}
+.adv{font-size:10px;padding:1px 6px}
+.btn{padding:7px 12px;font-size:13px} .btn.sm{padding:4px 9px;font-size:12px}
+.total b{font-size:22px}
+.metrics b{font-size:13px}
+/* v42: alt menü, skor renkleri, arama/sıralama */
+body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:15;border-radius:0;border:0;border-top:1px solid var(--line);padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px));gap:0;box-shadow:0 -4px 14px rgba(0,0,0,.07);max-width:none}
+nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0 4px;font:600 10.5px var(--f-body);border-radius:10px;color:var(--muted)}
+nav.tabs button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav.tabs button[aria-selected="true"]{background:none;color:var(--accent)}
+nav.tabs button[aria-selected="true"] svg{stroke-width:2.3}
+.score.hi{background:color-mix(in srgb,var(--up) 15%,transparent);color:var(--up)}
+.score.mid{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+.score.lo{background:color-mix(in srgb,var(--down) 14%,transparent);color:var(--down)}
+.lfbar{display:flex;flex-direction:column;gap:6px}
+.lfbar input{width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:500 14px var(--f-body)}
+.lfbar .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.lfbar .chips button{flex:none;border:1px solid var(--line);background:none;color:var(--muted);border-radius:999px;padding:4px 10px;font:600 12px var(--f-body);cursor:pointer}
+.lfbar .chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--card)}
+.ni{padding:12px 4px 12px 14px;border-top:1px solid var(--line);border-radius:12px;transition:background .15s;position:relative}
+.ni .xh{position:static} .nimp{position:absolute;left:2px;top:14px;bottom:14px;width:4px;border-radius:2px;background:var(--line)}
+.nimp-yuksek{background:var(--down)} .nimp-orta{background:var(--gold)} .nimp-dusuk{background:var(--line)}
+.ghero{background:linear-gradient(180deg,var(--accent-soft),var(--card) 140px)}
+.gstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.gs{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 7px;display:flex;flex-direction:column;gap:1px;min-width:0}
+.gs span{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .gs b{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .gs i{font-style:normal;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gs i.up{color:var(--up)} .gs i.down{color:var(--down)}
+.gb{display:flex;flex-direction:column;gap:4px;padding-top:10px;border-top:1px solid var(--line)} .gb p{margin:0;font-size:15px;line-height:1.5}
+.gtag{align-self:flex-start;font:700 10.5px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:2px 7px}
+.tlw{display:flex;flex-direction:column} .tl{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--line);align-items:baseline}
+.tl:first-child{border-top:0} .tld{font:600 13px var(--f-num);color:var(--accent)} .tlt{font-size:14px;line-height:1.45}
+.ni.x.open{background:var(--accent-soft);border-top-color:transparent;padding:12px;margin:4px 0;background-image:none}
+.ni.x.open + .ni{border-top-color:transparent}
+.nbody{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.nsec p{margin:2px 0 0;font-size:14px;line-height:1.5}
+.nlab{font:700 11px var(--f-body);text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.naff{display:flex;gap:8px;align-items:flex-start;margin-top:4px;font-size:13.5px;line-height:1.4}
+.naff > span{flex:none;width:16px;text-align:center;font-weight:700}
+.nmine{background:var(--card);border-radius:10px;padding:8px 10px;font-size:13.5px}
+.nlink{font:600 13px var(--f-body);color:var(--accent);text-decoration:none}
+.g{cursor:help;text-decoration:underline dotted;text-decoration-color:color-mix(in srgb,var(--muted) 60%,transparent);text-underline-offset:3px}
+#gtip{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--card,var(--bg));color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:0 8px 28px rgba(0,0,0,.18);max-width:520px;margin:0 auto}
+#gtip b{font-size:14px} #gtip p{margin:4px 0 0;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.noscroll{overflow:hidden}
+#det{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;padding:0 max(16px,env(safe-area-inset-left,0px)) calc(96px + env(safe-area-inset-bottom,0px))}
+.dtop{position:sticky;top:0;z-index:2;background:var(--bg);display:grid;grid-template-columns:44px 1fr auto;align-items:center;padding:calc(8px + env(safe-area-inset-top,0px)) 0 8px;max-width:560px;margin:0 auto}
+.dtop b{text-align:center;font:700 18px var(--f-display)} .dtop [data-back]{font-size:30px;line-height:1;padding:0 6px;text-decoration:none}
+.dwrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.dhead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:4px 2px}
+.dcode{font:700 26px var(--f-display);letter-spacing:.01em} .dbadges{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.dprice{text-align:right} .dprice .num:first-child{font-size:28px;font-weight:500} 
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:none;color:var(--ink);font:600 14px var(--f-body);padding:9px 6px;border-radius:9px;cursor:pointer}
+.seg button.on{background:var(--accent);color:var(--card)}
+.chart{position:relative} .chart svg{display:block;width:100%;height:150px} .chart.empty{padding:28px 4px;text-align:center}
+.cax{position:absolute;right:0;top:0;bottom:22px;display:flex;flex-direction:column;justify-content:space-between;font-size:11px;color:var(--muted);pointer-events:none;text-align:right}
+.cdates{display:flex;justify-content:space-between;margin-top:4px}
+.range{margin-top:14px} .rtrack{position:relative;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--down),var(--line) 50%,var(--up));margin:6px 0 4px;opacity:.85}
+.rtrack i{position:absolute;top:-4px;width:4px;height:14px;border-radius:2px;background:var(--ink);transform:translateX(-50%)}
+.rlab{display:flex;justify-content:space-between;gap:6px}
+.dlist{padding-top:4px;padding-bottom:4px} .drow{display:flex;justify-content:space-between;gap:12px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.35}
+.drow:last-child{border-bottom:0} .drow b{font-weight:500;text-align:right}
+.dscore{display:flex;align-items:baseline;gap:6px;margin-bottom:6px} .dscore .score{font-size:20px;padding:2px 10px}
+.dnews{padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px} .dnews:last-child{border-bottom:0}
+.dbar{position:fixed;left:0;right:0;bottom:0;z-index:3;background:var(--bg);border-top:1px solid var(--line);display:flex;gap:10px;justify-content:center;padding:10px max(16px,env(safe-area-inset-left,0px)) calc(10px + env(safe-area-inset-bottom,0px))}
+.dbar .btn{flex:1;max-width:270px;margin:0;padding:12px;font-size:15px}
+.swatches{display:flex;gap:10px} .swatches button{width:34px;height:34px;border-radius:50%;border:2px solid var(--card);box-shadow:0 0 0 1px var(--line);cursor:pointer}
+.swatches button.on{box-shadow:0 0 0 2px var(--ink)}
+.fund.x{cursor:pointer}
+.trade:not(.open) .lots{display:none} .lots{display:flex;flex-direction:column;gap:8px;margin-top:6px} .lot{border-top:1px solid var(--line);padding-top:8px}
+.mvgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px} .mvcol{display:flex;flex-direction:column;gap:6px;min-width:0}
+.mvh{font:600 12px var(--f-body);letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.mv{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:6px;border:0;background:var(--bg);border-radius:10px;padding:8px;cursor:pointer;color:var(--ink);font:inherit;text-align:left;min-width:0}
+.mvc{font:600 13px var(--f-num)} .mvp{font-size:12.5px} .mvb{height:6px;border-radius:3px;background:var(--line);overflow:hidden;min-width:16px}
+.mvb i{display:block;height:100%;border-radius:3px} .mvb i.p{background:var(--up)} .mvb i.n{background:var(--down)}
+.ig{display:flex;flex-direction:column;gap:6px} .igh{font:600 12px var(--f-body);letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.it{background:var(--bg);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.it .itl{font-size:12.5px;color:var(--muted)} .it .itl em{font-style:normal;font-size:11px;opacity:.8} .it b{font-size:19px;font-weight:600;letter-spacing:-.01em}
+.it .itn{font-size:11.5px;color:var(--muted);line-height:1.3} .it .itn.up{color:var(--up)} .it .itn.down{color:var(--down)}
+.it.hero{background:var(--accent-soft)} .it.hero b{font-size:24px}
+/* --- modern liste ve kartlar --- */
+.lrow{grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:2px 12px}
+.sbadge{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font:700 15px var(--f-num);background:var(--bg);color:var(--muted)}
+.sbadge.hi{background:color-mix(in srgb,var(--up) 16%,var(--card));color:var(--up)} .sbadge.mid{background:color-mix(in srgb,var(--warn) 16%,var(--card));color:var(--warn)} .sbadge.lo{background:color-mix(in srgb,var(--down) 15%,var(--card));color:var(--down)}
+.lmid{min-width:0;display:flex;flex-direction:column;gap:1px} .lt{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.lmid .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbar{display:grid;grid-template-columns:auto 1fr auto;gap:6px;align-items:center;font-size:11px;color:var(--muted);margin-top:3px;max-width:220px}
+.lbar i{height:4px;border-radius:2px;background:var(--line);overflow:hidden;display:block} .lbar i b{display:block;height:100%;border-radius:2px} .lbar i b.p{background:var(--up)} .lbar i b.n{background:var(--down)}
+.lbar em{font-style:normal;font-size:11px}
+.lrow .right .lp{font-size:15px;font-weight:500}
+.fchips{margin-top:2px}
+.aitem{grid-template-columns:12px minmax(0,1fr) auto!important;align-items:center!important;padding-block:8px!important;border-top:1px solid var(--line);gap:2px 10px!important}
+.aitem:first-child{border-top:0} .aitem .why{grid-column:2/-1!important;margin:2px 0 0} .aitem:not(.open) .why{display:none}
+.adot{width:10px;height:10px;border-radius:50%} .amid{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .amid .name{display:inline;font-size:12.5px}
+.aitem .pct{font:600 15px var(--f-num)}
+.alloc{height:14px;border-radius:7px}
+.pfhero{background:linear-gradient(180deg,var(--accent-soft),var(--card) 150px)}
+.pfh{display:flex;justify-content:space-between;align-items:center;gap:12px} .pfl{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pfv{font:700 26px var(--f-num);letter-spacing:-.02em;line-height:1.15} .pfp{font:600 15px var(--f-num)} .pfp span{font-weight:500;opacity:.85}
+.donut{width:72px;height:72px;flex:none}
+.pfhero{gap:10px!important}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px} .legend span{display:flex;align-items:center;gap:6px} .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.pfstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px} .pfstats div{background:var(--bg);border-radius:10px;padding:6px 8px;display:flex;flex-direction:column;min-width:0}
+.pfstats span{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .pfstats b{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card > h3:first-child, .horizon h3{font:700 11.5px var(--f-body);letter-spacing:.07em}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp 1s linear infinite;vertical-align:-2px;margin-right:4px}@keyframes sp{to{transform:rotate(360deg)}}
+.addrow input::placeholder{text-transform:none;letter-spacing:0} .addrow{margin-top:2px}
+.fgrp{display:flex;flex-direction:column} .fgh{font:700 11.5px var(--f-body);letter-spacing:.07em;text-transform:uppercase;color:var(--accent);padding:14px 0 6px;border-top:1px solid var(--line);margin-top:4px} .fgh span{color:var(--muted);font-weight:600}
+.fgrp .lrow:first-of-type{border-top:0}
+.pfpick{all:unset;cursor:pointer;font:700 11.5px var(--f-body);letter-spacing:.07em;text-transform:uppercase;color:var(--muted)} .pfpick span{color:var(--accent);letter-spacing:0;text-transform:none;font-weight:600;margin-left:4px}
+.pfmgr.closed{display:none!important}
+.pfchips{display:flex;gap:8px;flex-wrap:wrap}
+.pfchips button{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:7px 14px;font:600 14px var(--f-body);cursor:pointer}
+.pfchips button[aria-checked="true"]{background:var(--accent);border-color:var(--accent);color:var(--card)}
+.pfacts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px} .pfacts .btn{margin:0;width:100%;justify-content:center;padding:9px 6px}
+.pfacts .pfdel{color:var(--down);border-color:color-mix(in srgb,var(--down) 45%,var(--line))}
+.snote{grid-column:1/-1;font-size:13px;color:var(--muted);margin:2px 0 0}
+.stale{font:600 10.5px var(--f-body);color:var(--muted);border:1px dashed var(--line);border-radius:6px;padding:0 5px;margin-left:4px}
+.hist{margin-top:10px}.hist svg{display:block;width:100%;height:40px;margin-top:4px}
+.exitb{font:700 10.5px var(--f-body);letter-spacing:.04em;color:var(--down);border:1px solid var(--down);border-radius:6px;padding:0 5px}
+.exitw{grid-column:1/-1;margin:4px 0 0;font-size:12.5px;color:var(--down);background:color-mix(in srgb,var(--down) 8%,transparent);border-radius:8px;padding:6px 8px}
+details.removed{border-top:1px solid var(--line);padding-top:10px}
+details.removed summary{cursor:pointer;font:600 13px var(--f-body);color:var(--muted)}
+.remrow{padding:8px 0;border-top:1px solid var(--line)}
+.remrow:first-of-type{border-top:0}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand" style="display:flex;justify-content:space-between;align-items:center"><h1>Yatırım <span>Tavsiyesi</span></h1><button class="linkbtn" id="setBtn" aria-label="Ayarlar" style="font-size:20px">⚙︎</button></div>
+    <div class="fresh" id="fresh"><span class="dot" id="dot"></span><span id="freshText">Veriler yükleniyor…</span>
+      <button class="linkbtn" id="refreshBtn" hidden>Şimdi güncelle</button></div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" id="t-gundem" aria-selected="false">Gündem</button>
+      <button role="tab" id="t-oneri" aria-selected="true">Fon</button>
+      <button role="tab" id="t-hisse" aria-selected="false">Hisse</button>
+      <button role="tab" id="t-doviz" aria-selected="false">Döviz</button>
+      <button role="tab" id="t-sanal" aria-selected="false">Portföy</button>
+      <button role="tab" id="t-piyasa" aria-selected="false">Piyasa</button>
+    </nav>
+  </header>
+
+  <main id="v-gundem" class="wrap" style="padding:0" hidden></main>
+  <main id="v-oneri" class="wrap" style="padding:0"></main>
+  <main id="v-hisse" class="wrap" style="padding:0" hidden></main>
+  <main id="v-sanal" class="wrap" style="padding:0" hidden></main>
+  <main id="v-doviz" class="wrap" style="padding:0" hidden></main>
+  <main id="v-piyasa" class="wrap" style="padding:0" hidden></main>
+
+</div>
+
+<script>
+/* Bağımsız APK: claude.ai veritabanı yerine yerel depolama + GitHub'daki yapay zekâ çıktısı */
+(function(){
+  let sa=false; try{ sa=!!(window.YatirimApp && YatirimApp.standalone && YatirimApp.standalone()); }catch(_){}
+  if(!sa) return;
+  window.__standalone=true;
+  const RAW="https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/data/";
+  const ld=p=>{ try{ const v=localStorage.getItem("db:"+p); return v?JSON.parse(v):null; }catch(_){ return null; } };
+  const sv=(p,v)=>{ try{ v==null?localStorage.removeItem("db:"+p):localStorage.setItem("db:"+p,JSON.stringify(v)); }catch(_){} };
+  const subs={}, csubs={}, cp=v=>v==null?null:JSON.parse(JSON.stringify(v));
+  const remote=p=>p==="market/latest"||p==="market/scorelog"||p.startsWith("market/news_");
+  const snap=v=>({exists:v!=null, data:()=>cp(v)});
+  /* Kişisel takip listesi yalnızca bu telefonda: genel listede yoksa boş satır olarak eklenir, fiyatı canlı çekilir */
+  function withMine(m){ m=cp(m); const W=(ld("config/watchlist")||{}).codes||[], F=(ld("config/fundwatch")||{}).codes||[], X=(ld("config/fxwatch")||{}).codes||[];
+    const add=(arr,codes,mk)=>codes.forEach(c=>{ const x=arr.find(i=>i.code===c); if(x) x.mine=true; else arr.push(mk(c)); });
+    m.stocks=m.stocks||[]; m.funds=m.funds||[]; m.fx=m.fx||[];
+    add(m.stocks,W,c=>({code:c,name:c,mine:true,local:true}));
+    add(m.funds,F,c=>({code:c,name:c,cat:"diger",mine:true,local:true}));
+    add(m.fx,X,c=>({code:c,name:c,cat:"doviz",mine:true,local:true}));
+    return m; }
+  const value=p=>{ const v=ld(p); return p==="market/latest"&&v?withMine(v):v; };
+  const emit=p=>(subs[p]||[]).forEach(cb=>{ try{ cb(snap(value(p))); }catch(e){ console.error(e); } });
+  const get=url=>new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http("GET",url,"","{}"); }catch(e){ return rej(e); } const t0=Date.now();
+    const poll=()=>{ const r=YatirimApp.take(id); if(r){ try{ const o=JSON.parse(r); o.ok?res(o.body):rej(new Error(o.error||"hata")); }catch(e){ rej(e); } return; }
+      if(Date.now()-t0>30000) return rej(new Error("zaman aşımı")); setTimeout(poll,120); }; setTimeout(poll,60); });
+  const file=p=>p==="market/latest"?"market.json":p==="market/scorelog"?"scorelog.json":"news/"+p.slice(12)+".json";
+  async function pull(p){ try{ const v=JSON.parse(await get(RAW+file(p)+"?t="+Math.floor(Date.now()/60000)));
+      if(JSON.stringify(ld(p))!==JSON.stringify(v)){ sv(p,v); emit(p); }
+      if(p==="market/latest") setTimeout(()=>{ try{ if(!LIVE.busy && (!S.live?.at || Date.now()-new Date(S.live.at).getTime()>5*60e3)) liveRefresh(null,false); }catch(_){} },500); }
+    catch(e){ if(/404/.test(e.message) && p.startsWith("market/news_") && ld(p)!=null){ sv(p,null); emit(p); } } }
+  window.__pullRemote=()=>{ pull("market/latest"); pull("market/scorelog"); };
+  const after=p=>{ if(/^config\/(watchlist|fundwatch|fxwatch)$/.test(p)){ emit("market/latest"); setTimeout(()=>{ try{ liveRefresh(null,false); }catch(_){} },400); } };
+  function doc(p){ return {
+    onSnapshot(cb){ (subs[p]=subs[p]||new Set()).add(cb); setTimeout(()=>cb(snap(value(p))),0); if(remote(p)) pull(p); return ()=>subs[p].delete(cb); },
+    async get(){ return snap(value(p)); },
+    async set(v){ sv(p,cp(v)); emit(p); after(p); },
+    async update(v){ sv(p,{...(ld(p)||{}),...cp(v)}); emit(p); after(p); },
+    async delete(){ sv(p,null); emit(p); after(p); } }; }
+  function collection(p){ const k="col/"+p, all=()=>ld(k)||{}, qs=()=>({docs:Object.entries(all()).map(([id,d])=>({id,data:()=>cp(d)}))});
+    const put=o=>{ sv(k,o); (csubs[p]||[]).forEach(cb=>{ try{ cb(qs()); }catch(e){ console.error(e); } }); };
+    return {
+      onSnapshot(cb){ (csubs[p]=csubs[p]||new Set()).add(cb); setTimeout(()=>cb(qs()),0); return ()=>csubs[p].delete(cb); },
+      doc(id){ return { async set(v){ const o=all(); o[id]=cp(v); put(o); }, async update(v){ const o=all(); o[id]={...(o[id]||{}),...cp(v)}; put(o); }, async delete(){ const o=all(); delete o[id]; put(o); } }; },
+      async add(v){ const id=Date.now().toString(36)+Math.random().toString(36).slice(2,8); const o=all(); o[id]=cp(v); put(o); return {id}; } }; }
+  window.claude={ use: async n => n==="db" ? {doc, collection} : n==="user" ? {id: async()=>"local"} : null };
+})();
+</script>
+<script>
+const CAT = {para:"Para piyasası", altin:"Altın", hisse:"Hisse", diger:"Diğer", gumus:"Gümüş", doviz:"Döviz"};
+const S = { fxwatch:[], fwatch:[], pfs:[], pf:null, watch:[], market:null, trades:[], cfg:null, status:null, uid:null, tab:"oneri", db:null, mcp:null, sample:null, busy:false, ready:false };
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const tl = (n, d=0) => (n==null||isNaN(n)) ? "–" : n.toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d}) + " TL";
+/* Rozet rengi kalem türünün kendi eşikleriyle (config/rules): hisse 60/42, fon 70/45, döviz 62/42 */
+const sCls = (v,t) => v==null?"":v>=(t==="f"?70:t==="x"?62:60)?" hi":v>=(t==="f"?45:42)?" mid":" lo";
+const arr = v => v==null||isNaN(v)||v==0 ? "" : v>0 ? "▲ " : "▼ ";
+var S_LF = {hisse:{q:"",s:"puan",f:"all"},oneri:{q:"",s:"puan",f:"all"},doviz:{q:"",s:"puan",f:"all"}};
+function applyLF(tab, a){ const f=S_LF[tab]; const q=(f.q||"").toLocaleLowerCase("tr-TR").trim();
+  let out=q?a.filter(x=>(x.code+" "+(x.name||"")).toLocaleLowerCase("tr-TR").includes(q)):a;
+  const ff=f.f||"all"; if(ff!=="all") out=out.filter(x=> tab==="oneri" ? (ff==="al"?x.score>=70:ff==="izle"?(x.score>=45&&x.score<70):x.score<45) : x.signal===ff);
+  const key={puan:x=>-(x.score??-1),gun:x=>-(x.d1??-999),yil:x=>-(x.y1??-999),az:null}[f.s];
+  if(key) out=[...out].sort((p,q2)=>key(p)-key(q2)); else if(f.s==="az") out=[...out].sort((p,q2)=>p.code.localeCompare(q2.code,"tr"));
+  return out; }
+function lfBar(tab, ph){ const f=S_LF[tab];
+  return `<div class="lfbar"><input type="search" id="lfq-${tab}" data-lfq="${tab}" placeholder="${esc(ph||"Ara: kod ya da ad")}" value="${esc(f.q)}" autocomplete="off" aria-label="Listede ara">
+    <div class="chips" role="group" aria-label="Sırala">${[["puan","Puana göre"],["gun","Günün değişimi"],["yil","1 yıl"],["az","A–Z"]].map(([k,l])=>`<button data-lfs="${tab}:${k}" aria-pressed="${f.s===k}">${l}</button>`).join("")}</div>${(()=>{ const F=tab==="oneri"?[["all","Tümü"],["al","70+ puan"],["izle","45–69"],["uzak","45 altı"]]:[["all","Tümü"],["al","Alınabilir"],["izle","İzle"],["uzak","Uzak dur"]]; return `<div class="chips fchips" role="group" aria-label="Süz">${F.map(([k,l])=>`<button data-lff="${tab}:${k}" aria-pressed="${(f.f||"all")===k}">${l}</button>`).join("")}</div>`; })()}</div>`; }
+document.addEventListener("input",e=>{ const t=e.target.dataset?.lfq; if(!t) return; S_LF[t].q=e.target.value; const pos=e.target.selectionStart;
+  ({hisse:renderHisse,oneri:renderOneri,doviz:renderDoviz})[t](); const el=$("lfq-"+t); if(el){ el.focus(); try{el.setSelectionRange(pos,pos)}catch(_){} } });
+document.addEventListener("click",e=>{ const g=e.target.closest?.("[data-lff]"); if(g){ const [t,k]=g.dataset.lff.split(":"); S_LF[t].f=k; ({hisse:renderHisse,oneri:renderOneri,doviz:renderDoviz})[t](); return; } const b=e.target.closest?.("[data-lfs]"); if(!b) return; const [t,k]=b.dataset.lfs.split(":"); S_LF[t].s=k; ({hisse:renderHisse,oneri:renderOneri,doviz:renderDoviz})[t](); });
+const pc = (n, d=2) => (n==null||isNaN(n)) ? "–" : (n>0?"+":"") + "%" + n.toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const cls = n => n>0 ? "up" : n<0 ? "down" : "";
+const fmtDate = s => { if(!s) return "–"; const d=new Date(s); return isNaN(d) ? esc(s) : d.toLocaleDateString("tr-TR",{day:"numeric",month:"long"}); };
+const fmtTime = s => { const d=new Date(s); return isNaN(d) ? "–" : d.toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); };
+const asset = code => (S.market?.funds||[]).find(f => f.code===code) || (()=>{ const x=(S.market?.stocks||[]).find(f=>f.code===code); if(x) return {...x, cat:"hisse", isStock:true}; const y=(S.market?.fx||[]).find(f=>f.code===code); return y ? {...y, isFx:true} : null; })();
+function toast(msg,ms){ document.querySelectorAll(".toast").forEach(x=>x.remove()); const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),ms||2600); }
+
+/* ---------- Açılır satırlar ---------- */
+S.ok = new Set();
+const xo = k => S.ok.has(k) ? " open" : "";
+document.addEventListener("click", e => {
+  if(e.target.closest("button,a,input,select,textarea,label,form")) return;
+  const c = e.target.closest(".clamp"); if(c){ c.classList.toggle("open"); const k=c.dataset.k; c.classList.contains("open")?S.ok.add(k):S.ok.delete(k); return; }
+  const x = e.target.closest(".x"); if(!x) return;
+  const dk=x.dataset.k||""; if(/^[sfx]:/.test(dk) && x.classList.contains("fund")){ openDetail(dk[0], dk.slice(2)); return; }
+  if(!x.classList.contains("aitem") && x.classList.contains("open") && !e.target.closest(".xh")) return;
+  const opening=!x.classList.contains("open");
+  if(opening){ const view=x.closest("main")||document; view.querySelectorAll(".x.open").forEach(o=>{ if(o!==x && !o.contains(x) && !x.contains(o)){ o.classList.remove("open"); if(o.dataset.k) S.ok.delete(o.dataset.k); } }); }
+  x.classList.toggle("open"); const k=x.dataset.k; if(k) (x.classList.contains("open")?S.ok.add(k):S.ok.delete(k));
+  if(opening){ const t=x.getBoundingClientRect().top, hh=(document.querySelector("header")?.getBoundingClientRect().bottom||0)+8; if(t<hh) window.scrollBy({top:t-hh,behavior:"smooth"}); }
+});
+
+
+const GLOSS={"Politika faizi": "Merkez Bankası'nın belirlediği temel faiz. Mevduat, kredi ve para piyasası fonu getirileri buna göre şekillenir. Düşerse bu getiriler de zamanla düşer.", "Yıllık enflasyon": "Fiyatların son 12 ayda ortalama ne kadar arttığı (TÜİK). Paran bundan az kazanıyorsa gerçekte değer kaybediyor.", "Beklenen enflasyon (12 ay)": "Ekonomistlerin 12 ay sonrası için beklediği yıllık enflasyon (Merkez Bankası anketi). Puanlamada şirket kârlılığı buna göre ölçülür.", "Beklenen faiz (12 ay)": "Ekonomistlerin 12 ay sonra beklediği politika faizi. Bugünküden düşükse faiz indirimleri sürecek demek.", "Beklenen dolar (12 ay)": "Ekonomistlerin 12 ay sonrası için beklediği dolar kuru. Bugünkü kurla farkı, dövizin TL faizini geçip geçemeyeceğini gösterir.", "BIST 100": "Borsa İstanbul'daki en büyük 100 şirketin ortalama gidişini gösteren endeks.", "Sonraki PPK": "Merkez Bankası'nın bir sonraki faiz kararı toplantısının tarihi.", "Reel faiz": "Politika faizi eksi yıllık enflasyon. Artıdaysa TL'de (mevduat, para piyasası fonu) tutmak enflasyonu yeniyor demek.", "Gram altın": "1 gram altının TL fiyatı.", "Dolar/TL": "1 doların TL karşılığı.", "F/K": "Fiyat/Kazanç oranı. Şirket bugünkü kârıyla kendi borsa değerini kaç yılda çıkarır, onu gösterir. Düşükse hisse ucuz demektir (ör. 5 = 5 yıllık kâr). Çok düşükse kârın süreceğine güvenilmiyor olabilir.", "PD/DD": "Piyasa değerinin defter değerine oranı. Borsadaki fiyatın, şirketin muhasebedeki özvarlığının kaç katı olduğunu gösterir. 1'in altı: şirket defterdeki değerinin altında satılıyor.", "Özsermaye kârlılığı": "Ortakların şirkete koyduğu her 100 TL'ye şirketin yılda kaç TL kâr ettiği. Beklenen enflasyonun üstündeyse şirket gerçekten para kazanıyor demektir.", "Piyasa değeri": "Şirketin borsadaki toplam değeri (hisse fiyatı × hisse sayısı). \"mr\" milyar TL demek; 500 mr = 500 milyar TL. İyi ya da kötü değeri yoktur: 100 mr üstü büyük (daha sakin), 20–100 mr orta, 20 mr altı küçük (hızlı yükselebilir ama kolay oynatılır, riskli).", "Halka açıklık": "Hisselerin borsada serbestçe alınıp satılan kısmı. %20'nin altındaysa fiyat az parayla kolayca oynatılabilir, daha risklidir.", "Net kâr büyümesi": "Son açıklanan çeyrek kârının geçen yılın aynı dönemine göre yüzde değişimi. Enflasyonun üstünde büyümesi iyidir.", "Satış büyümesi": "Son çeyrek satışlarının (cironun) geçen yılın aynı dönemine göre yüzde değişimi. Enflasyonun altındaysa şirket gerçekte küçülüyor olabilir.", "Ort. hedef fiyat": "Aracı kurum analistlerinin 12 ay sonrası için tahmin ettiği fiyatların ortalaması (son 90 günde verilenler; en az 2 kurum yoksa boş kalır). Altında kaç kurumun hedef verdiği ve en son ne zaman verildiği yazar. Bir tahmindir ve çoğu zaman iyimserdir.", "Potansiyel": "Ortalama hedef fiyatın bugünkü fiyattan yüzde kaç yukarıda olduğu. Garanti değildir.", "TEFAS risk": "Fonun riskini 1 ile 7 arasında gösterir. 1 en az dalgalanan (ör. para piyasası), 7 en çok dalgalanan fondur.", "En büyük düşüş": "Son 1 yılda fon fiyatının zirveden en fazla yüzde kaç düştüğü. Kötü bir dönemde ne kadar kayıp görebileceğinin işaretidir.", "Sharpe": "Fonun aldığı riske göre ne kadar kazandırdığı. 1'in üstü iyi kabul edilir, yüksek olması daha iyidir.", "Yönetim ücreti": "Fonun her yıl paranın içinden kestiği yıllık ücret. Ne kadar düşükse sana o kadar çok kalır.", "Büyüklük": "Fonda toplanan toplam para (mr = milyar TL). Büyük fonlar genelde daha güvenilir ve kolay alınıp satılır.", "Yatırımcı": "Bu fona yatırım yapan kişi sayısı. Çok olması fonun bilindiğini ve güven gördüğünü gösterir.", "Birim": "Fiyatın hangi birimle verildiği (ör. TL/gr = 1 gram altının TL fiyatı).", "1 yıl en düşük": "Son 1 yılda görülen en düşük fiyat.", "1 yıl en yüksek": "Son 1 yılda görülen en yüksek fiyat. Bugünkü fiyat buna yakınsa pahalı bir noktada olabilir.", "Fiyat tarihi": "Gösterilen fiyatın hangi güne ait olduğu.", "Tahmini 12 ay": "Kurumların 12 ay sonrası için ortalama fiyat tahmini (uygulamada yarı ağırlıkla kullanılır). Tahmindir.", "Tür": "Kalemin türü (ör. para piyasası fonu, altın, döviz).", "12 ay aralığı": "Son 12 ayın en düşük ve en yüksek fiyatı arasında bugünkü fiyatın nerede durduğu. Sola yakınsa yılın dibine, sağa yakınsa zirvesine yakın.", "Temel veriler": "F/K, kâr, hedef fiyat gibi şirket bilgilerinin en son ne zaman toplandığı.", "Fiyat tarihi": "Gösterilen fiyatın hangi güne ait olduğu.", "Değerleme": "Fiyatı, kazancına ve değerine göre ucuz mu pahalı mı? Puan yüksekse ucuz.", "Kalite ve kârlılık": "Şirket enflasyonun üstünde kâr ediyor mu, kârı istikrarlı mı, borcu kontrol altında mı?", "Risk ve sağlamlık": "Borç durumu, fiyat dalgalanması ve halka açıklık. Puan yüksekse daha sağlam.", "Momentum ve trend": "Son 3 ay ve 12 ayda borsaya göre nasıl gitti? Yükselişte olanlar bir süre daha iyi gitme eğilimindedir.", "Analist ve haber": "Analistlerin hedef fiyatları ve son şirket haberleri (KAP) olumlu mu?", "Getiri tutarlılığı": "Fon sadece bir dönemde değil 1, 3, 6 ay ve 1 yılda düzenli kazandırmış mı?", "Maliyet (ücret)": "Yönetim ücreti düşük mü? Düşük ücret uzun vadede en güvenilir avantajdır.", "Risk kontrolü": "Fon ne kadar dalgalanıyor, en kötü dönemde ne kadar düşmüş?", "Kalite": "Fonun büyüklüğü, yatırımcı sayısı, yaşı ve yöneten şirket.", "Ortama uyum": "Bugünkü faiz, enflasyon ve kur ortamı bu tür fonu destekliyor mu?", "Taşıma (TL faizine göre)": "Parayı TL'de faizde tutmak mı, buna geçmek mi daha çok kazandırır? Puan yüksekse geçmek daha mantıklı.", "Trend": "Fiyat son aylarda yükselişte mi düşüşte mi?", "Makro ve risk ortamı": "Dünyadaki faiz, kriz ve merkez bankası alımları gibi koşullar fiyatı destekliyor mu?", "Oynaklık": "Fiyat ne kadar sert iniş çıkış yapıyor? Puan yüksekse daha sakin.", "Risk": "1–5 arası risk. 1 az dalgalanır, 5 sert yükselip sert düşebilir."};
+document.addEventListener("click", e => { const g=e.target.closest(".g"); const tip=document.getElementById("gtip");
+  if(!g){ if(tip && !e.target.closest("#gtip")) tip.remove(); return; }
+  e.stopPropagation(); const k=g.dataset.g||g.textContent.trim(), t=GLOSS[k]; if(!t) return;
+  const el=tip||Object.assign(document.createElement("div"),{id:"gtip",role:"dialog"}); const be=(S.market?.indicators||[]).find(i=>/Beklenen enflasyon/.test(i.k)); el.innerHTML=`<b>${esc(k)}</b><p>${esc(t)}${be&&/enflasyon/i.test(t)?` <b>Şu an beklenen enflasyon (12 ay): ${esc(be.v)}.</b>`:""}</p>`; if(!tip) document.body.appendChild(el); }, true);
+
+/* ---------- Tema ---------- */
+const ACC=[["yesil","Yeşil","#0F6B57"],["mavi","Mavi","#2F5BB7"],["mor","Mor","#6B46B0"],["turuncu","Turuncu","#B5541C"],["gri","Grafit","#3E4A52"]];
+let TH={mode:"auto",acc:"yesil"}; try{ TH={...TH,...JSON.parse(localStorage.getItem("fp-theme")||"{}")}; }catch(e){}
+function applyTheme(){ const r=document.documentElement; if(TH.mode==="auto") r.removeAttribute("data-theme"); else r.setAttribute("data-theme",TH.mode); if(TH.acc&&TH.acc!=="yesil") r.setAttribute("data-accent",TH.acc); else r.removeAttribute("data-accent"); }
+function saveTheme(){ try{localStorage.setItem("fp-theme",JSON.stringify(TH));}catch(e){} applyTheme(); notifyBars(); try{savePrefs();}catch(e){} }
+function notifyBars(){ setTimeout(()=>{ try{ if(!window.YatirimApp) return; const bg=getComputedStyle(document.body).backgroundColor, m=bg.match(/\d+/g)||[0,0,0], dark=(0.299*m[0]+0.587*m[1]+0.114*m[2])<128; window.YatirimApp.setBars(bg,dark); }catch(e){} },60); }
+applyTheme(); notifyBars(); window.addEventListener("load",notifyBars);
+try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change",notifyBars); }catch(e){}
+
+
+/* ---------- Açılışta otomatik hızlı güncelleme ---------- */
+let AUTOQ=[]; try{ AUTOQ=JSON.parse(localStorage.getItem("fp-autoq")||"[]"); }catch(e){}
+const saveAutoQ=()=>{ try{ localStorage.setItem("fp-autoq",JSON.stringify(AUTOQ)); }catch(e){} try{savePrefs();}catch(e){} };
+async function autoQuick(){
+  if(!AUTOQ.length || !S.mcp || !S.cfg?.lightTriggerId || pending() || S.busy) return;
+  const now=Date.now(), kinds=AUTOQ.filter(k=>{ const at=S.market?.[QK[k][1]], last=Math.max(at?new Date(at).getTime():0, S.market?.updatedAt?new Date(S.market.updatedAt).getTime():0);
+    if(now-last<15*60e3) return false;                       // 15 dk içinde güncellendiyse atla
+    if(k==="fon") return last<fundPoint();                     // fon fiyatı günde bir kez açıklanır: son açıklamadan sonra çekildiyse atla
+    if(!marketOpen() && last>=lastClose()) return false;      // piyasa kapalı ve veri zaten güncel
+    return true; });
+  if(!kinds.length) return;
+  S.busy=true;
+  try{ await S.mcp.callTool("Claude Code Remote","fire_trigger",{trigger_id:S.cfg.lightTriggerId, text:kinds.map(k=>QK[k][2]).join("\n")});
+    S.status={requestedAt:new Date().toISOString(), only:kinds.length>1?"__qa__":QK[kinds[0]][0], kinds}; try{ await S.db.doc("config/status").set(S.status); }catch(e){}
+    toast(kinds.map(k=>QK[k][4]).join(", ")+" otomatik güncelleniyor"); }
+  catch(e){} finally{ S.busy=false; renderFresh(); renderHisse(); renderOneri(); renderDoviz(); } }
+
+/* İlk açılışta: tam güncelleme gerekiyorsa sor; gerekmiyorsa ya da hayır derse yalnızca otomatik fiyat tazeleme */
+function startupFlow(){
+  const u=S.market?.updatedAt, stale=!u || new Date(u).getTime()<lastClose(), today=dayKey(Date.now());
+  let asked=null; try{ asked=localStorage.getItem("fp-askday"); }catch(e){}
+  if(!S.mcp || !S.cfg?.triggerId || pending() || !stale || asked===today){ autoQuick(); return; }
+  try{ localStorage.setItem("fp-askday",today); }catch(e){}
+  document.querySelectorAll(".confirm").forEach(e=>e.remove());
+  const scrim=document.createElement("div"); scrim.className="scrim confirm";
+  const sh=document.createElement("div"); sh.className="sheet confirm"; sh.setAttribute("role","dialog");
+  sh.innerHTML=`<h2 style="margin:0">Bugünün ilk girişi</h2><p style="margin:0">Puanlar ve öneriler son kapanıştan önce hesaplanmış. Tam güncelleme yapayım mı? (puanlar, öneriler, haberler; ~${Math.max(1,Math.round(estSec(scanDue()?"fullscan":"full")/60))} dk)</p>
+    <p class="note" style="margin:0">Tam güncelleme fiyatları da çektiği için ayrıca otomatik fiyat güncellemesi yapılmaz.</p>
+    <div class="row"><button class="btn ghost" data-no>Sadece fiyatlar</button><button class="btn" data-yes>Evet, tam güncelle</button></div>`;
+  document.body.append(scrim,sh);
+  const close=()=>{scrim.remove();sh.remove();};
+  scrim.onclick=()=>{ close(); autoQuick(); }; sh.querySelector("[data-no]").onclick=()=>{ close(); autoQuick(); };
+  sh.querySelector("[data-yes]").onclick=()=>{ close(); requestRefresh(true); };
+}
+/* Güncelleme bitince ne değiştiğini söyle */
+function priceSnap(){ const m=S.market||{}, o={}; [["s",m.stocks],["f",m.funds],["x",m.fx]].forEach(([t,a])=>(a||[]).forEach(x=>o[t+":"+x.code]=(x.priceDate||"")+"|"+x.price)); return o; }
+function reportRun(pre){ const m=S.market||{}, parts=[], L={s:["Hisse",m.stocks],f:["Fon",m.funds],x:["Döviz/altın",m.fx]};
+  for(const t of ["f","s","x"]){ const [n,a]=L[t]; if(!a?.length) continue; const ch=a.filter(x=>pre[t+":"+x.code]!==undefined && pre[t+":"+x.code]!==(x.priceDate||"")+"|"+x.price).length;
+    if(ch) parts.push(`${n} ${ch}/${a.length} yenilendi`); else if(t==="f") parts.push("Fonlarda yeni fiyat yok (son fiyat "+fmtDate(fundDate())+")"); }
+  if(!parts.length) parts.push("fiyatlarda değişiklik yok");
+  S.lastReport={at:new Date().toISOString(), text:parts.join(" · ")}; try{ localStorage.setItem("fp-lastrep",JSON.stringify(S.lastReport)); }catch(e){}
+  toast("Güncelleme bitti: "+S.lastReport.text, 6000); renderOneri(); renderFresh(); }
+function updLbl(){ const u=S.market?.updatedAt; if(!u) return S.market?.asOf||""; return new Date(u).toLocaleString("tr-TR",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}); }
+function fundDate(){ const c={}; (S.market?.funds||[]).forEach(f=>{ if(f.priceDate) c[f.priceDate]=(c[f.priceDate]||0)+1; }); return Object.keys(c).sort((a,b)=>c[b]-c[a]||b.localeCompare(a))[0]; }
+try{ S.lastReport=JSON.parse(localStorage.getItem("fp-lastrep")||"null"); }catch(e){}
+
+/* Ortak liste satırı: puan rozeti · kod/ad/rozetler · 1 ay çubuğu · fiyat */
+function exitTxt(x){ const w=String(x.exitWhy||"Puanı düştü").replace(/[;,.]?\s*(bir sonraki[^;.]*)?düzelmezse listeden çıkacak\.?/i,"").trim().replace(/[;,]$/,"");
+  return (w.endsWith(".")?w:w+".")+" Bir sonraki tam güncellemede düzelmezse listeden çıkacak; şimdilik alma."; }
+function listRow(t,x){
+  const k=t+":"+x.code, W=t==="s"?S.watch:t==="f"?S.fwatch:S.fxwatch, mine=W.includes(x.code);
+  const dg=t==="f"?6:(x.price<10?4:2), m1=typeof x.m1==="number"?x.m1:null, w=m1==null?0:Math.min(100,Math.abs(m1)/15*100);
+  const stale=t==="s"?staleB(x.fundAt,7,"Bilanço ve hedef fiyat bilgisi 7 günden eski"):t==="f"?staleB(x.priceDate,5,"Fiyat 5 günden eski"):staleB(x.priceDate,4,"Fiyat 4 günden eski");
+  return `<div class="fund lrow x" data-k="${esc(k)}">
+    <div class="sbadge xh${sCls(x.score,t)}">${x.score!=null?num(x.score,0):"–"}</div>
+    <div class="lmid xh"><div class="lt"><span class="code">${esc(x.code)}</span>${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${mine?'<span class="mine">EKLEDİĞİN</span>':""}${stale}</div>
+      <div class="name">${esc(x.name||"")}</div>
+      ${m1!=null?`<div class="lbar"><span>1 ay</span><i><b class="${m1>=0?"p":"n"}" style="width:${Math.max(4,w)}%"></b></i><em class="num ${cls(m1)}">${pc(m1,1)}</em></div>`:""}</div>
+    <div class="right xh"><div class="num lp">${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="small num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div>
+    ${x.exitAt?`<p class="exitw xh" style="grid-column:1/-1">⚠ ${esc(exitTxt(x))}</p>`:""}
+  </div>`; }
+
+/* Kaleme özel haberler: market/news_<KOD>, Haberler sekmesi açılınca gerekirse kendiliğinden getirilir */
+S.inews={}; S.nsub={}; S.nreq={}; try{ S.nreq=JSON.parse(localStorage.getItem("fp-nreq")||"{}"); }catch(e){}
+function subNews(c){ if(!S.db||S.nsub[c]) return; try{ S.nsub[c]=S.db.doc("market/news_"+c).onSnapshot(sn=>{ S.inews[c]=sn.exists?sn.data():null; if(S.det&&S.det.c===c) drawDetail(); }); }catch(e){} }
+function ensureNews(t,c,x,force){
+  const d=S.inews[c], age=d?.at?Date.now()-new Date(d.at).getTime():Infinity, rq=S.nreq[c]||0;
+  if(!S.mcp||!S.cfg?.lightTriggerId) return;
+  if(Date.now()-rq<4*60e3) return;                                  // zaten istendi
+  if(!force && age<12*3600e3) return;                                 // 12 saatten yeni
+  if(!force && d===undefined) return;                                // kayıt henüz okunmadı
+  S.nreq[c]=Date.now(); try{ localStorage.setItem("fp-nreq",JSON.stringify(S.nreq)); }catch(e){}
+  const tur=t==="s"?"hisse":t==="f"?"fon":"döviz";
+  S.mcp.callTool("Claude Code Remote","fire_trigger",{trigger_id:S.cfg.lightTriggerId, text:`HABER: ${c} | ${tur} | ${x.name||c}`}).catch(()=>{ S.nreq[c]=0; });
+  if(S.det&&S.det.c===c) drawDetail(); }
+function itemNewsBlock(t,x){ const c=x.code, d=S.inews[c], rq=S.nreq[c]||0, loading=Date.now()-rq<4*60e3 && (!d?.at || new Date(d.at).getTime()<rq);
+  const EF={up:["▲ Olumlu","up"],down:["▼ Olumsuz","down"],mixed:["◆ Karışık",""]};
+  const head=`<div class="horizon"><h2>${esc(c)} haberleri</h2>${d?.at?`<span class="small muted">${esc(new Date(d.at).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}))} · <button class="linkbtn" data-nref>yenile</button></span>`:""}</div>`;
+  if(loading) return `<section class="card">${head}<p class="note"><span class="spin"></span> Son 2 haftanın haberleri aranıyor… (~1–2 dk). Sayfadan çıkabilirsin, bitince burada görünür.</p></section>`;
+  if(!d) return `<section class="card">${head}<p class="note" style="margin:0">${d===null?"Bu kalem için kayıtlı haber yok. Tam güncellemede önemli hisselerin haberleri doldurulur.":"Yükleniyor…"}</p>${S.mcp&&d===null?`<div class="row" style="justify-content:flex-start"><button class="btn ghost sm" data-nref style="margin-left:0">Şimdi getir (~1–2 dk)</button></div>`:""}</section>`;
+  return `<section class="card">${head}${d.summary?`<p class="summary" style="margin:0">${esc(d.summary)}</p>`:""}
+    ${(d.items||[]).map(n=>`<div class="dnews"><div class="small muted">${esc(fmtDate(n.date))}${n.source?" · "+esc(n.source):""}${n.effect?` · <b class="${EF[n.effect]?.[1]||""}">${EF[n.effect]?.[0]||""}</b>`:""}</div><b>${esc(n.title)}</b>
+      ${n.what?`<p class="why">${esc(n.what)}</p>`:""}${n.meaning?`<p class="why"><b>Senin için:</b> ${esc(n.meaning)}</p>`:""}${n.url?`<a class="small" href="${esc(n.url)}" target="_blank" rel="noopener">Habere git ↗</a>`:""}</div>`).join("")}</section>`; }
+/* ---------- Detay ekranı ---------- */
+function detItem(t,c){ const m=S.market||{}; return (t==="s"?m.stocks:t==="f"?m.funds:m.fx||[])?.find(x=>x.code===c); }
+function openDetail(t,c){ if(!detItem(t,c)) return; subNews(c); S.det={t,c,tab:(S.det&&S.det.c===c)?S.det.tab:"veri"}; let el=$("det");
+  if(!el){ el=document.createElement("div"); el.id="det"; el.setAttribute("role","dialog"); el.setAttribute("aria-modal","true"); document.body.appendChild(el); document.body.classList.add("noscroll"); try{history.pushState({det:1},"");}catch(e){} }
+  drawDetail(); el.scrollTop=0; }
+function closeDetail(fromPop){ const el=$("det"); if(el) el.remove(); $("gtip")?.remove(); document.body.classList.remove("noscroll"); S.det=null; if(!fromPop){ try{ if(history.state?.det) history.back(); }catch(e){} } }
+window.addEventListener("popstate",()=>{ if(S.det) closeDetail(true); });
+function priceChart(x){ const h=((S.hist||{})[x.code]||[]).filter(p=>typeof p.p==="number"&&p.p>0).map(p=>({d:p.d,p:p.p}));
+  if(x.price&&x.priceDate&&(!h.length||String(x.priceDate)>String(h[h.length-1].d))) h.push({d:x.priceDate,p:Number(x.price)});
+  if(h.length<2) return `<div class="chart empty"><p class="note">Fiyat grafiği her tam güncellemede bir gün ekler; birkaç gün içinde dolacak.</p></div>`;
+  const v=h.map(p=>p.p), mn=Math.min(...v), mx=Math.max(...v), rg=(mx-mn)||mx*0.01||1, W=320, H=140;
+  const X=i=>(i/(h.length-1)*W).toFixed(1), Y=y=>(H-8-(y-mn)/rg*(H-16)).toFixed(1);
+  const pts=v.map((y,i)=>`${X(i)},${Y(y)}`).join(" "), up=v[v.length-1]>=v[0], col=up?"var(--up)":"var(--down)";
+  const dg=n=>n<10?4:2;
+  return `<div class="chart"><div class="cax"><span class="num">${num(mx,dg(mx))}</span><span class="num">${num(mn,dg(mn))}</span></div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Fiyat grafiği"><polygon points="0,${H} ${pts} ${W},${H}" fill="${col}" opacity=".14"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
+    <div class="cdates small muted"><span>${esc(fmtDate(h[0].d))}</span><span>${esc(fmtDate(h[h.length-1].d))}</span></div></div>`; }
+function rangeBar(x){ const lo=Number(x.low1y), hi=Number(x.high1y), p=Number(x.price); if(!(lo>0&&hi>lo&&p>0)) return "";
+  const pos=Math.max(0,Math.min(100,(p-lo)/(hi-lo)*100)), dg=p<10?4:2;
+  return `<div class="range"><div class="small muted"><span class="g" data-g="12 ay aralığı">12 ay aralığı</span></div><div class="rtrack"><i style="left:${pos}%"></i></div>
+    <div class="rlab num small"><span>${num(lo,dg)}</span><span class="muted">bugün %${num(pos,0)} noktasında</span><span>${num(hi,dg)}</span></div></div>`; }
+const drow=(l,v,cl="")=>`<div class="drow"><span class="${GLOSS[l]?"g":""}">${esc(l)}</span><b class="num ${cl}">${v}</b></div>`;
+function detRows(t,x){ const pc0=v=>v!=null?pc(v,0):"–", pct=(v,d=1)=>v!=null?"%"+num(v,d):"–";
+  if(t==="s") return [drow("Fiyat tarihi",esc(fmtDate(x.priceDate))),drow("F/K",num(x.fk,1)),drow("PD/DD",num(x.pddd,2)),drow("Özsermaye kârlılığı",pct(x.roe)),
+    drow("Piyasa değeri",x.mcapBn!=null?num(x.mcapBn,0)+" mr TL":"–"),drow("Halka açıklık",pct(x.freeFloat)),drow("Net kâr büyümesi",pc0(x.profitGrowth),cls(x.profitGrowth)),
+    drow("Satış büyümesi",pc0(x.salesGrowth),cls(x.salesGrowth)),drow("Ort. hedef fiyat",x.target!=null?num(x.target,2)+(x.targetN?` <span class="small muted">${num(x.targetN,0)} kurum · ${esc(fmtDate(x.targetAt))}</span>`:""):"–"),
+    drow("Potansiyel",pc0(x.targetUpside),cls(x.targetUpside)),drow("Risk",x.risk?num(x.risk,0)+"/5":"–"),drow("Temel veriler",esc(fmtDate(x.fundAt)))].join("");
+  if(t==="f") return [drow("Tür",esc(CAT[x.cat]||x.cat||"")),drow("Fiyat tarihi",esc(fmtDate(x.priceDate))),drow("TEFAS risk",x.riskValue!=null?num(x.riskValue,0)+"/7":"–"),drow("En büyük düşüş",pct(x.maxDD)),
+    drow("Sharpe",num(x.sharpe,2)),drow("Yönetim ücreti",pct(x.fee,2)),drow("Büyüklük",x.sizeBn!=null?num(x.sizeBn,1)+" mr TL":"–"),drow("Yatırımcı",num(x.investors,0))].join("");
+  return [drow("Tür",esc(FXCAT[x.cat]||x.cat||"")),drow("Birim",esc(x.unit||"TL")),drow("Fiyat tarihi",esc(fmtDate(x.priceDate))),drow("1 yıl en düşük",num(x.low1y,2)),drow("1 yıl en yüksek",num(x.high1y,2)),
+    drow("Tahmini 12 ay",x.fcst!=null?num(x.fcst,2):"–"),drow("Risk",x.risk?num(x.risk,0)+"/5":"–")].join(""); }
+function detNews(t,x){ const cat=t==="s"?"hisse":t==="f"?x.cat:(x.cat==="doviz"?"doviz":x.cat), N=S.market?.news||[];
+  const direct=N.filter(n=>(n.codes||[]).includes(x.code)), rel=N.filter(n=>!direct.includes(n)&&(n.affects||[]).some(a=>a.cat===cat));
+  const EF={up:["▲","up"],down:["▼","down"],mixed:["◆",""]};
+  const card=(n,d)=>{ const a=(n.affects||[]).find(a=>a.cat===cat); return `<div class="dnews"><div class="small muted">${esc(fmtDate(n.date))} · ${esc(n.source||"")}${d?' · <b class="mine">DOĞRUDAN</b>':""}</div><b>${esc(n.title)}</b>
+    ${n.what?`<p class="why">${esc(n.what)}</p>`:""}${n.meaning?`<p class="why">${esc(n.meaning)}</p>`:""}${a?`<p class="small ${EF[a.effect]?.[1]||""}">${EF[a.effect]?.[0]||""} ${esc(a.why||"")}</p>`:""}${n.url?`<a class="small" href="${esc(n.url)}" target="_blank" rel="noopener">Habere git</a>`:""}</div>`; };
+  const k=x.kap?`<div class="dnews"><div class="small muted">KAP bildirimi</div><p class="why">${esc(x.kap)}</p></div>`:"";
+  const body=k+direct.map(n=>card(n,1)).join("")+rel.slice(0,5).map(n=>card(n,0)).join("");
+  return body||`<p class="note">Bu kalemle ilgili güncel haber yok.</p>`; }
+function drawDetail(){ const el=$("det"); if(!el||!S.det) return; const {t,c}=S.det, x=detItem(t,c); if(!x){ closeDetail(); return; }
+  const tab=S.det.tab, W=t==="s"?S.watch:t==="f"?S.fwatch:S.fxwatch, watched=W.includes(c), dg=t==="f"?6:x.price<10?4:2;
+  el.innerHTML=`<div class="dtop"><button class="linkbtn" data-back aria-label="Geri">‹</button><b>Detay</b><span class="dref">${rowBtn(c)}</span></div>
+  <div class="dwrap">
+   <div class="dhead"><div><div class="dcode">${esc(c)}</div><div class="name">${esc(x.name||"")}</div>
+     <div class="dbadges">${x.score!=null?`<span class="score${sCls(x.score,t)}">${num(x.score,0)}</span>`:""}${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${watched?'<span class="mine">EKLEDİĞİN</span>':""}</div></div>
+     <div class="dprice"><div class="num">${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div></div>
+   <div class="seg dtabs" role="tablist">${[["veri","Veriler"],["puan","Puan"],["haber","Haberler"]].map(([k,l])=>`<button role="tab" data-dt="${k}" class="${tab===k?"on":""}" aria-selected="${tab===k}">${l}</button>`).join("")}</div>
+   ${tab==="veri"?`<section class="card">${perfBlock(x)||'<p class="note">Dönemsel getiri yok.</p>'}${rangeBar(x)}</section><section class="card dlist">${detRows(t,x)}</section>`:""}
+   ${tab==="puan"?`<section class="card">${x.score!=null?`<div class="dscore"><span class="score${sCls(x.score,t)}">${num(x.score,0)}</span><span class="small muted">/ 100</span></div>`:""}${scoreNote(x)}
+     ${x.exitAt?`<p class="exitw">⚠ ${esc(exitTxt(x))}</p>`:""}
+     ${x.why?`<p class="why" style="margin-top:8px">${esc(x.why)}</p>`:""}${partsBlock(x.parts)}${histBlock(c)}</section>`:""}
+   ${tab==="haber"?itemNewsBlock(t,x)+`<section class="card"><details${S.inews?.[c]?"":" open"}><summary class="code" style="cursor:pointer">Genel piyasa haberleri</summary><div style="margin-top:6px">${detNews(t,x)}</div></details></section>`:""}
+  </div>
+  <div class="dbar">${S.db&&S.uid?`<button class="btn" data-dbuy>Portföye ekle</button>`:""}${S.db?`<button class="btn ghost" data-dwatch>${watched?"Takipten çıkar":"Takibe al"}</button>`:""}</div>`;
+  el.querySelector("[data-back]").onclick=()=>closeDetail();
+  el.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{ S.det.tab=b.dataset.dt; $("gtip")?.remove(); drawDetail(); });
+  const bb=el.querySelector("[data-dbuy]"); if(bb) bb.onclick=()=>openBuy(c);
+  const bw=el.querySelector("[data-dwatch]"); if(bw) bw.onclick=async()=>{ const next=watched?W.filter(k=>k!==c):[...W,c];
+    const ok=await (t==="s"?saveWatch(next):t==="f"?saveFundWatch(next):saveFxWatch(next)); if(ok){ if(t==="s") S.watch=next; else if(t==="f") S.fwatch=next; else S.fxwatch=next; toast(watched?"Takipten çıkarıldı.":"Takibe alındı; bir sonraki güncellemede korunur."); drawDetail(); } };
+  el.querySelector("[data-nref]")?.addEventListener("click",()=>ensureNews(t,c,x,true));
+  bindRowBtns(el); }
+document.addEventListener("click",e=>{ const b=e.target.closest?.("[data-mv]"); if(b) openDetail("s",b.dataset.mv); });
+/* ---------- Tabs ---------- */
+["gundem","oneri","hisse","doviz","sanal","piyasa"].forEach(k => $("t-"+k).onclick = () => { S.tab=k; $("gtip")?.remove(); window.scrollTo({top:0}); try{localStorage.setItem("fp-tab",k)}catch(e){}; showTab(); });
+S.tab="gundem"; try{ S.pf=localStorage.getItem("fp-pf"); }catch(e){}
+function showTab(){ ["gundem","oneri","hisse","doviz","sanal","piyasa"].forEach(k => { $("t-"+k).setAttribute("aria-selected", String(S.tab===k)); $("v-"+k).hidden = S.tab!==k; }); }
+
+/* ---------- Freshness ---------- */
+const STALE_MS = 30*60e3, REQ_COOLDOWN = 20*60e3;
+/* Borsa İstanbul: hafta içi 10:00–18:10 (TSİ = UTC+3) */
+const TR = 3*3600e3;
+/* Borsa İstanbul tatilleri (kaynak: BIST 2026 takvimi) ve yarım günler (12:40 kapanış) */
+const BIST_CLOSED=new Set(["2026-01-01","2026-03-20","2026-04-23","2026-05-01","2026-05-19","2026-05-27","2026-05-28","2026-05-29","2026-07-15","2026-10-29","2027-01-01"]);
+const BIST_HALF=new Set(["2026-03-19","2026-05-26","2026-10-28"]);
+const dayKey = t => new Date(t+TR).toISOString().slice(0,10);
+const closeMin = key => BIST_HALF.has(key) ? 760 : 1090;
+const isTradingDay = t => { const wd=new Date(t+TR).getUTCDay(); return wd>=1&&wd<=5&&!BIST_CLOSED.has(dayKey(t)); };
+function marketOpen(){ const now=Date.now(), l=new Date(now+TR), m=l.getUTCHours()*60+l.getUTCMinutes(); return isTradingDay(now)&&m>=600&&m<closeMin(dayKey(now)); }
+function lastClose(){ const now=Date.now(), l=new Date(now+TR);
+  for(let i=0;i<14;i++){ const d0=Date.UTC(l.getUTCFullYear(),l.getUTCMonth(),l.getUTCDate()-i)-TR, key=dayKey(d0);
+    const c=d0+closeMin(key)*60e3; if(isTradingDay(d0)&&c<=now) return c; } return 0; }
+/* Fon fiyatları işlem günü geç akşam yayımlanır (20:30'da çoğu hâlâ önceki gündü); 22:00'yi açıklama anı say */
+function fundPoint(){ const now=Date.now(), l=new Date(now+TR);
+  for(let i=0;i<14;i++){ const d0=Date.UTC(l.getUTCFullYear(),l.getUTCMonth(),l.getUTCDate()-i)-TR, c=d0+1320*60e3; if(isTradingDay(d0)&&c<=now) return c; } return 0; }
+function upToDate(){ const u=S.market?.updatedAt; return !marketOpen() && !!u && new Date(u).getTime()>=lastClose(); }
+function updatedToday(){ const u=S.market?.updatedAt; return !!u && new Date(u).toDateString()===new Date().toDateString(); }
+function ageMs(){ return S.market?.updatedAt ? Date.now()-new Date(S.market.updatedAt).getTime() : Infinity; }
+function pending(){ const r=S.status?.requestedAt; if(!r || Date.now()-new Date(r).getTime() >= REQ_COOLDOWN) return false;
+  const o=S.status?.only, u = o==="__qa__" ? (()=>{ const ts=(S.status?.kinds||[]).map(k=>S.market?.[QK[k]?.[1]]); return ts.some(t=>!t)?null:ts.sort()[0]; })() : o==="__scan__" ? S.market?.fundScan?.at : o==="__qs__" ? S.market?.quickStocksAt : o==="__qf__" ? S.market?.quickFundsAt : o==="__qx__" ? S.market?.quickFxAt : o ? asset(o)?.updatedAt : S.market?.updatedAt; return !u || new Date(u) < new Date(r); }
+const EST0={scan:230,full:290,one:85,fullscan:480,qs:70,qf:110,qx:70};
+const QK={hisse:["__qs__","quickStocksAt","HIZLI: HISSE","qs","Hisse fiyatları"],fon:["__qf__","quickFundsAt","HIZLI: FON","qf","Fon fiyatları"],doviz:["__qx__","quickFxAt","HIZLI: DOVIZ","qx","Döviz ve altın"]};
+function quickBtn(kind){ const q=QK[kind]; if(!S.mcp||!S.cfg?.lightTriggerId) return ""; const busy=pending()&&S.status?.only===q[0], at=S.market?.[q[1]]||S.market?.updatedAt;
+  return `<button class="btn ghost sm" data-quick="${kind}" ${busy?"disabled":""} style="margin-left:auto">${busy?"Güncelleniyor…":"⚡ Hızlı güncelle"}</button>${at?`<span class="small muted" style="margin-left:6px">${esc(fmtTime(at))}</span>`:""}`; }
+async function requestQuick(kind){ const q=QK[kind];
+  if(pending()||S.busy){ toast("Bir güncelleme sürüyor, bitince tekrar dene."); return; }
+  const at=S.market?.[q[1]], last=Math.max(at?new Date(at).getTime():0, S.market?.updatedAt?new Date(S.market.updatedAt).getTime():0);
+  const go=async()=>{ S.busy=true; try{ await S.mcp.callTool("Claude Code Remote","fire_trigger",{trigger_id:S.cfg.lightTriggerId, text:q[2]+bankNote()});
+      S.status={requestedAt:new Date().toISOString(), only:q[0]}; try{ await S.db.doc("config/status").set(S.status); }catch(e){}
+      toast(q[4]+" güncelleniyor ("+estTxt(q[3])+")"); }
+    catch(e){ toast(e?.code==="not_granted"?"Güncelleme için izin verilmedi.":"Güncelleme başlatılamadı."); }
+    finally{ S.busy=false; renderFresh(); renderHisse(); renderOneri(); renderDoviz(); } };
+  if(kind==="fon"){ if(last>=fundPoint()) askConfirm("Fon fiyatları günde bir kez, akşam geç saatte açıklanır; en son açıklanan fiyatlar zaten alındı. Yine de güncelleyeyim mi?", go); else go(); return; }
+  if(!marketOpen() && last>=lastClose()) askConfirm(`${closedNote()} ve fiyatlar son kapanıştan sonra çekildi, değişmeyecek. Yine de güncelleyeyim mi?`, go); else go(); }
+function scanDue(){ let f=false; try{f=localStorage.getItem("fp-scanNext")==="1"}catch(_){} const at=S.market?.fundScan?.at; return f || !at || (Date.now()-new Date(at).getTime())/864e5>=6; }
+function durs(){ try{return JSON.parse(localStorage.getItem("fp-dur")||"{}")}catch(_){return {}} }
+function estSec(k){ const a=(durs()[k]||[]).slice(-5); if(!a.length) return EST0[k]; const b=[...a].sort((x,y)=>x-y); return b[Math.floor(b.length/2)]; }
+function estTxt(k){ const m=Math.max(1,Math.round(estSec(k)/60)); return "~"+m+" dk"; }
+const pKind=()=>{ const o=S.status?.only; return o==="__qa__"?((S.status?.kinds||[]).includes("fon")?"qf":"qs"):o==="__scan__"?"scan":o==="__qs__"?"qs":o==="__qf__"?"qf":o==="__qx__"?"qx":o?"one":S.status?.scan?"fullscan":"full"; };
+setInterval(()=>{ if(S.ready && pending()) renderFresh(); },3000);
+function renderFresh(){
+  const dot=$("dot"), txt=$("freshText"), btn=$("refreshBtn");
+  if(!S.ready){ return; }
+  if(pending()){ const k=pKind(), el=(Date.now()-new Date(S.status.requestedAt).getTime())/1000, est=estSec(k);
+    S._pw={k, at:S.status.requestedAt};
+    const pct=Math.min(95,Math.round(el/est*100)), left=Math.max(0,est-el);
+    const lbl = S.status.only==="__qa__" ? (S.status.kinds||[]).map(x=>QK[x]?.[4]).filter(Boolean).join(", ")+" güncelleniyor" : k==="scan" ? "Fon taraması" : k==="qs" ? "Hisse fiyatları güncelleniyor" : k==="qf" ? "Fon fiyatları güncelleniyor" : k==="qx" ? "Döviz ve altın güncelleniyor" : k==="one" ? S.status.only+" güncelleniyor" : k==="fullscan" ? "Veriler + haftalık fon taraması" : "Veriler güncelleniyor";
+    dot.className="dot busy"; txt.innerHTML = `${esc(lbl)} · %${pct} · ${left>20?"~"+Math.max(1,Math.round(left/60))+" dk kaldı":el>est*1.4?"beklenenden uzun sürüyor":"az kaldı"} <span class="muted">(tahmini)</span><span style="display:block;height:4px;background:var(--line);border-radius:2px;margin-top:4px;overflow:hidden"><span style="display:block;height:100%;width:${pct}%;background:var(--accent,#2a7);transition:width .5s"></span></span>`; btn.hidden=true; return; }
+  if(S._pw){ const d=(Date.now()-new Date(S._pw.at).getTime())/1000; if(d>20 && d<1800){ const o=durs(); (o[S._pw.k]=o[S._pw.k]||[]).push(Math.round(d)); o[S._pw.k]=o[S._pw.k].slice(-8); try{localStorage.setItem("fp-dur",JSON.stringify(o))}catch(_){} } S._pw=null; }
+  if(!S.market){ dot.className="dot"; txt.textContent="Henüz veri yok."; btn.hidden=!S.mcp; return; }
+  dot.className = ageMs()<STALE_MS ? "dot ok" : "dot";
+  txt.textContent = "Veriler: " + fmtTime(S.market.updatedAt) + (upToDate() ? (BIST_CLOSED.has(dayKey(Date.now()))?" · Bugün borsa tatil, veriler güncel":" · Piyasa kapalı, veriler güncel") : "");
+  btn.hidden = !S.mcp || !S.cfg?.triggerId;
+}
+function askConfirm(msg, onYes){
+  document.querySelectorAll(".confirm").forEach(e=>e.remove());
+  const scrim=document.createElement("div"); scrim.className="scrim confirm";
+  const sh=document.createElement("div"); sh.className="sheet confirm"; sh.setAttribute("role","dialog");
+  sh.innerHTML=`<p style="margin:0">${esc(msg)}</p><div class="row"><button class="btn ghost" data-no>Hayır</button><button class="btn" data-yes>Evet, güncelle</button></div>`;
+  document.body.append(scrim,sh);
+  const close=()=>{scrim.remove();sh.remove();};
+  scrim.onclick=close; sh.querySelector("[data-no]").onclick=close;
+  sh.querySelector("[data-yes]").onclick=()=>{ close(); onYes(); };
+}
+document.getElementById("setBtn").onclick=()=>openSettings();
+function closedNote(){ return BIST_CLOSED.has(dayKey(Date.now())) ? "Bugün borsa tatil" : "Piyasa şu an kapalı"; }
+async function requestRefresh(manual, only, isFund, force){
+  if(!S.mcp || !S.cfg?.triggerId || pending() || S.busy) { if(manual && !S.mcp) toast("Güncelleme bu görünümde kullanılamıyor."); return; }
+  if(!only && !force && upToDate()){ if(manual) askConfirm(`${closedNote()} ve veriler son kapanıştan sonra çekildi, büyük ihtimalle bir şey değişmeyecek. Yine de güncellemek ister misin?`, ()=>requestRefresh(true, null, false, true)); return; }
+  S.busy=true; const withScan=!only && scanDue();
+  try{
+    await S.mcp.callTool("Claude Code Remote","fire_trigger",{trigger_id: (only && S.cfg.lightTriggerId) || S.cfg.triggerId, text: only ? (isFund==="fx" ? "SADECE_DOVIZ: " : isFund ? "SADECE_FON: " : "SADECE: ")+only : "TAM_GUNCELLEME"+(withScan?"\nHAFTALIK TARAMA":"")+bankNote()});
+    S.status = {requestedAt:new Date().toISOString(), only: only||null, scan: withScan};
+    if(withScan) try{localStorage.removeItem("fp-scanNext")}catch(_){}
+    try{ await S.db.doc("config/status").set(S.status); }catch(e){}
+    if(manual) toast(only ? only+" güncelleniyor ("+estTxt("one")+")" : withScan ? "Güncelleme + haftalık fon taraması başladı ("+estTxt("fullscan")+")" : "Güncelleme başlatıldı ("+estTxt("full")+")");
+  }catch(e){
+    if(manual || e?.code!=="not_granted") toast(e?.code==="not_granted" ? "Güncelleme için izin verilmedi." : "Güncelleme başlatılamadı: " + (e?.message||e?.code||"hata"));
+  }finally{ S.busy=false; renderFresh(); }
+}
+$("refreshBtn").onclick = () => requestRefresh(true);
+
+/* ---------- Öneri ---------- */
+const BANKS=[["akbank","Akbank","Ak Portföy"],["is","İş Bankası","İş Portföy"],["garanti","Garanti BBVA","Garanti Portföy"],["yk","Yapı Kredi","Yapı Kredi Portföy"],["ziraat","Ziraat Bankası","Ziraat Portföy"],["halk","Halkbank","Halk Portföy"],["vakif","VakıfBank","Vakıf Portföy"],["qnb","QNB","QNB Portföy"],["deniz","DenizBank","Deniz Portföy"],["teb","TEB","TEB Portföy"],["kuveyt","Kuveyt Türk","Kuveyt Türk Portföy"]];
+let MYB=[]; try{ if(JSON.parse(localStorage.getItem("fp-banks")||"[]").length){ localStorage.removeItem("fp-banks"); localStorage.setItem("fp-scanNext","1"); } }catch(_){}
+const trl=x=>(x||"").toLocaleLowerCase("tr-TR");
+const isMine=f=>BANKS.filter(b=>MYB.includes(b[0])).some(b=>trl(f?.name).startsWith(trl(b[2])));
+const akVis=f=>!MYB.length||isMine(f);
+const bankNote=()=>MYB.length?`\nBANKA FİLTRESİ: Kullanıcı yalnızca şu portföy şirketlerinin fonlarını alabiliyor: ${BANKS.filter(b=>MYB.includes(b[0])).map(b=>b[2]).join(", ")}. Fon taramasını, fon keşfini/liderleri ve fon önerisi dağılımlarını (advice.short/long) YALNIZCA adı bu şirketlerle başlayan fonlarla yap; her kategoride (para, altın, hisse, diğer) bu şirketlerin en iyilerini bul. Başka şirketin fonunu önerme ya da dağılıma koyma. Kullanıcının elindeki ve eklediği fonları yine silme.`:"";
+function openSettings(){
+  const scrim=document.createElement("div"); scrim.className="scrim";
+  const sh=document.createElement("div"); sh.className="sheet"; sh.setAttribute("role","dialog");
+  sh.innerHTML=`<h2>Ayarlar</h2>
+    <h3 style="margin:8px 0 4px">Görünüm</h3><p class="note" style="margin:0">Sekmelerin ve kartların sırasını değiştir, istemediklerini gizle.</p>
+    <div class="row" style="justify-content:flex-start"><button class="btn ghost sm" data-ly style="margin-left:0">Sekme ve kart düzeni…</button></div>
+    <h3 style="margin:8px 0 4px">Açılışta otomatik güncelle</h3><p class="note" style="margin:0">İşaretlediklerinin fiyatları uygulama her açıldığında tazelenir (puanlama yapılmaz). Son 15 dakikada güncellendiyse ya da piyasa kapalıyken veriler kapanıştan sonra zaten çekildiyse atlanır. Fonlar günde bir kez güncellenir: fon fiyatı akşam geç açıklandığı için 22:00'den sonraki ilk açılışta (ya da ertesi sabah).${LIVE.ok()?" <b>Telefon uygulamasında</b> bu seçeneklere gerek yok: tüm fiyatlar her açılışta ücretsiz çekilir (hisse ve döviz 15 dk gecikmeli, fon TEFAS'tan).":""}</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;margin:4px 0">${[["hisse","Hisse"],["fon","Fon"],["doviz","Döviz"]].map(([k,l])=>`<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-aq="${k}" ${AUTOQ.includes(k)?"checked":""}>${l}</label>`).join("")}</div>
+    <h3 style="margin:8px 0 4px">Tema</h3>
+    <div class="seg" role="radiogroup" aria-label="Tema">${[["auto","Otomatik"],["light","Açık"],["dark","Koyu"]].map(([k,l])=>`<button data-th="${k}" class="${TH.mode===k?"on":""}" role="radio" aria-checked="${TH.mode===k}">${l}</button>`).join("")}</div>
+    <p class="note" style="margin:6px 0 4px">Renk</p>
+    <div class="swatches">${ACC.map(([k,l,c])=>`<button data-ac="${k}" class="${TH.acc===k?"on":""}" aria-label="${l}" title="${l}" style="background:${c}"></button>`).join("")}</div>
+    <div class="row"><button class="btn" data-c>Kapat</button></div>`;
+  document.body.append(scrim,sh);
+  const close=()=>{scrim.remove();sh.remove();};
+  scrim.onclick=close; sh.querySelector("[data-c]").onclick=close;
+  sh.querySelectorAll("[data-aq]").forEach(c=>c.onchange=()=>{ const k=c.dataset.aq; AUTOQ=c.checked?[...new Set([...AUTOQ,k])]:AUTOQ.filter(x=>x!==k); saveAutoQ(); });
+  sh.querySelectorAll("[data-th]").forEach(b=>b.onclick=()=>{ TH.mode=b.dataset.th; saveTheme(); sh.querySelectorAll("[data-th]").forEach(x=>{x.classList.toggle("on",x===b); x.setAttribute("aria-checked",x===b);}); });
+  sh.querySelectorAll("[data-ac]").forEach(b=>b.onclick=()=>{ TH.acc=b.dataset.ac; saveTheme(); sh.querySelectorAll("[data-ac]").forEach(x=>x.classList.toggle("on",x===b)); });
+  sh.querySelector("[data-ly]").onclick=()=>{ close(); openLayout(); };
+
+}
+function donut(mix){ const C={para:"var(--para)",altin:"var(--gold)",hisse:"var(--stock)",gumus:"#8a8f98",doviz:"#6b5aa6",diger:"var(--muted)"};
+  const R=15.915, L=100; let off=25;
+  const seg=mix.map(m=>{ const d=`<circle r="${R}" cx="21" cy="21" fill="none" stroke="${C[m.c]||"var(--muted)"}" stroke-width="6" stroke-dasharray="${m.w} ${L-m.w}" stroke-dashoffset="${off}"/>`; off-=m.w; return d; }).join("");
+  return `<svg class="donut" viewBox="0 0 42 42" role="img" aria-label="Portföy dağılımı"><circle r="${R}" cx="21" cy="21" fill="none" stroke="var(--line)" stroke-width="6"/>${seg}</svg>`; }
+function allocBlock(h){
+  if(h?.items?.length && MYB.length){ const ok=h.items.filter(it=>{const f=asset(it.code); return !f||f.isStock||isMine(f);}); const t=ok.reduce((s,i)=>s+Number(i.weight||0),0);
+    if(ok.length<h.items.length){ let acc=0; h={...h, items:ok.map((it,i)=>{ const w=i===ok.length-1?100-acc:Math.round(Number(it.weight)/t*100); acc+=w; return {...it,weight:w}; })}; } }
+  if(!h?.items?.length) return "";
+  const allStock=h.items.every(it=>asset(it.code)?.isStock);
+  const col=(it,i)=>{ const f=asset(it.code), cat=f?.cat||it.cat||"para"; return allStock ? `background:color-mix(in srgb,var(--stock) ${100-i*13}%,var(--card))` : ""; };
+  const cl=it=>{ const f=asset(it.code); return "bar-"+esc(f?.cat||it.cat||"para"); };
+  const bars = h.items.map((it,i) => `<i class="${allStock?"":cl(it)}" style="width:${Number(it.weight)||0}%;${col(it,i)}"></i>`).join("");
+  const rows = h.items.map((it,i) => { const f=asset(it.code); const cat=f?.cat||it.cat||"para";
+    const k="a:"+(h.title||"")+it.code;
+    return `<div class="aitem x${xo(k)}" data-k="${esc(k)}"><span class="adot xh ${allStock?"":cl(it)}" style="${col(it,i)}"></span>
+      <div class="xh amid"><span class="code">${esc(it.code)}</span> <span class="name">${esc(f?.name||CAT[cat]||"")}</span></div>
+      <span class="pct num xh">%${esc(it.weight)}</span>
+      <p class="why">${esc(it.why)}</p></div>`; }).join("");
+  return `<section class="card"><div class="horizon"><h2>${esc(h.title)}</h2><span class="small muted">${esc(h.horizon||"")}</span></div>
+    <div class="alloc" aria-hidden="true">${bars}</div><div>${rows}</div></section>`;
+}
+function renderOneri(){
+  const v=$("v-oneri"), a=S.market?.advice;
+  if(!S.market){ v.innerHTML = `<section class="card empty">${S.ready ? "Öneriler ilk veri güncellemesinden sonra burada görünecek." : "Yükleniyor…"}</section>`; return; }
+  v.innerHTML = `
+    ${allocBlock(a?.short)}
+    ${allocBlock(a?.long)}
+    ${scanBlock(S.market)}
+    ${fundsHtml(S.market)}
+`;
+  bindFunds(v);
+}
+async function ask(){
+  const q=$("askIn").value.trim(), out=$("askOut"), btn=$("askBtn"); if(!q||!S.sample) return;
+  btn.disabled=true; out.hidden=false; out.textContent="Düşünüyor…";
+  const ctx = { tarih:new Date().toISOString().slice(0,10), piyasa:S.market, sanalPortfoy:portfolioRows().map(r=>({kod:r.code,yatirilan:r.amount,simdikiDeger:Math.round(r.value),karZarar:Math.round(r.pnl)})) };
+  const prompt = `Türkiye'de yaşayan bireysel bir yatırımcıya Türkçe, kısa ve net yanıt ver (en fazla 8 cümle ya da kısa madde). Yalnızca aşağıdaki güncel verilere dayan; veride olmayan fiyat ya da haber uydurma. Belirli fon kodları ve yüzdeli dağılım önerebilirsin, gerekçesini bir cümleyle ver. Yanıtın sonunda tek satırla bunun bir görüş olduğunu, garanti olmadığını belirt.\n\nVERİ:\n${JSON.stringify(ctx)}\n\nSORU: ${q}`;
+  try{ const r = await S.sample(prompt,{modelTier:"default", cache:false, onText:({text})=>{ out.textContent=text; }}); out.textContent=r.text; }
+  catch(e){ out.textContent = e?.code==="not_granted" ? "Soru sorma izni verilmedi." : e?.code==="rate_limited" ? "Çok sık soruldu, biraz sonra tekrar dene." : "Yanıt alınamadı."; }
+  finally{ btn.disabled=false; }
+}
+
+/* ---------- Satır bazlı güncelleme ---------- */
+function itemFresh(x){ const u=x?.updatedAt||S.market?.updatedAt; return !marketOpen() && !!u && new Date(u).getTime()>=lastClose(); }
+function rowBtn(code){ const busy=pending() && S.status?.only===code;
+  return S.mcp&&S.cfg?.triggerId ? `<button class="rowbtn${busy?" spin":""}" data-refresh="${esc(code)}" title="Sadece ${esc(code)} güncelle" aria-label="Sadece ${esc(code)} güncelle">↻</button>` : ""; }
+function bindRowBtns(root){ root.querySelectorAll("[data-quick]").forEach(b=>b.onclick=()=>requestQuick(b.dataset.quick)); root.querySelectorAll("[data-refresh]").forEach(b=> b.onclick = () => {
+  const c=b.dataset.refresh, x=asset(c);
+  if(pending()){ toast("Bir güncelleme zaten sürüyor, bitince tekrar dene."); return; }
+  const isF=(S.market?.fx||[]).some(f=>f.code===c) ? "fx" : !!(S.market?.funds||[]).some(f=>f.code===c);
+  if(x && itemFresh(x)){ askConfirm(`${closedNote()} ve ${c} verisi son kapanıştan sonra çekildi. Yine de güncellemek ister misin?`, ()=>requestRefresh(true, c, isF, true)); return; }
+  requestRefresh(true, c, isF); }); }
+const num = (n,d=2) => (n==null||isNaN(n)) ? "–" : Number(n).toLocaleString("tr-TR",{maximumFractionDigits:d});
+function perfBlock(x){
+  const P=[["w1","1 hafta"],["m1","1 ay"],["m3","3 ay"],["m6","6 ay"],["ytd","Yıl başı"],["y1","1 yıl"]].filter(([k])=>typeof x[k]==="number");
+  if(!P.length) return "";
+  const mx=Math.max(...P.map(([k])=>Math.abs(x[k])),1);
+  return `<div class="perf" role="img" aria-label="Dönemsel getiri">${P.map(([k,l])=>{const v=x[k],w=Math.abs(v)/mx*50;
+    return `<span>${l}</span><span class="track"><i class="${v>=0?"p":"n"}" style="width:${w}%"></i></span><span class="v num ${cls(v)}">${pc(v,1)}</span>`}).join("")}</div>`;
+}
+function partsBlock(parts){ if(!parts) return "";
+  const L={deger:["Değerleme",20],karlilik:["Kalite ve kârlılık",30],saglamlik:["Risk ve sağlamlık",15],momentum:["Momentum ve trend",25],analist:["Analist ve haber",10],getiri:["Getiri tutarlılığı",30],maliyet:["Maliyet (ücret)",20],risk:["Risk kontrolü",25],kalite:["Kalite",15],uyum:["Ortama uyum",10],tasima:["Taşıma (TL faizine göre)",25],trend:["Trend",30],fxdeger:["Değerleme",15],makro:["Makro ve risk ortamı",20],fxrisk:["Oynaklık",10]};
+  return `<div class="parts">${Object.entries(parts).map(([k,v])=>{const n=(L[k]||[k])[0], mx=Number(S.market?.partsMax?.[k])||(L[k]||[0,100])[1];return `<span class="g">${n}</span><span class="pb"><i style="width:${Math.max(0,Math.min(100,v/mx*100))}%"></i></span><span class="num">${num(v,0)}/${mx}</span>`}).join("")}</div>`; }
+
+const NOTE={deger:["fiyatı ucuz","fiyatı pahalı"],karlilik:["kârlı","kârlılığı zayıf"],saglamlik:["şirket sağlam","yapısı riskli"],momentum:["yükselişte","son aylarda zayıf"],analist:["analistler olumlu","analist desteği az"],
+ getiri:["getirisi istikrarlı","getirisi zayıf"],maliyet:["ücreti düşük","ücreti yüksek"],risk:["az dalgalanır","çok dalgalanır"],kalite:["büyük ve köklü","küçük fon"],uyum:["ortam destekliyor","ortam desteklemiyor"],
+ tasima:["TL faizini geçebilir","TL faizi daha çok kazandırıyor"],trend:["yükselişte","düşüşte"],fxdeger:["fiyatı makul","fiyatı yüksek"],makro:["ortam destekliyor","ortam desteklemiyor"],fxrisk:["sakin seyrediyor","çok dalgalı"]};
+const PMX={deger:20,karlilik:30,saglamlik:15,momentum:25,analist:10,getiri:30,maliyet:20,risk:25,kalite:15,uyum:10,tasima:25,trend:30,fxdeger:15,makro:20,fxrisk:10};
+function scoreNote(x){ const p=x?.parts; if(!p) return "";
+  const r=Object.entries(p).filter(([k,v])=>NOTE[k]&&typeof v==="number").map(([k,v])=>[k,v/(Number(S.market?.partsMax?.[k])||PMX[k])]).sort((a,b)=>b[1]-a[1]);
+  if(!r.length) return ""; const g=r.filter(([,v])=>v>=0.7).slice(0,2).map(([k])=>NOTE[k][0]), z=r.filter(([,v])=>v<=0.4).slice(-2).reverse().map(([k])=>NOTE[k][1]);
+  const t=[g.length?"Artı: "+g.join(", "):"", z.length?"Eksi: "+z.join(", "):""].filter(Boolean).join(" · ");
+  return t?`<p class="snote">${esc(t)}</p>`:""; }
+const dAge = s => s ? (Date.now()-new Date(s).getTime())/864e5 : 99;
+const staleB = (d,lim,txt) => dAge(d)>lim ? ` <span class="stale" title="${esc(txt)}">veri eski</span>` : "";
+const META=/(eklenmedi|eklenmedi\.|aday(lar)?\b|kalibrasyon|scorelog|yeniden puanla|puanlar(ı)? (değişmedi|aynı)|tarama yapılmadı|tam güncelleme|önbellek|config\/)/i;
+const clean = t => String(t||"").split(/(?<=[.!?])\s+/).filter(x=>!META.test(x)).join(" ");
+function histBlock(code){ const h=(S.hist||{})[code]; if(!h||h.length<2) return "";
+  const v=h.map(p=>p.sc), mn=Math.min(...v), mx=Math.max(...v), W=240, H=40, rg=Math.max(mx-mn,4), lo=mn-(rg-(mx-mn))/2;
+  const pts=v.map((y,i)=>`${(i/(v.length-1)*W).toFixed(1)},${(H-4-(y-lo)/rg*(H-8)).toFixed(1)}`).join(" ");
+  const a=v[0], b=v[v.length-1], d=b-a;
+  return `<div class="hist"><div class="small muted">Puan geçmişi · ${esc(fmtDate(h[0].d))}'dan beri <b class="${d>0?"up":d<0?"down":""}">${num(a,0)} → ${num(b,0)}</b></div>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Puan geçmişi"><polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>`; }
+
+/* ---------- Hisse ---------- */
+const SIG = {al:"Alınabilir", izle:"İzle", uzak:"Uzak dur"};
+const pickBadge = x => x?.pick ? `<span class="pick">${x.pickAt && (Date.now()-new Date(x.pickAt).getTime() < 7*864e5) ? "YENİ KEŞİF" : "KEŞİF"}</span>` : "";
+function riskBars(r){ r=Math.max(0,Math.min(5,Number(r)||0)); return `<span class="risk g" data-g="Risk" title="Risk ${r}/5">${[1,2,3,4,5].map(i=>`<i class="${i<=r?"on":""}"></i>`).join("")} risk ${r}/5</span>`; }
+function stockRow(x){ return listRow("s",x); }
+function renderHisse(){
+  const v=$("v-hisse"), m=S.market;
+  if(!m){ v.innerHTML=`<section class="card empty">${S.ready?"Hisse analizi ilk güncellemeden sonra görünecek.":"Yükleniyor…"}</section>`; return; }
+  const st=m.stocks||[], a=m.advice?.stocks, ord={al:0,izle:1,uzak:2};
+  const list=applyLF("hisse",[...st].sort((x,y)=>(ord[x.signal]??3)-(ord[y.signal]??3)||(x.risk||9)-(y.risk||9)));
+  const waiting=S.watch.filter(c=>!st.some(x=>x.code===c));
+  v.innerHTML = `
+    ${a?.summary?`<section class="card"><h3>Borsa görüşü · ${esc(updLbl())}</h3><p class="summary clamp${xo("hsum")}" data-k="hsum">${esc(clean(a.summary))}</p></section>`:""}
+    ${(()=>{ const pk=[...st.filter(x=>x.pick)].sort((a,b)=>String(b.pickAt).localeCompare(String(a.pickAt)));
+      return pk.length?`<section class="card"><div class="horizon"><h2>Keşifler</h2><span class="small muted">Claude'un listeye eklediği hisseler</span></div>
+        ${pk.map(x=>x.isFund?`<div class="fund"><div><span class="code">${esc(x.code)}</span> <span class="score${sCls(x.score,"f")}">${num(x.score,0)}</span> ${pickBadge(x)}<div class="name">${esc(x.name)} · fon</div></div><div class="right"><div class="num">${num(x.price,6)}</div><div class="small num ${cls(x.y1)}">1 yıl ${pc(x.y1,0)}</div></div></div>`:stockRow(x)).join("")}</section>`:""; })()}
+    ${allocBlock(a?.short)}
+    ${allocBlock(a?.long)}
+    <section class="card"><details><summary class="code" style="cursor:pointer">Puan nasıl hesaplanıyor?</summary>
+      <p class="why" style="margin-top:8px">Her hisse 100 üzerinden puanlanır. <b>Kalite ve kârlılık (30):</b> enflasyondan arındırılmış (reel) özsermaye kârlılığı, reel kâr ve satış büyümesi, nakit akışı, borçluluk, bedelli sermaye artırımı (Piotroski F-skoru mantığı). Borsa İstanbul araştırmalarında getiriyi en iyi açıklayan ölçüt. <b>Momentum ve trend (25):</b> son 12 ay (son ay hariç) ve 3 aylık getirinin BIST 100'e göre gücü. <b>Değerleme (20):</b> F/K, PD/DD sektöre ve kârlılığa göre; bankada PD/DD özsermaye kârlılığıyla birlikte okunur. Ucuz ama kârı eriyen şirket "değer tuzağı" sayılır, puanı kırpılır. <b>Risk ve sağlamlık (15):</b> düşük oynaklık, büyüklük, halka açıklık, borç, olumsuz KAP. <b>Analist ve haber (10):</b> hedef fiyatlar araştırmalara göre 12 ayda ancak ≈%26 oranında tuttuğu ve iyimser olduğu için yarıya indirilerek kullanılır; hedeflerin yukarı/aşağı revize edilmesi ve beklenti üstü bilanço daha önemlidir. "Alınabilir": puan 60+ VE listedeki en iyi %30 içinde; "Uzak dur": 42 altı ya da ağır olumsuz KAP (SPK tedbiri, kayyum, konkordato); arası "İzle". Fonlarda bantlar: 70+ güçlü, 45–69 orta, 45 altı zayıf. Bankada değerleme ileriye dönük kârlılık ve beklenen faizle, holdingde net aktif değer iskontosuyla yapılır; reel kârlılık beklenen enflasyona göre ölçülür. Verisi eksik ölçüt yarım puan alır (ne ödül ne ceza). <b>Trend filtresi:</b> 3 ay ve 1 yıl getirisi ikisi de eksi olan hisse "Alınabilir" olamaz ve kısa vade önerisine girmez. Kârlılığı zayıf (10'un altı) hisse de "Alınabilir" olamaz. Risk; volatilite, halka açıklık, şirket büyüklüğü ve sektöre göre 1–5 verilir.</p></details></section>
+    <section class="card"><div class="horizon"><h2>Hisseler <span class="small muted">${st.length}</span></h2>${quickBtn("hisse")}</div>
+      ${lfBar("hisse","Hisse ara: kod ya da şirket")}
+      ${S.db?`<form id="addForm" class="addrow"><input id="addCode" placeholder="Hisse ekle (ör. TTRAK)" maxlength="6" autocomplete="off" aria-label="Hisse kodu"><button class="btn" type="submit">Ekle</button></form>`:""}
+      ${waiting.length?`<p class="note">Bir sonraki güncellemede analiz edilecek: ${waiting.map(esc).join(", ")}</p>`:""}
+      ${list.length?list.map(stockRow).join(""):`<div class="empty">Hisse verisi bir sonraki güncellemede gelecek.</div>`}
+      ${(S.market?.removedStocks||[]).length?`<details class="removed"><summary>Son çıkarılanlar (${S.market.removedStocks.length})</summary>${S.market.removedStocks.slice().reverse().map(z=>`<div class="remrow"><div><span class="code">${esc(z.code)}</span> <span class="small muted">${esc(fmtDate(z.date)||"")}${z.score!=null?" · puan "+num(z.score,0):""}</span></div><p class="small muted" style="margin:2px 0 0">${esc(z.why||"")}</p></div>`).join("")}</details>`:""}
+    </section>`;
+  v.querySelectorAll("[data-buy]").forEach(b=> b.onclick = () => openBuy(b.dataset.buy));
+  bindRowBtns(v);
+  v.querySelectorAll("[data-unwatch]").forEach(b=> b.onclick = () => saveWatch(S.watch.filter(c=>c!==b.dataset.unwatch)));
+  const f=$("addForm"); if(f) f.onsubmit = async e => { e.preventDefault(); const c=$("addCode").value.trim().toUpperCase();
+    if(!/^[A-Z0-9]{3,6}$/.test(c)){ toast("Geçerli bir hisse kodu yaz (ör. TTRAK)."); return; }
+    if(S.watch.includes(c)||st.some(x=>x.code===c&&!S.watch.includes(c))){ if(st.some(x=>x.code===c)){ toast(c+" zaten listede."); return; } }
+    if(await saveWatch([...S.watch,c])){ toast(c+" eklendi, sadece bu hisse analiz ediliyor"); requestRefresh(false, c); } };
+}
+async function saveWatch(codes){
+  try{ await S.db.doc("config/watchlist").set({codes:[...new Set(codes)]}); return true; }catch(e){ toast("Liste kaydedilemedi."); return false; }
+}
+
+/* ---------- Portföyler ---------- */
+function curPf(){ return S.pfs.find(p=>p.id===S.pf) || S.pfs[0] || null; }
+function pfTrades(pf){ if(!pf) return []; return S.trades.filter(t => t.pf===pf.id || (!t.pf && pf.legacy)); }
+function daysSince(d){ const t=new Date(d+"T00:00:00"); return isNaN(t) ? null : Math.max(0, Math.round((Date.now()-t.getTime())/864e5)); }
+function portfolioRows(pf){
+  pf = pf || curPf();
+  return pfTrades(pf).filter(t=>t.status!=="closed").map(t => {
+    const f=asset(t.code), cur = f?.price ?? t.price, units = t.units || t.amount/t.price, value=units*cur;
+    return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:f?.d1, curDate:f?.priceDate, days:daysSince(t.buyDate||t.priceDate)};
+  });
+}
+function groupRows(rows){ const m=new Map();
+  rows.forEach(r=>{ const g=m.get(r.code)||{code:r.code,lots:[],amount:0,value:0,units:0}; g.lots.push(r); g.amount+=r.amount; g.value+=r.value; g.units+=r.units; m.set(r.code,g); });
+  return [...m.values()].map(g=>{ g.lots.sort((a,b)=>String(a.buyDate||a.priceDate).localeCompare(String(b.buyDate||b.priceDate)));
+    g.cur=g.lots[0].cur; g.price=g.units?g.amount/g.units:g.lots[0].price; g.pnl=g.value-g.amount; g.pnlPct=g.amount?(g.value/g.amount-1)*100:0;
+    g.days=Math.max(...g.lots.map(l=>l.days||0)); g.buyDate=g.lots[0].buyDate; return g; }).sort((a,b)=>b.value-a.value); }
+function advise(r, total){
+  const a=asset(r.code); if(!a) return ["kal","Kal","Güncel veri yok."];
+  if(a.isFx){ const sc=a.score!=null?` (puan ${num(a.score,0)})`:"";
+    if(a.signal==="uzak") return ["cik","Azalt",`Analiz 'Uzak dur' diyor${sc}; TL faiz getirisinin gerisinde kalabilir.`];
+    if(r.pnlPct>=20 && a.signal!=="al") return ["kar","Kısmen kâr al",`%${num(r.pnlPct,0)} kârdasın ve sinyal 'İzle'.`];
+    if(a.signal==="al") return ["ekle","Kal, eklenebilir","'Alınabilir'"+sc+"."];
+    return ["kal","Kal","Sinyal 'İzle'"+sc+"; koruma amaçlı tutulabilir."]; }
+  if(a.isStock){
+    const sig=a.signal, sc=a.score!=null?` (puan ${num(a.score,0)})`:"";
+    if(sig==="uzak") return ["cik","Çık","Analiz 'Uzak dur' diyor"+sc+": "+(a.why||"")];
+    if(r.pnlPct<=-15 && sig!=="al") return ["cik","Çık","Zarar %15'i geçti ve hisse güçlü görünmüyor; zararı sınırlamak mantıklı."];
+    if(r.pnlPct>=30 && sig!=="al") return ["kar","Kısmen kâr al",`%${num(r.pnlPct,0)} kârdasın ve sinyal 'İzle'; bir kısmını satıp kârı kilitle.`];
+    if(sig==="al") return ["ekle","Kal, eklenebilir","'Alınabilir'"+sc+"; düşüşlerde parça parça eklenebilir."];
+    return ["kal","Kal","Sinyal 'İzle'"+sc+"; yeni alım için daha iyi fiyat bekle."];
+  }
+  const adv=S.market?.advice, find=h=>(adv?.[h]?.items||[]).find(i=>i.code===r.code);
+  const s=find("short"), l=find("long"), w=total? r.value/total*100 : 0, sc=a.score;
+  if(!s && !l && sc!=null && sc<50) return ["cik","Çık",`Önerilerde yok ve puanı düşük (${num(sc,0)}/100); daha yüksek puanlı bir fona geçilebilir.`];
+  if(s && w < s.weight-10) return ["ekle","Ekle",`Kısa vadede %${s.weight} öneriliyor, portföyünde %${num(w,0)}.`];
+  if(s && w > s.weight+20 && !l) return ["kar","Azalt",`Kısa vadede %${s.weight} öneriliyor, portföyünde %${num(w,0)}; fazlası başka fona kaydırılabilir.`];
+  if(!s && l) return ["kal","Kal (uzun vade)",`Kısa vadede önerilmiyor ama uzun vadede %${l.weight} payı var; aceleye gerek yok.`];
+  return ["kal","Kal", s ? `Önerilen dağılımda (%${s.weight}).` : "Belirgin bir değişiklik sinyali yok."];
+}
+function renderSanal(){
+  const v=$("v-sanal");
+  if(!S.db||!S.uid){ v.innerHTML=`<section class="card empty">${S.ready?"Portföy için claude.ai'de oturum açık olmalı.":"Yükleniyor…"}</section>`; return; }
+  const pf=curPf();
+  const head = `<section class="card pfmgr${pf&&!S.pfOpen?" closed":""}" id="pfMgr">${S.pfs.length?`<h3>Portföylerim</h3><div class="pfchips" role="radiogroup" aria-label="Portföy">${S.pfs.map(p=>`<button role="radio" aria-checked="${p.id===pf?.id}" data-pfsel="${esc(p.id)}">${esc(p.name)}</button>`).join("")}</div>`:""}
+      <select id="pfSel" hidden aria-hidden="true">${S.pfs.map(p=>`<option value="${esc(p.id)}" ${p.id===pf?.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select>
+      <div class="pfacts"><button class="btn ghost sm" id="pfNew">+ Yeni</button>${pf?`<button class="btn ghost sm" id="pfRen">✎ Adlandır</button><button class="btn ghost sm pfdel" id="pfDel">🗑 Sil</button>`:""}</div>
+      <form id="pfForm" class="addrow" hidden><input id="pfName" maxlength="30" placeholder="Portföy adı (ör. Gerçek 1)" aria-label="Portföy adı"><button class="btn" type="submit">Kaydet</button></form>
+      <div id="pfDelBox" class="row" hidden><span class="small" style="margin-right:auto">"${esc(pf?.name)}" ve içindeki tüm işlemler silinsin mi?</span><button class="btn ghost sm" id="pfDelNo">Vazgeç</button><button class="btn sm" id="pfDelYes" style="background:var(--down);border-color:var(--down)">Sil</button></div></section>`;
+  if(!pf){ v.innerHTML = head + `<section class="card empty">İlk portföyünü oluştur: "Yeni"ye bas ve bir ad ver (ör. Gerçek 1 ya da Test 1).</section>`; bindPf(pf); return; }
+  const rows=portfolioRows(pf), closed=pfTrades(pf).filter(t=>t.status==="closed");
+  const inv=rows.reduce((s,r)=>s+r.amount,0), val=rows.reduce((s,r)=>s+r.value,0), pnl=val-inv;
+  const day=rows.reduce((s,r)=> s + (r.d1!=null && r.curDate && r.curDate>(r.buyDate||r.priceDate) ? r.value*(r.d1/(100+r.d1)) : 0),0);
+  const realized=closed.reduce((s,t)=>s+(t.sellPrice/t.price-1)*t.amount,0);
+  const totalPnl=pnl+realized, costAll=inv+closed.reduce((s,t)=>s+t.amount,0);
+  const mix=["para","altin","gumus","doviz","hisse","diger"].map(c=>({c,w: val? rows.filter(r=>(asset(r.code)?.cat||"hisse")===c).reduce((s,r)=>s+r.value,0)/val*100 : 0})).filter(m=>m.w>0);
+  v.innerHTML = `
+    <section class="card pfhero">
+      <div class="pfh"><div class="pfl"><button class="pfpick" id="pfPick" aria-expanded="${!!S.pfOpen}">${esc(pf.name)} <span>${S.pfs.length>1?"▾ değiştir":"▾"}</span></button><b class="num pfv">${tl(val)}</b>
+          <div class="num ${cls(totalPnl)} pfp">${totalPnl>=0?"▲ +":"▼ "}${tl(totalPnl)} ${costAll?`<span>(${pc(totalPnl/costAll*100)})</span>`:""}</div>
+          <div class="small muted">toplam kâr/zarar · <span style="white-space:nowrap">son gün</span> <span class="num ${cls(day)}" style="white-space:nowrap">${day>=0?"+":""}${tl(day)}</span></div></div>
+        ${mix.length?donut(mix):""}</div>
+      ${mix.length?`<div class="legend">${mix.map(m=>`<span><i class="bar-${m.c}"></i>${CAT[m.c]} <b class="num">%${num(m.w,0)}</b></span>`).join("")}</div>`:""}
+      <div class="pfstats"><div><span>Yatırılan</span><b class="num">${tl(inv)}</b></div><div><span>Açık K/Z</span><b class="num ${cls(pnl)}">${pnl>=0?"+":""}${tl(pnl)}</b></div>
+        <div><span>Gerçekleşen</span><b class="num ${cls(realized)}">${realized>=0?"+":""}${tl(realized)}</b></div></div>
+    </section>
+    ${head}
+    <section class="card"><div class="horizon"><h2>Pozisyonlar</h2><button class="btn sm" id="goAdd">+ Ekle</button></div>
+      ${rows.length ? groupRows(rows).map(g=>{ const [k,lab,why]=advise(g,val), one=g.lots.length===1, r0=g.lots[0];
+        const lotLine=(r,nd)=>`<div class="small muted num">${nd?"":fmtDate(r.buyDate||r.priceDate)+" · "}${tl(r.amount)} · ${num(r.units,r.units<100?4:0)} adet · alış ${num(r.price,6)} → ${num(r.cur,6)}${r.days?` · günlük ort. ${pc(r.pnlPct/r.days,2)}`:""}</div>`;
+        const acts=r=>`<div class="acts"><button class="btn ghost sm" data-del="${esc(r.id)}">Sil</button><button class="btn ghost sm" data-edit="${esc(r.id)}" style="margin-left:0">Düzenle</button><button class="btn ghost sm" data-sell="${esc(r.id)}" style="margin-left:0">Sat</button></div>`;
+        return `<div class="trade x${xo("g:"+g.code)}" data-k="g:${esc(g.code)}">
+        <div class="xh"><span class="code">${esc(g.code)}</span> <span class="adv adv-${k}">${esc(lab)}</span>
+          <div class="small muted">${one?(g.days!=null?`${g.days} gün · `:""):`${g.lots.length} alım · `}${tl(g.amount)}</div></div>
+        <div class="right xh"><div class="num">${tl(g.value)}</div><div class="num small ${cls(g.pnl)}">${g.pnl>=0?"+":""}${tl(g.pnl)} (${pc(g.pnlPct)})</div></div>
+        <p class="why" style="grid-column:1/-1;margin:2px 0 0">${esc(why)}</p>
+        ${one ? `<div style="grid-column:1/-1">${lotLine(r0)}</div>${acts(r0)}`
+          : `<div class="small muted num" style="grid-column:1/-1">${num(g.units,g.units<100?4:0)} adet toplam · ort. alış ${num(g.price,6)} → ${num(g.cur,6)}</div>
+             <div class="lots" style="grid-column:1/-1">${g.lots.map(r=>`<div class="lot"><div style="display:flex;justify-content:space-between;gap:8px"><b class="num small">${fmtDate(r.buyDate||r.priceDate)}</b><span class="num small ${cls(r.pnl)}">${r.pnl>=0?"+":""}${tl(r.pnl)} (${pc(r.pnlPct)})</span></div>${lotLine(r,1)}${acts(r)}</div>`).join("")}</div>`}
+        </div>`}).join("")
+      : `<div class="empty">Bu portföy boş. "+ Ekle" ile gerçek alımlarını (tarih ve adet/fiyatla) ya da deneme alımlarını gir.</div>`}
+    </section>
+    ${closed.length ? `<section class="card"><div class="horizon"><h2>Kapanan işlemler</h2><span class="num small ${cls(realized)}">${realized>=0?"+":""}${tl(realized)}</span></div>
+      ${closed.map(t=>{const p=(t.sellPrice/t.price-1)*t.amount; return `<div class="trade"><div><span class="code">${esc(t.code)}</span> <span class="small muted">${tl(t.amount)} · ${fmtDate(t.buyDate||t.priceDate)} → ${fmtDate(t.sellDate)}</span></div>
+        <div class="right num ${cls(p)}">${p>=0?"+":""}${tl(p)}</div>
+        <div class="acts"><button class="btn ghost sm" data-del="${esc(t.id)}">Sil</button></div></div>`}).join("")}</section>` : ""}
+    <div id="planBox" style="display:flex;flex-direction:column;gap:inherit"></div>`;
+  bindPf(pf);
+  $("goAdd").onclick = () => openBuy(null);
+  v.querySelectorAll("[data-sell]").forEach(b=> b.onclick = () => sell(b.dataset.sell));
+  v.querySelectorAll("[data-edit]").forEach(b=> b.onclick = () => openBuy(null, S.trades.find(t=>t.id===b.dataset.edit)));
+  v.querySelectorAll("[data-del]").forEach(b=> b.onclick = () => delTrade(b.dataset.del));
+  renderPlan();
+}
+function bindPf(pf){
+  document.querySelectorAll("[data-pfsel]").forEach(b=>b.onclick=()=>{ S.pf=b.dataset.pfsel; try{localStorage.setItem("fp-pf",S.pf)}catch(_){}; renderSanal(); });
+  const pk=$("pfPick"); if(pk) pk.onclick=()=>{ S.pfOpen=!S.pfOpen; $("pfMgr").classList.toggle("closed",!S.pfOpen); pk.setAttribute("aria-expanded",S.pfOpen); };
+  $("pfSel").onchange = e => { S.pf=e.target.value; try{localStorage.setItem("fp-pf",S.pf)}catch(_){}; renderSanal(); };
+  let mode="new";
+  $("pfNew").onclick = () => { mode="new"; $("pfForm").hidden=false; $("pfName").value=""; $("pfName").focus(); };
+  if($("pfRen")) $("pfRen").onclick = () => { mode="ren"; $("pfForm").hidden=false; $("pfName").value=pf.name; $("pfName").focus(); };
+  if($("pfDel")) $("pfDel").onclick = () => { $("pfDelBox").hidden=false; };
+  if($("pfDelNo")) $("pfDelNo").onclick = () => { $("pfDelBox").hidden=true; };
+  if($("pfDelYes")) $("pfDelYes").onclick = async () => {
+    try{ for(const t of pfTrades(pf)) await tradesCol().doc(t.id).delete(); await tradesCol().doc(pf.id).delete(); S.pf=null; toast("Portföy silindi"); }catch(e){ toast("Silinemedi."); } };
+  $("pfForm").onsubmit = async e => { e.preventDefault(); const n=$("pfName").value.trim(); if(!n) return;
+    try{ if(mode==="ren"){ await tradesCol().doc(pf.id).update({name:n}); }
+      else { const ref=await tradesCol().add({kind:"portfolio",name:n,createdAt:new Date().toISOString(),legacy:S.pfs.length===0}); S.pf=ref.id; try{localStorage.setItem("fp-pf",S.pf)}catch(_){} }
+      $("pfForm").hidden=true; }catch(err){ toast("Kaydedilemedi."); } };
+}
+async function askPf(pf, rows, total){
+  const out=$("pfAskOut"), btn=$("pfAsk"); btn.disabled=true; out.hidden=false; out.textContent="Değerlendiriliyor…";
+  const pos=rows.map(r=>{ const a=asset(r.code); return {kod:r.code, alisTarihi:r.buyDate||r.priceDate, gun:r.days, yatirilan:Math.round(r.amount), deger:Math.round(r.value), karZararYuzde:+r.pnlPct.toFixed(2), portfoyPayi:+(r.value/total*100).toFixed(1), puan:a?.score, sinyal:a?.signal, risk:a?.risk, kural:advise(r,total)[1]}; });
+  const prompt=`Türkiye'de bireysel yatırımcının "${pf.name}" portföyünü değerlendir. Türkçe, kısa: önce 1–2 cümle genel durum, sonra her pozisyon için tek satır "KOD: Kal / Ekle / Azalt / Çık – gerekçe", sonunda varsa eksik olan (ör. çeşitlendirme) tek cümle. Yalnızca aşağıdaki verilere dayan, fiyat ya da haber uydurma.\n\nPİYASA: ${JSON.stringify({gostergeler:S.market?.indicators, fonOnerisi:S.market?.advice?.short, hisseOnerisi:S.market?.advice?.stocks?.short})}\n\nPORTFÖY: ${JSON.stringify(pos)}`;
+  try{ const r=await S.sample(prompt,{modelTier:"default",cache:false,onText:({text})=>{out.textContent=text;}}); out.textContent=r.text; }
+  catch(e){ out.textContent = e?.code==="not_granted" ? "Değerlendirme izni verilmedi." : "Değerlendirme alınamadı."; }
+  finally{ btn.disabled=false; }
+}
+function tradesCol(){ return S.db.collection("data/users/"+S.uid); }
+async function sell(id){
+  const t=S.trades.find(x=>x.id===id), f=asset(t?.code); if(!t||!f) return;
+  try{ await tradesCol().doc(id).update({status:"closed", sellPrice:f.price, sellDate:f.priceDate}); toast(`${t.code} satıldı olarak kaydedildi`); }
+  catch(e){ toast("Kaydedilemedi."); }
+}
+async function delTrade(id){ try{ await tradesCol().doc(id).delete(); }catch(e){ toast("Silinemedi."); } }
+
+/* ---------- Döviz ve emtia ---------- */
+const FXCAT={altin:"Altın",gumus:"Gümüş",doviz:"Döviz"};
+function fxRow(x){ return listRow("x",x); }
+function renderDoviz(){
+  const v=$("v-doviz"); if(!v) return; const m=S.market;
+  if(!m){ v.innerHTML=`<section class="card empty">${S.ready?"Döviz verisi ilk güncellemeden sonra görünecek.":"Yükleniyor…"}</section>`; return; }
+  const fx=m.fx||[], a=m.advice?.fx;
+  const waiting=S.fxwatch.filter(c=>!fx.some(x=>x.code===c));
+  v.innerHTML=`${a?.summary?`<section class="card"><h3>Döviz ve altın görüşü · ${esc(updLbl())}</h3><p class="summary clamp${xo("fxs")}" data-k="fxs">${esc(clean(a.summary))}</p></section>`:""}
+    ${allocBlock(a?.short)}${allocBlock(a?.long)}
+    <section class="card"><div class="horizon"><h2>Döviz <span class="small muted">${fx.length}</span></h2>${quickBtn("doviz")}</div>
+      ${lfBar("doviz","Döviz ara: dolar, altın…")}
+      ${S.db?`<form id="fxAddForm" class="addrow"><input id="fxAddCode" placeholder="Döviz ekle (ör. CHF, platin)" maxlength="20" autocomplete="off" aria-label="Döviz ya da emtia"><button class="btn" type="submit">Ekle</button></form>`:""}
+      ${waiting.length?`<p class="note">Analiz ediliyor: ${waiting.map(esc).join(", ")}</p>`:""}
+      ${fx.length?["altin","gumus","doviz"].map(c=>applyLF("doviz",fx.filter(x=>x.cat===c)).map(fxRow).join("")).join(""):`<div class="empty">Veriler bir sonraki tam güncellemede gelecek.</div>`}</section>
+    <section class="card"><details><summary class="code" style="cursor:pointer">Puan nasıl hesaplanıyor?</summary>
+      <p class="why" style="margin-top:8px">TL ile yaşayan biri için: <b>Taşıma (25):</b> dövize ya da altına geçince vazgeçtiğin TL faiz getirisi ile beklenen kur artışının karşılaştırması (TCMB Piyasa Katılımcıları Anketi). Reel faiz yüksekken dolar tutmak genelde para piyasası fonunun gerisinde kalır. <b>Trend (30):</b> 12 ay ve 3 ay getirisi, fiyatın 1 yıllık aralıktaki yeri; döviz ve emtiada en güçlü kanıtı olan ölçüt (zaman serisi momentumu). <b>Değerleme (15):</b> reel kur (TL aşırı değerli mi), altında ABD reel faizi, altın/gümüş oranı. <b>Makro (20):</b> Fed ve TCMB kararları, jeopolitik risk, merkez bankası altın alımları, CDS. <b>Risk (10):</b> oynaklık ve büyük düşüşler. "Alınabilir" 62+, "Uzak dur" 42 altı.</p></details></section>`;
+  bindFunds(v);
+  v.querySelectorAll("[data-unfx]").forEach(b=>b.onclick=()=>saveFxWatch(S.fxwatch.filter(c=>c!==b.dataset.unfx)));
+  const ff=$("fxAddForm"); if(ff) ff.onsubmit=async e=>{ e.preventDefault(); const c=$("fxAddCode").value.trim().toUpperCase(); if(!c) return;
+    if(fx.some(x=>x.code===c)){ toast(c+" zaten listede."); return; }
+    if(pending()){ toast("Bir güncelleme sürüyor, bitince tekrar dene."); return; }
+    if(await saveFxWatch([...S.fxwatch,c])){ toast(c+" eklendi, analiz ediliyor ("+estTxt("one")+")"); requestRefresh(false, c, "fx"); } };
+}
+async function saveFxWatch(codes){ try{ await S.db.doc("config/fxwatch").set({codes:[...new Set(codes)]}); return true; }catch(e){ toast("Liste kaydedilemedi."); return false; } }
+
+/* ---------- Gündem ---------- */
+const NCAT={para:"Para piyasası fonları",altin:"Altın",hisse:"Borsa / hisse",diger:"Borç. araçları ve diğer fonlar",doviz:"Dolar / döviz",mevduat:"Mevduat faizi"};
+const NEF={up:["↑ olumlu","up"],down:["↓ olumsuz","down"],mixed:["↕ karışık","muted"]};
+function renderGundem(){
+  const v=$("v-gundem"), m=S.market; if(!v) return;
+  if(!m){ v.innerHTML=`<section class="card empty">${S.ready?"Gündem ilk güncellemeden sonra görünecek.":"Yükleniyor…"}</section>`; return; }
+  const a=m.advice||{}, news=m.news||[];
+  const held=[...new Set(S.trades.filter(t=>t.status!=="closed").map(t=>t.code))].map(c=>asset(c)).filter(Boolean);
+  const mine=n=>{ const out=[]; (n.affects||[]).forEach(f=>held.forEach(h=>{ const hc=h.isStock?"hisse":h.cat; if(hc===f.cat||(n.codes||[]).includes(h.code)) out.push([h.code,f.effect]); })); const seen={}; return out.filter(([c])=>!seen[c]&&(seen[c]=1)); };
+  const I=k=>(m.indicators||[]).find(i=>i.k===k), pn=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isNaN(x)?null:x; };
+  const pf=pn(I("Politika faizi")?.v), inf=pn(I("Yıllık enflasyon")?.v), re=pf!=null&&inf!=null?pf-inf:null;
+  const chg=n=>{ const mm=String(n||"").match(/([+−-])\s*%?\s*([\d,]+)/); return mm?(mm[1]==="+"?1:-1)*parseFloat(mm[2].replace(",",".")):null; };
+  const stat=(l,v,d)=>v?`<div class="gs"><span>${l}</span><b class="num">${esc(String(v).replace(/\s*TL$/,""))}</b>${d!=null?`<i class="num ${d>=0?"up":"down"}">${d>=0?"▲":"▼"} %${Math.abs(d).toLocaleString("tr-TR",{maximumFractionDigits:2})}</i>`:"<i>&nbsp;</i>"}</div>`:"";
+  const blk=(tag,txt)=>txt?`<div class="gb"><span class="gtag">${tag}</span><p>${esc(clean(txt))}</p></div>`:"";
+  const wl=(a.watch||[]).map(w=>{ const i=w.indexOf(": "); const d=i>0&&i<22?w.slice(0,i):"", t=i>0&&i<22?w.slice(i+1).trim():w; return `<div class="tl"><span class="tld">${esc(d||"•")}</span><span class="tlt">${esc(t)}</span></div>`; }).join("");
+  v.innerHTML=`<section class="card ghero"><div class="horizon"><h2>Bugün</h2><span class="small muted">${esc(updLbl())}</span></div>
+      <div class="gstats">${stat("BIST 100",I("BIST 100")?.v,chg(I("BIST 100")?.note))}${stat("Dolar/TL",I("Dolar/TL")?.v,chg(I("Dolar/TL")?.note))}${stat("Gram altın",I("Gram altın")?.v,chg(I("Gram altın")?.note))}${re!=null?`<div class="gs"><span class="g" data-g="Reel faiz">Reel faiz</span><b class="num ${re>=0?"up":"down"}">${re>=0?"+":""}%${re.toLocaleString("tr-TR",{maximumFractionDigits:1})}</b><i>${re>=0?"TL'de kâr":"TL eriyor"}</i></div>`:""}</div>
+      ${blk("Genel",a.summary)}${blk("Hisse",a.stocks?.summary)}${blk("Döviz/altın",a.fx?.summary)}</section>
+    ${wl?`<section class="card"><h2>Takvim</h2><div class="tlw">${wl}</div></section>`:""}
+    <section class="card"><div class="horizon"><h2>Önemli haberler</h2><span class="small muted">${news.length} haber</span></div>
+    ${news.length?news.map((n,i)=>{ const k="n:"+i, mh=mine(n); return `<div class="ni x${xo(k)}" data-k="${esc(k)}">
+      <div class="xh"><span class="nimp nimp-${esc(n.impact||"orta")}" aria-hidden="true"></span><b>${esc(n.title)}</b>${n.impact==="yuksek"?' <span class="pick">ÖNEMLİ</span>':""}
+        <div class="small muted">${esc(fmtDate(n.date)||"")}${n.source?" · "+esc(n.source):""}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">${(n.affects||[]).map(f=>`<span class="chip"><span class="${(NEF[f.effect]||NEF.mixed)[1]}">${(NEF[f.effect]||NEF.mixed)[0]}</span> ${esc(NCAT[f.cat]||f.cat)}</span>`).join("")}</div></div>
+      <div class="more nbody"><div class="nsec"><span class="nlab">Ne oldu?</span><p>${esc(n.what)}</p></div>
+        <div class="nsec"><span class="nlab">Ne anlama geliyor?</span><p>${esc(n.meaning)}</p></div>
+        ${(n.affects||[]).length?`<div class="nsec"><span class="nlab">Neyi etkiler?</span>${n.affects.map(f=>`<div class="naff"><span class="${(NEF[f.effect]||NEF.mixed)[1]}">${(NEF[f.effect]||NEF.mixed)[0].split(" ")[0]}</span><div><b>${esc(NCAT[f.cat]||f.cat)}</b><span class="muted"> — ${esc(f.why||"")}</span></div></div>`).join("")}</div>`:""}
+        ${mh.length?`<div class="nmine">Senin portföyün: ${mh.map(([c,e])=>`<b>${esc(c)}</b> <span class="${(NEF[e]||NEF.mixed)[1]}">${(NEF[e]||NEF.mixed)[0]}</span>`).join(" · ")}</div>`:""}
+        ${n.url?`<a class="nlink" href="${esc(n.url)}" target="_blank" rel="noopener">Haberin kaynağı ↗</a>`:""}</div></div>`}).join("")
+      : `<p class="note">Haberler bir sonraki tam güncellemede eklenecek.</p>`}</section>`;
+}
+/* ---------- Piyasa ---------- */
+function indBlock(list){ if(!list.length) return "";
+  const get=k=>list.find(i=>i.k===k), pn=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isNaN(x)?null:x; };
+  const used=new Set(), tone=n=>/bp|baz puan/i.test(n||"")?"":/[−-]\s*%|[−-]\d|düş/i.test(n||"")?"down":/\+\s*%|\+\d|yüksel|art/i.test(n||"")?"up":"";
+  const tile=(i,extra="")=>{ if(!i) return ""; used.add(i.k); const lab=i.k.replace(" (12 ay)",""), g=GLOSS[i.k]?"g":"";
+    return `<div class="it ${extra}"><span class="itl ${g}" ${g?`data-g="${esc(i.k)}"`:""}>${esc(lab)}${/12 ay/.test(i.k)?' <em>12 ay sonra</em>':""}</span><b class="num">${esc(i.v)}</b>${i.note?`<span class="itn ${tone(i.note)}">${esc(i.note)}</span>`:""}</div>`; };
+  const pf=pn(get("Politika faizi")?.v), inf=pn(get("Yıllık enflasyon")?.v), re=pf!=null&&inf!=null?pf-inf:null;
+  const real=re==null?"":`<div class="it hero"><span class="itl g" data-g="Reel faiz">Reel faiz</span><b class="num ${re>=0?"up":"down"}">${re>=0?"+":""}%${re.toLocaleString("tr-TR",{maximumFractionDigits:1})}</b><span class="itn">${re>=0?"Faiz enflasyonun üstünde: TL'de tutmak kazandırıyor":"Faiz enflasyonun altında: TL değer kaybediyor"}</span></div>`;
+  const sec=(t,keys)=>{ const h=keys.map(k=>tile(get(k))).join(""); return h?`<div class="ig"><div class="igh">${t}</div><div class="igrid">${h}</div></div>`:""; };
+  const a=sec("Faiz ve enflasyon",["Politika faizi","Yıllık enflasyon","Beklenen faiz (12 ay)","Beklenen enflasyon (12 ay)"]);
+  const b=sec("Piyasalar",["BIST 100","Gram altın","Dolar/TL","Beklenen dolar (12 ay)"]);
+  const c=sec("Takvim",["Sonraki PPK"]);
+  const rest=list.filter(i=>!used.has(i.k)); const r=rest.length?`<div class="ig"><div class="igh">Diğer</div><div class="igrid">${rest.map(i=>tile(i)).join("")}</div></div>`:"";
+  return `<section class="card"><div class="horizon"><h2>Göstergeler</h2><span class="small muted">${esc(updLbl())}</span></div>${real}${a}${b}${c}${r}</section>`; }
+function renderPiyasa(){
+  const v=$("v-piyasa"), m=S.market;
+  if(!m){ v.innerHTML=`<section class="card empty">${S.ready?"Piyasa verisi ilk güncellemeden sonra görünecek.":"Yükleniyor…"}</section>`; return; }
+  const groups=["para","altin","hisse","diger"].map(c=>({c, list:(m.funds||[]).filter(f=>f.cat===c)})).filter(g=>g.list.length);
+  v.innerHTML = `
+    ${indBlock(m.indicators||[])}
+    ${moversBlock(m.stocks||[])}
+`;
+}
+function fundsHtml(m){
+  const groups=["para","altin","hisse","diger"].map(c=>({c, list:applyLF("oneri",(m.funds||[]).filter(f=>f.cat===c&&akVis(f)))})).filter(g=>g.list.length);
+  return `    ${S.db?`<section class="card"><div class="horizon"><h2>Fonlar <span class="small muted">${(m.funds||[]).length}</span></h2>${quickBtn("fon")}</div>${lfBar("oneri","Fon ara: kod ya da ad")}<form id="fAddForm" class="addrow"><input id="fAddCode" placeholder="Fon ekle (ör. ZBJ)" maxlength="4" autocomplete="off" aria-label="Fon kodu"><button class="btn" type="submit">Ekle</button></form>
+      ${MYB.length?`<p class="small muted" style="margin:8px 0 0">Filtre: ${BANKS.filter(b=>MYB.includes(b[0])).map(b=>esc(b[1])).join(", ")} · <button class="linkbtn" id="setBtn2">değiştir</button></p>`:""}
+      ${S.fwatch.filter(c=>!(m.funds||[]).some(f=>f.code===c)).length?`<p class="note">Analiz ediliyor: ${S.fwatch.filter(c=>!(m.funds||[]).some(f=>f.code===c)).map(esc).join(", ")}</p>`:""}`:`<section class="card">`}
+      ${groups.length?groups.map(g=>`<div class="fgrp"><div class="fgh">${CAT[g.c]} <span>${g.list.length}</span></div>${g.list.map(f=>listRow("f",f)).join("")}</div>`).join(""):`<div class="empty">Aramaya uyan fon yok.</div>`}</section>
+    <section class="card"><details><summary class="code" style="cursor:pointer">Fon puanı nasıl hesaplanıyor?</summary>
+      <p class="why" style="margin-top:8px"><b>Getiri (30):</b> tek döneme değil 1, 3, 6 ay ve 1 yılın tutarlılığına bakılır; geçen yılın en iyi fonları ertesi yıl çoğunlukla öne çıkmıyor. <b>Maliyet (20):</b> yönetim ücreti; araştırmalarda gelecek performansı en güvenilir öngören ölçüt düşük ücret. Endeks ve altın fonunda takip ettiği varlıktan sapma da burada. <b>Risk kontrolü (25):</b> TEFAS risk değeri, en büyük düşüş, Sharpe oranı. <b>Kalite (15):</b> fon büyüklüğü, yatırımcı sayısı, fon yaşı, portföy şirketi. <b>Ortama uyum (10):</b> faiz, enflasyon ve kur ortamının fon türünü destekleyip desteklemediği.</p><p class="why">Ağırlıklar sabit değil: her güncellemede eski puanlar sonraki gerçek getiriyle karşılaştırılır, isabetli ölçütlerin payı artar, yanıltanların azalır (çubuklardaki üst sınırlar güncel ağırlıkları gösterir).</p></details></section>`;
+}
+function bindFunds(v){
+  v.querySelectorAll("[data-buy]").forEach(b=> b.onclick = () => openBuy(b.dataset.buy));
+  bindRowBtns(v);
+  const s2=$("setBtn2"); if(s2) s2.onclick=openSettings;
+  v.querySelectorAll("[data-funwatch]").forEach(b=> b.onclick = () => saveFundWatch(S.fwatch.filter(c=>c!==b.dataset.funwatch)));
+  const ff=$("fAddForm"); if(ff) ff.onsubmit = async e => { e.preventDefault(); const c=$("fAddCode").value.trim().toUpperCase();
+    if(!/^[A-Z0-9]{3,4}$/.test(c)){ toast("Geçerli bir TEFAS fon kodu yaz (3 harf, ör. ZBJ)."); return; }
+    if((S.market?.funds||[]).some(f=>f.code===c) && !S.fwatch.includes(c)){ toast(c+" zaten listede."); return; }
+    if(pending()){ toast("Bir güncelleme sürüyor, bitince tekrar dene."); return; }
+    if(await saveFundWatch([...S.fwatch,c])){ toast(c+" eklendi, analiz ediliyor ("+estTxt("one")+")"); requestRefresh(false, c, true); } };
+}
+function scanBlock(m){
+  const sc=m.fundScan, busy=pending() && S.status?.only==="__scan__";
+  const age = sc?.at ? Math.floor((Date.now()-new Date(sc.at).getTime())/864e5) : null;
+  return `<section class="card"><div class="horizon"><h2>Fon taraması</h2><span class="small muted">${busy||(pending()&&S.status?.scan)?"taranıyor…":scanDue()?"sonraki güncellemede":`sonraki: ${Math.max(1,6-age)} gün sonra`}</span></div>
+    ${sc ? `<p class="small muted" style="margin:0">${fmtDate(sc.at)}${age!=null?` (${age} gün önce)`:""} · ${num(sc.coverage,0)} fon incelendi</p>
+      <p class="summary clamp${xo("scs")}" data-k="scs">${esc(sc.summary)}</p>
+      <div>${(sc.leaders||[]).filter(l=>akVis(l)).map(l=>{const k="sc:"+l.code; return `<div class="aitem x${xo(k)}" data-k="${esc(k)}"><span class="pct xh">${l.score!=null?num(l.score,0):"–"}</span>
+        <div class="xh"><span class="code">${esc(l.code)}</span> <span class="chip c-${esc(l.cat)}">${esc(CAT[l.cat]||l.cat)}</span><div class="name">${esc(l.name)}</div></div><p class="why">${esc(l.why)}</p></div>`}).join("")}</div>`
+    : `<p class="note">TEFAS'taki tüm ana fon kategorileri haftada bir, üstteki "Şimdi güncelle" ile birlikte otomatik taranır.</p>`}
+  </section>`;
+}
+async function saveFundWatch(codes){
+  try{ await S.db.doc("config/fundwatch").set({codes:[...new Set(codes)]}); return true; }catch(e){ toast("Liste kaydedilemedi."); return false; }
+}
+
+function moversBlock(st){
+  const l=st.filter(x=>typeof x.d1==="number"); if(!l.length) return "";
+  const up=l.filter(x=>x.d1>0).sort((a,b)=>b.d1-a.d1).slice(0,5), dn=l.filter(x=>x.d1<0).sort((a,b)=>a.d1-b.d1).slice(0,5);
+  const mx=Math.max(...l.map(x=>Math.abs(x.d1)),1);
+  const row=x=>`<button class="mv" data-mv="${esc(x.code)}"><span class="mvc">${esc(x.code)}</span><span class="mvb"><i class="${x.d1>=0?"p":"n"}" style="width:${Math.max(6,Math.abs(x.d1)/mx*100)}%"></i></span><span class="num mvp ${cls(x.d1)}">${pc(x.d1,1)}</span></button>`;
+  const col=(t,a,e)=>`<div class="mvcol"><div class="mvh">${t}</div>${a.length?a.map(row).join(""):`<p class="note" style="margin:4px 0">${e}</p>`}</div>`;
+  return `<section class="card"><div class="horizon"><h2>Günün hisseleri</h2><span class="small muted">listedeki ${l.length} hisse</span></div>
+    <div class="mvgrid">${col("▲ Yükselen",up,"Bugün yükselen yok")}${col("▼ Düşen",dn,"Bugün düşen yok")}</div></section>`;
+}
+
+/* ---------- Öneri (yatırım planı) ---------- */
+let PL={amt:0, fon:true, hisse:false, vade:"kisa", res:null, busy:false};
+try{ Object.assign(PL, JSON.parse(localStorage.getItem("fp-plan")||"{}"), {busy:false, res:null, amt:0}); }catch(_){}
+const savePL=()=>{ try{ const {busy,res,amt,...o}=PL; localStorage.setItem("fp-plan",JSON.stringify(o)); }catch(_){} };
+function renderPlan(){
+  const v=$("planBox"); if(!v) return; const pf=curPf(); if(!pf){ v.innerHTML=""; return; }
+  const rows=portfolioRows(pf), r=PL.res&&PL.res.pf===pf.id?PL.res:null, V=r&&!r.amount?{yatir:["Portföy iyi durumda"],kademeli:["Bazı düzeltmeler önerilir"],bekle:["Savunmaya geç"]}:{yatir:["Yatırım için uygun"],kademeli:["Kademeli gir"],bekle:["Şimdilik bekle"]};
+  v.innerHTML=`<section class="card"><h2>Ne yapayım?</h2>
+    <p class="note" style="margin-top:0">${rows.length?"Elindeki pozisyonlar için Kal / Ekle / Azalt / Çık önerisi verir.":"Portföy boş."} Üstüne para eklemek istersen tutarı da yaz, onu nereye koyacağını söyler.</p>
+    <div class="formgrid"><label for="plAmt">Eklemek istediğim tutar (TL, isteğe bağlı)<input id="plAmt" type="number" inputmode="decimal" min="0" placeholder="0" value="${PL.amt?esc(PL.amt):""}"></label></div>
+    <div class="quick" style="margin:8px 0">${[0,10000,25000,50000,100000].map(n=>`<button data-pq="${n}">${n?n.toLocaleString("tr-TR"):"Yok"}</button>`).join("")}</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin:6px 0">
+      <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="plFon" ${PL.fon?"checked":""}>Fon</label>
+      <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="plHis" ${PL.hisse?"checked":""}>Hisse</label>
+      <span style="flex:1"></span>
+      <label style="display:flex;gap:6px;align-items:center"><input type="radio" name="plV" value="kisa" ${PL.vade==="kisa"?"checked":""}>1–3 ay</label>
+      <label style="display:flex;gap:6px;align-items:center"><input type="radio" name="plV" value="uzun" ${PL.vade==="uzun"?"checked":""}>1 yıl+</label></div>
+    ${MYB.length?`<p class="small muted" style="margin:4px 0">Fonlar bankalarından seçilir: ${BANKS.filter(b=>MYB.includes(b[0])).map(b=>esc(b[1])).join(", ")}</p>`:""}
+    <div class="row"><button class="btn" id="plGo" ${PL.busy||!S.market?"disabled":""}>${PL.busy?"Değerlendiriliyor…":"Öneri al"}</button></div></section>
+  ${r?`<section class="card"><div class="horizon"><h2>${esc((V[r.verdict]||[r.verdict])[0])}</h2><span class="small muted">${esc(r.at||"")}</span></div>
+    <p class="summary">${esc(r.reason)}</p>
+    ${(r.positions||[]).length?`<h3 style="margin:10px 0 2px">Elindekiler</h3>${r.positions.map(p=>`<div style="padding:6px 0;border-top:1px solid var(--line)"><span class="code">${esc(p.code)}</span> <span class="adv adv-${esc(p.k)}">${esc(p.label)}</span><p class="why" style="margin:2px 0 0">${esc(p.why)}</p></div>`).join("")}`:""}
+    ${r.amount>0?`<h3 style="margin:12px 0 2px">Eklenecek ${tl(r.amount)}</h3>`:""}
+    ${r.amount>0?`<div class="alloc" aria-hidden="true">${r.items.map(it=>`<i class="bar-${esc(it.cat)}" style="width:${it.tl/r.amount*100}%"></i>`).join("")}${r.cash>0?`<i style="width:${r.cash/r.amount*100}%;background:var(--line)"></i>`:""}</div>`:""}
+    <div>${r.items.map(it=>`<div style="padding:8px 0;border-top:1px solid var(--line)"><div style="display:flex;justify-content:space-between;gap:8px"><div><span class="code">${esc(it.code)}</span> <span class="small muted">%${num(it.tl/r.amount*100,0)}</span><div class="name">${esc(it.name||"")}</div></div><div style="text-align:right"><b class="num">${tl(it.tl)}</b><div class="small muted num">${it.units?num(it.units,0)+" adet":""}</div></div></div><p class="why" style="margin:4px 0 0">${esc(it.why)}</p></div>`).join("")}
+    ${r.cash>0?`<div style="padding:8px 0;border-top:1px solid var(--line)"><div style="display:flex;justify-content:space-between"><span class="code">Nakit / bekle</span><b class="num">${tl(r.cash)}</b></div><p class="why" style="margin:4px 0 0">${esc(r.cashWhy||"Şimdilik yatırma, piyasa netleşince gir.")}</p></div>`:""}</div>
+    ${r.steps?`<p class="note">${esc(r.steps)}</p>`:""}
+    ${S.db&&S.uid&&r.items.length?`<div class="row"><button class="btn" id="plAdd">Önerilen alımları ${esc(pf.name)} portföyüne ekle</button></div>`:""}
+  </section>`:""}`;
+  const q=id=>v.querySelector(id);
+  q("#plAmt").oninput=e=>{PL.amt=Number(e.target.value)||0; savePL();};
+  v.querySelectorAll("[data-pq]").forEach(b=>b.onclick=()=>{PL.amt=Number(b.dataset.pq); q("#plAmt").value=PL.amt||""; savePL();});
+  q("#plFon").onchange=e=>{PL.fon=e.target.checked; savePL();};
+  q("#plHis").onchange=e=>{PL.hisse=e.target.checked; savePL();};
+  v.querySelectorAll("[name=plV]").forEach(x=>x.onchange=()=>{PL.vade=x.value; savePL();});
+  q("#plGo").onclick=runPlan;
+  const add=q("#plAdd"); if(add) add.onclick=()=>addPlan(pf.id);
+}
+function planBase(amount, types, vade){
+  const A=S.market.advice||{}, out=[];
+  const parts=[]; if(types.fon) parts.push((vade==="kisa"?A.short:A.long)?.items||[]); if(types.hisse) parts.push((vade==="kisa"?A.stocks?.short:A.stocks?.long)?.items||[]);
+  const share=amount/parts.length;
+  parts.forEach(items=>{ const ok=items.filter(it=>{const a=asset(it.code); return a && (a.isStock||akVis(a));}); const tot=ok.reduce((s,i)=>s+Number(i.weight||0),0)||1;
+    ok.forEach(it=>out.push({code:it.code, tl:share*Number(it.weight)/tot, why:it.why})); });
+  return out;
+}
+async function runPlan(){
+  if(!S.market) return; const pf=curPf(); if(!pf) return;
+  const amount=Math.max(0,Number(PL.amt)||0), rows=portfolioRows(pf), val=rows.reduce((s,x)=>s+x.value,0);
+  if(!rows.length && !amount){ toast("Portföy boş; eklemek istediğin tutarı yaz."); return; }
+  if(amount && !PL.fon && !PL.hisse){ toast("Fon ya da hisseden en az birini seç."); return; }
+  PL.busy=true; renderPlan();
+  const m=S.market, funds=(m.funds||[]).filter(akVis), base=amount?planBase(amount,PL,PL.vade):[];
+  const ACT={kal:["kal","Kal"],ekle:["ekle","Ekle"],azalt:["kar","Azalt"],kar:["kar","Kısmen kâr al"],cik:["cik","Çık"]};
+  const pos=rows.map(r=>{ const a=asset(r.code); return {kod:r.code, tur:a?.isStock?"hisse":a?.cat, alis:r.buyDate||r.priceDate, gun:r.days, yatirilan:Math.round(r.amount), deger:Math.round(r.value), karZararYuzde:+r.pnlPct.toFixed(2), pay:val?+(r.value/val*100).toFixed(1):0, puan:a?.score, sinyal:a?.signal, risk:a?.risk??a?.riskValue, m1:a?.m1, m3:a?.m3, y1:a?.y1, kuralOnerisi:advise(r,val)[1]}; });
+  let res=null;
+  if(S.sample){
+    const ctx={tarih:new Date().toISOString().slice(0,10), portfoy:pos, eklenecekTutar:amount, vade:PL.vade==="kisa"?"1–3 ay":"1 yıl ve üstü", yeniParaTurleri:[PL.fon&&"fon",PL.hisse&&"hisse"].filter(Boolean),
+      gostergeler:m.indicators, gorus:m.advice?.summary, hisseGorus:m.advice?.stocks?.summary, olaylar:m.advice?.watch,
+      modelDagilim:base.map(b=>({kod:b.code,tl:Math.round(b.tl)})),
+      fonlar:funds.map(f=>({kod:f.code,ad:f.name,tur:f.cat,puan:f.score,risk:f.riskValue,m1:f.m1,m3:f.m3,y1:f.y1})),
+      hisseler:(PL.hisse||rows.some(r=>asset(r.code)?.isStock))?(m.stocks||[]).map(x=>({kod:x.code,puan:x.score,sinyal:x.signal,risk:x.risk,m1:x.m1,m3:x.m3,y1:x.y1,hedefPot:x.targetUpside})):[]};
+    const prompt=`Türkiye'de bireysel bir yatırımcının portföyü için karar veriyorsun. Yalnızca aşağıdaki verilere dayan; listede olmayan kod önerme, sayı uydurma. Stopaj (para piyasası/altın/diğer fonlarda kazancın %17,5'i, hisse yoğun fonlarda %0) ve kısa sürede al-sat maliyetini dikkate al: gereksiz satış önerme.
+1) Elindeki her pozisyon için karar: "kal", "ekle", "azalt", "kar" (kısmen kâr al) ya da "cik"; tek cümle gerekçe (kuralOnerisi bir ipucudur, katılmıyorsan nedenini yaz).
+2) eklenecekTutar > 0 ise piyasa koşuluna karar ver: "yatir", "kademeli" ya da "bekle" ("bekle"de çoğunu para piyasası fonunda park et ya da cash'e yaz). Tutarı yalnızca yeniParaTurleri'nden dağıt; mevcut portföyle birlikte dengeli bir dağılım hedefle (elindekine ekleme de yapabilirsin); tek hisse ≤%20, tek sektör ≤%40; "uzak" sinyalli ya da m3<0 ve y1<0 hisseyi kısa vadede önerme; piyasa trendi zayıfsa (BIST 100 1 yıl getirisi enflasyonun altında ve 3 ay eksi) hisse payını sınırla; belirsizlikte kademeli alım öner; aynı türde puan farkı ≤5 olan fonlar arasında geçiş önerme. eklenecekTutar 0 ise items boş, verdict mevcut portföy için genel durum ("yatir"=iyi gidiyor/koru, "kademeli"=bazı düzeltmeler gerek, "bekle"=riskli, savunmaya geç).
+YALNIZCA şu JSON'u döndür:
+{"verdict":"yatir|kademeli|bekle","reason":"2 cümle","positions":[{"code":"KOD","action":"kal|ekle|azalt|kar|cik","why":"tek cümle"}],"items":[{"code":"KOD","tl":12345,"why":"tek cümle"}],"cash":0,"cashWhy":"","steps":"gerekirse ne zaman/hangi koşulda tek cümle, yoksa boş"}
+items tl toplamı + cash = ${amount}.
+VERİ: ${JSON.stringify(ctx)}`;
+    try{ const out=await S.sample(prompt,{modelTier:"default",cache:false}); const t=out.text||""; res=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1)); }
+    catch(e){ res=null; if(e?.code==="not_granted") toast("Claude'a sorma izni verilmedi; kural tabanlı öneri gösteriliyor."); }
+  }
+  if(!res) res={verdict:amount?"yatir":"kademeli", reason:"Uygulamanın kurallarına ve mevcut dağılımına göre hesaplandı (Claude yorumu alınamadı).", positions:[], items:base, cash:0};
+  const posMap=Object.fromEntries((res.positions||[]).map(p=>[String(p.code||"").toUpperCase(),p]));
+  const positions=[...new Set(rows.map(r=>r.code))].map(c=>{ const r=rows.find(x=>x.code===c), p=posMap[c];
+    if(p&&ACT[p.action]) return {code:c,k:ACT[p.action][0],label:ACT[p.action][1],why:p.why||""};
+    const [k,label,why]=advise(r,val); return {code:c,k,label,why}; });
+  let items=amount?(res.items||[]).map(it=>{ const a=asset(String(it.code||"").toUpperCase()); if(!a||(!a.isStock&&!akVis(a))||(a.isStock?!PL.hisse:!PL.fon)) return null;
+    const want=Math.max(0,Number(it.tl)||0), price=Number(a.price)||0, units=price>0?Math.floor(want/price):0;
+    return {code:a.code, name:a.name, cat:a.isStock?"hisse":a.cat, isStock:!!a.isStock, price, units, tl:units>0?units*price:want, why:it.why||""}; }).filter(x=>x&&x.tl>0):[];
+  const used=items.reduce((s,i)=>s+i.tl,0);
+  res={...res, pf:pf.id, positions, items, amount, cash:amount?Math.max(0,Math.round(amount-used)):0, at:new Date().toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})};
+  if(res.cash>0 && res.cash<amount*0.02 && !res.cashWhy) res.cashWhy="Adet yuvarlamasından kalan.";
+  PL.res=res; PL.busy=false; savePL(); renderPlan();
+}
+async function addPlan(pf){
+  const r=PL.res; if(!r||!pf) return;
+  const today=new Date(Date.now()+TR).toISOString().slice(0,10);
+  try{ for(const it of r.items){ const a=asset(it.code); await tradesCol().add({kind:"trade", pf, code:it.code, amount:it.tl, units:it.units||it.tl/it.price, price:it.price, buyDate:today, priceDate:a?.priceDate||today, at:new Date().toISOString(), status:"open"}); }
+    S.pf=pf; try{localStorage.setItem("fp-pf",pf)}catch(_){} toast(r.items.length+" pozisyon eklendi"); S.tab="sanal"; showTab(); renderSanal(); }
+  catch(e){ toast("Kaydedilemedi."); }
+}
+
+/* ---------- Ekleme sayfası ---------- */
+function openBuy(code, tr){
+  code = tr ? tr.code : code;
+  if(!S.pfs.length){ toast("Önce Portföy sekmesinden bir portföy oluştur."); S.tab="sanal"; showTab(); return; }
+  const all=[...(S.market?.funds||[]),...(S.market?.stocks||[]),...(S.market?.fx||[])];
+  const today=new Date(Date.now()+TR).toISOString().slice(0,10);
+  const scrim=document.createElement("div"); scrim.className="scrim";
+  const sh=document.createElement("div"); sh.className="sheet"; sh.setAttribute("role","dialog");
+  sh.innerHTML=`<h2>${tr?"Pozisyonu düzenle":"Pozisyon ekle"}</h2>
+    <div class="formgrid">
+      <label for="bPf">Portföy<select id="bPf">${S.pfs.map(p=>`<option value="${esc(p.id)}" ${p.id===(tr?.pf||curPf()?.id)?"selected":""}>${esc(p.name)}</option>`).join("")}</select></label>
+      <label for="bCode">Fon / hisse<select id="bCode">${all.map(a=>`<option value="${esc(a.code)}" ${a.code===code?"selected":""}>${esc(a.code)} · ${esc(a.name)}</option>`).join("")}<option value="__new">+ Listede yok, kodunu yazacağım</option></select></label>
+      <div id="bNewBox" hidden style="display:flex;gap:8px;grid-column:1/-1">
+        <label style="flex:1">Kod<input id="bNew" maxlength="12" autocomplete="off" placeholder="ör. NMP, THYAO" style="text-transform:uppercase;width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font:16px var(--f-body)"></label>
+        <label style="flex:1">Türü<select id="bNewT"><option value="f">Fon</option><option value="s">Hisse</option><option value="x">Döviz/altın</option></select></label></div>
+      <label for="bDate">Alış tarihi<input id="bDate" type="date" max="${today}" value="${esc(tr?.buyDate||tr?.priceDate||today)}"></label>
+      <label for="bAmt">Tutar (TL)<input id="bAmt" type="number" inputmode="decimal" min="1" step="any" value="${tr?tr.amount:10000}"></label>
+      <label for="bUnits">Adet <span class="muted">(isteğe bağlı)</span><input id="bUnits" type="number" inputmode="decimal" min="0" step="any" value="${tr?.units??""}"></label>
+      <label for="bPrice">Alış fiyatı <span class="muted">(isteğe bağlı)</span><input id="bPrice" type="number" inputmode="decimal" min="0" step="any" placeholder="${tr?num(tr.price,6):""}"></label>
+    </div>
+    <p class="note" id="bHint"></p>
+    <div class="quick">${[5000,10000,50000,100000,1000000].map(n=>`<button data-q="${n}">${n.toLocaleString("tr-TR")}</button>`).join("")}</div>
+    <div class="row"><button class="btn ghost" id="bCancel">Vazgeç</button><button class="btn" id="bOk">${tr?"Kaydet":"Ekle"}</button></div>`;
+  document.body.append(scrim,sh);
+  const q=id=>sh.querySelector(id), close=()=>{scrim.remove();sh.remove();};
+  const isNew=()=>q("#bCode").value==="__new";
+  const hint=()=>{ const a=asset(q("#bCode").value); q("#bNewBox").hidden=!isNew();
+    q("#bHint").textContent = isNew() ? "Listede olmayan kalem: adet ya da alış fiyatını gir. Kaydedince eklediklerine alınır ve verileri birkaç dakika içinde çekilir." : a ? `Güncel fiyat ${num(a.price,6)} (${fmtDate(a.priceDate)}). Adet girersen alış fiyatı tutar ÷ adet olarak hesaplanır; adet boşsa alış fiyatı kullanılır; ikisi de boşsa güncel fiyat.` : ""; };
+  hint(); q("#bCode").onchange=hint;
+  scrim.onclick=close; q("#bCancel").onclick=close;
+  sh.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{q("#bAmt").value=b.dataset.q;});
+  q("#bOk").onclick=async()=>{
+    const nw=isNew(), nc=(q("#bNew").value||"").trim().toLocaleUpperCase("tr").replace(/[^A-Z0-9ÇĞİÖŞÜ]/g,""), nt=q("#bNewT").value;
+    const a=nw ? (asset(nc) || (nc ? {code:nc, price:NaN} : null)) : asset(q("#bCode").value), amt=Number(q("#bAmt").value), units=Number(q("#bUnits").value)||0, pIn=Number(q("#bPrice").value)||0, date=q("#bDate").value||today;
+    if(!a || !(amt>0)){ toast(nw&&!nc?"Kodu yaz.":"Fon/hisse ve tutar gerekli."); return; }
+    if(!(Number(a.price)>0) && !(units>0) && !(pIn>0)){ toast("Bu kalemin güncel fiyatı yok; adet ya da alış fiyatı gir."); return; }
+    const price = units>0 ? amt/units : pIn>0 ? pIn : Number(a.price);
+    if(date<today && !(pIn>0) && !(units>0)){ toast("Geçmiş tarih için adet ya da alış fiyatı gir."); return; }
+    const rec={kind:"trade", pf:q("#bPf").value, code:a.code, amount:amt, units: units>0?units:amt/price, price, buyDate:date, priceDate:date};
+    if(tr){ try{ await tradesCol().doc(tr.id).update(rec); close(); toast(a.code+" güncellendi"); }catch(e){ toast("Kaydedilemedi."); } return; }
+    try{ await tradesCol().add({...rec, at:new Date().toISOString(), status:"open"});
+      S.pf=q("#bPf").value; try{localStorage.setItem("fp-pf",S.pf)}catch(_){}
+      close(); toast(`${a.code}: ${tl(amt)} eklendi`); S.tab="sanal"; showTab(); renderSanal();
+      if(nw && !asset(a.code)){ const W=nt==="s"?S.watch:nt==="f"?S.fwatch:S.fxwatch; const nx=[...new Set([...W,a.code])];
+        await (nt==="s"?saveWatch(nx):nt==="f"?saveFundWatch(nx):saveFxWatch(nx));
+        setTimeout(()=>requestRefresh(false, a.code, nt==="x"?"fx":nt==="f"), 400); } }
+    catch(e){ toast("Kaydedilemedi."); }
+  };
+}
+
+const ICONS={gundem:'<path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 8h3v9a2 2 0 0 1-2 2"/><path d="M7 9h7M7 12h7M7 15h4"/>',
+ oneri:'<path d="M12 3v9l7.5 4.5"/><circle cx="12" cy="12" r="9"/>',
+ hisse:'<path d="M3 17l6-6 4 4 7-8"/><path d="M15 7h5v5"/>',
+ doviz:'<circle cx="9" cy="9" r="5.5"/><path d="M14.5 10.2A5.5 5.5 0 1 1 10.2 14.5"/><path d="M9 6.5v5M7.5 8h3"/>',
+ sanal:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/>',
+ piyasa:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'};
+Object.entries(ICONS).forEach(([k,p])=>{ const b=$("t-"+k); if(b && !b.querySelector("svg")) b.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true">${p}</svg><span>${b.textContent}</span>`; });
+/* ---------- Görünüm (sekme ve kart düzeni) ---------- */
+const TABS={gundem:"Gündem",oneri:"Fon",hisse:"Hisse",doviz:"Döviz",sanal:"Portföy",piyasa:"Piyasa"};
+let LAY={tabs:Object.keys(TABS),hiddenTabs:[],cards:{}};
+try{ const l=JSON.parse(localStorage.getItem("fp-layout")||"null"); if(l) LAY={...LAY,...l}; }catch(_){}
+LAY.tabs=[...LAY.tabs.filter(t=>TABS[t]),...Object.keys(TABS).filter(t=>!LAY.tabs.includes(t))];
+const saveLay=()=>{ try{localStorage.setItem("fp-layout",JSON.stringify(LAY))}catch(_){} savePrefs(); };
+function savePrefs(){ if(!S.db||!S.uid||!S.prefsLoaded) return; try{ tradesCol().doc("prefs").set({kind:"prefs", layout:LAY, theme:TH, autoq:AUTOQ, at:new Date().toISOString()}); }catch(e){} }
+function loadPrefs(d){ if(!d) return; if(d.layout) { LAY={tabs:Object.keys(TABS),hiddenTabs:[],cards:{},...d.layout}; try{localStorage.setItem("fp-layout",JSON.stringify(LAY))}catch(_){} }
+  if(d.theme){ TH={...TH,...d.theme}; try{localStorage.setItem("fp-theme",JSON.stringify(TH))}catch(_){} applyTheme(); notifyBars(); }
+  if(Array.isArray(d.autoq)){ AUTOQ=d.autoq; try{localStorage.setItem("fp-autoq",JSON.stringify(AUTOQ))}catch(_){} }
+  try{ applyTabs(); showTab(); Object.keys(TABS).forEach(applyLayout); }catch(e){} }
+const CARDS={};
+function cardKey(el,i){
+  if(el.dataset.card) return el.dataset.card;
+  if(el.id==="planBox") return "Ne yapayım?";
+  if(el.querySelector("#pfSel")) return "Portföy seçimi";
+  const h=el.querySelector("h2,h3,summary"); let t=h?h.textContent:"";
+  t=t.split("·")[0].replace(/\d[\d.,]*/g,"").replace(/%/g,"").replace(/\s+/g," ").trim();
+  if(/özet$/i.test(t)) t="Portföy özeti";
+  return t||("Kart "+(i+1));
+}
+function applyLayout(tab){
+  const v=$("v-"+tab); if(!v) return;
+  const els=[...v.children]; if(!els.length) return;
+  const keys=els.map((e,i)=>{ const k=cardKey(e,i); e.dataset.lk=k; return k; });
+  CARDS[tab]=[...new Set(keys)];
+  const c=LAY.cards[tab]||{}, ord=c.order||[], hid=c.hidden||[], first={hisse:["Hisseler"],oneri:["Fonlar","Para piyasası","Altın","Hisse","Diğer","Gümüş","Döviz"],doviz:["Döviz"]}[tab]||[];
+  const rank=k=>{ const fi=first.indexOf(k); if(fi>=0) return fi-100; const i=ord.indexOf(k); return i>=0?i:1000+keys.indexOf(k); };
+  els.sort((a,b)=>rank(a.dataset.lk)-rank(b.dataset.lk)).forEach(e=>{ e.hidden=hid.includes(e.dataset.lk); v.appendChild(e); });
+}
+function applyTabs(){
+  const nav=document.querySelector("nav.tabs"); if(!nav) return;
+  const vis=LAY.tabs.filter(t=>!LAY.hiddenTabs.includes(t));
+  LAY.tabs.forEach(t=>{ const b=$("t-"+t); nav.appendChild(b); b.hidden=!vis.includes(t); });
+  nav.style.gridTemplateColumns=`repeat(${Math.max(1,vis.length)},1fr)`;
+  if(!vis.includes(S.tab) && vis.length){ S.tab=vis[0]; }
+}
+const _showTab=showTab; showTab=function(){ applyTabs(); _showTab(); };
+[["renderDoviz","doviz"],["renderGundem","gundem"],["renderOneri","oneri"],["renderHisse","hisse"],["renderSanal","sanal"],["renderPiyasa","piyasa"]].forEach(([fn,tab])=>{
+  const o=window[fn]; window[fn]=function(){ const r=o.apply(this,arguments); applyLayout(tab); return r; }; });
+function openLayout(){
+  let tab=S.tab;
+  const scrim=document.createElement("div"); scrim.className="scrim";
+  const sh=document.createElement("div"); sh.className="sheet"; sh.setAttribute("role","dialog");
+  document.body.append(scrim,sh);
+  const close=()=>{scrim.remove();sh.remove();};
+  const mv=(arr,i,d)=>{ const j=i+d; if(j<0||j>=arr.length) return arr; const a=[...arr]; [a[i],a[j]]=[a[j],a[i]]; return a; };
+  const row=(lab,on,up,dn,tg,dis)=>`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--line)">
+    <label style="display:flex;gap:8px;align-items:center;flex:1"><input type="checkbox" ${on?"checked":""} ${dis?"disabled":""} data-tg="${esc(tg)}">${esc(lab)}</label>
+    <button class="btn ghost sm" data-mv="${esc(up)}" aria-label="Yukarı">↑</button><button class="btn ghost sm" data-mv="${esc(dn)}" aria-label="Aşağı" style="margin-left:0">↓</button></div>`;
+  const draw=()=>{
+    const c=LAY.cards[tab]||{}, keys=CARDS[tab]||[], ord=[...(c.order||[]).filter(k=>keys.includes(k)),...keys.filter(k=>!(c.order||[]).includes(k))], hid=c.hidden||[];
+    const visTabs=LAY.tabs.filter(t=>!LAY.hiddenTabs.includes(t)).length;
+    sh.innerHTML=`<h2>Görünüm</h2>
+      <h3 style="margin:8px 0 2px">Sekmeler</h3><p class="note" style="margin:0 0 4px">Sırasını değiştir ya da gizle.</p>
+      ${LAY.tabs.map((t,i)=>row(TABS[t],!LAY.hiddenTabs.includes(t),"t:"+i+":-1","t:"+i+":1","t:"+t, !LAY.hiddenTabs.includes(t)&&visTabs<=1)).join("")}
+      <h3 style="margin:14px 0 2px">Kartlar</h3>
+      <select id="lyTab" style="margin:4px 0 6px">${LAY.tabs.map(t=>`<option value="${t}" ${t===tab?"selected":""}>${TABS[t]}</option>`).join("")}</select>
+      ${keys.length?ord.map((k,i)=>row(k,!hid.includes(k),"c:"+i+":-1","c:"+i+":1","c:"+k)).join(""):`<p class="note">Bu sekmeyi bir kez açınca kartları burada görürsün.</p>`}
+      <div class="row"><button class="btn ghost" data-rs>Varsayılana dön</button><button class="btn" data-ok>Tamam</button></div>`;
+    sh.querySelector("#lyTab").onchange=e=>{ tab=e.target.value; draw(); };
+    sh.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{ const [t,i,d]=b.dataset.mv.split(":");
+      if(t==="t") LAY.tabs=mv(LAY.tabs,+i,+d); else { LAY.cards[tab]={...(LAY.cards[tab]||{}), order:mv(ord,+i,+d)}; }
+      saveLay(); apply(); draw(); });
+    sh.querySelectorAll("[data-tg]").forEach(x=>x.onchange=()=>{ const g=x.dataset.tg, k=g.slice(2);
+      if(g[0]==="t"){ LAY.hiddenTabs=x.checked?LAY.hiddenTabs.filter(t=>t!==k):[...LAY.hiddenTabs,k]; }
+      else { const cc=LAY.cards[tab]||{}, h=cc.hidden||[]; LAY.cards[tab]={...cc, order:ord, hidden:x.checked?h.filter(y=>y!==k):[...h,k]}; }
+      saveLay(); apply(); draw(); });
+    sh.querySelector("[data-rs]").onclick=()=>{ LAY={tabs:Object.keys(TABS),hiddenTabs:[],cards:{}}; saveLay(); apply(); draw(); };
+    sh.querySelector("[data-ok]").onclick=close;
+  };
+  const apply=()=>{ showTab(); Object.keys(TABS).forEach(applyLayout); };
+  scrim.onclick=close; draw();
+}
+
+/* ---------- Canlı fiyat (yalnız APK): hisse/döviz Yahoo (15 dk gecikmeli), fon TEFAS; ücretsiz, yapay zekâ kullanmaz ---------- */
+const LIVE={ busy:false, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
+function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
+  const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
+    if(r){ try{ const o=JSON.parse(r); return o.ok?res(o):rej(new Error(o.error||("HTTP "+o.code))); }catch(e){ return rej(e); } }
+    if(Date.now()-t0>60000) return rej(new Error("zaman aşımı")); setTimeout(poll,150); }; setTimeout(poll,80); }); }
+async function lpool(list,n,fn){ const out=new Array(list.length); let i=0;
+  await Promise.all(Array.from({length:Math.min(n,list.length)},async()=>{ while(i<list.length){ const k=i++; try{ out[k]=await fn(list[k]); }catch(e){ out[k]=null; } } })); return out; }
+const lr=(v,d=2)=>v==null||!isFinite(v)?null:Math.round(v*10**d)/10**d;
+/* ser: [{t,c,l,h}] artan; fiyat ve fiyat zamanından günlük/dönem getirileri ve 1 yıl aralığı */
+function lbuild(o,dp){ if(!o||!o.ser?.length||!(o.price>0)) return null; const {ser,price,pt}=o, day=864e5, dk=dayKey(pt);
+  const at=ms=>{ let v=null; for(const p of ser){ if(p.t<=ms) v=p.c; else break; } return v; };
+  const pc=b=>b>0?lr((price/b-1)*100):null, prev=[...ser].reverse().find(p=>dayKey(p.t)<dk);
+  const y0=Date.UTC(new Date(pt+TR).getUTCFullYear(),0,1)-TR, yr=ser.filter(p=>p.t>=pt-365*day);
+  return { price:lr(price,dp), priceDate:dk, d1:prev?pc(prev.c):null, w1:pc(at(pt-7*day)), m1:pc(at(pt-30*day)), m3:pc(at(pt-91*day)), m6:pc(at(pt-182*day)), ytd:pc(at(y0-1)), y1:pc(at(pt-365*day)),
+    low1y:lr(Math.min(price,...yr.map(p=>p.l??p.c)),dp), high1y:lr(Math.max(price,...yr.map(p=>p.h??p.c)),dp) }; }
+async function lyahoo(sym){ const o=await nget("GET","https://query1.finance.yahoo.com/v8/finance/chart/"+encodeURIComponent(sym)+"?range=1y&interval=1d");
+  const j=JSON.parse(o.body)?.chart?.result?.[0]; if(!j) throw new Error("veri yok"); const q=j.indicators?.quote?.[0]||{}, ser=[];
+  (j.timestamp||[]).forEach((t,i)=>{ const c=q.close?.[i]; if(c!=null) ser.push({t:t*1000,c,l:q.low?.[i]??c,h:q.high?.[i]??c}); });
+  const m=j.meta||{}; return {name:m.longName||m.shortName||null, ser, price:m.regularMarketPrice??ser.at(-1)?.c, pt:(m.regularMarketTime?m.regularMarketTime*1000:ser.at(-1)?.t)}; }
+/* İki seriyi gün bazında çarp (ör. ons altın $ × dolar/TL ÷ 31,1035 = gram altın TL) */
+function lmul(a,b,k){ const B={}; b.ser.forEach(p=>B[dayKey(p.t)]=p.c); let last=null;
+  const ser=a.ser.map(p=>{ const u=B[dayKey(p.t)]??last; if(u!=null) last=u; return u==null?null:{t:p.t,c:p.c*u*k,l:p.l*u*k,h:p.h*u*k}; }).filter(Boolean);
+  return {ser, price:a.price*b.price*k, pt:Math.max(a.pt,b.pt)}; }
+const OZ=1/31.1034768, LFX={XAU:["GC=F"],XAG:["SI=F"],GAU:["GC=F","USDTRY=X",OZ],GAG:["SI=F","USDTRY=X",OZ]};
+async function lfx(code){ const d=LFX[code]||(/^[A-Z]{3}$/.test(code)?[code+"TRY=X"]:null); if(!d) return null;
+  if(d.length===1) return lbuild(await lyahoo(d[0]),4);
+  const [a,b]=await Promise.all([lyahoo(d[0]),lyahoo(d[1])]); return lbuild(lmul(a,b,d[2]),code==="GAG"?4:2); }
+const TEF_H={"X-Requested-With":"XMLHttpRequest","Referer":"https://www.tefas.gov.tr/TarihselVeriler.aspx","Origin":"https://www.tefas.gov.tr","Content-Type":"application/x-www-form-urlencoded; charset=UTF-8","Accept":"application/json, text/javascript, */*; q=0.01"};
+const tdt=ms=>{ const d=new Date(ms+TR); return String(d.getUTCDate()).padStart(2,"0")+"."+String(d.getUTCMonth()+1).padStart(2,"0")+"."+d.getUTCFullYear(); };
+async function ltefas(code){ const now=Date.now(), W=[0,1,2,3,4,5].map(i=>[now-(i*62+61)*864e5, now-i*62*864e5]);
+  const parts=await Promise.all(W.map(([s,e])=>nget("POST","https://www.tefas.gov.tr/api/DB/BindHistoryInfo",`fontip=YAT&sfontur=&fonkod=${encodeURIComponent(code)}&fongrup=&bastarih=${tdt(s)}&bittarih=${tdt(e)}&fonturkod=&fonunvantip=`,TEF_H).then(o=>JSON.parse(o.body)?.data||[]).catch(()=>null)));
+  if(parts[0]===null) throw new Error("TEFAS yanıt vermedi"); const M={};
+  parts.flat().filter(Boolean).forEach(r=>{ const t=Number(r.TARIH), c=Number(r.FIYAT); if(t>0&&c>0) M[t]={t,c,n:r.KISISAYISI,b:r.PORTFOYBUYUKLUK,u:r.FONUNVAN}; });
+  const ser=Object.values(M).sort((a,b)=>a.t-b.t); if(!ser.length) return null; const last=ser.at(-1), x=lbuild({ser,price:last.c,pt:last.t},6);
+  if(x){ if(last.u) x.name=last.u; if(Number(last.n)>0) x.investors=Number(last.n); if(Number(last.b)>0) x.sizeBn=lr(Number(last.b)/1e9,2); } return x; }
+async function liveRefresh(kinds,manual){
+  if(!LIVE.ok()||!S.market) return false;
+  if(LIVE.busy){ if(manual) toast("Fiyatlar zaten çekiliyor…"); return true; }
+  kinds=kinds||["hisse","fon","doviz"]; LIVE.busy=true; renderFresh(); if(manual) toast("Fiyatlar çekiliyor…");
+  const now=new Date().toISOString(), L={at:now, stocks:{...(S.live?.stocks||{})}, funds:{...(S.live?.funds||{})}, fx:{...(S.live?.fx||{})}}, cnt=[];
+  const run=async(arr,key,lbl,fn,n)=>{ const r=await lpool(arr,n,fn); let k=0; arr.forEach((x,i)=>{ if(r[i]?.price){ const v={...r[i],at:now}; if(!x.local) delete v.name; L[key][x.code]=v; k++; } }); cnt.push(`${lbl} ${k}/${arr.length}`); };
+  try{
+    const jobs=[];
+    if(kinds.includes("hisse")) jobs.push(run(S.market.stocks||[],"stocks","Hisse",x=>lyahoo(x.code+".IS").then(o=>{ const r=lbuild(o,x.price<10?4:2); if(r&&o.name) r.name=o.name; return r; }),6));
+    if(kinds.includes("doviz")) jobs.push(run(S.market.fx||[],"fx","Döviz",x=>lfx(x.code),4));
+    if(kinds.includes("fon")) jobs.push((async()=>{ await nget("GET","https://www.tefas.gov.tr/TarihselVeriler.aspx").catch(()=>{}); await run(S.market.funds||[],"funds","Fon",x=>ltefas(x.code),2); })());
+    await Promise.all(jobs);
+    S.live=L; applyLive(); renderAll(); if(S.det) drawDetail();
+    try{ await S.db?.doc("market/live").set(L); }catch(e){}
+    toast("Fiyatlar güncellendi (hisse/döviz 15 dk gecikmeli): "+cnt.join(" · "));
+  }catch(e){ toast("Fiyatlar alınamadı: "+(e?.message||"hata")); }
+  finally{ LIVE.busy=false; renderFresh(); }
+  return true; }
+/* Canlı fiyatları yapay zekânın yazdığı verinin üstüne koy (yalnız daha yeniyse) */
+function applyLive(){ const L=S.live, M=S.market; if(!L||!M) return;
+  const ap=(arr,map,qk)=>{ let any=false; (arr||[]).forEach(x=>{ const v=map?.[x.code]; if(!v) return;
+      if(x.priceDate && v.priceDate && v.priceDate<x.priceDate) return;
+      if(x.priceDate===v.priceDate && x.updatedAt && v.at && v.at<x.updatedAt) return;
+      Object.entries(v).forEach(([k,val])=>{ if(k!=="at" && val!=null) x[k]=val; }); any=true; });
+    if(any && (!M[qk] || M[qk]<L.at)) M[qk]=L.at; };
+  ap(M.stocks,L.stocks,"quickStocksAt"); ap(M.funds,L.funds,"quickFundsAt"); ap(M.fx,L.fx,"quickFxAt"); }
+/* APK'da hızlı güncelleme bedava canlı çekimdir; yapay zekâ ile hızlı güncelleme yalnız tarayıcıda */
+{ const _rq=requestQuick; requestQuick=function(kind){ return LIVE.ok() ? liveRefresh([kind],true) : _rq(kind); }; }
+try{ if(typeof autoQuick==="function"){ const _aq=autoQuick; autoQuick=function(){ return LIVE.ok() ? false : _aq.apply(this,arguments); }; } }catch(_){}
+
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden && S.ready && LIVE.ok() && S.market && (!S.live?.at || Date.now()-new Date(S.live.at).getTime()>5*60e3)) liveRefresh(null,false); });
+function renderAll(){ renderFresh(); renderDoviz(); renderGundem(); renderOneri(); renderHisse(); renderSanal(); renderPiyasa(); if(S.det) drawDetail(); }
+showTab(); renderAll();
+
+/* ---------- Bağlantılar ---------- */
+(async () => {
+  const [db, user, mcp, sample] = await Promise.all(["db","user","mcp","sample"].map(n => window.claude?.use ? window.claude.use(n) : null));
+  S.db=db; S.mcp=mcp; S.sample=sample;
+  if(user){ try{ S.uid = await user.id(); }catch(e){} }
+  S.ready=true;
+  if(!db){ renderAll(); return; }
+  let firstMarket=true, firstCfg=false, firstStatus=false;
+  const maybeAuto = () => { if(firstMarket || !firstCfg || !firstStatus) return; maybeAuto.done=true; if(LIVE.ok() && (!S.live?.at || Date.now()-new Date(S.live.at).getTime()>5*60e3)) liveRefresh(null,false); startupFlow(); };
+  db.doc("market/live").onSnapshot(s => { if(LIVE.busy) return; const L=s.exists?s.data():null; if(L && (!S.live || L.at>S.live.at)){ S.live=L; applyLive(); renderAll(); } });
+  db.doc("market/latest").onSnapshot(s => { S.market = s.exists ? s.data() : null; applyLive(); firstMarket=false; renderAll(); if(!maybeAuto.done) maybeAuto(); });
+  db.doc("config/app").onSnapshot(s => { S.cfg = s.exists ? s.data() : null; firstCfg=true; renderFresh(); if(!maybeAuto.done) maybeAuto(); });
+  db.doc("market/scorelog").onSnapshot(s => { const H={}; ((s.exists&&s.data()?.snaps)||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(sn=>(sn.items||[]).forEach(it=>{ if(it?.c&&typeof it.sc==="number") (H[it.c]=H[it.c]||[]).push({d:sn.date,sc:it.sc,p:it.p}); })); S.hist=H; renderHisse(); renderOneri(); renderDoviz(); if(S.det) drawDetail(); });
+  db.doc("config/fundwatch").onSnapshot(s => { S.fwatch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; renderOneri(); });
+  db.doc("config/fxwatch").onSnapshot(s => { S.fxwatch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; renderDoviz(); });
+  db.doc("config/watchlist").onSnapshot(s => { S.watch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; renderHisse(); });
+  db.doc("config/status").onSnapshot(s => { S.status = s.exists ? s.data() : null; firstStatus=true; if(S.status?.requestedAt){ if(!S.preQ) S.preQ=priceSnap(); } else if(S.preQ){ const p=S.preQ; S.preQ=null; setTimeout(()=>reportRun(p),800); } renderFresh(); renderHisse(); renderOneri(); if(!maybeAuto.done) maybeAuto(); });
+  if(S.uid){
+    tradesCol().onSnapshot(q => { const all=q.docs.map(d=>({id:d.id,...d.data()}));
+      if(!S.prefsLoaded){ const pr=all.find(d=>d.id==="prefs"); S.prefsLoaded=true; if(pr) loadPrefs(pr); else savePrefs(); }
+      S.trades = all.filter(d=>d.kind==="trade").sort((a,b)=>String(b.buyDate||b.at).localeCompare(String(a.buyDate||a.at)));
+      S.pfs = all.filter(d=>d.kind==="portfolio").sort((a,b)=>String(a.createdAt).localeCompare(String(b.createdAt)));
+      const held=[...new Set(S.trades.filter(t=>t.status!=="closed").map(t=>t.code))].sort();
+      if(held.join()!==(S.heldSent||"")){ S.heldSent=held.join(); db.doc("config/held").set({codes:held}).catch(()=>{}); } renderSanal(); renderHisse(); renderOneri(); });
+  }
+  setInterval(renderFresh, 60e3);
+})();
+</script>
+
+<script>
+/* Bağımsız APK: sahip telefonunda "Güncelleme iste" (Claude bağlantılı eski uygulamayı açar) */
+if(window.__standalone){
+  const OLD="https://claude.ai/artifact/KGLuNpASfKJZT1QXGir68H";
+  const OWN=()=>{ try{ return localStorage.getItem("fp-owner")==="1"; }catch(_){ return false; } };
+  const _rf=renderFresh; renderFresh=function(){ const r=_rf.apply(this,arguments); const b=$("refreshBtn"); if(b){ b.hidden=!OWN(); b.textContent="Güncelleme iste"; } return r; };
+  $("refreshBtn").onclick=()=>YatirimApp.openUrl(OLD);
+  const _os=openSettings; openSettings=function(){ const r=_os.apply(this,arguments); const sh=[...document.querySelectorAll(".sheet")].pop();
+    const row=sh?.querySelector(".row:last-child"); if(row){ const d=document.createElement("div");
+      d.innerHTML=`<h3 style="margin:8px 0 4px">Bu telefon</h3><label style="display:flex;gap:8px;align-items:flex-start"><input type="checkbox" id="ownChk" ${OWN()?"checked":""}><span>Yapay zekâ güncellemesini isteme düğmesini göster <span class="note">(yalnız uygulamanın sahibi içindir; Claude hesabı ister)</span></span></label>`;
+      row.before(d); d.querySelector("#ownChk").onchange=e=>{ try{ localStorage.setItem("fp-owner",e.target.checked?"1":"0"); }catch(_){} renderFresh(); }; }
+    return r; };
+  document.addEventListener("visibilitychange",()=>{ if(!document.hidden) window.__pullRemote?.(); });
+  renderFresh();
+}
+</script>
+</body></html>
