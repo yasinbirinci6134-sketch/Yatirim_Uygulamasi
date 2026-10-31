@@ -14,7 +14,8 @@ async function get(u){ for(let k=0;k<4;k++){ try{ const ck=Object.entries(jar).m
 async function closes(sym){ const o=await get(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?range=2y&interval=1d`);
   try{ const r=JSON.parse(o.b).chart.result[0], q=r.indicators.quote[0], m=r.meta||{}, c=[], t=[]; r.timestamp.forEach((ts,i)=>{ if(q.close[i]>0){ c.push(q.close[i]); t.push(ts); } });
     if(m.regularMarketPrice>0&&t.length&&m.regularMarketTime>t[t.length-1]+3600&&new Date(m.regularMarketTime*1000).toISOString().slice(0,10)!==new Date(t[t.length-1]*1000).toISOString().slice(0,10)){ c.push(m.regularMarketPrice); t.push(m.regularMarketTime); }
-    return {c,t,name:(m.longName||m.shortName||'').trim()}; }catch(_){ return null; } }
+    const nm=String(m.longName||m.shortName||'').replace(/\s+/g,' ').replace(/[ ,]+(Anonim [SŞ]irketi|T\.?\s?A\.?\s?[SŞ]\.?|A\.?\s?[SŞ]\.?)$/i,'').trim();
+    return {c,t,name:nm}; }catch(_){ return null; } }
 (async()=>{ await get('https://fc.yahoo.com');
   const xu=await closes('XU100.IS'); if(!xu||xu.c.length<60){ console.error('XU100 alınamadı'); process.exit(1); }
   const items=[]; let i=0;
