@@ -943,6 +943,36 @@ html[data-design="modern"] #v-oneri .fgrp .fgh{
   border:0;border-left:3px solid var(--accent);border-radius:3px;
 }
 
+
+/* Tema 2: hisse/fon/döviz puanı kodun yanında, ayrı puan satırı yok. */
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow,
+html.apk[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow{
+  grid-template-areas:"id quote"!important;
+  grid-template-rows:auto!important;
+  align-items:center!important;
+  min-height:49px!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow > .sbadge{
+  display:none!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .studio-inline-score{
+  display:inline-block;
+  margin-left:2px;
+  background:transparent;
+  border:0;
+  padding:0;
+  font:800 12px/1.25 var(--f-body);
+  color:var(--muted);
+  vertical-align:baseline;
+  white-space:nowrap;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .studio-inline-score.hi{
+  color:var(--up);
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .studio-inline-score.lo{
+  color:var(--down);
+}
+
 </style>
 
 <div class="wrap">
@@ -1183,7 +1213,7 @@ function listRow(t,x){
   const stale=t==="s"?staleB([x.fundAt,x.finAt].filter(Boolean).sort().pop(),7,"Bilanço ve hedef fiyat bilgisi 7 günden eski"):t==="f"?staleB(x.priceDate,5,"Fiyat 5 günden eski"):staleB(x.priceDate,4,"Fiyat 4 günden eski");
   return `<div class="fund lrow x" data-k="${esc(k)}">
     <div class="sbadge xh${sCls(x.score,t)}">${x.score!=null?num(x.score,0):"–"}</div>
-    <div class="lmid xh"><div class="lt"><span class="code">${esc(x.code)}</span>${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${mine?'<span class="mine">EKLEDİĞİN</span>':""}${stale}</div>
+    <div class="lmid xh"><div class="lt"><span class="code">${esc(x.code)}</span>${studioOn()?`<span class="studio-inline-score${sCls(x.score,t)}" aria-label="Skor ${x.score!=null?num(x.score,0):"yok"}">${x.score!=null?num(x.score,0):"–"}</span>`:""}${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${mine?'<span class="mine">EKLEDİĞİN</span>':""}${stale}</div>
       <div class="name">${esc(x.name||"")}</div>
       ${m1!=null?`<div class="lbar"><span>1 ay</span><i><b class="${m1>=0?"p":"n"}" style="width:${Math.max(4,w)}%"></b></i><em class="num ${cls(m1)}">${pc(m1,1)}</em></div>`:""}</div>
     <div class="right xh"><div class="num lp">${t==="x"&&FUTX.has(x.code)?'<span class="small muted" title="Yaklaşık fiyat: vadeli işlem fiyatından hesaplanır">≈ </span>':""}${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="small num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div>
@@ -2040,7 +2070,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-29";
+const UI_VERSION="2026.11.01-30";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
