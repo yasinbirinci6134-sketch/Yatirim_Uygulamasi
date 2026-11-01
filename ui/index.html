@@ -310,6 +310,76 @@ details.removed{border-top:1px solid var(--line);padding-top:10px}
 details.removed summary{cursor:pointer;font:600 13px var(--f-body);color:var(--muted)}
 .remrow{padding:8px 0;border-top:1px solid var(--line)}
 .remrow:first-of-type{border-top:0}
+
+/* Tema 2: mevcut Tema 1 görünümü tamamen korunur; bu kurallar yalnız seçimle etkinleşir. */
+html[data-design="modern"]{
+  --bg:#F3F6FB;--card:#FFFFFF;--ink:#19263A;--muted:#65758A;--line:#DEE6F1;
+  --para:#177A6E;--gold:#A87427;--gold-soft:#FBF0DB;
+  --stock:#3F5DAD;--stock-soft:#E9EEFA;--up:#0E856C;--down:#C54C5D;--warn:#A87521;
+}
+html[data-design="modern"][data-theme="dark"]{
+  --bg:#0D1423;--card:#162135;--ink:#E8EDF8;--muted:#99A9C0;--line:#283950;
+  --para:#5AD3BC;--gold:#EDC078;--gold-soft:#3D352C;
+  --stock:#9AB5FF;--stock-soft:#263758;--up:#5CD3AB;--down:#FF8895;--warn:#E3BB76;
+}
+@media (prefers-color-scheme: dark){
+  html[data-design="modern"]:not([data-theme="light"]){
+    --bg:#0D1423;--card:#162135;--ink:#E8EDF8;--muted:#99A9C0;--line:#283950;
+    --para:#5AD3BC;--gold:#EDC078;--gold-soft:#3D352C;
+    --stock:#9AB5FF;--stock-soft:#263758;--up:#5CD3AB;--down:#FF8895;--warn:#E3BB76;
+  }
+}
+html[data-design="modern"] body{background:var(--bg);color:var(--ink)}
+html[data-design="modern"] .card,html.apk[data-design="modern"] .card{
+  background:var(--card);border:1px solid var(--line);border-radius:19px;padding:19px;
+  box-shadow:0 5px 22px -18px rgba(18,36,70,.45)
+}
+html[data-design="modern"] .card h2,html.apk[data-design="modern"] .card h2{font-size:18px;letter-spacing:-.025em}
+html[data-design="modern"] .card h3,html.apk[data-design="modern"] .card h3{letter-spacing:.025em}
+html[data-design="modern"] .btn,html.apk[data-design="modern"] .btn{border-radius:13px}
+html[data-design="modern"] .seg,html.apk[data-design="modern"] .seg{
+  background:color-mix(in srgb,var(--accent) 5%,var(--card));border:1px solid var(--line);border-radius:14px
+}
+html[data-design="modern"] .seg button.on,html.apk[data-design="modern"] .seg button.on{
+  box-shadow:0 2px 7px -4px rgba(15,30,75,.55)
+}
+html[data-design="modern"] .alloc,html.apk[data-design="modern"] .alloc{height:9px;border-radius:999px}
+html[data-design="modern"] .fresh,html.apk[data-design="modern"] .fresh{
+  border:1px solid var(--line);border-radius:12px;padding:7px 10px;
+  background:color-mix(in srgb,var(--accent) 3%,var(--card))
+}
+html[data-design="modern"] .lrow,html.apk[data-design="modern"] .lrow{padding-block:15px}
+html.apk[data-design="modern"] .sbadge{
+  border-radius:15px;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 28%,var(--line));
+  background:color-mix(in srgb,var(--c) 11%,var(--card))
+}
+html.apk[data-design="modern"] header{padding-top:calc(11px + env(safe-area-inset-top,0px));gap:9px}
+html.apk[data-design="modern"] .brand h1{font-size:26px;letter-spacing:-.035em}
+html.apk[data-design="modern"] .brand h1::before{
+  content:"FON PUSULASI  /  PİYASA PANELİ";display:block;margin-bottom:5px;
+  color:var(--accent);font:800 9px/1.2 var(--f-body);letter-spacing:.14em
+}
+html.apk[data-design="modern"] nav.tabs{
+  left:12px;right:12px;bottom:calc(7px + env(safe-area-inset-bottom,0px));
+  border:1px solid var(--line);border-radius:19px;
+  background:var(--card);padding:5px 3px;box-shadow:0 9px 30px rgba(8,23,56,.16)
+}
+html.apk[data-design="modern"] nav.tabs button{border-radius:13px;font-size:10px;padding:5px 0}
+html.apk[data-design="modern"] nav.tabs button[aria-selected="true"]{
+  color:var(--accent);background:var(--accent-soft)
+}
+html.apk[data-design="modern"] nav.tabs button[aria-selected="true"] svg{
+  border-radius:13px;background:none
+}
+html.apk[data-design="modern"] .hm-pf{
+  border-radius:19px;background:linear-gradient(125deg,#172D53 0%,#274B7E 67%,#4268AE 100%);
+  box-shadow:0 14px 30px -19px rgba(15,37,83,.6)
+}
+html.apk[data-design="modern"] .hm-pf .v{letter-spacing:-.04em}
+html.apk[data-design="modern"] .st-seg{border:1px solid var(--line);border-radius:11px}
+html.apk[data-design="modern"] .st-seg button.on{color:var(--accent)}
+@media(max-width:380px){html.apk[data-design="modern"] nav.tabs{left:7px;right:7px}}
+
 </style>
 
 <div class="wrap">
@@ -479,8 +549,9 @@ document.addEventListener("click", e => { const g=e.target.closest(".g"); const 
 
 /* ---------- Tema ---------- */
 const ACC=[["yesil","Yeşil","#0F6B57"],["mavi","Mavi","#2F5BB7"],["mor","Mor","#6B46B0"],["turuncu","Turuncu","#B5541C"],["gri","Grafit","#3E4A52"]];
-let TH={mode:"auto",acc:"yesil"}; try{ TH={...TH,...JSON.parse(localStorage.getItem("fp-theme")||"{}")}; }catch(e){}
-function applyTheme(){ const r=document.documentElement; if(TH.mode==="auto") r.removeAttribute("data-theme"); else r.setAttribute("data-theme",TH.mode); if(TH.acc&&TH.acc!=="yesil") r.setAttribute("data-accent",TH.acc); else r.removeAttribute("data-accent"); }
+let TH={mode:"auto",acc:"yesil",design:"classic",modernAcc:"mavi"}; try{ TH={...TH,...JSON.parse(localStorage.getItem("fp-theme")||"{}")}; }catch(e){}
+function activeAccent(){ return TH.design==="modern"?(TH.modernAcc||"mavi"):(TH.acc||"yesil"); }
+function applyTheme(){ const r=document.documentElement; if(TH.mode==="auto") r.removeAttribute("data-theme"); else r.setAttribute("data-theme",TH.mode); const ac=activeAccent(); if(ac!=="yesil") r.setAttribute("data-accent",ac); else r.removeAttribute("data-accent"); if(TH.design==="modern") r.setAttribute("data-design","modern"); else r.removeAttribute("data-design"); }
 function saveTheme(){ try{localStorage.setItem("fp-theme",JSON.stringify(TH));}catch(e){} applyTheme(); notifyBars(); try{savePrefs();}catch(e){} }
 function notifyBars(){ setTimeout(()=>{ try{ if(!window.YatirimApp) return; const bg=getComputedStyle(document.body).backgroundColor, m=bg.match(/\d+/g)||[0,0,0], dark=(0.299*m[0]+0.587*m[1]+0.114*m[2])<128; window.YatirimApp.setBars(bg,dark); }catch(e){} },60); }
 applyTheme(); notifyBars(); window.addEventListener("load",notifyBars);
@@ -767,17 +838,20 @@ function openSettings(){
     <div class="row" style="justify-content:flex-start"><button class="btn ghost sm" data-ly style="margin-left:0">Sekme ve kart düzeni…</button></div>
     <h3 style="margin:8px 0 4px">Açılışta otomatik güncelle</h3><p class="note" style="margin:0">İşaretlediklerinin fiyatları uygulama her açıldığında tazelenir (puanlama yapılmaz). Son 15 dakikada güncellendiyse ya da piyasa kapalıyken veriler kapanıştan sonra zaten çekildiyse atlanır. Fonlar günde bir kez güncellenir: fon fiyatı akşam geç açıklandığı için 22:00'den sonraki ilk açılışta (ya da ertesi sabah).${LIVE.ok()?" <b>Telefon uygulamasında</b> bu seçeneklere gerek yok: tüm fiyatlar her açılışta ücretsiz çekilir (hisse ve döviz 15 dk gecikmeli, fon TEFAS'tan).":""}</p>
     <div style="display:flex;gap:18px;flex-wrap:wrap;margin:4px 0">${[["hisse","Hisse"],["fon","Fon"],["doviz","Döviz"]].map(([k,l])=>`<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-aq="${k}" ${AUTOQ.includes(k)?"checked":""}>${l}</label>`).join("")}</div>
+    <h3 style="margin:8px 0 4px">Tasarım</h3>
+    <div class="seg" role="radiogroup" aria-label="Tasarım">${[["classic","Tema 1 · Claude"],["modern","Tema 2 · ChatGPT"]].map(([k,l])=>`<button data-design="${k}" class="${(TH.design||"classic")===k?"on":""}" role="radio" aria-checked="${(TH.design||"classic")===k}">${l}</button>`).join("")}</div>
     <h3 style="margin:8px 0 4px">Tema</h3>
     <div class="seg" role="radiogroup" aria-label="Tema">${[["auto","Otomatik"],["light","Açık"],["dark","Koyu"]].map(([k,l])=>`<button data-th="${k}" class="${TH.mode===k?"on":""}" role="radio" aria-checked="${TH.mode===k}">${l}</button>`).join("")}</div>
     <p class="note" style="margin:6px 0 4px">Renk</p>
-    <div class="swatches">${ACC.map(([k,l,c])=>`<button data-ac="${k}" class="${TH.acc===k?"on":""}" aria-label="${l}" title="${l}" style="background:${c}"></button>`).join("")}</div>
+    <div class="swatches">${ACC.map(([k,l,c])=>`<button data-ac="${k}" class="${activeAccent()===k?"on":""}" aria-label="${l}" title="${l}" style="background:${c}"></button>`).join("")}</div>
     <div class="row"><button class="btn" data-c>Kapat</button></div>`;
   document.body.append(scrim,sh);
   const close=()=>{scrim.remove();sh.remove();};
   scrim.onclick=close; sh.querySelector("[data-c]").onclick=close;
   sh.querySelectorAll("[data-aq]").forEach(c=>c.onchange=()=>{ const k=c.dataset.aq; AUTOQ=c.checked?[...new Set([...AUTOQ,k])]:AUTOQ.filter(x=>x!==k); saveAutoQ(); });
+  sh.querySelectorAll("[data-design]").forEach(b=>b.onclick=()=>{ TH.design=b.dataset.design; saveTheme(); sh.querySelectorAll("[data-design]").forEach(x=>{x.classList.toggle("on",x===b); x.setAttribute("aria-checked",x===b);}); sh.querySelectorAll("[data-ac]").forEach(x=>x.classList.toggle("on",x.dataset.ac===activeAccent())); });
   sh.querySelectorAll("[data-th]").forEach(b=>b.onclick=()=>{ TH.mode=b.dataset.th; saveTheme(); sh.querySelectorAll("[data-th]").forEach(x=>{x.classList.toggle("on",x===b); x.setAttribute("aria-checked",x===b);}); });
-  sh.querySelectorAll("[data-ac]").forEach(b=>b.onclick=()=>{ TH.acc=b.dataset.ac; saveTheme(); sh.querySelectorAll("[data-ac]").forEach(x=>x.classList.toggle("on",x===b)); });
+  sh.querySelectorAll("[data-ac]").forEach(b=>b.onclick=()=>{ if(TH.design==="modern") TH.modernAcc=b.dataset.ac; else TH.acc=b.dataset.ac; saveTheme(); sh.querySelectorAll("[data-ac]").forEach(x=>x.classList.toggle("on",x===b)); });
   sh.querySelector("[data-ly]").onclick=()=>{ close(); openLayout(); };
 
 }
@@ -1397,7 +1471,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-23";
+const UI_VERSION="2026.11.01-24";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -2078,8 +2152,9 @@ if(window.__standalone){
     const draw=()=>{ const cfg=getCfg(), ns=has("notifyStatus")?A.notifyStatus():"yok", al=has("getAlarms")?getAl():[];
       sh.innerHTML=`<div class="st-top"><h2>Ayarlar</h2><button class="st-x" data-c aria-label="Kapat">✕</button></div>
         <div class="st-h">Görünüm</div><div class="st-g">
+          <div class="st-r" style="cursor:default"><span class="st-ic">◈</span><span class="tx">Tasarım<small>Görünüm tercihin saklanır</small></span><div class="st-seg">${[["classic","Tema 1"],["modern","Tema 2"]].map(([k,l])=>`<button data-design="${k}" class="${(TH.design||"classic")===k?"on":""}" aria-pressed="${(TH.design||"classic")===k}">${l}</button>`).join("")}</div></div>
           <div class="st-r" style="cursor:default"><span class="st-ic">🌓</span><span class="tx">Tema</span><div class="st-seg">${[["auto","Otomatik"],["light","Açık"],["dark","Koyu"]].map(([k,l])=>`<button data-th="${k}" class="${TH.mode===k?"on":""}">${l}</button>`).join("")}</div></div>
-          <div class="st-r" style="cursor:default"><span class="st-ic">🎨</span><span class="tx">Renk</span><div class="st-sw">${ACC.map(([k,l,c])=>`<button data-ac="${k}" class="${TH.acc===k?"on":""}" aria-label="${l}" style="background:${c}"></button>`).join("")}</div></div>
+          <div class="st-r" style="cursor:default"><span class="st-ic">🎨</span><span class="tx">Renk</span><div class="st-sw">${ACC.map(([k,l,c])=>`<button data-ac="${k}" class="${activeAccent()===k?"on":""}" aria-label="${l}" style="background:${c}"></button>`).join("")}</div></div>
           <div class="st-r" data-ly><span class="st-ic">🧩</span><span class="tx">Sekme ve kart düzeni<small>Sırayı değiştir, istemediklerini gizle</small></span><span class="ch">›</span></div></div>
         <div class="st-h">Bildirimler</div><div class="st-g">
           ${ns==="yok"?`<div class="st-r st-warn" style="cursor:default"><span class="tx">Bildirimler için uygulamanın yeni sürümünü kur.</span></div>`:`
@@ -2101,8 +2176,9 @@ if(window.__standalone){
         <div class="st-foot">Arayüz ${esc(UI_VERSION)}${has("uiSource")&&A.uiSource()==="file"?" · güncellendi":""}</div>`;
       const q=s=>sh.querySelector(s);
       q("[data-c]").onclick=close;
+      sh.querySelectorAll("[data-design]").forEach(b=>b.onclick=()=>{ TH.design=b.dataset.design; saveTheme(); draw(); });
       sh.querySelectorAll("[data-th]").forEach(b=>b.onclick=()=>{ TH.mode=b.dataset.th; saveTheme(); draw(); });
-      sh.querySelectorAll("[data-ac]").forEach(b=>b.onclick=()=>{ TH.acc=b.dataset.ac; saveTheme(); draw(); });
+      sh.querySelectorAll("[data-ac]").forEach(b=>b.onclick=()=>{ if(TH.design==="modern") TH.modernAcc=b.dataset.ac; else TH.acc=b.dataset.ac; saveTheme(); draw(); });
       q("[data-ly]").onclick=()=>{ close(); openLayout(); };
       q("[data-perm]")?.addEventListener("click",()=>withNotify(()=>draw()));
       const tg=(id,k)=>{ const c=q("#"+id); if(!c) return; c.onchange=()=>{ const v=c.checked, save=()=>{ const g=getCfg(); g[k]=v; A.setNotify(JSON.stringify(g)); };
