@@ -1,0 +1,157 @@
+{
+  "testOnly": true,
+  "generatedAt": "2026-11-01T19:21:59.320Z",
+  "sourceBranch": "data",
+  "marketAsOf": "1 Kasım 2026 (piyasalar kapalı; 30 Ekim kapanışı)",
+  "news": [
+    {
+      "title": "BIST 100, 30 Ekim seansını %3,64 düşüşle tamamladı",
+      "date": "2026-10-30",
+      "source": "Anadolu Ajansı",
+      "url": "https://mobil.aa.com.tr/tr/ekonomi/borsa-gunu-dususle-tamamladi/4106741",
+      "impact": "yuksek",
+      "what": "BIST 100 endeksi 30 Ekim kapanışında 10.759,56 puana geriledi; bankacılık endeksi %3,06 düştü.",
+      "meaning": "Kısa vadeli piyasa oynaklığı ve banka hisselerindeki baskı artmış olabilir; tek günlük hareket kalıcı eğilim kanıtı değildir.",
+      "affects": [
+        {
+          "cat": "hisse",
+          "effect": "down",
+          "why": "Gözlenen endeks ve bankacılık endeksi düşüşü; gelecek dönem tahmini değildir."
+        }
+      ],
+      "codes": [
+        "GARAN",
+        "AKBNK",
+        "YKBNK",
+        "VAKBN"
+      ]
+    },
+    {
+      "title": "SPK Başkanlığına Muhsin Atcı atandı",
+      "date": "2026-11-01",
+      "source": "Anadolu Ajansı",
+      "url": "https://www.aa.com.tr/tr/ekonomi/spk-baskanligina-muhsin-atci-atandi/4107676",
+      "impact": "orta",
+      "what": "Resmi Gazete'de yayımlanan kararla SPK Başkanlığına Muhsin Atcı, başkan vekilliğine Ersin Başar Ekmekci ve üyeliğe Yasemin Girici atandı.",
+      "meaning": "Sermaye piyasası gözetim ve düzenleme gündemi bakımından izlenebilir; tek başına fiyat yönü çıkarılamaz.",
+      "affects": [
+        {
+          "cat": "hisse",
+          "effect": "mixed",
+          "why": "Yeni yönetimin uygulamaları henüz bilinmediğinden yönlü etki doğrulanamaz."
+        }
+      ],
+      "codes": []
+    },
+    {
+      "title": "TOBB Nefes Kredisi yeni dilimi için başvurular 3 Kasım'da başlayacak",
+      "date": "2026-11-01",
+      "source": "Anadolu Ajansı",
+      "url": "https://m.aa.com.tr/tr/ekonomi/tobb-nefes-kredisinde-yeni-dilim-basvurulari-3-kasimda-baslayacak/4107757",
+      "impact": "orta",
+      "what": "TOBB açıklamasına göre KOBİ kredilerinde 50 milyar TL'lik yeni dilim açılacak; firma başına üst limit 5 milyon TL, vade en çok 48 ay olarak açıklandı.",
+      "meaning": "KOBİ finansmanına erişim ve programa katılan bankaların kredi faaliyetleri açısından izlenebilir; banka hisselerine net etkisi belirsizdir.",
+      "affects": [
+        {
+          "cat": "hisse",
+          "effect": "mixed",
+          "why": "Kredi büyümesi olasılığı ile fonlama/maliyet etkileri birlikte değerlendirilmelidir."
+        }
+      ],
+      "codes": [
+        "GARAN",
+        "VAKBN",
+        "YKBNK"
+      ]
+    },
+    {
+      "title": "Rusya dizel ve bazı yakıtların ihracat yasağını 31 Ocak 2027'ye uzattı",
+      "date": "2026-10-31",
+      "source": "Anadolu Ajansı",
+      "url": "https://f.aa.com.tr/tr/ekonomi/rusya-dizel-ihracati-yasagini-ocak-sonuna-kadar-uzatti/4107267",
+      "impact": "orta",
+      "what": "Rus hükümeti dizel, gemi yakıtı ve gaz yağına ilişkin belirli ihracat kısıtlamalarını 31 Ocak 2027'ye uzattığını bildirdi.",
+      "meaning": "Bölgesel rafineri ürün arzı ve marj beklentileri bakımından takip edilebilir; Tüpraş için doğrudan kâr etkisi hesaplanmadı.",
+      "affects": [
+        {
+          "cat": "hisse",
+          "effect": "mixed",
+          "why": "Rafineri ürün fiyatları, ham petrol maliyeti ve talep birlikte değişebilir."
+        }
+      ],
+      "codes": [
+        "TUPRS"
+      ]
+    },
+    {
+      "title": "Türkiye'nin dokuz aylık orta-yüksek ve yüksek teknoloji ihracatı 86,4 milyar dolar",
+      "date": "2026-11-01",
+      "source": "Anadolu Ajansı",
+      "url": "https://h.aa.com.tr/tr/ekonomi/turkiyenin-kritik-teknoloji-ihracati-9-ayda-86-4-milyar-dolari-buldu/4107782",
+      "impact": "orta",
+      "what": "TÜİK verilerinden yapılan derlemeye göre ocak-eylül 2026 döneminde orta-yüksek ve yüksek teknoloji ürünlerinin ihracatı 86,4 milyar dolara ulaştı.",
+      "meaning": "Sanayi ve teknoloji ihracatının makro görünümü için gösterge; listedeki belirli şirketlerin satış artışını doğrudan kanıtlamaz.",
+      "affects": [
+        {
+          "cat": "hisse",
+          "effect": "mixed",
+          "why": "Toplam ihracat verisi tek tek şirketlerin kârını veya fiyat yönünü belirlemez."
+        }
+      ],
+      "codes": []
+    }
+  ],
+  "kapChecks": [
+    {
+      "code": "GARAN",
+      "checkedAt": "2026-11-01T19:21:59.320Z",
+      "status": "verified",
+      "events": [
+        {
+          "date": "2026-10-28",
+          "title": "30 Eylül 2026 BDDK konsolide finansal sonuç sunumu",
+          "source": "KAP",
+          "url": "https://www.kap.org.tr/tr/Bildirim/1689153",
+          "summary": "Banka 30 Eylül 2026 tarihli konsolide finansal sonuçlarına ilişkin Türkçe ve İngilizce sunumları KAP'ta paylaştı."
+        },
+        {
+          "date": "2026-10-28",
+          "title": "2026 dokuz aylık konsolide finansal tablolar için sorumluluk beyanı",
+          "source": "KAP",
+          "url": "https://www.kap.org.tr/tr/Bildirim/1689149",
+          "summary": "Banka 01.01.2026–30.09.2026 dönemine ilişkin konsolide finansal tablo ve sınırlı denetim raporuna dair sorumluluk beyanını yayımladı."
+        }
+      ],
+      "comment": "Son 14 günde iki ilgili resmi KAP bildirimi doğrulandı. Bu pilotta finansal tablo kalemleri bağımsız yeniden hesaplanmadı."
+    },
+    {
+      "code": "AKBNK",
+      "checkedAt": "2026-11-01T19:21:59.320Z",
+      "status": "verified",
+      "events": [
+        {
+          "date": "2026-10-26",
+          "title": "Sendikasyon kredisi hakkında özel durum açıklaması",
+          "source": "KAP",
+          "url": "https://www.kap.org.tr/tr/Bildirim/1687058",
+          "summary": "Akbank farklı vadelerde ABD doları ve avro cinsinden beş dilimli sendikasyon kredisi sağladığını, vadeleri ve referans faiz marjlarını açıkladı."
+        },
+        {
+          "date": "2026-10-27",
+          "title": "2026 dokuz aylık konsolide finansal tablolar için sorumluluk beyanı",
+          "source": "KAP",
+          "url": "https://kap.org.tr/tr/Bildirim/1688328",
+          "summary": "Banka 30 Eylül 2026 tarihli konsolide finansal tabloları ve sınırlı denetim raporuna ilişkin sorumluluk beyanını KAP'ta yayımladı."
+        }
+      ],
+      "comment": "Son 14 günde iki resmi KAP bildirimi doğrulandı. Bu pilotta kredi veya bilanço açıklamalarından otomatik hisse al-sat sinyali üretilmedi."
+    }
+  ],
+  "notes": [
+    "Yalnız test amaçlı, bağımsız haber/KAP derlemesi; yatırım tavsiyesi veya otomatik emir değildir.",
+    "market.json 'data' dalından salt okunur incelendi. Ana uygulamanın news ve stocks alanlarının market.json dizileri olarak kullanıldığı ui/index.html kodunda kontrol edildi.",
+    "Haberler 30 Ekim–1 Kasım 2026 yayın/olay tarihleriyle sınırlandı. KAP taraması 19 Ekim–1 Kasım 2026 dönemini kapsar.",
+    "affects alanları kanıtlanmış fiyat tahmini değil, ihtimalli etki değerlendirmesidir; puanlar ve sinyaller değiştirilmedi.",
+    "Bu dosya uygulamanın canlı veri şemasına bağlanmadı; sadece test dalında saklandı."
+  ]
+}
