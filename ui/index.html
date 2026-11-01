@@ -2040,7 +2040,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-28";
+const UI_VERSION="2026.11.01-29";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -2713,17 +2713,41 @@ if(window.__standalone){
       .aibtn.busy{opacity:.8}.aibtn:disabled{opacity:.55}`;
     document.head.appendChild(ss);
     const settingsFix=document.createElement("style"); settingsFix.textContent=`
-      html.apk .sheet.st{display:flex;flex-direction:column;gap:0;overflow:hidden;min-height:0;
-        max-height:94vh;max-height:94dvh;padding:0 16px 0}
+      /* Ayarlar iki tasarımda da tam ekran, düz bir yüzeydir:
+         üstte karartılmış boşluk / koyu bir başlık bandı oluşmaz. */
+      html.apk .sheet.st{
+        position:fixed;inset:0 0 0 0;
+        width:100%;max-width:560px;height:100vh;height:100dvh;
+        max-height:100vh;max-height:100dvh;min-height:0;
+        display:flex;flex-direction:column;gap:0;overflow:hidden;
+        box-sizing:border-box;margin:0 auto;
+        padding:env(safe-area-inset-top,0px) 0 0;
+        border:0;border-radius:0;box-shadow:none;background:var(--card);
+      }
       html.apk .sheet.st::before{display:none}
-      html.apk .sheet.st .st-top{position:relative;top:auto;flex:0 0 auto;
-        min-height:62px;padding:14px 1px 12px;background:var(--bg);
-        border-bottom:1px solid var(--line);z-index:1}
-      html.apk .sheet.st .st-top h2{font:800 21px var(--f-display);letter-spacing:-.025em}
-      html.apk .sheet.st .st-scroll{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;
+      html.apk .sheet.st .st-top{
+        position:relative;top:auto;flex:0 0 auto;
+        display:flex;align-items:center;justify-content:space-between;
+        min-height:66px;box-sizing:border-box;padding:13px 18px;
+        background:var(--card);color:var(--ink);
+        border-bottom:1px solid var(--line);z-index:1;
+      }
+      html.apk .sheet.st .st-top h2{
+        margin:0;background:none;color:var(--ink);
+        font:800 22px/1.2 var(--f-display);letter-spacing:-.025em;
+      }
+      html.apk .sheet.st .st-x{
+        display:grid;place-items:center;width:36px;height:36px;
+        border-radius:12px;background:var(--bg);color:var(--ink);
+        border:1px solid var(--line);box-shadow:none;flex-shrink:0;
+      }
+      html.apk .sheet.st .st-scroll{
+        display:flex;flex-direction:column;flex:1 1 auto;min-height:0;
         overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
-        padding:2px 0 calc(20px + env(safe-area-inset-bottom,0px));gap:12px;
-        -webkit-overflow-scrolling:touch;scrollbar-width:thin}
+        box-sizing:border-box;background:var(--bg);
+        padding:5px 16px calc(22px + env(safe-area-inset-bottom,0px));gap:12px;
+        -webkit-overflow-scrolling:touch;scrollbar-width:thin;
+      }
       html.apk .sheet.st .st-scroll>*{flex-shrink:0}
       html.apk .sheet.st .st-scroll .st-h{margin-top:17px}
       html.apk .sheet.st .st-scroll .st-foot{padding-bottom:2px}
