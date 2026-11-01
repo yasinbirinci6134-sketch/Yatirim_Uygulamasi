@@ -367,7 +367,9 @@ details.removed summary{cursor:pointer;font:600 13px var(--f-body);color:var(--m
     const k="db:col/data/users/local", o=JSON.parse(localStorage.getItem(k)||"null"); let ch=0;
     if(o&&typeof o==="object") for(const id in o){ const r=o[id]; if(r&&typeof r.code==="string"&&/[İÇĞÖŞÜ]/.test(r.code)){ r.code=fx(r.code); ch++; } }
     if(ch) localStorage.setItem(k,JSON.stringify(o));
-    ["db:config/watchlist","db:config/fundwatch","db:config/fxwatch"].forEach(w=>{ const v=JSON.parse(localStorage.getItem(w)||"null"); if(v&&Array.isArray(v.codes)&&v.codes.some(c=>/[İÇĞÖŞÜ]/.test(c))){ v.codes=[...new Set(v.codes.map(fx))]; localStorage.setItem(w,JSON.stringify(v)); } }); }catch(_){}
+    ["db:config/watchlist","db:config/fundwatch","db:config/fxwatch"].forEach(w=>{ const v=JSON.parse(localStorage.getItem(w)||"null"); if(v&&Array.isArray(v.codes)&&v.codes.some(c=>/[İÇĞÖŞÜ]/.test(c))){ v.codes=[...new Set(v.codes.map(fx))]; localStorage.setItem(w,JSON.stringify(v)); } });
+    const kt=JSON.parse(localStorage.getItem("fp-ktype")||"null"); if(kt&&typeof kt==="object"&&Object.keys(kt).some(c=>/[İÇĞÖŞÜ]/.test(c))){ const n={};   // tür eşleştirmesi de yeni koda taşınır
+      for(const c in kt){ const d=fx(c); if(n[d]==null||d===c) n[d]=kt[c]; } localStorage.setItem("fp-ktype",JSON.stringify(n)); } }catch(_){}
   const RAWB="https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/", RAW=RAWB+"data/";
   const ld=p=>{ try{ const v=localStorage.getItem("db:"+p); return v?JSON.parse(v):null; }catch(_){ return null; } };
   const sv=(p,v)=>{ try{ v==null?localStorage.removeItem("db:"+p):localStorage.setItem("db:"+p,JSON.stringify(v)); }catch(_){} };
@@ -1814,7 +1816,7 @@ const SCORE={
 
 /* Puan geçmişi: hisse kayıtlarındaki alt puanlar (pt) telefonun ağırlıklarına (STOCK_W) ölçeklenerek gösterilir; scorelog'un kendisi değişmez */
 function histSc(it){ const pt=it?.pt; if(it?.t!=="s"||!pt||!Object.keys(STOCK_W).every(k=>typeof pt[k]==="number")) return it.sc;
-  return Math.round(Object.keys(STOCK_W).reduce((s,k)=>s+pt[k]*STOCK_W[k]/SCORE.MAX[k],0)); }
+  return Object.keys(STOCK_W).reduce((s,k)=>s+Math.round(pt[k]*STOCK_W[k]/SCORE.MAX[k]),0); }   // canlı puanla aynı: her bileşen ayrı yuvarlanır
 /* Detaydaki Puan sekmesi: yapay zekânın günlük puanından farkı açıkla */
 function liveNote(x){ return x?.finPeriod?`<p class="small muted" style="margin:6px 0 0">Puan güncel fiyat ve ${esc(String(x.finPeriod).replace("/"," / "))} dönemi bilançosuyla hesaplandı.</p>`:""; }
 /* Canlı fiyatları yapay zekânın yazdığı verinin üstüne koy (yalnız daha yeniyse), göstergeleri ve fiyata bağlı puanları güncelle */
