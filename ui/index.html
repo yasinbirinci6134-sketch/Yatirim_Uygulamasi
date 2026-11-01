@@ -695,7 +695,7 @@ html[data-design="modern"] .lrow .sbadge,html.apk[data-design="modern"] .lrow .s
   border-radius:999px;box-shadow:none;background:var(--s2-soft);
   font:800 12px/1.35 var(--f-body);color:var(--muted)
 }
-html[data-design="modern"] .lrow .sbadge::before{content:"Puan ";font-weight:600}
+html[data-design="modern"] .lrow .sbadge::before{content:"";font-weight:600}
 html[data-design="modern"] .lrow .sbadge.hi{color:var(--up);border-color:color-mix(in srgb,var(--up) 35%,var(--line))}
 html[data-design="modern"] .lrow .sbadge.lo{color:var(--down);border-color:color-mix(in srgb,var(--down) 35%,var(--line))}
 html[data-design="modern"] .lrow .exitw{grid-column:1/-1}
@@ -824,10 +824,6 @@ html[data-design="modern"] .s2-newsarrow{font-size:14px;color:var(--muted)}
 html[data-design="modern"] .s2-more{border:0;background:transparent;color:var(--accent);font:700 12px var(--f-body);padding:13px 0}
 html[data-design="modern"] .s2-count{font-size:11px;color:var(--muted)}
 html[data-design="modern"] .s2-muted{font-size:13px;color:var(--muted)}
-html[data-design="modern"] .s2-subhead{padding:10px 4px 15px;border-bottom:1px solid var(--line);margin-bottom:4px}
-html[data-design="modern"] .s2-subhead>span{color:var(--accent);font:800 10px var(--f-body);letter-spacing:.13em}
-html[data-design="modern"] .s2-subhead h2{font:800 29px/1.14 var(--f-display);letter-spacing:-.06em;margin:9px 0 5px}
-html[data-design="modern"] .s2-subhead p{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0}
 @media(max-width:375px){
   html[data-design="modern"] .lrow,html.apk[data-design="modern"] .lrow{grid-template-columns:minmax(0,1fr) minmax(100px,auto)!important}
   html[data-design="modern"] .lrow .right .lp{font-size:15px}
@@ -906,7 +902,7 @@ html.apk[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadg
 html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge.hi{color:var(--up)}
 html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge.lo{color:var(--down)}
 html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge::before{
-  content:"Puan ";font-weight:500;
+  content:"";font-weight:500;
 }
 html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .exitw{
   grid-column:1/-1;
@@ -2032,7 +2028,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-27";
+const UI_VERSION="2026.11.01-28";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -3140,30 +3136,9 @@ function studio2RenderGundem(){
     if(e.key==="Enter"||e.key===" "){e.preventDefault();el.click();}
   }));
 }
-function studio2PostTab(tab){
-  if(!studioOn())return;
-  const v=$("v-"+tab),m=S.market;
-  if(!v||!m||v.querySelector(".s2-subhead"))return;
-  const all={
-    oneri:["FON REHBERİ","Fonlara yakından bak.","Güncel puanlar, dağılım önerileri ve fon karşılaştırmaları."],
-    hisse:["HİSSE ANALİZİ","Şirketleri keşfet.","Hisse puanları, fiyat değişimleri ve temel değerlendirmeler."],
-    doviz:["DÖVİZ & EMTİA","Kur ve değerli metaller.","Altın, döviz ve emtianın son açıklanan fiyatları."],
-    sanal:["PORTFÖY TAKİBİ","Varlıkların bir arada.","Pozisyonlarının toplam değeri ve işlem geçmişi."],
-    piyasa:["EKONOMİ PANOSU","Büyük resim.","Faiz, enflasyon, kur ve piyasadaki hareketler."]
-  },q=all[tab];if(!q)return;
-  const intro=document.createElement("div");intro.className="s2-subhead";
-  intro.innerHTML=`<span>${q[0]}</span><h2>${q[1]}</h2><p>${q[2]}</p>`;
-  v.insertBefore(intro,v.firstChild);
-}
   // Yalnız Tema 2 için ayrı ana ekran; Tema 1'in tüm render ve davranışları korunur.
   const beforeStudioGundem=renderGundem;
   renderGundem=function(){ return studioOn()?studio2RenderGundem():beforeStudioGundem.apply(this,arguments); };
-  for(const [fn,tab] of [["renderOneri","oneri"],["renderHisse","hisse"],["renderDoviz","doviz"],["renderSanal","sanal"],["renderPiyasa","piyasa"]]){
-    const original=window[fn];
-    if(typeof original!=="function")continue;
-    window[fn]=function(){const output=original.apply(this,arguments);studio2PostTab(tab);return output;};
-  }
-
   // Veri bu katman yüklenmeden gelmiş olabilir: yeni görünümle (puan halkası, Bugün ekranı) hemen yeniden çiz
   try{ if(S.market) renderAll(); }catch(e){ console.error(e); }
   renderFresh(); setTimeout(()=>apkCheck(false),4000);
