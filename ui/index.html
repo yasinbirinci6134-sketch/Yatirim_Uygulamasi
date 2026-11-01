@@ -695,7 +695,7 @@ html[data-design="modern"] .lrow .sbadge,html.apk[data-design="modern"] .lrow .s
   border-radius:999px;box-shadow:none;background:var(--s2-soft);
   font:800 12px/1.35 var(--f-body);color:var(--muted)
 }
-html[data-design="modern"] .lrow .sbadge::before{content:"";font-weight:600}
+html[data-design="modern"] .lrow .sbadge::before{content:none!important;display:none!important}
 html[data-design="modern"] .lrow .sbadge.hi{color:var(--up);border-color:color-mix(in srgb,var(--up) 35%,var(--line))}
 html[data-design="modern"] .lrow .sbadge.lo{color:var(--down);border-color:color-mix(in srgb,var(--down) 35%,var(--line))}
 html[data-design="modern"] .lrow .exitw{grid-column:1/-1}
@@ -902,7 +902,7 @@ html.apk[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadg
 html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge.hi{color:var(--up)}
 html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge.lo{color:var(--down)}
 html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge::before{
-  content:"";font-weight:500;
+  content:none!important;display:none!important;
 }
 html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .exitw{
   grid-column:1/-1;
