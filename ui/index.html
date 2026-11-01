@@ -837,6 +837,104 @@ html[data-design="modern"] .s2-subhead p{font-size:12.5px;line-height:1.5;color:
   html[data-design="modern"] .s2-balance-foot{gap:8px}
 }
 
+
+/* Tema 2 — yüksek yoğunluklu varlık listeleri.
+   Sadece hisse, fon ve döviz sekmelerindeki satırlar; Tema 1 değişmez. */
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow,
+html.apk[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(92px,auto)!important;
+  grid-template-areas:"id quote" "id score"!important;
+  gap:0 10px!important;
+  align-items:center!important;
+  min-height:55px!important;
+  margin:0!important;
+  padding:5px 3px!important;
+  border:0!important;
+  border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow:active{
+  background:color-mix(in srgb,var(--accent) 5%,var(--card))!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .lmid{
+  grid-area:id;align-self:center;min-width:0;gap:1px;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .lt{
+  gap:3px 5px;line-height:1.25;min-width:0;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .code{
+  font:800 13.5px/1.25 var(--f-body);letter-spacing:-.01em;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sig{
+  font-size:9px;padding:1px 5px;white-space:nowrap;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .mine,
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .pick,
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .stale{
+  font-size:9px;line-height:1.2;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .name{
+  font-size:10.5px;line-height:1.35;
+  display:block;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;
+  max-width:100%;min-width:0;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .lbar{
+  display:none!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .right{
+  grid-area:quote;align-self:end;text-align:right;min-width:0;padding:0;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .right .lp{
+  font:800 14px/1.2 var(--f-body);letter-spacing:-.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .right .small{
+  font-size:10.5px;line-height:1.25;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge,
+html.apk[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge{
+  grid-area:score;justify-self:end;align-self:start;
+  width:auto!important;height:auto!important;min-width:0!important;
+  margin:0!important;padding:1px 0!important;
+  border:0!important;border-radius:0!important;
+  box-shadow:none!important;background:none!important;
+  font:700 10px/1.25 var(--f-body);color:var(--muted);
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge.hi{color:var(--up)}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge.lo{color:var(--down)}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .sbadge::before{
+  content:"Puan ";font-weight:500;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .exitw{
+  grid-column:1/-1;
+}
+/* Fon kategorileri ve içteki liste çevresindeki fazladan boşluğu kaldır. */
+html[data-design="modern"] #v-oneri .fgrp{
+  gap:0;margin:4px 0 0;
+}
+html[data-design="modern"] #v-oneri .fgrp .fgh,
+html[data-design="modern"] #v-doviz .studio-asset-category{
+  margin:5px 0 0;padding:7px 2px 5px;
+  font-size:10.5px;letter-spacing:.035em;
+  background:transparent;border-bottom:1px solid var(--line);
+}
+html[data-design="modern"] :is(#v-oneri,#v-hisse,#v-doviz) .card:has(.fund.lrow){
+  gap:6px;padding:12px 14px;
+}
+@media(max-width:360px){
+  html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow,
+  html.apk[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow{
+    grid-template-columns:minmax(0,1fr) minmax(86px,auto)!important;
+    column-gap:6px!important;
+  }
+  html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .right .lp{
+    font-size:12.5px;
+  }
+}
+
 </style>
 
 <div class="wrap">
@@ -1934,7 +2032,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-26";
+const UI_VERSION="2026.11.01-27";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
