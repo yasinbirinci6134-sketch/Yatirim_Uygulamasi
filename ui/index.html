@@ -1357,7 +1357,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-14";
+const UI_VERSION="2026.11.01-15";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1894,12 +1894,12 @@ if(window.__standalone){
   let anT=0; const anWatch=()=>{ clearTimeout(anT); const r=anRun(); window.__anState();
     if(!r) return;
     if(S.market?.updatedAt&&S.market.updatedAt!==r.base&&new Date(S.market.updatedAt).getTime()>r.at-60e3){ try{ localStorage.removeItem("fp-anrun"); }catch(_){} window.__anState(); toast("Yeni analiz geldi.",3500); return; }
-    if(Date.now()-r.at>7*60e3&&!document.hidden) window.__pullRemote?.();   // görev ~9 dk sürer; sonrasında 1 dakikada bir bak
-    anT=setTimeout(anWatch,60e3); };
+    if(Date.now()-r.at>60e3&&!document.hidden) window.__pullRemote?.();   // görev bitince sonuç hemen görünsün: 1. dakikadan sonra 30 sn'de bir bak
+    anT=setTimeout(anWatch,30e3); };
   const anFire=async()=>{ const tok=(ls("fp-rtok")||"").trim(); const b=$("aiBtn"); if(b) b.disabled=true;
     try{ const o=await nget("POST",AN_URL,JSON.stringify({text:"Telefondaki Analiz düğmesiyle başlatıldı."}),{"Authorization":"Bearer "+tok,"anthropic-version":"2023-06-01","anthropic-beta":"experimental-cc-routine-2026-04-01","Content-Type":"application/json"});
       let sid=""; try{ sid=JSON.parse(o.body).claude_code_session_id||""; }catch(_){}
-      ls("fp-anrun",JSON.stringify({at:Date.now(),base:S.market?.updatedAt||"",sid})); toast("Analiz başladı. Yaklaşık 10 dakika sürer; bitince veriler kendiliğinden gelir.",4500); anWatch();
+      ls("fp-anrun",JSON.stringify({at:Date.now(),base:S.market?.updatedAt||"",sid})); toast("Analiz başladı. Birkaç dakika sürer; bitince veriler kendiliğinden gelir.",4500); anWatch();
     }catch(e){ const m=String(e?.message||e);
       if(/izinsiz adres/.test(m)){ toast("Arka planda başlatmak için uygulamanın yeni sürümünü kur. Şimdilik eski yolla açılıyor.",4000); setTimeout(anOld,1500); }
       else if(/HTTP 401/.test(m)) toast("Analiz anahtarı geçersiz; Ayarlar'dan yeniden gir.",4000);
