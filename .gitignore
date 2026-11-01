@@ -2,3 +2,5 @@ app/build/
 .gradle/
 build/
 local.properties
+app/release.p12
+*.p12
