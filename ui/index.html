@@ -363,6 +363,11 @@ details.removed summary{cursor:pointer;font:600 13px var(--f-body);color:var(--m
     Storage.prototype.setItem=function(k,v){ _set.call(this,k,v); try{ if(this===LS&&KEYS.includes(k)) save(); }catch(_){} };
     Storage.prototype.removeItem=function(k){ _rem.call(this,k); try{ if(this===LS&&KEYS.includes(k)) save(); }catch(_){} };
     setTimeout(save,3000); }catch(_){}
+  try{ const TRM={"İ":"I","I":"I","Ç":"C","Ğ":"G","Ö":"O","Ş":"S","Ü":"U"}, fx=c=>String(c).replace(/[İÇĞÖŞÜ]/g,ch=>TRM[ch]);
+    const k="db:col/data/users/local", o=JSON.parse(localStorage.getItem(k)||"null"); let ch=0;
+    if(o&&typeof o==="object") for(const id in o){ const r=o[id]; if(r&&typeof r.code==="string"&&/[İÇĞÖŞÜ]/.test(r.code)){ r.code=fx(r.code); ch++; } }
+    if(ch) localStorage.setItem(k,JSON.stringify(o));
+    ["db:config/watchlist","db:config/fundwatch","db:config/fxwatch"].forEach(w=>{ const v=JSON.parse(localStorage.getItem(w)||"null"); if(v&&Array.isArray(v.codes)&&v.codes.some(c=>/[İÇĞÖŞÜ]/.test(c))){ v.codes=[...new Set(v.codes.map(fx))]; localStorage.setItem(w,JSON.stringify(v)); } }); }catch(_){}
   const RAWB="https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/", RAW=RAWB+"data/";
   const ld=p=>{ try{ const v=localStorage.getItem("db:"+p); return v?JSON.parse(v):null; }catch(_){ return null; } };
   const sv=(p,v)=>{ try{ v==null?localStorage.removeItem("db:"+p):localStorage.setItem("db:"+p,JSON.stringify(v)); }catch(_){} };
@@ -529,6 +534,7 @@ try{ S.lastReport=JSON.parse(localStorage.getItem("fp-lastrep")||"null"); }catch
 /* Ortak liste satırı: puan rozeti · kod/ad/rozetler · 1 ay çubuğu · fiyat */
 function exitTxt(x){ const w=String(x.exitWhy||"Puanı düştü").replace(/[;,.]?\s*(bir sonraki[^;.]*)?düzelmezse listeden çıkacak\.?/i,"").trim().replace(/[;,]$/,"");
   return (w.endsWith(".")?w:w+".")+" Bir sonraki tam güncellemede düzelmezse listeden çıkacak; şimdilik alma."; }
+const FUTX=new Set(["XAU","XAG","GAU","GAG"]);   // canlı fiyatı vadeli altın/gümüşten hesaplananlar
 function listRow(t,x){
   const k=t+":"+x.code, W=t==="s"?S.watch:t==="f"?S.fwatch:S.fxwatch, mine=W.includes(x.code);
   const dg=t==="f"?6:(x.price<10?4:2), m1=typeof x.m1==="number"?x.m1:null, w=m1==null?0:Math.min(100,Math.abs(m1)/15*100);
@@ -538,7 +544,7 @@ function listRow(t,x){
     <div class="lmid xh"><div class="lt"><span class="code">${esc(x.code)}</span>${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${mine?'<span class="mine">EKLEDİĞİN</span>':""}${stale}</div>
       <div class="name">${esc(x.name||"")}</div>
       ${m1!=null?`<div class="lbar"><span>1 ay</span><i><b class="${m1>=0?"p":"n"}" style="width:${Math.max(4,w)}%"></b></i><em class="num ${cls(m1)}">${pc(m1,1)}</em></div>`:""}</div>
-    <div class="right xh"><div class="num lp">${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="small num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div>
+    <div class="right xh"><div class="num lp">${t==="x"&&FUTX.has(x.code)?'<span class="small muted" title="Yaklaşık fiyat: vadeli işlem fiyatından hesaplanır">≈ </span>':""}${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="small num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div>
     ${x.exitAt?`<p class="exitw xh" style="grid-column:1/-1">⚠ ${esc(exitTxt(x))}</p>`:""}
   </div>`; }
 
@@ -635,7 +641,7 @@ function drawDetail(){ const el=$("det"); if(!el||!S.det) return; const {t,c}=S.
   <div class="dwrap">
    <div class="dhead"><div><div class="dcode">${esc(c)}</div><div class="name">${esc(x.name||"")}</div>
      <div class="dbadges">${x.score!=null?`<span class="score${sCls(x.score,t)}">${num(x.score,0)}</span>`:""}${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${watched?'<span class="mine">EKLEDİĞİN</span>':""}</div></div>
-     <div class="dprice"><div class="num">${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div></div>
+     <div class="dprice"><div class="num">${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div>${t==="x"&&FUTX.has(c)?'<div class="small muted">Yaklaşık fiyat · vadeli işlem fiyatından hesaplanır, kuyumcu fiyatından farklı olabilir</div>':""}</div></div>
    <div class="seg dtabs" role="tablist">${[["veri","Veriler"],["puan","Puan"],["haber","Haberler"]].map(([k,l])=>`<button role="tab" data-dt="${k}" class="${tab===k?"on":""}" aria-selected="${tab===k}">${l}</button>`).join("")}</div>
    ${tab==="veri"?`<section class="card">${priceChart(x)}</section><section class="card">${perfBlock(x)||'<p class="note">Dönemsel getiri yok.</p>'}${rangeBar(x)}</section><section class="card dlist">${detRows(t,x)}</section>`:""}
    ${tab==="puan"?`<section class="card">${x.score!=null?`<div class="dscore"><span class="score${sCls(x.score,t)}">${num(x.score,0)}</span><span class="small muted">/ 100</span></div>`:""}${scoreNote(x)}${liveNote(x)}
@@ -1017,8 +1023,9 @@ async function askPf(pf, rows, total){
 }
 function tradesCol(){ return S.db.collection("data/users/"+S.uid); }
 async function sell(id){
-  const t=S.trades.find(x=>x.id===id), f=asset(t?.code); if(!t||!f) return;
-  try{ await tradesCol().doc(id).update({status:"closed", sellPrice:f.price, sellDate:f.priceDate}); toast(`${t.code} satıldı olarak kaydedildi`); }
+  const t=S.trades.find(x=>x.id===id), f=asset(t?.code); if(!t) return;
+  const sp=Number(f?.price); if(!(isFinite(sp)&&sp>0)){ toast(`${t.code} için güncel fiyat yok; satış kaydedilmedi.`,3500); return; }
+  try{ await tradesCol().doc(id).update({status:"closed", sellPrice:sp, sellDate:f.priceDate||new Date(Date.now()+TR).toISOString().slice(0,10)}); toast(`${t.code} satıldı olarak kaydedildi`); }
   catch(e){ toast("Kaydedilemedi."); }
 }
 async function delTrade(id){ try{ await tradesCol().doc(id).delete(); }catch(e){ toast("Silinemedi."); } }
@@ -1230,7 +1237,9 @@ VERİ: ${JSON.stringify(ctx)}`;
     const [k,label,why]=advise(r,val); return {code:c,k,label,why}; });
   const grpOf=a=>(S.live?.fin?.[a.code]?.bank||BANKCODES.has(a.code))?"banka":(HOLD.has(a.code)||/holding/i.test(a.name||""))?"holding":null, G={};
   let left=amount, capped=false;
-  let items=amount?(res.items||[]).map(it=>{ const a=asset(String(it.code||"").toUpperCase()); if(!a||(!a.isStock&&!akVis(a))||(a.isStock?!PL.hisse:!PL.fon)) return null;
+  const merged=[]; (res.items||[]).forEach(it=>{ const c=String(it?.code||"").toUpperCase(), m=merged.find(z=>z.code===c);
+    if(m){ m.tl=(Number(m.tl)||0)+(Number(it.tl)||0); if(it.why&&!m.why) m.why=it.why; } else merged.push({...it,code:c}); });
+  let items=amount?merged.map(it=>{ const a=asset(String(it.code||"").toUpperCase()); if(!a||(!a.isStock&&!akVis(a))||(a.isStock?!PL.hisse:!PL.fon)) return null;
     const price=Number(a.price); if(!(price>0)||!isFinite(price)) return null;
     let want=Math.min(Math.max(0,Number(it.tl)||0), left);
     if(a.isStock&&fromAI){ const g=grpOf(a), lim=Math.min(amount*0.20, g?amount*0.40-(G[g]||0):Infinity); if(want>lim){ want=Math.max(0,lim); capped=true; } }
@@ -1285,7 +1294,7 @@ function openBuy(code, tr){
   scrim.onclick=close; q("#bCancel").onclick=close;
   sh.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{q("#bAmt").value=b.dataset.q;});
   q("#bOk").onclick=async()=>{
-    const nw=isNew(), nc=(q("#bNew").value||"").trim().toLocaleUpperCase("tr").replace(/[^A-Z0-9ÇĞİÖŞÜ]/g,""), nt=q("#bNewT").value;
+    const nw=isNew(), nc=(q("#bNew").value||"").trim().toUpperCase().replace(/[^A-Z0-9]/g,""), nt=q("#bNewT").value;
     const a=nw ? (asset(nc) || (nc ? {code:nc, price:NaN} : null)) : asset(q("#bCode").value), amt=Number(q("#bAmt").value), units=Number(q("#bUnits").value)||0, pIn=Number(q("#bPrice").value)||0, date=q("#bDate").value||today;
     if(!a || !(amt>0)){ toast(nw&&!nc?"Kodu yaz.":"Fon/hisse ve tutar gerekli."); return; }
     if(!(Number(a.price)>0) && !(units>0) && !(pIn>0)){ toast("Bu kalemin güncel fiyatı yok; adet ya da alış fiyatı gir."); return; }
@@ -1386,7 +1395,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-22";
+const UI_VERSION="2026.11.01-23";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1803,6 +1812,9 @@ const SCORE={
 };
 /*SCORE:END*/
 
+/* Puan geçmişi: hisse kayıtlarındaki alt puanlar (pt) telefonun ağırlıklarına (STOCK_W) ölçeklenerek gösterilir; scorelog'un kendisi değişmez */
+function histSc(it){ const pt=it?.pt; if(it?.t!=="s"||!pt||!Object.keys(STOCK_W).every(k=>typeof pt[k]==="number")) return it.sc;
+  return Math.round(Object.keys(STOCK_W).reduce((s,k)=>s+pt[k]*STOCK_W[k]/SCORE.MAX[k],0)); }
 /* Detaydaki Puan sekmesi: yapay zekânın günlük puanından farkı açıkla */
 function liveNote(x){ return x?.finPeriod?`<p class="small muted" style="margin:6px 0 0">Puan güncel fiyat ve ${esc(String(x.finPeriod).replace("/"," / "))} dönemi bilançosuyla hesaplandı.</p>`:""; }
 /* Canlı fiyatları yapay zekânın yazdığı verinin üstüne koy (yalnız daha yeniyse), göstergeleri ve fiyata bağlı puanları güncelle */
@@ -1849,7 +1861,7 @@ showTab(); renderAll();
   db.doc("market/live").onSnapshot(s => { if(LIVE.busy) return; const L=s.exists?s.data():null; if(L && (!S.live || L.at>S.live.at)){ S.live=L; applyLive(); renderAll(); } });
   db.doc("market/latest").onSnapshot(s => { S.market = s.exists ? s.data() : null; applyLive(); firstMarket=false; renderAll(); if(!maybeAuto.done) maybeAuto(); window.__anCheck?.(); });
   db.doc("config/app").onSnapshot(s => { S.cfg = s.exists ? s.data() : null; firstCfg=true; renderFresh(); if(!maybeAuto.done) maybeAuto(); });
-  db.doc("market/scorelog").onSnapshot(s => { const H={}; ((s.exists&&s.data()?.snaps)||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(sn=>(sn.items||[]).forEach(it=>{ if(it?.c&&typeof it.sc==="number") (H[it.c]=H[it.c]||[]).push({d:sn.date,sc:it.sc,p:it.p}); })); S.hist=H; renderHisse(); renderOneri(); renderDoviz(); if(S.det) drawDetail(); });
+  db.doc("market/scorelog").onSnapshot(s => { const H={}; ((s.exists&&s.data()?.snaps)||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(sn=>(sn.items||[]).forEach(it=>{ if(it?.c&&typeof it.sc==="number") (H[it.c]=H[it.c]||[]).push({d:sn.date,sc:histSc(it),p:it.p}); })); S.hist=H; renderHisse(); renderOneri(); renderDoviz(); if(S.det) drawDetail(); });
   db.doc("config/fundwatch").onSnapshot(s => { S.fwatch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; renderOneri(); });
   db.doc("config/fxwatch").onSnapshot(s => { S.fxwatch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; renderDoviz(); });
   db.doc("config/watchlist").onSnapshot(s => { S.watch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; renderHisse(); });
