@@ -931,6 +931,22 @@ html[data-design="modern"] :is(#v-oneri,#v-hisse,#v-doviz) .card:has(.fund.lrow)
   }
 }
 
+
+/* Tema 2: döviz/emtia ve fon alt grup başlıkları ana bölüm başlığıyla karışmasın. */
+html[data-design="modern"] #v-doviz .studio-asset-category,
+html[data-design="modern"] #v-oneri .fgrp .fgh{
+  display:flex;align-items:center;gap:7px;
+  color:var(--muted);background:var(--s2-soft);
+  font:700 10.5px/1.25 var(--f-body);
+  letter-spacing:.11em;text-transform:uppercase;
+  margin:7px 0 2px;padding:6px 9px;
+  border:0;border-left:3px solid var(--accent);border-radius:3px;
+}
+html[data-design="modern"] #v-doviz .studio-asset-category::first-letter,
+html[data-design="modern"] #v-oneri .fgrp .fgh::first-letter{
+  color:var(--ink);
+}
+
 </style>
 
 <div class="wrap">
