@@ -380,6 +380,258 @@ html.apk[data-design="modern"] .st-seg{border:1px solid var(--line);border-radiu
 html.apk[data-design="modern"] .st-seg button.on{color:var(--accent)}
 @media(max-width:380px){html.apk[data-design="modern"] nav.tabs{left:7px;right:7px}}
 
+
+/* TEMA 2 — AYRI ARAYÜZ: kartların, listelerin, portföyün ve tablo bilgi hiyerarşisinin yeniden tasarımı.
+   Tüm seçiciler data-design="modern" ile sınırlıdır. */
+html[data-design="modern"]{
+  --bg:#F3F3EF;--card:#FFFFFF;--ink:#17252A;--muted:#66777D;--line:#DCE2E0;
+  --up:#087C68;--down:#BB464B;--warn:#9B722C;
+  --m-deep:#192D32;--m-tint:#E9EFEB;--m-side:#F7F9F7
+}
+html[data-design="modern"][data-theme="dark"]{
+  --bg:#111A1D;--card:#1A2629;--ink:#ECF2F0;--muted:#9BAFAC;--line:#334345;
+  --up:#62D6B7;--down:#FC959B;--warn:#F0BF79;
+  --m-deep:#203A3F;--m-tint:#223235;--m-side:#1E2D30
+}
+@media (prefers-color-scheme:dark) {
+  html[data-design="modern"]:not([data-theme="light"]){
+    --bg:#111A1D;--card:#1A2629;--ink:#ECF2F0;--muted:#9BAFAC;--line:#334345;
+    --up:#62D6B7;--down:#FC959B;--warn:#F0BF79;
+    --m-deep:#203A3F;--m-tint:#223235;--m-side:#1E2D30
+  }
+}
+html[data-design="modern"] body{background:var(--bg)}
+html.apk[data-design="modern"] .wrap{gap:12px}
+html.apk[data-design="modern"] header{
+  background:var(--card);margin-inline:-16px;padding:14px 16px 13px;
+  border-bottom:1px solid var(--line);box-shadow:0 4px 16px -14px #071A1B;
+}
+html.apk[data-design="modern"] .brand h1{font:800 27px/1.12 var(--f-display);letter-spacing:-.055em}
+html.apk[data-design="modern"] .brand h1::before{
+  content:"FON PUSULASI  •  PORTFÖY TERMİNALİ";display:block;margin-bottom:8px;
+  color:var(--muted);font:800 9px/1.25 var(--f-body);letter-spacing:.15em;
+}
+html.apk[data-design="modern"] .fresh{
+  padding:5px 0 0;border:0;border-radius:0;background:transparent;font-size:11.5px
+}
+html.apk[data-design="modern"] .card,html[data-design="modern"] .card{
+  border:1px solid var(--line);border-radius:8px;
+  box-shadow:none;background:var(--card);padding:16px;gap:12px;
+}
+html.apk[data-design="modern"] .card h2,html[data-design="modern"] .card h2{
+  font:800 16px/1.3 var(--f-display);letter-spacing:-.035em
+}
+html.apk[data-design="modern"] .card h3,html[data-design="modern"] .card h3{
+  font:800 10px/1.2 var(--f-body);letter-spacing:.13em
+}
+html.apk[data-design="modern"] .horizon{
+  align-items:center;padding-bottom:10px;border-bottom:1px solid var(--line)
+}
+html.apk[data-design="modern"] .horizon h2{display:flex;align-items:center;gap:8px}
+html.apk[data-design="modern"] .horizon h2::before{
+  content:"";display:block;width:3px;height:18px;background:var(--accent);border-radius:0
+}
+/* Ana ekran: yatay kaydırmalı kutular artık gerçek 2 sütunlu gösterge tablosu. */
+html.apk[data-design="modern"] .hm{display:flex;flex-direction:column;gap:13px}
+html.apk[data-design="modern"] .hm-hi{
+  margin:4px 0 0;letter-spacing:.02em;text-transform:uppercase;font-size:11px;
+  font-weight:800;color:var(--muted)
+}
+html.apk[data-design="modern"] .hm-sec{
+  margin-top:6px;border-bottom:1px solid var(--line);padding-bottom:7px;
+  display:flex;justify-content:space-between;align-items:center
+}
+html.apk[data-design="modern"] .hm-sec h2{
+  font:800 12px var(--f-body);text-transform:uppercase;letter-spacing:.1em
+}
+html.apk[data-design="modern"] .hm-pf{
+  background:var(--m-deep);color:#F6FAF9;border:0;border-radius:9px;
+  padding:21px 20px 19px;box-shadow:none;
+  position:relative;overflow:hidden;gap:15px;
+}
+html.apk[data-design="modern"] .hm-pf::before{
+  content:"";position:absolute;width:110px;height:110px;right:-35px;top:-45px;
+  border-radius:50%;border:20px solid rgba(255,255,255,.035);pointer-events:none
+}
+html.apk[data-design="modern"] .hm-pf .l{font-size:10px;letter-spacing:.14em}
+html.apk[data-design="modern"] .hm-pf .v{font:800 38px/1.08 var(--f-display);letter-spacing:-.055em}
+html.apk[data-design="modern"] .hm-pfs{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+  margin-top:1px;padding-top:17px;border-top:1px solid rgba(255,255,255,.2)
+}
+html.apk[data-design="modern"] .hm-pfs>div+div{border-left:0;padding-left:12px}
+html.apk[data-design="modern"] .hm-pfs .n{font-size:17px}
+html.apk[data-design="modern"] .hm-pfs .pg .n,html.apk[data-design="modern"] .hm-pfs .pl .n{
+  background:none;margin:0;padding:0;border-radius:0
+}
+html.apk[data-design="modern"] .hm-do{
+  border-left:4px solid var(--accent);background:var(--card);padding:18px 16px 18px 19px
+}
+html.apk[data-design="modern"] .hm-do .t{align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:12px}
+html.apk[data-design="modern"] .hm-do .hm-ic{
+  background:var(--m-tint);border-radius:4px;width:36px;height:36px
+}
+html.apk[data-design="modern"] .hm-step{
+  position:relative;border-bottom:1px dashed var(--line);padding:4px 0 13px;font-size:13.5px
+}
+html.apk[data-design="modern"] .hm-step b{
+  border-radius:5px;background:var(--m-tint);color:var(--accent);font-size:12px
+}
+html.apk[data-design="modern"] .hm-bar{height:8px;border-radius:3px}
+html.apk[data-design="modern"] .hm-tiles{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;
+  overflow:visible;max-width:none;padding:0;align-items:stretch
+}
+html.apk[data-design="modern"] .hm-tile{
+  min-width:0;min-height:102px;background:var(--card);border:1px solid var(--line);
+  border-radius:7px;box-shadow:none;padding:13px 12px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:6px
+}
+html.apk[data-design="modern"] .hm-tile .k{font:800 10px var(--f-body);text-transform:uppercase;letter-spacing:.06em}
+html.apk[data-design="modern"] .hm-tile .v{font:800 21px/1.12 var(--f-display);letter-spacing:-.045em;overflow-wrap:anywhere}
+html.apk[data-design="modern"] .hm-tile .hm-chg{font-size:11px}
+html.apk[data-design="modern"] .hm-mini{
+  background:var(--card);border:1px solid var(--line);border-radius:7px;box-shadow:none;padding:15px
+}
+html.apk[data-design="modern"] .hm-mini .k{color:var(--accent);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+html.apk[data-design="modern"] .hm-mini .go{font-weight:800}
+html.apk[data-design="modern"] .hm-row{
+  border:1px solid var(--line);border-radius:6px;background:var(--m-side);
+  padding:13px 12px;margin-bottom:8px;align-items:flex-start
+}
+html.apk[data-design="modern"] .hm-row:first-child{border-top:1px solid var(--line)}
+html.apk[data-design="modern"] .hm-row .hg b{font-size:13px;line-height:1.45}
+html.apk[data-design="modern"] .hm-dot{
+  width:5px!important;min-width:5px!important;height:30px!important;border-radius:2px!important
+}
+/* Fon / Hisse / Döviz: üç sütunlu fiyat terminali, ana listedeki kart görünümünün yerine geçer. */
+html[data-design="modern"] .studio-tablehead{
+  display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(100px,.9fr);
+  align-items:center;gap:8px;margin:7px 0 0;
+  padding:9px 10px;background:var(--m-deep);color:#ECF5F2;border-radius:5px 5px 0 0;
+  font:800 9px/1.3 var(--f-body);letter-spacing:.08em
+}
+html[data-design="modern"] .studio-tablehead span:nth-child(2){text-align:center}
+html[data-design="modern"] .studio-tablehead span:nth-child(3){text-align:right}
+html[data-design="modern"] .lrow,html.apk[data-design="modern"] .lrow{
+  display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(100px,.9fr);
+  grid-template-areas:"id score quote";gap:8px;align-items:center;
+  padding:12px 10px!important;border:1px solid var(--line);border-top:0;
+  border-radius:0;min-width:0;background:var(--card)
+}
+html[data-design="modern"] .lrow:nth-of-type(even){background:var(--m-side)}
+html[data-design="modern"] .lrow .lmid{grid-area:id;min-width:0;gap:5px}
+html[data-design="modern"] .lrow .lmid .lt{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+html[data-design="modern"] .lrow .lmid .lt .code{font:800 13px var(--f-display);letter-spacing:-.02em}
+html[data-design="modern"] .lrow .lmid .name{
+  font-size:10.5px;line-height:1.3;white-space:normal;display:-webkit-box;
+  -webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden
+}
+html[data-design="modern"] .lrow .lbar{display:none}
+html[data-design="modern"] .lrow .sbadge,
+html.apk[data-design="modern"] .lrow .sbadge{
+  grid-area:score;display:grid;width:38px;height:38px;margin-inline:auto;
+  background:var(--m-tint);border:1px solid var(--line);border-radius:5px;
+  box-shadow:none;font:800 14px var(--f-body);color:var(--ink)
+}
+html[data-design="modern"] .lrow .sbadge.hi{border-left:3px solid var(--up);color:var(--up)}
+html[data-design="modern"] .lrow .sbadge.mid{border-left:3px solid var(--warn);color:var(--ink)}
+html[data-design="modern"] .lrow .sbadge.lo{border-left:3px solid var(--down);color:var(--down)}
+html[data-design="modern"] .lrow .right{grid-area:quote;min-width:0;text-align:right}
+html[data-design="modern"] .lrow .right .lp{
+  font:800 14px/1.35 var(--f-display);letter-spacing:-.035em;overflow-wrap:anywhere
+}
+html[data-design="modern"] .lrow .right .small{font-size:11px}
+html[data-design="modern"] .lrow .exitw{grid-column:1/-1}
+html[data-design="modern"] .fgrp{gap:0;margin-top:13px}
+html[data-design="modern"] .fgrp .fgh,html[data-design="modern"] .studio-asset-category{
+  color:var(--ink);font:800 11px var(--f-body);letter-spacing:.06em;
+  border:0;margin:0;padding:11px 8px;background:var(--m-tint)
+}
+html[data-design="modern"] .fgrp .studio-tablehead{margin-top:0}
+html[data-design="modern"] .fgrp .lrow:first-of-type{border-top:0}
+html[data-design="modern"] .lfbar{gap:11px}
+html[data-design="modern"] .lfbar input{
+  border:1px solid var(--line);background:var(--m-side);border-radius:6px;padding:12px
+}
+html[data-design="modern"] .chips button{border-radius:5px}
+/* Öneri dağılımları: klasik kart içi liste yerine yatırım terminalinin satırları */
+html[data-design="modern"] .aitem{
+  grid-template-columns:22px minmax(0,1fr) auto;
+  align-items:start;column-gap:9px;row-gap:3px;
+  border-bottom:1px solid var(--line);padding:10px 0
+}
+html[data-design="modern"] .aitem .adot{width:10px;height:10px;border-radius:2px;margin-top:5px}
+html[data-design="modern"] .aitem .pct{font:800 15px var(--f-display);text-align:right}
+html[data-design="modern"] .aitem .why{grid-column:2/-1;font-size:12px}
+html[data-design="modern"] .alloc{border-radius:2px;height:7px}
+/* Portföy: farklı özet bölümü, istatistik kutuları ve tablo biçimli işlem listesi */
+html[data-design="modern"] .pfhero{
+  background:var(--m-deep)!important;color:#EEF7F4;border:0!important;
+  padding:22px 18px!important;border-radius:8px!important
+}
+html[data-design="modern"] .pfhero .muted{color:#B7C6C4}
+html[data-design="modern"] .pfhero .pfv{font:800 30px var(--f-display);letter-spacing:-.05em}
+html[data-design="modern"] .pfhero .pfpick{color:#C7D7D2}
+html[data-design="modern"] .pfhero .pfstats{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px
+}
+html[data-design="modern"] .pfhero .pfstats>div{
+  border:1px solid rgba(255,255,255,.18);border-radius:5px;background:rgba(255,255,255,.06);
+  padding:10px 8px;gap:6px
+}
+html[data-design="modern"] .pfhero .pfstats span{color:#C7D7D2}
+html[data-design="modern"] .pfhero .pfstats b{color:#EEF7F4;font-size:12px}
+html[data-design="modern"] .trade{
+  padding:13px 10px;border:1px solid var(--line);border-radius:6px;
+  background:var(--m-side);margin:5px 0;gap:9px 12px
+}
+html[data-design="modern"] .trade .acts{padding-top:8px;border-top:1px dashed var(--line)}
+html[data-design="modern"] .trade .code{font:800 15px var(--f-display)}
+html[data-design="modern"] .trade .right>.num:first-child{font:800 17px var(--f-display)}
+/* Piyasa göstergeleri, haberler, zaman çizelgesi */
+html[data-design="modern"] .igrid{gap:9px}
+html[data-design="modern"] .it{
+  border:1px solid var(--line);background:var(--m-side);border-radius:6px;
+  padding:15px 12px;min-height:90px
+}
+html[data-design="modern"] .it b{font:800 19px var(--f-display);letter-spacing:-.03em}
+html[data-design="modern"] .it.hero{
+  border-left:4px solid var(--accent);border-radius:5px
+}
+html[data-design="modern"] .ni{
+  background:var(--m-side);border:1px solid var(--line);border-radius:6px;
+  padding:14px 12px 14px 19px;margin-bottom:9px
+}
+html[data-design="modern"] .nimp{left:0;top:0;bottom:0;border-radius:5px 0 0 5px}
+html[data-design="modern"] .mv{
+  background:var(--m-side);border:1px solid var(--line);border-radius:5px;padding:10px 8px
+}
+html[data-design="modern"] .st-g{border:1px solid var(--line);border-radius:8px;box-shadow:none}
+html[data-design="modern"] .sheet{border-radius:12px 12px 0 0}
+html[data-design="modern"] nav.tabs,
+html.apk[data-design="modern"] nav.tabs{
+  left:0;right:0;bottom:0;border:0;border-top:1px solid var(--line);
+  border-radius:0;background:var(--card);padding:6px 4px calc(7px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -8px 20px -18px #060E15;
+}
+html.apk[data-design="modern"] nav.tabs button{
+  border-radius:5px;margin:0 2px;padding:8px 0;min-width:0
+}
+html.apk[data-design="modern"] nav.tabs button[aria-selected="true"]{
+  background:var(--m-tint);box-shadow:inset 0 3px 0 var(--accent);border-radius:4px
+}
+html.apk[data-design="modern"] nav.tabs button[aria-selected="true"] svg{background:none}
+@media(max-width:380px){
+  html[data-design="modern"] .studio-tablehead,html[data-design="modern"] .lrow{
+    grid-template-columns:minmax(0,1fr) 38px minmax(84px,.9fr);gap:5px
+  }
+  html[data-design="modern"] .studio-tablehead{font-size:8px;padding-inline:6px}
+  html[data-design="modern"] .lrow{padding-inline:6px!important}
+  html[data-design="modern"] .lrow .right .lp{font-size:12px}
+  html.apk[data-design="modern"] .hm-pf .v{font-size:32px}
+}
+
 </style>
 
 <div class="wrap">
@@ -552,7 +804,10 @@ const ACC=[["yesil","Yeşil","#0F6B57"],["mavi","Mavi","#2F5BB7"],["mor","Mor","
 let TH={mode:"auto",acc:"yesil",design:"classic",modernAcc:"mavi"}; try{ TH={...TH,...JSON.parse(localStorage.getItem("fp-theme")||"{}")}; }catch(e){}
 function activeAccent(){ return TH.design==="modern"?(TH.modernAcc||"mavi"):(TH.acc||"yesil"); }
 function applyTheme(){ const r=document.documentElement; if(TH.mode==="auto") r.removeAttribute("data-theme"); else r.setAttribute("data-theme",TH.mode); const ac=activeAccent(); if(ac!=="yesil") r.setAttribute("data-accent",ac); else r.removeAttribute("data-accent"); if(TH.design==="modern") r.setAttribute("data-design","modern"); else r.removeAttribute("data-design"); }
-function saveTheme(){ try{localStorage.setItem("fp-theme",JSON.stringify(TH));}catch(e){} applyTheme(); notifyBars(); try{savePrefs();}catch(e){} }
+function saveTheme(){ try{localStorage.setItem("fp-theme",JSON.stringify(TH));}catch(e){} applyTheme(); notifyBars(); try{savePrefs();}catch(e){} 
+  // Tema 2 tablo başlıkları DOM içinde üretildiği için değişimde o sayfayı yeniden çiz.
+  try{ if(S&&S.market&&typeof renderAll==="function") renderAll(); }catch(e){ console.error("Tema yenilenemedi",e); }
+}
 function notifyBars(){ setTimeout(()=>{ try{ if(!window.YatirimApp) return; const bg=getComputedStyle(document.body).backgroundColor, m=bg.match(/\d+/g)||[0,0,0], dark=(0.299*m[0]+0.587*m[1]+0.114*m[2])<128; window.YatirimApp.setBars(bg,dark); }catch(e){} },60); }
 applyTheme(); notifyBars(); window.addEventListener("load",notifyBars);
 try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change",notifyBars); }catch(e){}
@@ -607,7 +862,10 @@ try{ S.lastReport=JSON.parse(localStorage.getItem("fp-lastrep")||"null"); }catch
 /* Ortak liste satırı: puan rozeti · kod/ad/rozetler · 1 ay çubuğu · fiyat */
 function exitTxt(x){ const w=String(x.exitWhy||"Puanı düştü").replace(/[;,.]?\s*(bir sonraki[^;.]*)?düzelmezse listeden çıkacak\.?/i,"").trim().replace(/[;,]$/,"");
   return (w.endsWith(".")?w:w+".")+" Bir sonraki tam güncellemede düzelmezse listeden çıkacak; şimdilik alma."; }
-const FUTX=new Set(["XAU","XAG","GAU","GAG"]);   // canlı fiyatı vadeli altın/gümüşten hesaplananlar
+const FUTX=new Set(["XAU","XAG","GAU","GAG"]);
+/* Tema 2: aynı veriler için tablo başlıkları. Tema 1'de hiç HTML üretilmez. */
+const studioOn=()=>document.documentElement.getAttribute("data-design")==="modern";
+const studioTableHead=()=>studioOn()?'<div class="studio-tablehead" aria-hidden="true"><span>VARLIK / FON</span><span>SKOR</span><span>SON FİYAT / DEĞİŞİM</span></div>':"";   // canlı fiyatı vadeli altın/gümüşten hesaplananlar
 function listRow(t,x){
   const k=t+":"+x.code, W=t==="s"?S.watch:t==="f"?S.fwatch:S.fxwatch, mine=W.includes(x.code);
   const dg=t==="f"?6:(x.price<10?4:2), m1=typeof x.m1==="number"?x.m1:null, w=m1==null?0:Math.min(100,Math.abs(m1)/15*100);
@@ -965,7 +1223,7 @@ function renderHisse(){
       ${lfBar("hisse","Hisse ara: kod ya da şirket")}
       ${S.db?`<form id="addForm" class="addrow"><input id="addCode" placeholder="Hisse ekle (ör. TTRAK)" maxlength="6" autocomplete="off" aria-label="Hisse kodu"><button class="btn" type="submit">Ekle</button></form>`:""}
       ${waiting.length?`<p class="note">Bir sonraki güncellemede analiz edilecek: ${waiting.map(esc).join(", ")}</p>`:""}
-      ${list.length?list.map(stockRow).join(""):`<div class="empty">Hisse verisi bir sonraki güncellemede gelecek.</div>`}
+      ${list.length?studioTableHead()+list.map(stockRow).join(""):`<div class="empty">Hisse verisi bir sonraki güncellemede gelecek.</div>`}
       ${(S.market?.removedStocks||[]).length?`<details class="removed"><summary>Son çıkarılanlar (${S.market.removedStocks.length})</summary>${S.market.removedStocks.slice().reverse().map(z=>`<div class="remrow"><div><span class="code">${esc(z.code)}</span> <span class="small muted">${esc(fmtDate(z.date)||"")}${z.score!=null?" · puan "+num(z.score,0):""}</span></div><p class="small muted" style="margin:2px 0 0">${esc(z.why||"")}</p></div>`).join("")}</details>`:""}
     </section>`;
   v.querySelectorAll("[data-buy]").forEach(b=> b.onclick = () => openBuy(b.dataset.buy));
@@ -1120,7 +1378,7 @@ function renderDoviz(){
       ${lfBar("doviz","Döviz ara: dolar, altın…")}
       ${S.db?`<form id="fxAddForm" class="addrow"><input id="fxAddCode" placeholder="Döviz ekle (ör. CHF, platin)" maxlength="20" autocomplete="off" aria-label="Döviz ya da emtia"><button class="btn" type="submit">Ekle</button></form>`:""}
       ${waiting.length?`<p class="note">Analiz ediliyor: ${waiting.map(esc).join(", ")}</p>`:""}
-      ${fx.length?["altin","gumus","doviz"].map(c=>applyLF("doviz",fx.filter(x=>x.cat===c)).map(fxRow).join("")).join(""):`<div class="empty">Veriler bir sonraki tam güncellemede gelecek.</div>`}</section>
+      ${fx.length?["altin","gumus","doviz"].map(c=>{const a=applyLF("doviz",fx.filter(x=>x.cat===c));return a.length?(studioOn()?`<div class="fgh studio-asset-category">${esc(FXCAT[c])}</div>`+studioTableHead():"")+a.map(fxRow).join(""):"";}).join(""):`<div class="empty">Veriler bir sonraki tam güncellemede gelecek.</div>`}</section>
     <section class="card"><details><summary class="code" style="cursor:pointer">Puan nasıl hesaplanıyor?</summary>
       <p class="why" style="margin-top:8px">TL ile yaşayan biri için: <b>Taşıma (25):</b> dövize ya da altına geçince vazgeçtiğin TL faiz getirisi ile beklenen kur artışının karşılaştırması (TCMB Piyasa Katılımcıları Anketi). Reel faiz yüksekken dolar tutmak genelde para piyasası fonunun gerisinde kalır. <b>Trend (30):</b> 12 ay ve 3 ay getirisi, fiyatın 1 yıllık aralıktaki yeri; döviz ve emtiada en güçlü kanıtı olan ölçüt (zaman serisi momentumu). <b>Değerleme (15):</b> reel kur (TL aşırı değerli mi), altında ABD reel faizi, altın/gümüş oranı. <b>Makro (20):</b> Fed ve TCMB kararları, jeopolitik risk, merkez bankası altın alımları, CDS. <b>Risk (10):</b> oynaklık ve büyük düşüşler. "Alınabilir" 62+, "Uzak dur" 42 altı.</p></details></section>`;
   bindFunds(v);
@@ -1191,7 +1449,7 @@ function fundsHtml(m){
   return `    ${S.db?`<section class="card"><div class="horizon"><h2>Fonlar <span class="small muted">${(m.funds||[]).length}</span></h2>${quickBtn("fon")}</div>${lfBar("oneri","Fon ara: kod ya da ad")}<form id="fAddForm" class="addrow"><input id="fAddCode" placeholder="Fon ekle (ör. ZBJ)" maxlength="4" autocomplete="off" aria-label="Fon kodu"><button class="btn" type="submit">Ekle</button></form>
       ${MYB.length?`<p class="small muted" style="margin:8px 0 0">Filtre: ${BANKS.filter(b=>MYB.includes(b[0])).map(b=>esc(b[1])).join(", ")} · <button class="linkbtn" id="setBtn2">değiştir</button></p>`:""}
       ${S.fwatch.filter(c=>!(m.funds||[]).some(f=>f.code===c)).length?`<p class="note">Analiz ediliyor: ${S.fwatch.filter(c=>!(m.funds||[]).some(f=>f.code===c)).map(esc).join(", ")}</p>`:""}`:`<section class="card">`}
-      ${groups.length?groups.map(g=>`<div class="fgrp"><div class="fgh">${CAT[g.c]} <span>${g.list.length}</span></div>${g.list.map(f=>listRow("f",f)).join("")}</div>`).join(""):`<div class="empty">Aramaya uyan fon yok.</div>`}</section>
+      ${groups.length?groups.map(g=>`<div class="fgrp"><div class="fgh">${CAT[g.c]} <span>${g.list.length}</span></div>${studioTableHead()+g.list.map(f=>listRow("f",f)).join("")}</div>`).join(""):`<div class="empty">Aramaya uyan fon yok.</div>`}</section>
     <section class="card"><details><summary class="code" style="cursor:pointer">Fon puanı nasıl hesaplanıyor?</summary>
       <p class="why" style="margin-top:8px"><b>Getiri (30):</b> tek döneme değil 1, 3, 6 ay ve 1 yılın tutarlılığına bakılır; geçen yılın en iyi fonları ertesi yıl çoğunlukla öne çıkmıyor. <b>Maliyet (20):</b> yönetim ücreti; araştırmalarda gelecek performansı en güvenilir öngören ölçüt düşük ücret. Endeks ve altın fonunda takip ettiği varlıktan sapma da burada. <b>Risk kontrolü (25):</b> TEFAS risk değeri, en büyük düşüş, Sharpe oranı. <b>Kalite (15):</b> fon büyüklüğü, yatırımcı sayısı, fon yaşı, portföy şirketi. <b>Ortama uyum (10):</b> faiz, enflasyon ve kur ortamının fon türünü destekleyip desteklemediği.</p><p class="why">Ağırlıklar sabit değil: her güncellemede eski puanlar sonraki gerçek getiriyle karşılaştırılır, isabetli ölçütlerin payı artar, yanıltanların azalır (çubuklardaki üst sınırlar güncel ağırlıkları gösterir).</p></details></section>`;
 }
@@ -1471,7 +1729,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-24";
+const UI_VERSION="2026.11.01-25";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
