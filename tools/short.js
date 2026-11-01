@@ -25,6 +25,6 @@ async function closes(sym){ const o=await get(`https://query1.finance.yahoo.com/
   if(items.length<50){ console.error('az hisse:',items.length); process.exit(1); }
   const F=items.map(x=>x.f); items.forEach(x=>x.cv=+SHORT.comp(x.f,F).toFixed(5)); const C=items.map(x=>x.cv); items.forEach(x=>{ x.score=SHORT.score(x.cv,C); x.tags=SHORT.tags(x.f,F); });
   items.sort((p,q)=>q.score-p.score);
-  const out={ at:new Date().toISOString(), asOf:items[0]?.date, n:items.length, market:SHORT.market(xu.c), items };
+  const out={ at:new Date().toISOString(), asOf:items[0]?.date, n:items.length, market:SHORT.market(xu.c), xu:{price:+xu.c[xu.c.length-1].toFixed(2),date:new Date(xu.t[xu.t.length-1]*1000+3*3600e3).toISOString().slice(0,10)}, items };
   fs.writeFileSync(process.argv[2]||'short.json',JSON.stringify(out));
   console.log('tamam',items.length,'hisse; piyasa',JSON.stringify(out.market),'; ilk 5:',items.slice(0,5).map(x=>x.code+' '+x.score).join(', ')); })();

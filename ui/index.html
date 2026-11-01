@@ -1386,7 +1386,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-21";
+const UI_VERSION="2026.11.01-22";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -2316,7 +2316,8 @@ if(window.__standalone){
       <section class="card"><h3 style="margin-top:0">Nasıl kullanılır?</h3>
         <p class="why">Kısa vade puanı (0–100) mutlak bir not değil, sıralamadır: hissenin son aylardaki gidişini BIST 100'deki diğer hisselerle karşılaştırır. Bu yüzden piyasa ne durumda olursa olsun en iyiler 90'ların üstünde çıkar; ne zaman girileceğini piyasanın durumu söyler. Karşılaştırılanlar: son 1 yılda piyasadan güçlü mü, uzun vadeli ortalamasının üstünde mi, 1 yıllık fiyat aralığının neresinde, ne kadar dalgalı. 80 ve üstü en iyi %20'dir.</p>
         <p class="why"><b>Kural:</b> Birikiminin küçük bir kısmıyla (en fazla %10) gir, en fazla 1 ay tut, aldığın fiyattan %8 düşerse sat. Piyasa düşüş eğilimindeyken girme.</p>
-        <p class="why"><b>Geçmişte nasıl çalıştı (2017–2026):</b> Puanı 80 ve üstü olan hisseler sonraki 1 ayda BIST 100'ü ortalama %0,3 ile %1,7 arasında geçti; puanı 20'nin altındakiler geride kaldı. Ama tek tek işlemlerin yaklaşık yarısı yine endeksin gerisinde kaldı; piyasa düşüşteyken avantaj neredeyse yoktu. Bir olasılıktır, garanti değildir.</p></section>`; }
+        <p class="why"><b>Geçmişte nasıl çalıştı (2017–2026):</b> En yüksek puanlı 5 hisseyle 680 geçmiş işlem denendi: sinyalden sonraki gün alış, %8 zarar-kes, işlem başına %0,3 maliyet. 20 işlem gününde ortalama getiri %5,0; aynı hisselerin ortalamasından 1,2 puan fazla. İşlemlerin %56'sı kârla kapandı (ortalama +%15), %44'ü zararla (ortalama −%8); %31'i en az %10 kazandırdı. 2023–2024'te model hisselerin ortalamasının gerisinde kaldı.</p>
+        <p class="why"><b>Dikkat:</b> %8 zarar-kes kaybı her zaman %8'de durdurmaz; sert düşüşte ya da boşlukla açılışta en kötü işlemde kayıp %29'a ulaştı. Geçmiş testte bugün borsada olan hisseler kullanıldı; gelecekte aynı sonuç garanti değildir.</p></section>`; }
   // Listede olmayan hisse: aynı detay ekranı; fiyat geçmişi, bilanço ve analist verisi çekilip puan aynı formülle hesaplanır
   // Listede olmayan hisse için kalem: tarama verisiyle hemen, fiyat geçmişi/bilanço/analist arkadan (önceden de çekilir)
   function scanItem(code){ S.scanItems=S.scanItems||[]; let x=S.scanItems.find(z=>z.code===code); if(x) return x; const it=SH.d?.items.find(i=>i.code===code);
