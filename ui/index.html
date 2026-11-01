@@ -1122,6 +1122,48 @@ html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .ni{
   }
 }
 
+
+/* Tema 2 — Uzun / Kısa seçimleri Hisseler satırındaki iki mini düğmeye taşınır. */
+html[data-design="modern"] #v-hisse .horizon:has(.studio-hm-tabs){
+  display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0;
+}
+html[data-design="modern"] #v-hisse .horizon:has(.studio-hm-tabs) h2{
+  flex:0 0 auto;white-space:nowrap;
+}
+html[data-design="modern"] #v-hisse .studio-hm-tabs{
+  display:inline-flex;gap:2px;align-items:center;flex:0 0 auto;
+  margin:0 0 0 auto;padding:2px;border-radius:9px;
+  background:var(--s2-soft);border:1px solid var(--line);
+}
+html[data-design="modern"] #v-hisse .studio-hm-tabs button{
+  min-width:42px;min-height:27px;padding:4px 7px;
+  border:0!important;border-radius:7px!important;
+  background:transparent;color:var(--muted);
+  font:700 10.5px/1.25 var(--f-body);white-space:nowrap;
+}
+html[data-design="modern"] #v-hisse .studio-hm-tabs button.on{
+  color:var(--ink);background:var(--card);
+  box-shadow:0 1px 3px rgba(0,0,0,.09);
+}
+html[data-design="modern"] #v-hisse .studio-hm-strip{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  min-height:32px;margin:0;padding:1px 1px 4px;
+}
+html[data-design="modern"] #v-hisse .studio-hm-strip>span{
+  font:800 15px/1.25 var(--f-display);
+}
+html[data-design="modern"] #v-hisse .st-view{
+  display:flex;flex-direction:column;gap:8px;
+}
+html[data-design="modern"] #v-hisse .st-view .card{
+  padding:10px 12px!important;gap:7px!important;
+}
+@media(max-width:365px){
+  html[data-design="modern"] #v-hisse .studio-hm-tabs button{
+    min-width:37px;padding:4px 5px;font-size:10px;
+  }
+}
+
 </style>
 
 <div class="wrap">
@@ -3217,8 +3259,22 @@ if(window.__standalone){
     if(pfBusy||!pfQ.length||!LIVE.ok()) return; pfBusy=true; setTimeout(async()=>{ while(pfQ.length){ const c=pfQ.shift(); try{ await loadScanItem(c); }catch(_){} await new Promise(r=>setTimeout(r,300)); } pfBusy=false; },800); }
   const bindSt=v=>v.querySelectorAll("[data-st]").forEach(e=>e.addEventListener("click",()=>openScanDetail(e.dataset.st)));
   { const o=renderHisse; renderHisse=function(){ const v=$("v-hisse"); if(!v) return o.apply(this,arguments);
-      const seg=`<div class="seg hseg" role="tablist">${[["uzun","Uzun vade"],["kisa","Kısa vade"]].map(([k,l])=>`<button data-hm="${k}" class="${(S.hmode||"uzun")===k?"on":""}" aria-selected="${(S.hmode||"uzun")===k}">${l}</button>`).join("")}</div>`;
-      let r; if((S.hmode||"uzun")!=="kisa"){ r=o.apply(this,arguments); v.insertAdjacentHTML("afterbegin",seg); } else { v.innerHTML=seg+`<div class="st-view">${shortView()}</div>`; bindSt(v); prefetchScan((SH.d?.items||[]).filter(i=>i.score>=80).slice(0,15).map(i=>i.code)); }
+      const modern=studioOn();
+      const options=modern?[["uzun","Uzun"],["kisa","Kısa"]]:[["uzun","Uzun vade"],["kisa","Kısa vade"]];
+      const seg=`<div class="seg ${modern?"studio-hm-tabs":"hseg"}" role="tablist" aria-label="Hisse yatırım vadesi">${options.map(([k,l])=>`<button data-hm="${k}" class="${(S.hmode||"uzun")===k?"on":""}" role="tab" aria-selected="${(S.hmode||"uzun")===k}">${l}</button>`).join("")}</div>`;
+      let r;
+      if((S.hmode||"uzun")!=="kisa"){
+        r=o.apply(this,arguments);
+        if(modern){
+          const heading=[...v.querySelectorAll(".horizon")].find(h=>(h.querySelector("h2")?.textContent||"").trim().startsWith("Hisseler"));
+          if(heading) heading.querySelector("h2").insertAdjacentHTML("afterend",seg);
+          else v.insertAdjacentHTML("afterbegin",seg);
+        } else v.insertAdjacentHTML("afterbegin",seg);
+      } else {
+        v.innerHTML=modern?`<div class="studio-hm-strip"><span>Hisseler</span>${seg}</div><div class="st-view">${shortView()}</div>`:
+          seg+`<div class="st-view">${shortView()}</div>`;
+        bindSt(v); prefetchScan((SH.d?.items||[]).filter(i=>i.score>=80).slice(0,15).map(i=>i.code));
+      }
       v.querySelectorAll("[data-hm]").forEach(b=>b.onclick=()=>{ S.hmode=b.dataset.hm; try{ localStorage.setItem("fp-hmode",S.hmode); }catch(_){} renderHisse(); }); return r; };
     try{ S.hmode=localStorage.getItem("fp-hmode")||"uzun"; }catch(_){} }
   { const o=renderGundem; renderGundem=function(){ const r=o.apply(this,arguments); const card=document.querySelector("#v-gundem .hm-do"); if(!card) return r;
