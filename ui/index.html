@@ -3223,7 +3223,7 @@ if(window.__standalone){
   const stCls=s=>{ const mk=stMarket(); return s<20?" lo":mk&&!mk.up?" mid":s>=80?" hi":" mid"; };
   const stRow=it=>{ const inL=(S.market?.stocks||[]).some(x=>x.code===it.code), r21=typeof it.f?.r21==="number"?it.f.r21*100:null;
     return `<div class="fund lrow st-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div>
-      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${studioOn()?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${it.score}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
+      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${studioOn()?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${num(it.score,0)}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
       ${(it.tags||[]).length?`<div class="st-tags">${it.tags.map(esc).join(" · ")}</div>`:""}</div>
       <div class="right"><div class="num lp">${it.price>0?Number(it.price).toLocaleString("tr-TR",{maximumFractionDigits:it.price<10?4:2}):"–"}</div>${r21!=null?`<div class="small num ${cls(r21)}">1 ay ${pc(r21,1)}</div>`:""}</div></div>`; };
   const mkText=mk=>!mk?"":mk.up?`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} üstünde. Kısa vadeli alım için ortam uygun; yine de küçük tutarla gir.`
