@@ -1,0 +1,7 @@
+{
+  "testOnly": true,
+  "source": "ChatGPT GitHub connector",
+  "purpose": "Confirm create_branch, create_file, and fetch_file without modifying main or data",
+  "createdDate": "2026-11-01",
+  "status": "write_test"
+}
