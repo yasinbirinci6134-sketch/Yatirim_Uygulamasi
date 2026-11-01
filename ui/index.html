@@ -1228,7 +1228,7 @@ VERİ: ${JSON.stringify(ctx)}`;
   const positions=[...new Set(rows.map(r=>r.code))].map(c=>{ const r=rows.find(x=>x.code===c), p=posMap[c];
     if(p&&ACT[p.action]) return {code:c,k:ACT[p.action][0],label:ACT[p.action][1],why:p.why||""};
     const [k,label,why]=advise(r,val); return {code:c,k,label,why}; });
-  const grpOf=a=>S.live?.fin?.[a.code]?.bank?"banka":(HOLD.has(a.code)||/holding/i.test(a.name||""))?"holding":null, G={};
+  const grpOf=a=>(S.live?.fin?.[a.code]?.bank||BANKCODES.has(a.code))?"banka":(HOLD.has(a.code)||/holding/i.test(a.name||""))?"holding":null, G={};
   let left=amount, capped=false;
   let items=amount?(res.items||[]).map(it=>{ const a=asset(String(it.code||"").toUpperCase()); if(!a||(!a.isStock&&!akVis(a))||(a.isStock?!PL.hisse:!PL.fon)) return null;
     const price=Number(a.price); if(!(price>0)||!isFinite(price)) return null;
@@ -1386,7 +1386,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-20";
+const UI_VERSION="2026.11.01-21";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1605,6 +1605,8 @@ async function lanalyst(code){ const c=await lcrumb(); if(!c) return null;
 // ağır olumsuz KAP: yapay zekânın "kapAgir" alanı; eski veride puanı ≥42 iken "uzak" verilmişse
 const kapAgir=x=>{ if(typeof x.kapAgir==="boolean") return x.kapAgir; const s=typeof x._s0==="number"?x._s0:x._ai?.score; return x._ai?.signal==="uzak"&&typeof s==="number"&&s>=42; };
 const HOLD=new Set(["KCHOL","SAHOL","DOHOL","ALARK","TKFEN","AGHOL","GLYHO","ENKAI"]);
+// canlı bilanço verisi gelmese de banka grubu sınırı çalışsın diye bilinen BIST bankaları
+const BANKCODES=new Set(["AKBNK","GARAN","YKBNK","ISCTR","VAKBN","HALKB","TSKB","ALBRK","SKBNK","QNBTR","QNBFB","ICBCT","KLNMA"]);
 /* Hisse puanı formülle: kârlılık, değer, sağlamlık, analist (momentum SCORE'da). Veri yoksa yapay zekânın değeri kalır; o da yoksa nötr. */
 function formulaScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.clamp, PM={...SCORE.MAX,...(M.partsMax||{})}, F=S.live?.fin||{}, Q=S.live?.an||{};
   const pf=v=>{ const x=parseFloat((t=>t.includes(",")?t.replace(/\./g,"").replace(",","."):/^-?\d{1,3}(\.\d{3})+$/.test(t)?t.replace(/\./g,""):t)(String(v||"").replace(/[^0-9,.-]/g,""))); return isFinite(x)?x:null; }, ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v;
@@ -1682,7 +1684,7 @@ function buildAdvice(M){ const n=v=>typeof v==="number"&&isFinite(v), F=S.live?.
     for(let k=0;k<ord.length&&rest>0;k++){ const i=ord[k][1]; if(fits(i)){ r[i]++; rest--; } }   // yuvarlama da sınırı aşmaz
     return list.map((z,i)=>({code:z.x.code, weight:r[i], why:z.why})).filter(z=>z.weight>0).sort((a,b)=>b.weight-a.weight); };
   // hisseler
-  const ST=(M.stocks||[]).filter(x=>n(x.score)&&x.signal!=="uzak"), grp=x=>F[x.code]?.bank?"banka":(HOLD.has(x.code)||/holding/i.test(x.name||""))?"holding":null;
+  const ST=(M.stocks||[]).filter(x=>n(x.score)&&x.signal!=="uzak"), grp=x=>(F[x.code]?.bank||BANKCODES.has(x.code))?"banka":(HOLD.has(x.code)||/holding/i.test(x.name||""))?"holding":null;
   const pickS=(min,short)=>ST.filter(x=>x.score>=min&&(!short||(n(x.m3)&&n(x.y1)&&!(x.m3<0&&x.y1<0)))).sort((a,b)=>b.score-a.score).slice(0,5);
   const mkS=(min,short,AIa)=>norm(pickS(min,short).map(x=>({x,w:x.score-40,why:why(x,oldWhy(AIa,x.code)),g:grp(x)})),0.35,z=>z.g,0.4);
   const sa=M.advice.stocks=M.advice.stocks||{}; const aS=AI.stocks||{};
