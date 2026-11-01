@@ -344,7 +344,7 @@ details.removed summary{cursor:pointer;font:600 13px var(--f-body);color:var(--m
   window.__standalone=true;
   /* Otomatik yedek: portföy, takip listeleri ve ayarlar ayrıca telefonun kendi deposunda (bildirim ayarlarının yanında) tutulur.
      WebView deposu bir açılışta boş gelirse ya da son yazılanları kaybetmişse veriler buradan geri gelir. */
-  try{ const KEYS=["db:col/data/users/local","db:config/watchlist","db:config/fundwatch","db:config/fxwatch","db:config/app","fp-theme","fp-layout","fp-pf","fp-owner","fp-ownunlock","fp-autoq","fp-plan","fp-hmode"], MAIN=KEYS[0];
+  try{ const KEYS=["db:col/data/users/local","db:config/watchlist","db:config/fundwatch","db:config/fxwatch","db:config/app","fp-theme","fp-layout","fp-pf","fp-owner","fp-ownunlock","fp-autoq","fp-plan","fp-hmode","fp-rtok"], MAIN=KEYS[0];
     const LS=window.localStorage, _set=Storage.prototype.setItem, _rem=Storage.prototype.removeItem;
     const ncfg=()=>{ try{ const o=JSON.parse(YatirimApp.getNotify()||"{}"); return o&&typeof o==="object"&&!Array.isArray(o)?o:null; }catch(_){ return null; } };
     const items=v=>{ try{ return Object.values(JSON.parse(v||"{}")||{}).filter(d=>d&&(d.kind==="trade"||d.kind==="portfolio")).length; }catch(_){ return 0; } };
@@ -1357,7 +1357,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-13";
+const UI_VERSION="2026.11.01-14";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1885,7 +1885,33 @@ if(window.__standalone){
     const la=S.live?.at; dot.className="dot "+(LIVE.busy?"busy":LIVE.err?"":"ok");
     txt.innerHTML=`<button class="linkbtn fr" id="frBtn" aria-label="Fiyatları yenile">Analiz ${esc(fmtTime(S.market.updatedAt))} · Fiyat ${LIVE.busy?"yenileniyor…":la?esc(fmtTime(la)):"—"}${LIVE.err?' <span class="down">· bağlantı yok</span>':""}</button>`;
     $("frBtn").onclick=()=>{ liveRefresh(null,true); window.__pullRemote?.(); }; };
-  $("refreshBtn").onclick=()=>{ A.openUrl(OLD+"#guncelle"); toast("Analiz başlatılıyor; bitince veriler buraya da gelir."); };
+  /* Analiz: anahtar girildiyse görev arka planda başlar (başka uygulama açılmaz); girilmediyse eski yol.
+     Anahtar yalnızca bu telefonda durur; yalnızca bu görevi başlatabilir. */
+  const AN_URL="https://api.anthropic.com/v1/claude_code/routines/trig_01McvDNvR9EFxKtiVSRuDZvb/fire", AN_MAX=30*60e3;
+  const anOld=()=>{ A.openUrl(OLD+"#guncelle"); toast("Analiz başlatılıyor; bitince veriler buraya da gelir."); };
+  const anRun=()=>{ try{ const r=JSON.parse(ls("fp-anrun")||"null"); return r&&Date.now()-r.at<AN_MAX?r:null; }catch(_){ return null; } };
+  window.__anState=()=>{ const b=$("aiBtn"); if(!b) return; const r=anRun(); b.textContent=r?"⏳ Analiz":"✦ Analiz"; b.classList.toggle("busy",!!r); };
+  let anT=0; const anWatch=()=>{ clearTimeout(anT); const r=anRun(); window.__anState();
+    if(!r) return;
+    if(S.market?.updatedAt&&S.market.updatedAt!==r.base&&new Date(S.market.updatedAt).getTime()>r.at-60e3){ try{ localStorage.removeItem("fp-anrun"); }catch(_){} window.__anState(); toast("Yeni analiz geldi.",3500); return; }
+    if(Date.now()-r.at>7*60e3&&!document.hidden) window.__pullRemote?.();   // görev ~9 dk sürer; sonrasında 1 dakikada bir bak
+    anT=setTimeout(anWatch,60e3); };
+  const anFire=async()=>{ const tok=(ls("fp-rtok")||"").trim(); const b=$("aiBtn"); if(b) b.disabled=true;
+    try{ const o=await nget("POST",AN_URL,JSON.stringify({text:"Telefondaki Analiz düğmesiyle başlatıldı."}),{"Authorization":"Bearer "+tok,"anthropic-version":"2023-06-01","anthropic-beta":"experimental-cc-routine-2026-04-01","Content-Type":"application/json"});
+      let sid=""; try{ sid=JSON.parse(o.body).claude_code_session_id||""; }catch(_){}
+      ls("fp-anrun",JSON.stringify({at:Date.now(),base:S.market?.updatedAt||"",sid})); toast("Analiz başladı. Yaklaşık 10 dakika sürer; bitince veriler kendiliğinden gelir.",4500); anWatch();
+    }catch(e){ const m=String(e?.message||e);
+      if(/izinsiz adres/.test(m)){ toast("Arka planda başlatmak için uygulamanın yeni sürümünü kur. Şimdilik eski yolla açılıyor.",4000); setTimeout(anOld,1500); }
+      else if(/HTTP 401/.test(m)) toast("Analiz anahtarı geçersiz; Ayarlar'dan yeniden gir.",4000);
+      else if(/HTTP 429/.test(m)) toast("Son bir saatte çok fazla analiz istendi; biraz sonra dene.",4000);
+      else if(/HTTP 400/.test(m)) toast("Analiz görevi şu an kapalı ya da duraklatılmış.",4000);
+      else toast("Analiz başlatılamadı: "+m,4000);
+    }finally{ if(b) b.disabled=false; window.__anState(); } };
+  $("refreshBtn").onclick=()=>{ if(!(ls("fp-rtok")||"").trim()) return anOld();
+    if(anRun()) return toast("Analiz zaten sürüyor; bitince veriler kendiliğinden gelir.");
+    if(typeof upToDate==="function"&&upToDate()) return askConfirm(`${closedNote()} ve veriler son kapanıştan sonra çekildi, büyük ihtimalle bir şey değişmeyecek. Yine de analiz başlatılsın mı?`, anFire);
+    anFire(); };
+  setTimeout(anWatch,2500);
 
   /* Aşağı çekip yenileme */
   (()=>{ const ind=document.createElement("div"); ind.className="ptr"; ind.textContent="↻"; document.body.appendChild(ind);
@@ -1983,7 +2009,8 @@ if(window.__standalone){
       .st-warn{background:color-mix(in srgb,var(--warn) 14%,var(--card));color:var(--ink)}
       .st-foot{text-align:center;font:500 12px var(--f-body);color:var(--muted);margin:16px 0 4px}
       .st textarea{width:100%;box-sizing:border-box;height:84px;margin:0;border-radius:12px;font:500 13px var(--f-body)}
-      .aibtn{all:unset;cursor:pointer;height:34px;padding:0 12px;border-radius:999px;background:var(--accent);color:#fff;font:700 13px/1 var(--f-body);display:flex;align-items:center;gap:5px;box-shadow:var(--sh);white-space:nowrap;flex-shrink:0}`;
+      .aibtn{all:unset;cursor:pointer;height:34px;padding:0 12px;border-radius:999px;background:var(--accent);color:#fff;font:700 13px/1 var(--f-body);display:flex;align-items:center;gap:5px;box-shadow:var(--sh);white-space:nowrap;flex-shrink:0}
+      .aibtn.busy{opacity:.8}.aibtn:disabled{opacity:.55}`;
     document.head.appendChild(ss); }
   openSettings=function(){
     document.querySelectorAll(".st,.st-scrim").forEach(e=>e.remove());
@@ -2011,7 +2038,9 @@ if(window.__standalone){
         <div class="st-h">Uygulama</div><div class="st-g">
           <div class="st-r" data-up><span class="st-ic">⬆️</span><span class="tx">Güncellemeleri denetle</span><span class="vl">${has("appVersionName")?esc(A.appVersionName()):""}</span><span class="ch">›</span></div>
           <div class="st-r" data-sh><span class="st-ic">🔗</span><span class="tx">Uygulamayı paylaş</span><span class="ch">›</span></div>
-          <label class="st-r" id="ownRow"${OWN()||ls("fp-ownunlock")==="1"?"":" hidden"}><span class="st-ic">👤</span><span class="tx">Bu telefon benim<small>Üstte analiz isteme düğmesi çıkar</small></span>${sw("own",OWN())}</label></div>
+          <label class="st-r" id="ownRow"${OWN()||ls("fp-ownunlock")==="1"?"":" hidden"}><span class="st-ic">👤</span><span class="tx">Bu telefon benim<small>Üstte analiz isteme düğmesi çıkar</small></span>${sw("own",OWN())}</label>
+          ${OWN()?`<div class="st-r" data-rt><span class="st-ic">🔑</span><span class="tx">Analiz anahtarı<small>${ls("fp-rtok")?"Girildi · analiz arka planda başlar":"Girilirse analiz başka uygulama açılmadan başlar"}</small></span><span class="ch">›</span></div>
+          <div class="st-r" id="rtBox" hidden style="cursor:default;flex-direction:column;align-items:stretch;gap:8px"><input id="rtIn" type="password" placeholder="sk-ant-oat01-…" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font:15px var(--f-body)"><div style="display:flex;gap:8px">${ls("fp-rtok")?`<button class="btn ghost" id="rtDel" style="flex:1">Sil</button>`:""}<button class="btn" id="rtOk" style="flex:1">Kaydet</button></div></div>`:""}</div>
         <div class="st-foot">Arayüz ${esc(UI_VERSION)}${has("uiSource")&&A.uiSource()==="file"?" · güncellendi":""}</div>`;
       const q=s=>sh.querySelector(s);
       q("[data-c]").onclick=close;
@@ -2033,7 +2062,10 @@ if(window.__standalone){
         toast(n+" kayıt geri yüklendi."); close(); };
       q("[data-up]").onclick=()=>apkCheck(true);
       q("[data-sh]").onclick=()=>{ if(has("share")) A.share(`Yatırım uygulaması (Android): https://github.com/${REPO}/releases/latest — sayfadaki Yatirim.apk dosyasını indirip kur.`,"Yatırım uygulaması"); };
-      q("#own").onchange=e=>{ ls("fp-owner",e.target.checked?"1":"0"); aiBtn(); };
+      q("#own").onchange=e=>{ ls("fp-owner",e.target.checked?"1":"0"); aiBtn(); draw(); };
+      q("[data-rt]")?.addEventListener("click",()=>{ const b=q("#rtBox"); b.hidden=!b.hidden; if(!b.hidden) q("#rtIn").focus(); });
+      q("#rtOk")?.addEventListener("click",()=>{ const v=q("#rtIn").value.replace(/\s+/g,""); if(!/^sk-ant-[\w-]{20,}$/.test(v)){ toast("Bu bir analiz anahtarına benzemiyor; tamamını yapıştır."); return; } ls("fp-rtok",v); toast("Anahtar kaydedildi. Analiz artık arka planda başlar."); draw(); });
+      q("#rtDel")?.addEventListener("click",()=>{ try{ localStorage.removeItem("fp-rtok"); }catch(_){} toast("Anahtar silindi."); draw(); });
       { let n=0; const f=q(".st-foot"); if(f) f.onclick=()=>{ if(++n>=7){ ls("fp-ownunlock","1"); const r=q("#ownRow"); if(r) r.hidden=false; } }; }
     };
     document.body.append(scrim,sh); draw(); };
@@ -2041,8 +2073,9 @@ if(window.__standalone){
   function aiBtn(){ let b=$("aiBtn"); const brand=document.querySelector(".brand"); if(!brand) return;
     if(!OWN()){ b?.remove(); return; }
     if(!b){ b=document.createElement("button"); b.id="aiBtn"; b.className="aibtn"; b.innerHTML="✦ Analiz"; b.onclick=()=>$("refreshBtn").click();
-      const g=$("setBtn"); const wrap=document.createElement("div"); wrap.style.cssText="display:flex;gap:8px;align-items:center"; g.parentNode.insertBefore(wrap,g); wrap.append(b,g); } }
-  aiBtn();
+      const g=$("setBtn"); const wrap=document.createElement("div"); wrap.style.cssText="display:flex;gap:8px;align-items:center"; g.parentNode.insertBefore(wrap,g); wrap.append(b,g); }
+    window.__anState?.(); }
+  aiBtn(); window.__anState?.();
 
   /* ===================== YENİ TASARIM (APK) ===================== */
   // Manrope yazı tipi uygulamanın içinde (açılışta internetten indirilmez, yazılar kaymaz)
