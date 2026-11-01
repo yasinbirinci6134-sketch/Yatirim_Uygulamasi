@@ -973,6 +973,155 @@ html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .studio-in
   color:var(--down);
 }
 
+
+/* Tema 2 — yoğun liste görünümü: portföy, haber, öneri, analiz ve piyasa.
+   Satırları tıklayınca açılan mevcut .x etkileşimi korunur; veri saklanmaz/silinmez. */
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal,#v-piyasa) > .card,
+html.apk[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal,#v-piyasa) > .card{
+  gap:8px!important;
+  padding:12px 13px!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal,#v-piyasa) .horizon{
+  padding:0 0 5px!important;gap:6px;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal,#v-piyasa) .horizon h2{
+  font-size:15px!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal,#v-piyasa) .fgrp{
+  margin-top:2px!important;
+}
+html[data-design="modern"] #v-sanal .pfhero{
+  padding:15px!important;gap:8px!important;
+}
+html[data-design="modern"] #v-sanal .pfhero .pfv{font-size:26px!important}
+html[data-design="modern"] #v-sanal .pfhero .pfstats{gap:4px!important}
+html[data-design="modern"] #v-sanal .pfhero .pfstats>div{
+  padding:6px 7px!important;gap:3px!important;
+}
+html[data-design="modern"] #v-sanal .pfhero .legend{
+  gap:6px!important;margin:0!important;font-size:11px!important;
+}
+/* Açılmamış pozisyonlar: iki satır yerine iki kompakt sütun.
+   Detaylar, alım partileri, düzenleme/silme/satış düğmeleri satır açılınca görünür. */
+html[data-design="modern"] #v-sanal .trade.x,
+html.apk[data-design="modern"] #v-sanal .trade.x{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(112px,auto)!important;
+  gap:1px 8px!important;align-items:center!important;
+  border:0!important;border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;box-shadow:none!important;
+  background:transparent!important;
+  margin:0!important;padding:7px 2px!important;min-height:51px!important;
+}
+html[data-design="modern"] #v-sanal .trade.x>.xh:first-child{
+  grid-column:1;grid-row:1;min-width:0;
+}
+html[data-design="modern"] #v-sanal .trade.x>.xh:first-child>.code{
+  font:800 14px/1.25 var(--f-body)!important;
+}
+html[data-design="modern"] #v-sanal .trade.x>.xh:first-child>.adv{
+  font-size:9px!important;padding:1px 5px!important;margin-left:3px!important;
+}
+html[data-design="modern"] #v-sanal .trade.x>.xh:first-child>.small{
+  display:block;font-size:10px!important;line-height:1.25!important;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-top:3px;
+}
+html[data-design="modern"] #v-sanal .trade.x>.right.xh{
+  grid-column:2;grid-row:1;min-width:0;
+}
+html[data-design="modern"] #v-sanal .trade.x>.right.xh>.num:first-child{
+  font:800 14px/1.25 var(--f-body)!important;white-space:nowrap;
+}
+html[data-design="modern"] #v-sanal .trade.x>.right.xh>.num.small{
+  font-size:10.5px!important;line-height:1.25!important;
+}
+html[data-design="modern"] #v-sanal .trade.x:not(.open)>:not(.xh){
+  display:none!important;
+}
+html[data-design="modern"] #v-sanal .trade.x.open{
+  background:var(--s2-soft)!important;
+  border-left:3px solid var(--accent)!important;
+  padding:9px 10px!important;gap:7px!important;
+}
+html[data-design="modern"] #v-sanal .trade.x.open>.why{
+  display:block!important;font-size:12px;line-height:1.4;margin:3px 0!important;
+}
+html[data-design="modern"] #v-sanal .trade.x.open .lot{
+  padding:5px 0!important;
+}
+html[data-design="modern"] #v-sanal .trade.x.open .lots{
+  gap:5px!important;margin-top:2px!important;
+}
+html[data-design="modern"] #v-sanal .trade.x.open .acts{
+  gap:4px!important;padding-top:6px!important;
+}
+html[data-design="modern"] #v-sanal .trade.x.open .acts .btn{
+  padding:5px 10px!important;font-size:11px!important;
+}
+/* Kapanmış pozisyonlar işlem düğmeleriyle birlikte görünmeye devam eder. */
+html[data-design="modern"] #v-sanal .trade:not(.x){
+  border:0!important;border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;background:transparent!important;
+  padding:7px 2px!important;margin:0!important;gap:5px 8px!important;
+}
+html[data-design="modern"] #v-sanal .trade:not(.x) .acts{
+  border:0!important;padding:0!important;justify-content:flex-start!important;
+}
+html[data-design="modern"] #v-sanal .trade:not(.x) .acts .btn{font-size:11px;padding:4px 8px}
+html[data-design="modern"] #v-sanal .pfmgr{padding:9px 12px!important}
+html[data-design="modern"] #v-sanal .pfmgr .pfacts{gap:5px!important}
+html[data-design="modern"] #v-sanal .pfmgr .pfchips{gap:5px!important}
+html[data-design="modern"] #v-sanal #planBox .card{padding:12px 13px!important;gap:8px!important}
+/* Öneri tablolarındaki ayrı kartlar yerine üst üste sıkı satırlar. */
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .aitem{
+  background:transparent!important;
+  border:0!important;border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;margin:0!important;
+  padding:7px 1px!important;row-gap:2px!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .aitem .why{
+  font-size:11.5px!important;line-height:1.4!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .aitem .pct{
+  font-size:13px!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fgh{
+  margin-top:5px!important;padding-top:6px!important;padding-bottom:5px!important;
+}
+/* Kısa vade sıralamasındaki skor da hisse kodunun yanına taşınır. */
+html[data-design="modern"] #v-hisse .st-row>.sbadge{display:none!important}
+html[data-design="modern"] #v-hisse .st-row .lmid{grid-area:id;min-width:0}
+html[data-design="modern"] #v-hisse .st-row .right{grid-area:quote}
+html[data-design="modern"] #v-hisse .st-row .studio-inline-score{font-size:12px}
+/* Piyasa verileri, yükselen/düşenler ve haber listelerinde daha az boşluk. */
+html[data-design="modern"] #v-piyasa .ig{margin:4px 0!important}
+html[data-design="modern"] #v-piyasa .igrid{gap:5px!important}
+html[data-design="modern"] #v-piyasa .it{
+  min-height:0!important;padding:8px 9px!important;gap:2px!important;
+}
+html[data-design="modern"] #v-piyasa .it b{font-size:16px!important}
+html[data-design="modern"] #v-piyasa .mvgrid{gap:7px!important}
+html[data-design="modern"] #v-piyasa .mvcol{gap:4px!important}
+html[data-design="modern"] #v-piyasa .mv{
+  border:0!important;border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;background:transparent!important;
+  padding:5px 3px!important;gap:4px!important;
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .ni{
+  border:0!important;border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;background:transparent!important;
+  padding:8px 8px 8px 12px!important;margin:0!important;
+}
+@media(max-width:375px){
+  html[data-design="modern"] #v-sanal .trade.x{
+    grid-template-columns:minmax(0,1fr) minmax(95px,auto)!important;
+  }
+  html[data-design="modern"] #v-sanal .trade.x>.right.xh>.num:first-child{
+    font-size:12px!important;
+  }
+}
+
 </style>
 
 <div class="wrap">
@@ -3032,7 +3181,7 @@ if(window.__standalone){
   const stCls=s=>{ const mk=stMarket(); return s<20?" lo":mk&&!mk.up?" mid":s>=80?" hi":" mid"; };
   const stRow=it=>{ const inL=(S.market?.stocks||[]).some(x=>x.code===it.code), r21=typeof it.f?.r21==="number"?it.f.r21*100:null;
     return `<div class="fund lrow st-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div>
-      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
+      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${studioOn()?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${it.score}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
       ${(it.tags||[]).length?`<div class="st-tags">${it.tags.map(esc).join(" · ")}</div>`:""}</div>
       <div class="right"><div class="num lp">${it.price>0?Number(it.price).toLocaleString("tr-TR",{maximumFractionDigits:it.price<10?4:2}):"–"}</div>${r21!=null?`<div class="small num ${cls(r21)}">1 ay ${pc(r21,1)}</div>`:""}</div></div>`; };
   const mkText=mk=>!mk?"":mk.up?`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} üstünde. Kısa vadeli alım için ortam uygun; yine de küçük tutarla gir.`
