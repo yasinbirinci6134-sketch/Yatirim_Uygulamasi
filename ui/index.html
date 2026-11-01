@@ -783,8 +783,10 @@ function allocBlock(h){
       <div class="xh amid"><span class="code">${esc(it.code)}</span> <span class="name">${esc(f?.name||CAT[cat]||"")}</span></div>
       <span class="pct num xh">%${esc(it.weight)}</span>
       <p class="why">${esc(it.why)}</p></div>`; }).join("");
+  const left=Math.round(100-h.items.reduce((s,i)=>s+(Number(i.weight)||0),0));   // sınırlar yüzünden dağıtılmayan pay
+  const restRow=left>=1?`<div class="aitem"><span class="adot xh" style="background:var(--line)"></span><div class="xh amid"><span class="name">Dağıtılmadı · para piyasasında tutabilirsin</span></div><span class="pct num xh">%${left}</span></div>`:"";
   return `<section class="card"><div class="horizon"><h2>${esc(h.title)}</h2><span class="small muted">${esc(h.horizon||"")}</span></div>
-    <div class="alloc" aria-hidden="true">${bars}</div><div>${rows}</div></section>`;
+    <div class="alloc" aria-hidden="true">${bars}</div><div>${rows}${restRow}</div></section>`;
 }
 function renderOneri(){
   const v=$("v-oneri"), a=S.market?.advice;
@@ -1048,7 +1050,7 @@ function renderGundem(){
   const a=m.advice||{}, news=m.news||[];
   const held=[...new Set(S.trades.filter(t=>t.status!=="closed").map(t=>t.code))].map(c=>asset(c)).filter(Boolean);
   const mine=n=>{ const out=[]; (n.affects||[]).forEach(f=>held.forEach(h=>{ const hc=h.isStock?"hisse":h.cat; if(hc===f.cat||(n.codes||[]).includes(h.code)) out.push([h.code,f.effect]); })); const seen={}; return out.filter(([c])=>!seen[c]&&(seen[c]=1)); };
-  const I=k=>(m.indicators||[]).find(i=>i.k===k), pn=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isNaN(x)?null:x; };
+  const I=k=>(m.indicators||[]).find(i=>i.k===k), pn=v=>{ const x=parseFloat((t=>t.includes(",")?t.replace(/\./g,"").replace(",","."):/^-?\d{1,3}(\.\d{3})+$/.test(t)?t.replace(/\./g,""):t)(String(v||"").replace(/[^0-9,.-]/g,""))); return isNaN(x)?null:x; };
   const pf=pn(I("Politika faizi")?.v), inf=pn(I("Yıllık enflasyon")?.v), re=pf!=null&&inf!=null?pf-inf:null;
   const chg=n=>{ const mm=String(n||"").match(/([+−-])\s*%?\s*([\d,]+)/); return mm?(mm[1]==="+"?1:-1)*parseFloat(mm[2].replace(",",".")):null; };
   const stat=(l,v,d)=>v?`<div class="gs"><span>${l}</span><b class="num">${esc(String(v).replace(/\s*TL$/,""))}</b>${d!=null?`<i class="num ${d>=0?"up":"down"}">${d>=0?"▲":"▼"} %${Math.abs(d).toLocaleString("tr-TR",{maximumFractionDigits:2})}</i>`:"<i>&nbsp;</i>"}</div>`:"";
@@ -1072,7 +1074,7 @@ function renderGundem(){
 }
 /* ---------- Piyasa ---------- */
 function indBlock(list){ if(!list.length) return "";
-  const get=k=>list.find(i=>i.k===k), pn=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isNaN(x)?null:x; };
+  const get=k=>list.find(i=>i.k===k), pn=v=>{ const x=parseFloat((t=>t.includes(",")?t.replace(/\./g,"").replace(",","."):/^-?\d{1,3}(\.\d{3})+$/.test(t)?t.replace(/\./g,""):t)(String(v||"").replace(/[^0-9,.-]/g,""))); return isNaN(x)?null:x; };
   const used=new Set(), tone=n=>/bp|baz puan/i.test(n||"")?"":/[−-]\s*%|[−-]\d|düş/i.test(n||"")?"down":/\+\s*%|\+\d|yüksel|art/i.test(n||"")?"up":"";
   const tile=(i,extra="")=>{ if(!i) return ""; used.add(i.k); const lab=i.k.replace(" (12 ay)",""), g=GLOSS[i.k]?"g":"";
     return `<div class="it ${extra}"><span class="itl ${g}" ${g?`data-g="${esc(i.k)}"`:""}>${esc(lab)}${/12 ay/.test(i.k)?' <em>12 ay sonra</em>':""}</span><b class="num">${esc(i.v)}</b>${i.note?`<span class="itn ${tone(i.note)}">${esc(i.note)}</span>`:""}</div>`; };
@@ -1180,7 +1182,8 @@ function planBase(amount, types, vade){
   const A=S.market.advice||{}, out=[];
   const parts=[]; if(types.fon) parts.push((vade==="kisa"?A.short:A.long)?.items||[]); if(types.hisse) parts.push((vade==="kisa"?A.stocks?.short:A.stocks?.long)?.items||[]);
   const share=amount/parts.length;
-  parts.forEach(items=>{ const ok=items.filter(it=>{const a=asset(it.code); return a && (a.isStock||akVis(a));}); const tot=ok.reduce((s,i)=>s+Number(i.weight||0),0)||1;
+  parts.forEach(items=>{ const ok=items.filter(it=>{const a=asset(it.code); return a && (a.isStock||akVis(a));}), full=items.reduce((s,i)=>s+Number(i.weight||0),0);
+    const tot=(ok.reduce((s,i)=>s+Number(i.weight||0),0)||1)*(full>0&&full<99.5?100/full:1);
     ok.forEach(it=>out.push({code:it.code, tl:share*Number(it.weight)/tot, why:it.why})); });
   return out;
 }
@@ -1210,24 +1213,34 @@ VERİ: ${JSON.stringify(ctx)}`;
     try{ const out=await S.sample(prompt,{modelTier:"default",cache:false}); const t=out.text||""; res=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1)); }
     catch(e){ res=null; if(e?.code==="not_granted") toast("Kural tabanlı öneri gösteriliyor."); }
   }
+  const fromAI=!!res;   // yapay zekâ planı: tek hisse ≤%20, banka/holding grubu ≤%40 burada da uygulanır (kural planı sınırları öneriden alır)
   if(!res) res={verdict:amount?"yatir":"kademeli", reason:"Uygulamanın kurallarına ve mevcut dağılımına göre hesaplandı.", positions:[], items:base, cash:0};
   const posMap=Object.fromEntries((res.positions||[]).map(p=>[String(p.code||"").toUpperCase(),p]));
   const positions=[...new Set(rows.map(r=>r.code))].map(c=>{ const r=rows.find(x=>x.code===c), p=posMap[c];
     if(p&&ACT[p.action]) return {code:c,k:ACT[p.action][0],label:ACT[p.action][1],why:p.why||""};
     const [k,label,why]=advise(r,val); return {code:c,k,label,why}; });
+  const grpOf=a=>S.live?.fin?.[a.code]?.bank?"banka":(HOLD.has(a.code)||/holding/i.test(a.name||""))?"holding":null, G={};
+  let left=amount, capped=false;
   let items=amount?(res.items||[]).map(it=>{ const a=asset(String(it.code||"").toUpperCase()); if(!a||(!a.isStock&&!akVis(a))||(a.isStock?!PL.hisse:!PL.fon)) return null;
-    const want=Math.max(0,Number(it.tl)||0), price=Number(a.price)||0, units=price>0?Math.floor(want/price):0;
-    return {code:a.code, name:a.name, cat:a.isStock?"hisse":a.cat, isStock:!!a.isStock, price, units, tl:units>0?units*price:want, why:it.why||""}; }).filter(x=>x&&x.tl>0):[];
+    const price=Number(a.price); if(!(price>0)||!isFinite(price)) return null;
+    let want=Math.min(Math.max(0,Number(it.tl)||0), left);
+    if(a.isStock&&fromAI){ const g=grpOf(a), lim=Math.min(amount*0.20, g?amount*0.40-(G[g]||0):Infinity); if(want>lim){ want=Math.max(0,lim); capped=true; } }
+    let units=Math.floor(want/price), tl=units*price;
+    if(!a.isStock&&units<1){ units=want/price; tl=want; }   // fon: tek paydan az tutar kesirli pay olarak kalır
+    if(!(tl>0)) return null; left-=tl; if(a.isStock){ const g=grpOf(a); if(g) G[g]=(G[g]||0)+tl; }
+    return {code:a.code, name:a.name, cat:a.isStock?"hisse":a.cat, isStock:!!a.isStock, price, units, tl, why:it.why||""}; }).filter(Boolean):[];
   const used=items.reduce((s,i)=>s+i.tl,0);
   res={...res, pf:pf.id, positions, items, amount, cash:amount?Math.max(0,Math.round(amount-used)):0, at:new Date().toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})};
   if(res.cash>0 && res.cash<amount*0.02 && !res.cashWhy) res.cashWhy="Adet yuvarlamasından kalan.";
+  else if(res.cash>0 && !res.cashWhy) res.cashWhy=capped?"Tek hisse ve aynı grup sınırları aşılmasın diye yatırılmadı; para piyasası fonunda tutabilirsin.":"Sınırlar ya da adet yuvarlaması nedeniyle yatırılmadı; para piyasası fonunda tutabilirsin.";
   PL.res=res; PL.busy=false; savePL(); renderPlan();
 }
 async function addPlan(pf){
   const r=PL.res; if(!r||!pf) return;
   const today=new Date(Date.now()+TR).toISOString().slice(0,10);
-  try{ for(const it of r.items){ const a=asset(it.code); await tradesCol().add({kind:"trade", pf, code:it.code, amount:it.tl, units:it.units||it.tl/it.price, price:it.price, buyDate:today, priceDate:a?.priceDate||today, at:new Date().toISOString(), status:"open"}); }
-    S.pf=pf; try{localStorage.setItem("fp-pf",pf)}catch(_){} toast(r.items.length+" pozisyon eklendi"); S.tab="sanal"; showTab(); renderSanal(); }
+  const ok=r.items.filter(it=>it.price>0&&it.tl>0&&(it.isStock?Number.isInteger(it.units)&&it.units>=1:it.units>0));
+  try{ for(const it of ok){ const a=asset(it.code); await tradesCol().add({kind:"trade", pf, code:it.code, amount:it.tl, units:it.units, price:it.price, buyDate:today, priceDate:a?.priceDate||today, at:new Date().toISOString(), status:"open"}); }
+    S.pf=pf; try{localStorage.setItem("fp-pf",pf)}catch(_){} toast(ok.length+" pozisyon eklendi"); S.tab="sanal"; showTab(); renderSanal(); }
   catch(e){ toast("Kaydedilemedi."); }
 }
 
@@ -1364,7 +1377,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-17";
+const UI_VERSION="2026.11.01-18";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1520,7 +1533,7 @@ async function lfvtStock(code){ const o=await nget("GET","https://fvt.com.tr/his
   const N=v=>{ const x=parseFloat(v); return isFinite(x)?x:null; };
   return { sermaye:N(d.sermaye), netKar:N(d.netKar), ozsermaye:N(d.ozsermaye), ff:N(d.dolasimPayYuzde), name:String(d.hisseAdi||"").trim()||null, fvtAt:new Date().toISOString() }; }
 function autoScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.clamp, PM={...SCORE.MAX,...(M.partsMax||{})}, sc=(p)=>{ for(const k of Object.keys(p)) p[k]=Math.round(p[k]*PM[k]/SCORE.MAX[k]); return p; };
-  const pf=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isFinite(x)?x:null; }, ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v;
+  const pf=v=>{ const x=parseFloat((t=>t.includes(",")?t.replace(/\./g,"").replace(",","."):/^-?\d{1,3}(\.\d{3})+$/.test(t)?t.replace(/\./g,""):t)(String(v||"").replace(/[^0-9,.-]/g,""))); return isFinite(x)?x:null; }, ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v;
   const infl=pf(ind("Beklenen enflasyon (12 ay)"))??pf(ind("Yıllık enflasyon"))??25, rate=pf(ind("Beklenen faiz (12 ay)"))??pf(ind("Politika faizi"));
   const B=S.live?.idx?.XU100||M.bist||null;
   const pubSt=(M.stocks||[]).filter(x=>!x.local&&n(x.score)), cut=pubSt.length?[...pubSt].sort((a,b)=>b.score-a.score)[Math.max(0,Math.ceil(pubSt.length*0.3)-1)].score:60;
@@ -1585,7 +1598,7 @@ const kapAgir=x=>{ if(typeof x.kapAgir==="boolean") return x.kapAgir; const s=ty
 const HOLD=new Set(["KCHOL","SAHOL","DOHOL","ALARK","TKFEN","AGHOL","GLYHO","ENKAI"]);
 /* Hisse puanı formülle: kârlılık, değer, sağlamlık, analist (momentum SCORE'da). Veri yoksa yapay zekânın değeri kalır; o da yoksa nötr. */
 function formulaScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.clamp, PM={...SCORE.MAX,...(M.partsMax||{})}, F=S.live?.fin||{}, Q=S.live?.an||{};
-  const pf=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isFinite(x)?x:null; }, ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v;
+  const pf=v=>{ const x=parseFloat((t=>t.includes(",")?t.replace(/\./g,"").replace(",","."):/^-?\d{1,3}(\.\d{3})+$/.test(t)?t.replace(/\./g,""):t)(String(v||"").replace(/[^0-9,.-]/g,""))); return isFinite(x)?x:null; }, ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v;
   const infl=pf(ind("Beklenen enflasyon (12 ay)"))??pf(ind("Yıllık enflasyon"))??25, rate=pf(ind("Beklenen faiz (12 ay)"))??pf(ind("Politika faizi"))??30;
   const B=S.live?.idx?.XU100||M.bist||null;
   (M.stocks||[]).forEach(x=>{ if(!(x.price>0)) return; const fin=F[x.code], an=Q[x.code], ai=x._ai?.parts||{}, hold=HOLD.has(x.code)||/holding/i.test(x.name||"");
@@ -1637,7 +1650,7 @@ function formulaScore(M){ const n=v=>typeof v==="number"&&isFinite(v), C=SCORE.c
 function buildAdvice(M){ const n=v=>typeof v==="number"&&isFinite(v), F=S.live?.fin||{};
   if(!M.advice) M.advice={}; if(!M._advAI) M._advAI=JSON.parse(JSON.stringify(M.advice||{}));
   const AI=M._advAI, oldWhy=(arr,c)=>(arr?.items||[]).find(i=>i.code===c)?.why;
-  const pf=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isFinite(x)?x:null; }, ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v;
+  const pf=v=>{ const x=parseFloat((t=>t.includes(",")?t.replace(/\./g,"").replace(",","."):/^-?\d{1,3}(\.\d{3})+$/.test(t)?t.replace(/\./g,""):t)(String(v||"").replace(/[^0-9,.-]/g,""))); return isFinite(x)?x:null; }, ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v;
   const rate=pf(ind("Politika faizi")), infl=pf(ind("Yıllık enflasyon"))??pf(ind("Beklenen enflasyon (12 ay)")), realPos=rate!=null&&infl!=null?rate>infl:true;
   const B=S.live?.idx?.XU100||M.bist||{}, weak=n(B.y1)&&n(B.m3)&&infl!=null?(B.y1<infl&&B.m3<0):false;
   const why=(x,ai)=>{ if(ai) return ai; const p=x.parts||{}, r=Object.entries(p).filter(([k,v])=>NOTE[k]&&n(v)).map(([k,v])=>[k,v/((M.partsMax||{})[k]||PMX[k])]).sort((a,b)=>b[1]-a[1]).filter(([,v])=>v>=0.6).slice(0,2).map(([k])=>NOTE[k][0]);
@@ -1648,7 +1661,8 @@ function buildAdvice(M){ const n=v=>typeof v==="number"&&isFinite(v), F=S.live?.
       w=w.map((v,i)=>{ if(v>cap){ ex+=v-cap; return cap; } free.push(i); return v; });
       if(grp){ const G={}; list.forEach((z,i)=>{ const g=grp(z); if(g) (G[g]=G[g]||[]).push(i); }); for(const g in G){ const s=G[g].reduce((a,i)=>a+w[i],0); if(s>gcap){ const k=gcap/s; G[g].forEach(i=>{ ex+=w[i]*(1-k); w[i]*=k; }); free=free.filter(i=>!G[g].includes(i)); } } }
       if(ex<1e-6||!free.length) break; const fs=free.reduce((a,i)=>a+w[i],0)||1; free.forEach(i=>w[i]+=ex*w[i]/fs); }
-    const t=T(); let r=w.map(v=>Math.floor(v/t*100)), rest=100-r.reduce((s,v)=>s+v,0); const ord=w.map((v,i)=>[v/t*100-r[i],i]).sort((a,b)=>b[0]-a[0]); for(let k=0;k<rest;k++) r[ord[k%ord.length][1]]++;
+    // sınırlar %100'e izin vermiyorsa (ör. iki hisse, her biri en çok %35) kalan pay dağıtılmaz: toplam %100'ün altında kalır, sınırlar aşılmaz
+    const tot=Math.min(1,T()); let r=w.map(v=>Math.floor(v*100+1e-9)), rest=Math.round(tot*100)-r.reduce((s,v)=>s+v,0); const ord=w.map((v,i)=>[v*100-r[i],i]).sort((a,b)=>b[0]-a[0]); for(let k=0;k<rest;k++) r[ord[k%ord.length][1]]++;
     return list.map((z,i)=>({code:z.x.code, weight:r[i], why:z.why})).filter(z=>z.weight>0).sort((a,b)=>b.weight-a.weight); };
   // hisseler
   const ST=(M.stocks||[]).filter(x=>n(x.score)&&x.signal!=="uzak"), grp=x=>F[x.code]?.bank?"banka":(HOLD.has(x.code)||/holding/i.test(x.name||""))?"holding":null;
@@ -1658,8 +1672,8 @@ function buildAdvice(M){ const n=v=>typeof v==="number"&&isFinite(v), F=S.live?.
   sa.short={...(aS.short||{}),horizon:aS.short?.horizon||"1–3 ay",items:mkS(50,true,aS.short)}; sa.long={...(aS.long||{}),horizon:aS.long?.horizon||"1 yıl ve üstü",items:mkS(45,false,aS.long)};
   // fonlar: önce türlere pay, sonra türün en iyisine
   const FU=(M.funds||[]).filter(x=>n(x.score)&&x.cat), cats=["para","altin","hisse","diger"];
-  const share=short=>short?(realPos?{para:60,altin:15,hisse:weak?10:20,diger:15}:{para:35,altin:25,hisse:weak?15:25,diger:15})
-                          :(realPos?{para:40,altin:20,hisse:weak?25:30,diger:10}:{para:25,altin:25,hisse:weak?30:35,diger:15});
+  const share=short=>short?(realPos?{para:weak?60:50,altin:15,hisse:weak?10:20,diger:15}:{para:weak?45:35,altin:25,hisse:weak?15:25,diger:15})
+                          :(realPos?{para:weak?45:40,altin:20,hisse:weak?25:30,diger:10}:{para:weak?30:25,altin:25,hisse:weak?30:35,diger:15});
   const mkF=(short,AIa)=>{ const sh=share(short), out=[]; let moved=0;
     cats.forEach(c=>{ const L=FU.filter(x=>x.cat===c).sort((a,b)=>b.score-a.score); let ok=L.filter(x=>x.score>=45);
       if(!ok.length&&!short&&L.length&&c!=="para"){ out.push({x:L[0],w:Math.min(10,sh[c]),why:why(L[0],oldWhy(AIa,L[0].code))}); moved+=sh[c]-Math.min(10,sh[c]); return; }
@@ -1749,7 +1763,7 @@ const SCORE={
   sum:p=>Object.values(p||{}).reduce((s,v)=>s+(typeof v==="number"?v:0),0),
   /* M: piyasa verisi (yerinde günceller). ctx: {B:BIST100 getirileri, now} */
   apply(M,ctx){ const PM={...SCORE.MAX,...(M.partsMax||{})}, n=SCORE.num, out={changed:0};
-    const pf=v=>{ const x=parseFloat(String(v||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isFinite(x)?x:null; };
+    const pf=v=>{ const x=parseFloat((t=>t.includes(",")?t.replace(/\./g,"").replace(",","."):/^-?\d{1,3}(\.\d{3})+$/.test(t)?t.replace(/\./g,""):t)(String(v||"").replace(/[^0-9,.-]/g,""))); return isFinite(x)?x:null; };
     const ind=k=>(M.indicators||[]).find(i=>i.k===k)?.v, rate=pf(ind("Beklenen faiz (12 ay)"))??pf(ind("Politika faizi"));
     const ale=(M.funds||[]).find(f=>f.code==="ALE")||(M.funds||[]).find(f=>f.cat==="para"), MM=ale?{m1:ale.m1,m3:ale.m3,y1:ale.y1}:null;
     const usd=(M.fx||[]).find(x=>x.code==="USD"), usdExp=usd?.fcst>0&&usd.price>0?(usd.fcst/usd.price-1)*100:null;
@@ -2204,7 +2218,7 @@ if(window.__standalone){
   renderGundem=function(){ const v=$("v-gundem"), m=S.market; if(!v) return;
     if(!m){ v.innerHTML=`<div class="hm"><section class="card empty">${S.ready?"Veriler yükleniyor… İlk açılışta internet gerekir.":"Yükleniyor…"}</section></div>`; return; }
     const a=m.advice||{}, I=k=>(m.indicators||[]).find(i=>i.k===k);
-    const pn=s=>{ const x=parseFloat(String(s||"").replace(/[^0-9,.-]/g,"").replace(/\./g,"").replace(",",".")); return isNaN(x)?null:x; };
+    const pn=s=>{ const x=parseFloat((t=>t.includes(",")?t.replace(/\./g,"").replace(",","."):/^-?\d{1,3}(\.\d{3})+$/.test(t)?t.replace(/\./g,""):t)(String(s||"").replace(/[^0-9,.-]/g,""))); return isNaN(x)?null:x; };
     const nchg=s=>{ const mm=String(s||"").match(/([+−-])\s*%?\s*([\d,]+)/); return mm?(mm[1]==="+"?1:-1)*parseFloat(mm[2].replace(",",".")):null; };
     // portföy
     const open=S.trades.filter(t=>t.status!=="closed"); let val=0, cost=0, today=0;
