@@ -1357,7 +1357,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-15";
+const UI_VERSION="2026.11.01-16";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1829,7 +1829,7 @@ showTab(); renderAll();
 <script>
 /* ---------- APK katmanı: tazelik satırı, aşağı çekip yenileme, bildirim/alarm, yedek, sürüm, sahip düğmesi ---------- */
 if(window.__standalone){
-  const OLD="https://claude.ai/artifact/KGLuNpASfKJZT1QXGir68H", REPO="yasinbirinci6134-sketch/Yatirim_Uygulamasi";
+  const REPO="yasinbirinci6134-sketch/Yatirim_Uygulamasi";
   const A=window.YatirimApp, has=f=>{ try{ return typeof A[f]==="function"; }catch(_){ return false; } };
   const ls=(k,v)=>{ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(_){ return null; } };
   const OWN=()=>ls("fp-owner")==="1";
@@ -1885,10 +1885,10 @@ if(window.__standalone){
     const la=S.live?.at; dot.className="dot "+(LIVE.busy?"busy":LIVE.err?"":"ok");
     txt.innerHTML=`<button class="linkbtn fr" id="frBtn" aria-label="Fiyatları yenile">Analiz ${esc(fmtTime(S.market.updatedAt))} · Fiyat ${LIVE.busy?"yenileniyor…":la?esc(fmtTime(la)):"—"}${LIVE.err?' <span class="down">· bağlantı yok</span>':""}</button>`;
     $("frBtn").onclick=()=>{ liveRefresh(null,true); window.__pullRemote?.(); }; };
-  /* Analiz: anahtar girildiyse görev arka planda başlar (başka uygulama açılmaz); girilmediyse eski yol.
+  /* Analiz: görev arka planda başlar (başka uygulama açılmaz); anahtar girilmediyse Ayarlar'a yönlendirir.
      Anahtar yalnızca bu telefonda durur; yalnızca bu görevi başlatabilir. */
   const AN_URL="https://api.anthropic.com/v1/claude_code/routines/trig_01McvDNvR9EFxKtiVSRuDZvb/fire", AN_MAX=30*60e3;
-  const anOld=()=>{ A.openUrl(OLD+"#guncelle"); toast("Analiz başlatılıyor; bitince veriler buraya da gelir."); };
+  const anOld=()=>toast("Analizi başlatmak için Ayarlar'dan analiz anahtarını gir.",4000);
   const anRun=()=>{ try{ const r=JSON.parse(ls("fp-anrun")||"null"); return r&&Date.now()-r.at<AN_MAX?r:null; }catch(_){ return null; } };
   window.__anState=()=>{ const b=$("aiBtn"); if(!b) return; const r=anRun(); b.textContent=r?"⏳ Analiz":"✦ Analiz"; b.classList.toggle("busy",!!r); };
   let anT=0; const anWatch=()=>{ clearTimeout(anT); const r=anRun(); window.__anState();
@@ -1901,7 +1901,7 @@ if(window.__standalone){
       let sid=""; try{ sid=JSON.parse(o.body).claude_code_session_id||""; }catch(_){}
       ls("fp-anrun",JSON.stringify({at:Date.now(),base:S.market?.updatedAt||"",sid})); toast("Analiz başladı. Birkaç dakika sürer; bitince veriler kendiliğinden gelir.",4500); anWatch();
     }catch(e){ const m=String(e?.message||e);
-      if(/izinsiz adres/.test(m)){ toast("Arka planda başlatmak için uygulamanın yeni sürümünü kur. Şimdilik eski yolla açılıyor.",4000); setTimeout(anOld,1500); }
+      if(/izinsiz adres/.test(m)){ toast("Arka planda başlatmak için uygulamanın yeni sürümünü kur.",4000); }
       else if(/HTTP 401/.test(m)) toast("Analiz anahtarı geçersiz; Ayarlar'dan yeniden gir.",4000);
       else if(/HTTP 429/.test(m)) toast("Son bir saatte çok fazla analiz istendi; biraz sonra dene.",4000);
       else if(/HTTP 400/.test(m)) toast("Analiz görevi şu an kapalı ya da duraklatılmış.",4000);
@@ -1909,7 +1909,7 @@ if(window.__standalone){
     }finally{ if(b) b.disabled=false; window.__anState(); } };
   $("refreshBtn").onclick=()=>{ if(!(ls("fp-rtok")||"").trim()) return anOld();
     if(anRun()) return toast("Analiz zaten sürüyor; bitince veriler kendiliğinden gelir.");
-    if(typeof upToDate==="function"&&upToDate()) return askConfirm(`${closedNote()} ve veriler son kapanıştan sonra çekildi, büyük ihtimalle bir şey değişmeyecek. Yine de analiz başlatılsın mı?`, anFire);
+    if(typeof upToDate==="function"&&upToDate()) return askConfirm(`${closedNote()}; fiyatlar değişmez, haberler, KAP bildirimleri ve yorumlar tazelenir. Analiz başlatılsın mı?`, anFire);
     anFire(); };
   setTimeout(anWatch,2500);
 
