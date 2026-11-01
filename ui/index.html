@@ -376,6 +376,14 @@ details.removed summary{cursor:pointer;font:600 13px var(--f-body);color:var(--m
     add(m.stocks,W,c=>({code:c,name:c,mine:true,local:true}));
     add(m.funds,F,c=>({code:c,name:c,cat:"diger",mine:true,local:true}));
     add(m.fx,X,c=>({code:c,name:c,cat:"doviz",mine:true,local:true}));
+    /* Portföyde açık pozisyonu olup genel listeden çıkmış kalemler de yerel satır olarak eklenir (fiyatı ve puanı canlı güncellenir) */
+    try{ let KT={}; try{ KT=JSON.parse(localStorage.getItem("fp-ktype")||"{}")||{}; }catch(_){}
+      const pub=[["s",m.stocks],["f",m.funds],["x",m.fx]]; let ch=false; pub.forEach(([t,a])=>a.forEach(i=>{ if(i&&i.code&&!i.local&&KT[i.code]!==t){ KT[i.code]=t; ch=true; } }));
+      if(ch) try{ localStorage.setItem("fp-ktype",JSON.stringify(KT)); }catch(_){}
+      const have=new Set([...m.stocks,...m.funds,...m.fx].map(i=>i&&i.code)), tr=Object.values(ld("col/data/users/local")||{});
+      [...new Set(tr.filter(r=>r&&r.kind==="trade"&&(r.status||"open")==="open"&&r.code).map(r=>String(r.code).toUpperCase()))].forEach(c=>{ if(have.has(c)) return;
+        const t=KT[c]||(c.length>=4?"s":"f");
+        if(t==="s") m.stocks.push({code:c,name:c,local:true,held:true}); else if(t==="x") m.fx.push({code:c,name:c,cat:"doviz",local:true,held:true}); else m.funds.push({code:c,name:c,cat:"diger",local:true,held:true}); }); }catch(_){}
     return m; }
   const value=p=>{ const v=ld(p); return p==="market/latest"&&v?withMine(v):v; };
   const emit=p=>(subs[p]||[]).forEach(cb=>{ try{ cb(snap(value(p))); }catch(e){ console.error(e); } });
@@ -1378,7 +1386,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-19";
+const UI_VERSION="2026.11.01-20";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1783,7 +1791,7 @@ const SCORE={
       if(x.target>0&&x.price>0) x.targetUpside=lr((x.target/x.price-1)*100,1);
       x.parts=p; x.score=Math.round(SCORE.sum(p)); if(x.score!==ai.score) out.changed++; });
     const st=(M.stocks||[]).filter(x=>n(x.score)&&!x.local), top=new Set([...st].sort((a,b)=>b.score-a.score).slice(0,Math.max(1,Math.ceil(st.length*0.3))).map(x=>x.code));
-    st.forEach(x=>{ const ai=x._ai||{}, kapNeg=ai.signal==="uzak"&&n(ai.score)&&ai.score>=42, trendBad=x.m3<0&&x.y1<0;
+    st.forEach(x=>{ const ai=x._ai||{}, kapNeg=x.kapAgir===true||(x.kapAgir!==false&&ai.signal==="uzak"&&n(ai.score)&&ai.score>=42), trendBad=x.m3<0&&x.y1<0;
       x.signal=(x.score<42||kapNeg)?"uzak":(x.score>=60&&top.has(x.code)&&(x.parts.karlilik??0)>=10*PM.karlilik/30&&!trendBad)?"al":"izle"; });
     (M.fx||[]).forEach(x=>{ if(!x.parts||x.local) return; keep(x); const p={...x._ai.parts};
       const tr=SCORE.trend(x,MM,PM.trend); if(tr!=null) p.trend=tr;
