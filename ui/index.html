@@ -1183,7 +1183,8 @@ function planBase(amount, types, vade){
   const parts=[]; if(types.fon) parts.push((vade==="kisa"?A.short:A.long)?.items||[]); if(types.hisse) parts.push((vade==="kisa"?A.stocks?.short:A.stocks?.long)?.items||[]);
   const share=amount/parts.length;
   parts.forEach(items=>{ const ok=items.filter(it=>{const a=asset(it.code); return a && (a.isStock||akVis(a));}), full=items.reduce((s,i)=>s+Number(i.weight||0),0);
-    const tot=(ok.reduce((s,i)=>s+Number(i.weight||0),0)||1)*(full>0&&full<99.5?100/full:1);
+    const stockPart=items.length&&items.every(it=>asset(it.code)?.isStock!==false&&!(S.market.funds||[]).some(f=>f.code===it.code));
+    const tot=stockPart?Math.max(100,full):(ok.reduce((s,i)=>s+Number(i.weight||0),0)||1)*(full>0&&full<99.5?100/full:1);
     ok.forEach(it=>out.push({code:it.code, tl:share*Number(it.weight)/tot, why:it.why})); });
   return out;
 }
@@ -1377,7 +1378,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.01-18";
+const UI_VERSION="2026.11.01-19";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -1656,13 +1657,21 @@ function buildAdvice(M){ const n=v=>typeof v==="number"&&isFinite(v), F=S.live?.
   const why=(x,ai)=>{ if(ai) return ai; const p=x.parts||{}, r=Object.entries(p).filter(([k,v])=>NOTE[k]&&n(v)).map(([k,v])=>[k,v/((M.partsMax||{})[k]||PMX[k])]).sort((a,b)=>b[1]-a[1]).filter(([,v])=>v>=0.6).slice(0,2).map(([k])=>NOTE[k][0]);
     return r.length?(r.join(", ").replace(/^./,c=>c.toLocaleUpperCase("tr"))+"."):"Listede puanı en yüksekler arasında."; };
   // ağırlıkları tam sayıya yuvarla, toplam 100
-  const norm=(list,cap,grp,gcap)=>{ if(!list.length) return []; let w=list.map(z=>Math.max(1,z.w)); const T=()=>w.reduce((s,v)=>s+v,0);
-    for(let it=0;it<20;it++){ const t=T(); w=w.map(v=>v/t); let ex=0, free=[];
-      w=w.map((v,i)=>{ if(v>cap){ ex+=v-cap; return cap; } free.push(i); return v; });
-      if(grp){ const G={}; list.forEach((z,i)=>{ const g=grp(z); if(g) (G[g]=G[g]||[]).push(i); }); for(const g in G){ const s=G[g].reduce((a,i)=>a+w[i],0); if(s>gcap){ const k=gcap/s; G[g].forEach(i=>{ ex+=w[i]*(1-k); w[i]*=k; }); free=free.filter(i=>!G[g].includes(i)); } } }
-      if(ex<1e-6||!free.length) break; const fs=free.reduce((a,i)=>a+w[i],0)||1; free.forEach(i=>w[i]+=ex*w[i]/fs); }
-    // sınırlar %100'e izin vermiyorsa (ör. iki hisse, her biri en çok %35) kalan pay dağıtılmaz: toplam %100'ün altında kalır, sınırlar aşılmaz
-    const tot=Math.min(1,T()); let r=w.map(v=>Math.floor(v*100+1e-9)), rest=Math.round(tot*100)-r.reduce((s,v)=>s+v,0); const ord=w.map((v,i)=>[v*100-r[i],i]).sort((a,b)=>b[0]-a[0]); for(let k=0;k<rest;k++) r[ord[k%ord.length][1]]++;
+  // sınırlı orantılı dağıtım: sınıra takılan kalem (ya da grup) o değerde sabitlenir, kalan pay yalnız serbest kalemlere orana göre dağıtılır;
+  // sınırlar %100'e izin vermiyorsa (ör. iki hisse, her biri en çok %35) kalan pay dağıtılmaz, toplam %100'ün altında kalır
+  const norm=(list,cap,grp,gcap)=>{ if(!list.length) return []; const raw=list.map(z=>Math.max(1,z.w)), N=raw.length, fix=new Array(N).fill(null), E=1e-12;
+    const G={}; if(grp) list.forEach((z,i)=>{ const g=grp(z); if(g) (G[g]=G[g]||[]).push(i); }); const gd={};
+    for(let it=0;it<=2*N+2;it++){ const F=[...Array(N).keys()].filter(i=>fix[i]==null); if(!F.length) break;
+      const R=1-fix.reduce((s,v)=>s+(v||0),0), rs=F.reduce((s,i)=>s+raw[i],0); if(R<=E){ F.forEach(i=>fix[i]=0); break; }
+      const w=fix.map((v,i)=>v!=null?v:R*raw[i]/rs); let bad=false;
+      for(const g in G){ if(gd[g]) continue; const s=G[g].reduce((a,i)=>a+w[i],0); if(s>gcap+E){   // grup sınırı: grubun tamamı gcap'e orana göre (tek kalem sınırıyla) sabitlenir
+        const gs=G[g].reduce((a,i)=>a+raw[i],0); G[g].forEach(i=>fix[i]=Math.min(cap,gcap*raw[i]/gs)); gd[g]=1; bad=true; } }
+      if(!bad) F.forEach(i=>{ if(w[i]>cap+E){ fix[i]=cap; bad=true; } });
+      if(!bad){ F.forEach(i=>fix[i]=w[i]); break; } }
+    const w=fix.map(v=>v||0), tot=Math.min(1,w.reduce((s,v)=>s+v,0));
+    let r=w.map(v=>Math.floor(v*100+1e-9)), rest=Math.round(tot*100)-r.reduce((s,v)=>s+v,0); const ord=w.map((v,i)=>[v*100-r[i],i]).sort((a,b)=>b[0]-a[0]);
+    const gOf=i=>Object.keys(G).find(g=>G[g].includes(i)), fits=i=>r[i]+1<=Math.round(cap*100)&&(!gOf(i)||G[gOf(i)].reduce((a,j)=>a+r[j],0)+1<=Math.round(gcap*100));
+    for(let k=0;k<ord.length&&rest>0;k++){ const i=ord[k][1]; if(fits(i)){ r[i]++; rest--; } }   // yuvarlama da sınırı aşmaz
     return list.map((z,i)=>({code:z.x.code, weight:r[i], why:z.why})).filter(z=>z.weight>0).sort((a,b)=>b.weight-a.weight); };
   // hisseler
   const ST=(M.stocks||[]).filter(x=>n(x.score)&&x.signal!=="uzak"), grp=x=>F[x.code]?.bank?"banka":(HOLD.has(x.code)||/holding/i.test(x.name||""))?"holding":null;
