@@ -2379,13 +2379,30 @@ function fpScoreDelta(code){const h=fpHistory().filter(x=>x.items?.some(z=>z.cod
  if(h.length<2)return null;const a=h[h.length-2].items.find(x=>x.code===code),b=h[h.length-1].items.find(x=>x.code===code);
  return a&&b?b.score-a.score:null;
 }
+/* Recorded-signal evaluation: 5 distinct future scans; never future-leaking. */
+function fpSignalResults(history,hold=5){
+ const a=(history||[]).filter(x=>x?.at&&Array.isArray(x.items)).slice().sort((x,y)=>String(x.at).localeCompare(String(y.at)));
+ let eligible=0,positive=0,sum=0;
+ for(let i=0;i+hold<a.length;i++){
+   const before=a[i],after=a[i+hold],future=new Map(after.items.map(x=>[x.code,x]));
+   for(const x of before.items){
+     if(x.score<80||!(x.price>0))continue;
+     const y=future.get(x.code);if(!(y?.price>0))continue;
+     const change=(y.price/x.price-1)*100;
+     if(!Number.isFinite(change))continue;
+     eligible++;if(change>0)positive++;sum+=change;
+   }
+ }
+ return {count:eligible,positive,avg:eligible?sum/eligible:null,hitRate:eligible?100*positive/eligible:null};
+}
 function fpScoreDiary(){
  const h=fpHistory();if(!h.length)return `<section class="card"><h2>Skor günlüğü</h2><p class="small muted">Yeni taramalar geldikçe gerçek puan geçmişi birikecek; geçmiş tarihler için tahmin üretilmez.</p></section>`;
- const latest=h[h.length-1],prev=h.length>1?h[h.length-2]:null;
+ const latest=h[h.length-1],prev=h.length>1?h[h.length-2]:null,results=fpSignalResults(h);
  const changes=prev?latest.items.map(x=>{const old=prev.items.find(y=>y.code===x.code);return old?{...x,delta:x.score-old.score}:null}).filter(Boolean).sort((a,b)=>b.delta-a.delta).slice(0,7):[];
  return `<section class="card"><div class="horizon"><h2>Skor günlüğü</h2><span class="small muted">${h.length} tarama · ${esc(latest.asOf||"")}</span></div>
  ${changes.length?changes.map(x=>`<div class="trade" data-st="${esc(x.code)}"><b class="code">${esc(x.code)}</b><span class="small muted">Önceki ${x.score-x.delta} → ${x.score}</span><b class="num ${cls(x.delta)}">${x.delta>0?"+":""}${x.delta}</b></div>`).join(""):`<p class="small muted">Değişimleri göstermek için iki farklı günlük tarama kaydı gerekiyor.</p>`}
- <p class="small muted">Bu kayıtlar cihazda tutulur ve yeni veri geldikçe oluşur; geriye dönük test sonucu değildir.</p></section>`;
+ ${results.count?`<div class="pfstats"><div><span>5 tarama sonrası yükselen</span><b class="num">% ${num(results.hitRate,1)}</b></div><div><span>Ortalama fiyat değişimi</span><b class="num ${cls(results.avg)}">${pc(results.avg,2)}</b></div><div><span>Ölçülen sinyal</span><b class="num">${results.count}</b></div></div>`:`<p class="small muted">5 sonraki tarama kaydı oluştuğunda geçmiş 80+ puanların gerçekleşmiş fiyat değişimi ölçülecek.</p>`}
+ <p class="small muted">Yalnız bu cihazda kaydedilen taramalardan hesaplanır. 5 tarama aralığı yaklaşık bir işlem haftasıdır, sabit süre değildir. Temettü, bölünme ve BIST karşılaştırması dahil değildir; başarı tahmini değildir.</p></section>`;
 }
 /* Kisa vadede eksik gunluk yuzde varsa sunucudaki yeni taramayi bir kez kontrol et.
    Eski localStorage verisiyle acilsa bile 30 dakika engeline takilmasin.
