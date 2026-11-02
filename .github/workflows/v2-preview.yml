@@ -23,6 +23,7 @@ jobs:
           node tools/return-metrics.test.js
           node tools/v2-ui.test.js
           node tools/twr.test.js
+          node tools/external-flows.test.js
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
