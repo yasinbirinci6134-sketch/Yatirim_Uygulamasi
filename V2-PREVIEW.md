@@ -43,6 +43,10 @@ Portfoy > Gercek getiri > Ekstre yukle > Taslak olustur:
   son portfoy degeri ve nakit dahil NAV gecmisi kurum ekstresinden tamamlanmalidir.
 - Taslak kendi basina dogrulanmis hesaplama ya da banka ekstresi degildir.
 - JSON cihazdaki localStorage alaninda tutulur; hesap / kisi bilgisi ekleme.
+- Telefondaki "CSV/TXT dosyasini sec" alanina dokunarak ekstre dosyasini dogrudan secebilirsin.
+  Secim Android'in sistem dosya secicisini acar, dosya yalniz WebView icinde okunur;
+  banka verisi otomatik olarak bir sunucuya gonderilmez. 250 KB siniri vardir.
+  Dosya okununca "CSV hareketlerini aktar" butonuna ayrica basmalisin.
 - JSON'i elle duzenlemek yerine "CSV hareketlerini ice aktar" bolumune yapistirabilirsin.
   Kabul edilen basliklar: tarih;tür;tutar;referans veya date,type,amount,reference.
   Tarih YYYY-AA-GG veya GG.AA.YYYY; miktar 1000.50 ya da 1.000,50 olabilir.
