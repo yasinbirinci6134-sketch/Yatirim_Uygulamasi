@@ -25,6 +25,7 @@ jobs:
           node tools/twr.test.js
           node tools/external-flows.test.js
           node tools/ledger-reconcile.test.js
+          node tools/legacy-trade-audit.test.js
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
