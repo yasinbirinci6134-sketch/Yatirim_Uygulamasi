@@ -21,6 +21,7 @@ jobs:
           node tools/quote-selection.test.js
           node tools/portfolio-engine.test.js
           node tools/return-metrics.test.js
+          node tools/v2-ui.test.js
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
