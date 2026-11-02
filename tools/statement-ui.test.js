@@ -50,10 +50,10 @@ sheet.querySelector("#pfEvidenceSave").onclick();
 assert.equal(getHandlers.fpImportedStatement("pf1"),null,"unverified draft must never be saved");
 assert.equal(redraws,0);
 const real={source:{institution:"Example",reference:"statement"},openingCash:0,terminalCash:200,positionsValue:900,
- terminal:{date:"2026-01-01",value:1100},events:[
+ terminal:{date:"2026-01-01",value:1100,externalFlow:0},events:[
  {id:"d",reference:"broker-deposit",date:"2025-01-01",type:"deposit",amount:1000},
  {id:"b",reference:"broker-buy",date:"2025-01-02",type:"buy",amount:800}],
- valuations:[{date:"2025-01-01",value:1000},{date:"2026-01-01",value:1100}]};
+ valuations:[{date:"2025-01-01",value:1000,externalFlow:0},{date:"2026-01-01",value:1100,externalFlow:0}]};
 sheet.querySelector("#pfEvidenceText").value=JSON.stringify(real);
 sheet.querySelector("#pfEvidenceSave").onclick();
 assert.equal(redraws,1,"accepted statement should trigger rerender");

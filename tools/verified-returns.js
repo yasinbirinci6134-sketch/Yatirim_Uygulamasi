@@ -23,7 +23,7 @@ function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=nul
   const ordered=[...valuations].sort((a,b)=>String(a?.date||"").localeCompare(String(b?.date||"")));
   const first=ordered[0],last=ordered[ordered.length-1];
   if(first?.date!==events.filter(e=>e.type==="deposit").map(e=>e.date).sort()[0])errors.push("opening NAV must match first deposit date");
-  if(ordered.some(p=>!p||!Number.isFinite(p.value)||p.value<0||typeof p.date!=="string"))errors.push("invalid NAV records");
+  if(ordered.some(p=>!p||!Number.isFinite(p.value)||p.value<0||!Number.isFinite(p.externalFlow)||typeof p.date!=="string"))errors.push("invalid NAV records");
   if(new Set(ordered.map(p=>p?.date)).size!==ordered.length)errors.push("duplicate NAV dates");
   if(!first||!last||last.date!==terminal.date||!Number.isFinite(last.value)||Math.abs(last.value-terminal.value)>0.01)errors.push("TWR ending valuation differs from verified terminal NAV");
   if(first&&!(Number.isFinite(first.value)&&first.value>0))errors.push("TWR opening NAV unverified");
@@ -35,7 +35,7 @@ function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=nul
    const p=ordered[i],previous=ordered[i-1];
    if(!p||!previous||typeof p.date!=="string"||typeof previous.date!=="string")continue;
    let sum=0;for(const [date,amount] of movementByDay)if(date>previous.date&&date<=p.date)sum+=amount;
-   if(!Number.isFinite(p.externalFlow||0)||Math.abs((p.externalFlow||0)-sum)>0.01)errors.push("TWR external flows do not match dated cash movements");
+   if(!Number.isFinite(p.externalFlow)||Math.abs(p.externalFlow-sum)>0.01)errors.push("TWR external flows do not match dated cash movements");
   }
   if(!errors.length)twr=timeWeightedReturn(ordered);
   if(twr===null&&!errors.length)errors.push("TWR history invalid");

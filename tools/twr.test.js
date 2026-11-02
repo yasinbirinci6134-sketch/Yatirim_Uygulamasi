@@ -1,11 +1,13 @@
 "use strict";
 const assert=require("node:assert/strict");
 const {timeWeightedReturn}=require("./twr");
-const result=timeWeightedReturn([{date:"2026-01-01",value:1000},{date:"2026-02-01",value:1600,externalFlow:500},{date:"2026-03-01",value:1760}]);
+const result=timeWeightedReturn([{date:"2026-01-01",value:1000,externalFlow:0},{date:"2026-02-01",value:1600,externalFlow:500},{date:"2026-03-01",value:1760,externalFlow:0}]);
 assert.ok(Math.abs(result-0.21)<1e-10);
 assert.equal(timeWeightedReturn([{date:"2026-01-01",value:0},{date:"2026-02-01",value:1000}]),null);
-assert.equal(timeWeightedReturn([{date:"2026-01-01",value:1000},{date:"2026-01-01",value:1100}]),null);
-assert.equal(timeWeightedReturn([{date:"2026-01-01",value:1000}]),null);
+assert.equal(timeWeightedReturn([{date:"2026-01-01",value:1000,externalFlow:0},{date:"2026-01-01",value:1100}]),null);
+assert.equal(timeWeightedReturn([{date:"2026-01-01",value:1000,externalFlow:0}]),null);
+assert.equal(timeWeightedReturn([{date:"2026-01-01",value:1000,externalFlow:0},{date:"2026-02-01",value:1100}]),null,"missing external-flow evidence must not default to zero");
+assert.equal(timeWeightedReturn([{date:"2026-01-01",value:1000,externalFlow:0},{date:"2026-02-01",value:1100,externalFlow:null}]),null,"null external-flow evidence must not default to zero");
 assert.equal(timeWeightedReturn([{date:"2026-02-30",value:100},{date:"2026-03-01",value:110}]),null);
 assert.equal(timeWeightedReturn([{date:"2026-01-01",value:100},null]),null);
 assert.equal(timeWeightedReturn([{date:"2026-01-01",value:100},{date:"2026-02-01",value:Infinity}]),null);

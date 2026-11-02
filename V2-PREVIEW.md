@@ -63,7 +63,7 @@ Portfoy > Gercek getiri > Ekstre yukle > Taslak olustur:
 - TWR icin "NAV gecmisini aktar" bolumu: tarih;deger;disNakit basliklarini
   iceren CSV veya TXT dosyasindan nakit dahil toplam portfoy degeri kayitlarini alir.
   disNakit ilgili gun yatirma eksi cekme tutaridir; cekme varsa negatif yazilir.
-  Her gunun tarihi tekil olmalidir. Bu rakamlar asla uygulama tarafindan
+  Her gunun tarihi tekil olmalidir. NAV disNakit her satirda acikca yazilmalidir; bos veya null tutar sifir varsayilmaz. Bu rakamlar asla uygulama tarafindan
   tahmin edilmez, nakit hareketleriyle eslesmedikce TWR gosterilmez.
 
 ## APK derlemesini dogrulama
