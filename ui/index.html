@@ -1794,7 +1794,7 @@ function portfolioRows(pf){
   pf = pf || curPf();
   return pfTrades(pf).filter(t=>t.status!=="closed").map(t => {
     const f=asset(t.code), q=fpQuote(t.code,f,null), cur = q.price ?? f?.price ?? t.price, units = t.units || t.amount/t.price, value=units*cur;
-    return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:q.d1??f?.d1, curDate:q.priceAt||f?.priceDate, days:daysSince(t.buyDate||t.priceDate)};
+    return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:q.d1??f?.d1, curDate:q.priceAt||f?.priceDate, quoteSource:q.source, days:daysSince(t.buyDate||t.priceDate)};
   });
 }
 function groupRows(rows){ const m=new Map();
@@ -1908,7 +1908,7 @@ function renderSanal(){
     ${riskBlock}
     <section class="card"><div class="horizon"><h2>Pozisyonlar</h2><button class="btn sm" id="goAdd">+ Ekle</button></div>
       ${rows.length ? groupRows(rows).map(g=>{ const [k,lab,why]=advise(g,val), one=g.lots.length===1, r0=g.lots[0];
-        const lotLine=(r,nd)=>`<div class="small muted num">${nd?"":fmtDate(r.buyDate||r.priceDate)+" · "}${tl2(r.amount)} · ${num(r.units,r.units<100?4:0)} adet · alış ${num(r.price,6)} → ${num(r.cur,6)}${r.days?` · günlük ort. ${pc(r.pnlPct/r.days,2)}`:""}</div>`;
+        const lotLine=(r,nd)=>`<div class="small muted num">${nd?"":fmtDate(r.buyDate||r.priceDate)+" · "}${tl2(r.amount)} · ${num(r.units,r.units<100?4:0)} adet · alış ${num(r.price,6)} → ${num(r.cur,6)} · ${r.curDate?esc(r.curDate):"Tarih bilinmiyor"}${r.days?` · günlük ort. ${pc(r.pnlPct/r.days,2)}`:""}</div>`;
         const acts=r=>`<div class="acts"><button class="btn ghost sm" data-del="${esc(r.id)}">Sil</button><button class="btn ghost sm" data-edit="${esc(r.id)}" style="margin-left:0">Düzenle</button><button class="btn ghost sm" data-sell="${esc(r.id)}" style="margin-left:0">Sat</button></div>`;
         return `<div class="trade x${xo("g:"+g.code)}" data-k="g:${esc(g.code)}">
         <div class="xh"><span class="code">${esc(g.code)}</span> <span class="adv adv-${k}">${esc(lab)}</span>
@@ -2423,7 +2423,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-v2-preview5";
+const UI_VERSION="2026.11.02-v2-preview6";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
