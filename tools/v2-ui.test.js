@@ -108,7 +108,7 @@ assert.ok(svg.includes("<svg"),"two priced points should render the position cha
 assert.ok(!svg.includes("2026-01-01"),"unverified historical price must be excluded");
 assert.ok(svg.includes(yday)&&svg.includes(today),"graph must show trusted price dates");
 const csvSource=fs.readFileSync(path.join(__dirname,"statement-csv.js"),"utf8").trim();
-const csvInline=csvSource.replace("module.exports={fpParseStatementCsv};",'if(typeof module!=="undefined"&&module.exports)module.exports={fpParseStatementCsv};');
+const csvInline=csvSource.replace("module.exports={fpParseStatementCsv,fpParseNavCsv};",'if(typeof module!=="undefined"&&module.exports)module.exports={fpParseStatementCsv,fpParseNavCsv};');
 const csvStart=html.indexOf('/* Strict, all-or-nothing conversion');
 const csvEnd=html.indexOf('const FP_IMPORT_KEY=',csvStart);
 assert.ok(csvStart>0&&csvEnd>csvStart,"CSV import code must be bundled in WebView");
