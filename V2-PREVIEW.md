@@ -58,8 +58,13 @@ Portfoy > Gercek getiri > Ekstre yukle > Taslak olustur:
   kapanis tarihini, kapanis pozisyon degerini ve toplam portfoy degerini dogrudan
   telefondan girebilirsin. Bu alanlara gercek kurum dokumundeki degerleri gir.
   Mevcut JSON'u degistirip form alanlarina dokunmazsan eski alanlar JSON'un
-  uzerine yazilmaz. TWR'nin ara NAV tarihlerindeki degerleri halen gelismis
-  JSON bolumunden saglanir; bunlar otomatik tahmin edilmez.
+  uzerine yazilmaz. Yalniz formu doldurarak kontrol baslatabilirsin;
+  ancak ilgili tarihli kurum ekstresi ve islem referanslari eksikse kaydedilmez.
+- TWR icin "NAV gecmisini aktar" bolumu: tarih;deger;disNakit basliklarini
+  iceren CSV veya TXT dosyasindan nakit dahil toplam portfoy degeri kayitlarini alir.
+  disNakit ilgili gun yatirma eksi cekme tutaridir; cekme varsa negatif yazilir.
+  Her gunun tarihi tekil olmalidir. Bu rakamlar asla uygulama tarafindan
+  tahmin edilmez, nakit hareketleriyle eslesmedikce TWR gosterilmez.
 
 ## APK derlemesini dogrulama
 GitHub Actions > Fon Pusulasi 2.0 Test APK > basarili calisma.
