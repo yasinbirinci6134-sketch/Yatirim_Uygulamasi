@@ -8,6 +8,7 @@ const {timeWeightedReturn}=require("./twr");
 function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=null,positionsValue=null,ledgerEvidence={},valuations=[],navVerified=false}={}){
  const errors=[];
  if(!Array.isArray(events))return {ready:false,xirr:null,twr:null,errors:["transaction records must be an array"],ledgerReady:false};
+ if(!ledgerEvidence||typeof ledgerEvidence!=="object"||Array.isArray(ledgerEvidence))return {ready:false,xirr:null,twr:null,errors:["independent ledger evidence missing"],ledgerReady:false};
  const ledger=reconcileLedger({events,openingCash,terminalCash,...ledgerEvidence});
  if(!ledger.ready)errors.push(...ledger.errors);
  if(!terminal||!Number.isFinite(terminal.value)||terminal.value<0||typeof terminal.date!=="string")errors.push("terminal portfolio valuation missing");
@@ -21,6 +22,9 @@ function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=nul
  if(navVerified&&errors.length===0&&Array.isArray(valuations)&&valuations.length>=2){
   const ordered=[...valuations].sort((a,b)=>String(a?.date||"").localeCompare(String(b?.date||"")));
   const first=ordered[0],last=ordered[ordered.length-1];
+  if(first?.date!==events.filter(e=>e.type==="deposit").map(e=>e.date).sort()[0])errors.push("opening NAV must match first deposit date");
+  if(ordered.some(p=>!p||!Number.isFinite(p.value)||p.value<0||typeof p.date!=="string"))errors.push("invalid NAV records");
+  if(new Set(ordered.map(p=>p?.date)).size!==ordered.length)errors.push("duplicate NAV dates");
   if(!first||!last||last.date!==terminal.date||Math.abs(last.value-terminal.value)>0.01)errors.push("TWR ending valuation differs from verified terminal NAV");
   if(first&&!(Number.isFinite(first.value)&&first.value>0))errors.push("TWR opening NAV unverified");
   const navDates=new Set(ordered.map(p=>p?.date));
