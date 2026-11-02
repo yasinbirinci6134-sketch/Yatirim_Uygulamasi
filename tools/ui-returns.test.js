@@ -27,5 +27,13 @@ assert.equal(run({...data,valuations:[data.valuations[0],{date:"2026-01-01",valu
 assert.equal(run({...data,valuations:[]}).twr,null);
 assert.ok(run({...data,valuations:[]}).xirr!==null);
 assert.equal(run({...data,events:[...data.events,data.events[0]]}).ledgerReady,false);
+assert.equal(run({
+ ...data,terminalCash:300,positionsValue:800,events:[
+  {id:"early",reference:"broker-early",date:"2024-12-30",type:"sell",amount:100},
+  ...data.events
+ ]},
+ {issues:[],candidates:[{type:"sell",date:"2024-12-30",amount:100},...audit.candidates]},
+ cash,800).ledgerReady,false,"trades before opening funding must not create synthetic XIRR");
+
 assert.equal(run({...data,events:data.events.map(e=>({...e,reference:""}))}).ledgerReady,false);
 console.log("imported statement returns tests passed");
