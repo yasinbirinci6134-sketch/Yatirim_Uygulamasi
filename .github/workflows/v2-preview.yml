@@ -33,6 +33,7 @@ jobs:
           node tools/verified-returns.test.js
           node tools/ui-returns.test.js
           node tools/statement-ui.test.js
+          node tools/android-host.test.js
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
