@@ -2319,7 +2319,39 @@ function applyTabs(){
   nav.style.gridTemplateColumns=`repeat(${Math.max(1,vis.length)},1fr)`;
   if(!vis.includes(S.tab) && vis.length){ S.tab=vis[0]; }
 }
-const _showTab=showTab; showTab=function(){ applyTabs(); _showTab(); };
+/* V2 Tema 2: four primary destinations, with existing three discovery pages retained. */
+let FP_DISCOVERY_TAB="oneri";
+function fpNavV2(){
+ const nav=document.querySelector("nav.tabs");if(!nav)return;
+ const modern=studioOn();
+ const choices=[["gundem","Bugün"],["discover","Keşfet"],["sanal","Portföy"],["piyasa","Piyasa"]];
+ const old=LAY.tabs.map(t=>$("t-"+t)).filter(Boolean);
+ if(!modern){
+  nav.querySelectorAll("[data-fp-v2]").forEach(e=>e.remove());
+  old.forEach(e=>e.hidden=LAY.hiddenTabs.includes(e.id.slice(2)));
+  nav.style.gridTemplateColumns="repeat("+Math.max(1,old.filter(e=>!e.hidden).length)+",1fr)";
+  document.querySelector("#fp-discovery-tabs")?.remove();
+  return;
+ }
+ old.forEach(e=>e.hidden=true);
+ for(const [id,label]of choices){
+  let b=nav.querySelector('[data-fp-v2="'+id+'"]');
+  if(!b){b=document.createElement("button");b.type="button";b.dataset.fpV2=id;b.setAttribute("role","tab");b.onclick=()=>{
+    S.tab=id==="discover"?FP_DISCOVERY_TAB:id;
+    showTab();renderAll();window.scrollTo(0,0);
+  };nav.appendChild(b);}
+  b.textContent=label;b.setAttribute("aria-selected",String(id==="discover"?["oneri","hisse","doviz"].includes(S.tab):S.tab===id));
+ }
+ nav.style.gridTemplateColumns="repeat(4,minmax(0,1fr))";
+ let chips=document.querySelector("#fp-discovery-tabs");
+ if(["oneri","hisse","doviz"].includes(S.tab)){
+  if(!chips){chips=document.createElement("div");chips.id="fp-discovery-tabs";chips.className="chips";
+   chips.style.cssText="display:flex;gap:6px;margin:8px 14px 4px;justify-content:center";nav.insertAdjacentElement("afterend",chips);}
+  chips.innerHTML=["oneri","hisse","doviz"].map((id,i)=>'<button type="button" data-fp-disc="'+id+'" aria-pressed="'+(S.tab===id)+'">'+["Fonlar","Hisseler","Altın / Döviz"][i]+"</button>").join("");
+  chips.querySelectorAll("[data-fp-disc]").forEach(b=>b.onclick=()=>{S.tab=b.dataset.fpDisc;FP_DISCOVERY_TAB=S.tab;showTab();renderAll();window.scrollTo(0,0);});
+ }else chips?.remove();
+}
+const _showTab=showTab; showTab=function(){ applyTabs(); _showTab(); fpNavV2(); };
 [["renderDoviz","doviz"],["renderGundem","gundem"],["renderOneri","oneri"],["renderHisse","hisse"],["renderSanal","sanal"],["renderPiyasa","piyasa"]].forEach(([fn,tab])=>{
   const o=window[fn]; window[fn]=function(){ const r=o.apply(this,arguments); applyLayout(tab); return r; }; });
 function openLayout(){
@@ -2358,7 +2390,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-v2-preview1";
+const UI_VERSION="2026.11.02-v2-preview2";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
