@@ -1306,21 +1306,23 @@ const fmtTime = s => { const d=new Date(s); return isNaN(d) ? "–" : d.toLocale
 /* V2 veri katmani: fiyatin kaynagini ve zamanini tek noktadan belirle.
    Puan ve fiyat ayri tutulur; gecersiz fiyatlar kullanilmaz. */
 function fpQuote(code,base,scan){
-  const live=S.live?.stocks?.[code], raw=LIVE.shortQuotes?.[code], tick=raw?{...raw,price:raw.price??raw.p,at:raw.at??raw.t}:null;
+  const kind=base?.isFx?"fx":base?.isStock||scan?"stock":base?.cat==="hisse"&&S.market?.stocks?.some(x=>x.code===code)?"stock":"fund";
+  const live=kind==="fx"?S.live?.fx?.[code]:kind==="stock"?S.live?.stocks?.[code]:S.live?.funds?.[code];
+  const raw=kind==="stock"?LIVE.shortQuotes?.[code]:null, tick=raw?{...raw,price:raw.price??raw.p,at:raw.at??raw.t}:null;
   const candidates=[
     {src:"scan",v:scan,at:scan?.date},
     {src:"market",v:base,at:base?.priceDate||base?.updatedAt},
     {src:"live",v:live,at:live?.at||live?.priceDate},
     {src:"tick",v:tick,at:tick?.at}
   ];
-  const ts=x=>{if(typeof x==="number")return x;const t=Date.parse(x||"");return Number.isFinite(t)?t:0;};
-  const valid=c=>c.v&&typeof c.v.price==="number"&&Number.isFinite(c.v.price)&&c.v.price>0;
+  const ts=x=>{if(typeof x==="number")return x<1e11?x*1000:x;const t=Date.parse(x||"");return Number.isFinite(t)?t:0;};
+  const valid=c=>c.v&&typeof c.v.price==="number"&&Number.isFinite(c.v.price)&&c.v.price>0&&ts(c.at)<=Date.now()+3600000;
   const available=candidates.filter(valid).sort((a,b)=>ts(b.at)-ts(a.at));
   const winner=available[0];
   const daily=candidates.filter(c=>typeof c.v?.d1==="number"&&Number.isFinite(c.v.d1))
     .sort((a,b)=>ts(b.at)-ts(a.at))[0];
   return {price:winner?.v.price??null,d1:daily?.v.d1??null,
-    source:winner?.src||"none",priceAt:winner?.at?(typeof winner.at==="number"?new Date(winner.at).toISOString().slice(0,10):String(winner.at).slice(0,10)):null,dailySource:daily?.src||"none"};
+    source:winner?.src||"none",priceAt:winner?.at?new Date(ts(winner.at)).toISOString().slice(0,10):null,dailySource:daily?.src||"none"};
 }
 const asset = code => (S.market?.funds||[]).find(f => f.code===code) || (()=>{ const x=(S.market?.stocks||[]).find(f=>f.code===code); if(x) return {...x, cat:"hisse", isStock:true}; const y=(S.market?.fx||[]).find(f=>f.code===code); return y ? {...y, isFx:true} : null; })();
 function toast(msg,ms){ document.querySelectorAll(".toast").forEach(x=>x.remove()); const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),ms||2600); }
