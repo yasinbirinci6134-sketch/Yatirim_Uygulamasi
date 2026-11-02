@@ -7,6 +7,15 @@ android {
   // Arayüz tek kaynaktan: ui/index.html (uygulama ayrıca GitHub'dan günceller)
   sourceSets { main { assets.srcDirs = ['../ui'] } }
   signingConfigs { release { storeFile file('release.p12'); storeType 'pkcs12'; storePassword System.getenv('KEYSTORE_PASSWORD'); keyAlias 'yatirim'; keyPassword System.getenv('KEYSTORE_PASSWORD') } }
-  buildTypes { debug { applicationIdSuffix '.preview'; versionNameSuffix '-preview' } release { minifyEnabled false; signingConfig signingConfigs.release } }
+  buildTypes {
+    debug {
+      applicationIdSuffix '.preview'
+      versionNameSuffix '-preview'
+    }
+    release {
+      minifyEnabled false
+      signingConfig signingConfigs.release
+    }
+  }
   compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
 }
