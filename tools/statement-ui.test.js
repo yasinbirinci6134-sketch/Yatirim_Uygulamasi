@@ -72,6 +72,17 @@ assert.equal(redraws,2);
 savedSheet.querySelector("#pfEvidenceDelete").onclick();
 assert.equal(getHandlers.fpImportedStatement("pf1"),null,"deleting evidence must clear local storage");
 assert.equal(redraws,3,"deleting evidence must rerender");
+// A broker statement can be completed with plain fields rather than manual JSON edits.
+getHandlers.fpReturnEvidenceSheet({id:"pf1",name:"Ornek"});
+const formSheet=elements.filter(el=>el.tag==="div"&&el.innerHTML.includes('id="pfEvidenceInstitution"')).at(-1);
+assert.ok(formSheet,"phone-friendly statement form must be present");
+formSheet.querySelector("#pfEvidenceText").value=JSON.stringify({...real,source:{institution:"",reference:""},openingCash:null,terminalCash:null,positionsValue:null,terminal:{date:"",value:null},valuations:real.valuations});
+for(const [id,value] of Object.entries({
+ pfEvidenceInstitution:"Example",pfEvidenceReference:"statement",pfEvidenceOpening:"0",
+ pfEvidenceClosing:"200",pfEvidenceAsOf:"2026-01-01",pfEvidenceHoldings:"900",pfEvidenceNav:"1100"
+}))formSheet.querySelector("#"+id).value=value;
+formSheet.querySelector("#pfEvidenceSave").onclick();
+assert.deepEqual(getHandlers.fpImportedStatement("pf1"),real,"form fields must merge into final checked statement");
 console.log("statement modal interaction tests passed");
 (async()=>{
  const fresh=elements.length;
