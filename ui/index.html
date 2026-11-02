@@ -1856,6 +1856,7 @@ function fpComputeImportedReturns(data,audit,cashflows,liveHoldings,today){
  if(!data||typeof data!=="object"||Array.isArray(data))return {xirr:null,twr:null,ledgerReady:false,errors:["Ekstre verisi geçersiz"]};
  if(!data.source||typeof data.source.institution!=="string"||!data.source.institution.trim()||typeof data.source.reference!=="string"||!data.source.reference.trim())missing("Ekstre kurumu ve referansı eksik");
  if(!Number.isFinite(data.openingCash)||data.openingCash<0||!Number.isFinite(data.terminalCash)||data.terminalCash<0)missing("Açılış veya kapanış nakdi geçersiz");
+ if(data.openingCash!==0)missing("XIRR için başlangıç nakdi sıfır olmalı; dönem öncesi sermaye bu kayıtlarla ölçülemez");
  if(!Array.isArray(data.events)||!data.events.length)missing("Ekstre işlem listesi eksik");
  if(!data.terminal||!validDate(data.terminal.date)||!Number.isFinite(data.terminal.value)||data.terminal.value<0)missing("Kapanış portföy değerlemesi eksik");
  if(!Number.isFinite(data.positionsValue)||data.positionsValue<0)missing("Pozisyon değerlemesi eksik");
@@ -1940,7 +1941,7 @@ function fpReturnEvidenceSheet(pf){
  scrim.className="scrim";sh.className="sheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-label","Ekstre verisiyle getiri hesaplama");
  const example={source:{institution:"ARACI_KURUM_ADI",reference:"EKSTRE_REFERANSI"},openingCash:0,terminalCash:0,positionsValue:0,terminal:{date:"YYYY-AA-GG",value:0},events:[{id:"hareket-1",reference:"ekstre-satır-1",type:"deposit",date:"YYYY-AA-GG",amount:1000}],valuations:[]};
  sh.innerHTML=`<h2>Ekstre verisi yükle</h2>
-  <p class="small muted">Yalnız bu portföyün işlemleriyle birebir eşleşen, kurum ekstresinden alınmış tarihli hareket ve bakiye verilerini kullan. Kopyalanan JSON sadece bu cihazda saklanır; otomatik olarak dışarı gönderilmez. Kaynağın gerçekliğini uygulama doğrulayamaz.</p>
+  <p class="small muted">Yalnız bu portföyün işlemleriyle birebir eşleşen, kurum ekstresinden alınmış tarihli hareket ve bakiye verilerini kullan. Kopyalanan JSON sadece bu cihazda saklanır; otomatik olarak dışarı gönderilmez. Kaynağın gerçekliğini uygulama doğrulayamaz. İsim, hesap numarası veya başka kişisel bilgi ekleme.</p>
   <label>Ekstre verisi (JSON)<textarea id="pfEvidenceText" rows="9" maxlength="250000" style="width:100%;box-sizing:border-box;font:12px monospace" placeholder="Ekstre hareketlerini ve kapanış değerlemesini içeren JSON yapıştırın"></textarea></label>
   <details><summary class="small">Beklenen veri yapısı</summary><pre class="small" style="white-space:pre-wrap;word-break:break-word">${esc(JSON.stringify(example,null,2))}</pre></details>
   <div class="row"><button class="btn ghost sm" id="pfEvidenceCancel">Kapat</button><button class="btn ghost sm" id="pfEvidenceDelete">Veriyi sil</button><button class="btn sm" id="pfEvidenceSave">Kontrol et ve kaydet</button></div>`;
