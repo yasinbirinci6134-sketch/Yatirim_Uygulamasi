@@ -1807,6 +1807,7 @@ function advise(r, total){
   return ["kal","Kal", s ? `Önerilen dağılımda (%${s.weight}).` : "Belirgin bir değişiklik sinyali yok."];
 }
 function renderSanal(){
+  const tl2=n=>tl(n,2);
   const v=$("v-sanal");
   if(!S.db||!S.uid){ v.innerHTML=`<section class="card empty">${S.ready?"Portföy için claude.ai'de oturum açık olmalı.":"Yükleniyor…"}</section>`; return; }
   const pf=curPf();
@@ -1824,33 +1825,33 @@ function renderSanal(){
   const mix=["para","altin","gumus","doviz","hisse","diger"].map(c=>({c,w: val? rows.filter(r=>(asset(r.code)?.cat||"hisse")===c).reduce((s,r)=>s+r.value,0)/val*100 : 0})).filter(m=>m.w>0);
   v.innerHTML = `
     <section class="card pfhero">
-      <div class="pfh"><div class="pfl"><button class="pfpick" id="pfPick" aria-expanded="${!!S.pfOpen}">${esc(pf.name)} <span>${S.pfs.length>1?"▾ değiştir":"▾"}</span></button><b class="num pfv">${tl(val)}</b>
-          <div class="num ${cls(totalPnl)} pfp">${totalPnl>=0?"▲ +":"▼ "}${tl(totalPnl)} ${costAll?`<span>(${pc(totalPnl/costAll*100)})</span>`:""}</div>
-          <div class="small muted">toplam kâr/zarar · <span style="white-space:nowrap">son gün</span> <span class="num ${cls(day)}" style="white-space:nowrap">${day>=0?"+":""}${tl(day)}</span></div></div>
+      <div class="pfh"><div class="pfl"><button class="pfpick" id="pfPick" aria-expanded="${!!S.pfOpen}">${esc(pf.name)} <span>${S.pfs.length>1?"▾ değiştir":"▾"}</span></button><b class="num pfv">${tl2(val)}</b>
+          <div class="num ${cls(totalPnl)} pfp">${totalPnl>=0?"▲ +":"▼ "}${tl2(totalPnl)} ${costAll?`<span>(${pc(totalPnl/costAll*100)})</span>`:""}</div>
+          <div class="small muted">toplam kâr/zarar · <span style="white-space:nowrap">son gün</span> <span class="num ${cls(day)}" style="white-space:nowrap">${day>=0?"+":""}${tl2(day)}</span></div></div>
         ${mix.length?donut(mix):""}</div>
       ${mix.length?`<div class="legend">${mix.map(m=>`<span><i class="bar-${m.c}"></i>${CAT[m.c]} <b class="num">%${num(m.w,0)}</b></span>`).join("")}</div>`:""}
-      <div class="pfstats"><div><span>Yatırılan</span><b class="num">${tl(inv)}</b></div><div><span>Açık K/Z</span><b class="num ${cls(pnl)}">${pnl>=0?"+":""}${tl(pnl)}</b></div>
-        <div><span>Gerçekleşen</span><b class="num ${cls(realized)}">${realized>=0?"+":""}${tl(realized)}</b></div></div>
+      <div class="pfstats"><div><span>Yatırılan</span><b class="num">${tl2(inv)}</b></div><div><span>Açık K/Z</span><b class="num ${cls(pnl)}">${pnl>=0?"+":""}${tl2(pnl)}</b></div>
+        <div><span>Gerçekleşen</span><b class="num ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</b></div></div>
     </section>
     ${head}
     <section class="card"><div class="horizon"><h2>Pozisyonlar</h2><button class="btn sm" id="goAdd">+ Ekle</button></div>
       ${rows.length ? groupRows(rows).map(g=>{ const [k,lab,why]=advise(g,val), one=g.lots.length===1, r0=g.lots[0];
-        const lotLine=(r,nd)=>`<div class="small muted num">${nd?"":fmtDate(r.buyDate||r.priceDate)+" · "}${tl(r.amount)} · ${num(r.units,r.units<100?4:0)} adet · alış ${num(r.price,6)} → ${num(r.cur,6)}${r.days?` · günlük ort. ${pc(r.pnlPct/r.days,2)}`:""}</div>`;
+        const lotLine=(r,nd)=>`<div class="small muted num">${nd?"":fmtDate(r.buyDate||r.priceDate)+" · "}${tl2(r.amount)} · ${num(r.units,r.units<100?4:0)} adet · alış ${num(r.price,6)} → ${num(r.cur,6)}${r.days?` · günlük ort. ${pc(r.pnlPct/r.days,2)}`:""}</div>`;
         const acts=r=>`<div class="acts"><button class="btn ghost sm" data-del="${esc(r.id)}">Sil</button><button class="btn ghost sm" data-edit="${esc(r.id)}" style="margin-left:0">Düzenle</button><button class="btn ghost sm" data-sell="${esc(r.id)}" style="margin-left:0">Sat</button></div>`;
         return `<div class="trade x${xo("g:"+g.code)}" data-k="g:${esc(g.code)}">
         <div class="xh"><span class="code">${esc(g.code)}</span> <span class="adv adv-${k}">${esc(lab)}</span>
-          <div class="small muted">${one?(g.days!=null?`${g.days} gün · `:""):`${g.lots.length} alım · `}${tl(g.amount)}</div></div>
-        <div class="right xh"><div class="num">${tl(g.value)}</div><div class="num small ${cls(g.pnl)}">${g.pnl>=0?"+":""}${tl(g.pnl)} (${pc(g.pnlPct)})</div></div>
+          <div class="small muted">${one?(g.days!=null?`${g.days} gün · `:""):`${g.lots.length} alım · `}${tl2(g.amount)}</div></div>
+        <div class="right xh"><div class="num">${tl2(g.value)}</div><div class="num small ${cls(g.pnl)}">${g.pnl>=0?"+":""}${tl2(g.pnl)} (${pc(g.pnlPct)})</div></div>
         <p class="why" style="grid-column:1/-1;margin:2px 0 0">${esc(why)}</p>
         ${one ? `<div style="grid-column:1/-1">${lotLine(r0)}</div>${acts(r0)}`
           : `<div class="small muted num" style="grid-column:1/-1">${num(g.units,g.units<100?4:0)} adet toplam · ort. alış ${num(g.price,6)} → ${num(g.cur,6)}</div>
-             <div class="lots" style="grid-column:1/-1">${g.lots.map(r=>`<div class="lot"><div style="display:flex;justify-content:space-between;gap:8px"><b class="num small">${fmtDate(r.buyDate||r.priceDate)}</b><span class="num small ${cls(r.pnl)}">${r.pnl>=0?"+":""}${tl(r.pnl)} (${pc(r.pnlPct)})</span></div>${lotLine(r,1)}${acts(r)}</div>`).join("")}</div>`}
+             <div class="lots" style="grid-column:1/-1">${g.lots.map(r=>`<div class="lot"><div style="display:flex;justify-content:space-between;gap:8px"><b class="num small">${fmtDate(r.buyDate||r.priceDate)}</b><span class="num small ${cls(r.pnl)}">${r.pnl>=0?"+":""}${tl2(r.pnl)} (${pc(r.pnlPct)})</span></div>${lotLine(r,1)}${acts(r)}</div>`).join("")}</div>`}
         </div>`}).join("")
       : `<div class="empty">Bu portföy boş. "+ Ekle" ile gerçek alımlarını (tarih ve adet/fiyatla) ya da deneme alımlarını gir.</div>`}
     </section>
-    ${closed.length ? `<section class="card"><div class="horizon"><h2>Kapanan işlemler</h2><span class="num small ${cls(realized)}">${realized>=0?"+":""}${tl(realized)}</span></div>
-      ${closed.map(t=>{const p=(t.sellPrice/t.price-1)*t.amount; return `<div class="trade"><div><span class="code">${esc(t.code)}</span> <span class="small muted">${tl(t.amount)} · ${fmtDate(t.buyDate||t.priceDate)} → ${fmtDate(t.sellDate)}</span></div>
-        <div class="right num ${cls(p)}">${p>=0?"+":""}${tl(p)}</div>
+    ${closed.length ? `<section class="card"><div class="horizon"><h2>Kapanan işlemler</h2><span class="num small ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</span></div>
+      ${closed.map(t=>{const p=(t.sellPrice/t.price-1)*t.amount; return `<div class="trade"><div><span class="code">${esc(t.code)}</span> <span class="small muted">${tl2(t.amount)} · ${fmtDate(t.buyDate||t.priceDate)} → ${fmtDate(t.sellDate)}</span></div>
+        <div class="right num ${cls(p)}">${p>=0?"+":""}${tl2(p)}</div>
         <div class="acts"><button class="btn ghost sm" data-del="${esc(t.id)}">Sil</button></div></div>`}).join("")}</section>` : ""}
     <div id="planBox" style="display:flex;flex-direction:column;gap:inherit"></div>`;
   bindPf(pf);
@@ -2141,7 +2142,7 @@ function openBuy(code, tr){
         <label style="flex:1">Kod<input id="bNew" maxlength="12" autocomplete="off" placeholder="ör. NMP, THYAO" style="text-transform:uppercase;width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:10px 12px;font:16px var(--f-body)"></label>
         <label style="flex:1">Türü<select id="bNewT"><option value="f">Fon</option><option value="s">Hisse</option><option value="x">Döviz/altın</option></select></label></div>
       <label for="bDate">Alış tarihi<input id="bDate" type="date" max="${today}" value="${esc(tr?.buyDate||tr?.priceDate||today)}"></label>
-      <label for="bAmt">Tutar (TL)<input id="bAmt" type="number" inputmode="decimal" min="1" step="any" value="${tr?tr.amount:10000}"></label>
+      <label for="bAmt">Tutar (TL)<input id="bAmt" type="number" inputmode="decimal" min="1" step="any" value="${Number(tr?tr.amount:10000).toFixed(2)}"></label>
       <label for="bUnits">Adet <span class="muted">(isteğe bağlı)</span><input id="bUnits" type="number" inputmode="decimal" min="0" step="any" value="${tr?.units??""}"></label>
       <label for="bPrice">Alış fiyatı <span class="muted">(isteğe bağlı)</span><input id="bPrice" type="number" inputmode="decimal" min="0" step="any" placeholder="${tr?num(tr.price,6):""}"></label>
     </div>
@@ -2155,7 +2156,7 @@ function openBuy(code, tr){
     q("#bHint").textContent = isNew() ? "Listede olmayan kalem: adet ya da alış fiyatını gir. Kaydedince eklediklerine alınır ve verileri birkaç dakika içinde çekilir." : a ? `Güncel fiyat ${num(a.price,6)} (${fmtDate(a.priceDate)}). Adet girersen alış fiyatı tutar ÷ adet olarak hesaplanır; adet boşsa alış fiyatı kullanılır; ikisi de boşsa güncel fiyat.` : ""; };
   hint(); q("#bCode").onchange=hint;
   scrim.onclick=close; q("#bCancel").onclick=close;
-  sh.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{q("#bAmt").value=b.dataset.q;});
+  sh.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{q("#bAmt").value=Number(b.dataset.q).toFixed(2);});
   q("#bOk").onclick=async()=>{
     const nw=isNew(), nc=(q("#bNew").value||"").trim().toUpperCase().replace(/[^A-Z0-9]/g,""), nt=q("#bNewT").value;
     const a=nw ? (asset(nc) || (nc ? {code:nc, price:NaN} : null)) : asset(q("#bCode").value), amt=Number(q("#bAmt").value), units=Number(q("#bUnits").value)||0, pIn=Number(q("#bPrice").value)||0, date=q("#bDate").value||today;
@@ -2258,7 +2259,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-40";
+const UI_VERSION="2026.11.02-41";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
