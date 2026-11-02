@@ -34,6 +34,8 @@ function fpComputeImportedReturns(data,audit,cashflows,liveHoldings,today){
   if(match<0)missing("Portföy işlemleri ile ekstre hareketleri eşleşmiyor");else used.add(match);
  }
  if(used.size!==events.length)missing("Ekstrede portföyde kaydedilmemiş hareketler var");
+ const firstFunding=events.filter(e=>e&&e.type==="deposit").map(e=>e.date).sort()[0];
+ if(firstFunding&&events.some(e=>e&&e.date<firstFunding))missing("İlk para yatırma tarihinden önce işlem var; başlangıç sermayesi eksik");
  const external=events.filter(e=>e&&(e.type==="deposit"||e.type==="withdrawal"));
  if(!external.some(e=>e.type==="deposit"))missing("Para yatırma hareketi bulunamadı");
  if(external.some(e=>e.date>=data.terminal.date))missing("Kapanış tarihinde veya sonrasında dış nakit hareketi var");
