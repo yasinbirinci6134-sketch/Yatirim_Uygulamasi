@@ -7,6 +7,7 @@ const {xirr}=require("./return-metrics");
 const {timeWeightedReturn}=require("./twr");
 function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=null,positionsValue=null,ledgerEvidence={},valuations=[],navVerified=false}={}){
  const errors=[];
+ if(!Array.isArray(events))return {ready:false,xirr:null,twr:null,errors:["transaction records must be an array"],ledgerReady:false};
  const ledger=reconcileLedger({events,openingCash,terminalCash,...ledgerEvidence});
  if(!ledger.ready)errors.push(...ledger.errors);
  if(!terminal||!Number.isFinite(terminal.value)||terminal.value<0||typeof terminal.date!=="string")errors.push("terminal portfolio valuation missing");
@@ -22,6 +23,8 @@ function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=nul
   const first=ordered[0],last=ordered[ordered.length-1];
   if(!first||!last||last.date!==terminal.date||Math.abs(last.value-terminal.value)>0.01)errors.push("TWR ending valuation differs from verified terminal NAV");
   if(first&&!(Number.isFinite(first.value)&&first.value>0))errors.push("TWR opening NAV unverified");
+  const navDates=new Set(ordered.map(p=>p?.date));
+  for(const e of events)if((e.type==="deposit"||e.type==="withdrawal")&&!navDates.has(e.date))errors.push("external cashflow date lacks contemporaneous NAV");
   const movementByDay=new Map();
   for(const e of events){if(e.type==="deposit"||e.type==="withdrawal")movementByDay.set(e.date,(movementByDay.get(e.date)||0)+(e.type==="deposit"?e.amount:-e.amount));}
   for(let i=1;i<ordered.length;i++){
