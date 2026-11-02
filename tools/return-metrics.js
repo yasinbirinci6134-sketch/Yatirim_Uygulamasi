@@ -8,6 +8,14 @@ function xirr(flows,{maxRate=1e6,tolerance=1e-9}={}){
  const f=flows.map(x=>({date:String(x.date||""),amount:x.amount,day:Date.parse(x.date+"T00:00:00Z")}));
  if(f.some(x=>!validDay(x.date)||!Number.isFinite(x.day)||!Number.isFinite(x.amount)))return null;
  if(!f.some(x=>x.amount<0)||!f.some(x=>x.amount>0))return null;
+ /* Multiple sign reversals may produce multiple XIRR roots. Do not publish an
+    ambiguous annualized return without a dedicated multi-root solver. */
+ const ordered=f.slice().sort((a,b)=>a.day-b.day);
+ const byDay=[];
+ for(const x of ordered){const prev=byDay[byDay.length-1];if(prev&&prev.day===x.day)prev.amount+=x.amount;else byDay.push({...x});}
+ let reversals=0,previous=0;
+ for(const x of byDay){const sign=Math.sign(x.amount);if(!sign)continue;if(previous&&sign!==previous)reversals++;previous=sign;}
+ if(reversals!==1)return null;
  const t0=Math.min(...f.map(x=>x.day)),yr=365.2425*86400000;
  const npv=r=>f.reduce((sum,x)=>sum+x.amount/Math.pow(1+r,(x.day-t0)/yr),0);
  let lo=-0.999999,hi=1,fl=npv(lo),fh=npv(hi);
