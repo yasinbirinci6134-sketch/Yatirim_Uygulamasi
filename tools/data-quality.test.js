@@ -1,0 +1,13 @@
+"use strict";
+const assert=require("node:assert/strict");
+const {validateShortScan}=require("./data-quality");
+const items=Array.from({length:50},(_,i)=>({code:"X"+String(i).padStart(3,"0"),price:50+i,d1:i%2?1.5:-1.2,score:50,date:"2026-11-02",f:{momentum:0.5}}));
+const make=()=>({at:"2026-11-02T18:15:00.000Z",asOf:"2026-11-02",n:50,items:structuredClone(items)});
+assert.equal(validateShortScan(make(),new Date("2026-11-03")).ok,true);
+const missing=make();delete missing.items[0].d1;
+assert.equal(validateShortScan(missing,new Date("2026-11-03")).ok,false);
+const duplicate=make();duplicate.items[1].code=duplicate.items[0].code;
+assert.equal(validateShortScan(duplicate,new Date("2026-11-03")).ok,false);
+const bad=make();bad.items[3].price=0;
+assert.equal(validateShortScan(bad,new Date("2026-11-03")).ok,false);
+process.stdout.write("data-quality tests passed\n");
