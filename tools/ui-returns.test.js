@@ -14,6 +14,7 @@ assert.equal(ok.ledgerReady,true);
 assert.ok(Math.abs(ok.xirr-0.10006965697)<1e-7);
 assert.ok(Math.abs(ok.twr-0.1)<1e-9);
 assert.equal(run({...data,terminalCash:150}).ledgerReady,false);
+assert.equal(run({...data,openingCash:100}).xirr,null,"opening capital is not part of XIRR flows");
 assert.equal(run({...data,source:null}).xirr,null);
 assert.equal(run({...data,events:[...data.events,{id:"fee",reference:"r3",type:"fee",date:"2025-06-01",amount:1}]}).ledgerReady,false);
 assert.equal(run(data,{...audit,issues:["incomplete trade"]}).xirr,null);
