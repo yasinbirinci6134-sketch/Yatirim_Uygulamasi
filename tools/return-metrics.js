@@ -2,10 +2,11 @@
 /* Money-weighted return for COMPLETE cashflow ledgers only.
    Cashflows investor perspective: deposits negative, withdrawals positive.
    Terminal portfolio market value positive. Never calculate from incomplete legacy trades. */
+function validDay(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return false;const d=new Date(s+'T00:00:00Z');return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===s;}
 function xirr(flows,{maxRate=1e6,tolerance=1e-9}={}){
  if(!Array.isArray(flows)||flows.length<2)return null;
  const f=flows.map(x=>({date:String(x.date||""),amount:x.amount,day:Date.parse(x.date+"T00:00:00Z")}));
- if(f.some(x=>!/^\d{4}-\d{2}-\d{2}$/.test(x.date)||!Number.isFinite(x.day)||!Number.isFinite(x.amount)))return null;
+ if(f.some(x=>!validDay(x.date)||!Number.isFinite(x.day)||!Number.isFinite(x.amount)))return null;
  if(!f.some(x=>x.amount<0)||!f.some(x=>x.amount>0))return null;
  const t0=Math.min(...f.map(x=>x.day)),yr=365.2425*86400000;
  const npv=r=>f.reduce((sum,x)=>sum+x.amount/Math.pow(1+r,(x.day-t0)/yr),0);
