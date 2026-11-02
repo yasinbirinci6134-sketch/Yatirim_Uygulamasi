@@ -114,6 +114,10 @@ const csvEnd=html.indexOf('const FP_IMPORT_KEY=',csvStart);
 assert.ok(csvStart>0&&csvEnd>csvStart,"CSV import code must be bundled in WebView");
 assert.equal(html.slice(csvStart-14,csvEnd).trim(),csvInline,"bundled CSV engine must match tested source");
 assert.ok(html.includes('id="pfCsvApply"'));
+assert.ok(html.includes('id="pfNavApply"'));
+assert.ok(html.includes('id="pfNavCsvFile"'));
+assert.ok(html.includes("fpParseNavCsv(get("));
+
 assert.ok(html.includes('id="pfCsvFile"'));
 assert.ok(html.includes('get("pfCsvFile").onchange=async()=>'));
 assert.ok(html.includes('file.size>250000'));
