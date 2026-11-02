@@ -44,4 +44,12 @@ for(const tradeSet of [
   "UI and reconciliation engine candidate totals must agree");
  assert.equal(uiAudit.verified,false);
 }
+const sourceReturns=fs.readFileSync(path.join(__dirname,"ui-returns.js"),"utf8").trim();
+const inlineStart=html.indexOf("/* Browser and Node shared audit");
+const inlineEnd=html.indexOf("const FP_IMPORT_KEY=",inlineStart);
+assert.ok(inlineStart>0&&inlineEnd>inlineStart);
+assert.equal(html.slice(inlineStart,inlineEnd).trim(),sourceReturns,"WebView and test engine must use identical return calculator");
+assert.ok(html.includes('id="pfReturnImport"'),"evidence import control must be visible");
+assert.ok(html.includes('id="pfEvidenceSave"'),"statement importer must permit explicit save");
+assert.ok(html.includes("fpComputeImportedReturns(statementData"),"portfolio screen must call return engine");
 console.log("UI scripts and score-history tests passed");
