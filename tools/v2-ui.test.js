@@ -72,4 +72,17 @@ assert.ok(html.includes("statementIsHistorical"),"returns must identify historic
 assert.ok(html.includes("Bu geçmiş tarihli getiri hesabıdır"),"stale returns cannot look current");
 assert.ok(html.includes("İşlem eşleştirmesi"),"legacy trades must be presented as matched when reconciled");
 assert.ok(html.includes("TWR verisi değildir"),"position-only historical chart is not total NAV");
+const trustedStart=html.indexOf("function fpTrustedHoldingsValue(");
+const trustedEnd=html.indexOf("function fpReturnEvidenceSheet(",trustedStart);
+assert.ok(trustedStart>0&&trustedEnd>trustedStart);
+const trusted=new Function(html.slice(trustedStart,trustedEnd)+";return fpTrustedHoldingsValue;")();
+const dated={value:300,quoteSource:"live",curDate:"2026-11-03"};
+assert.equal(trusted([dated],"2026-11-03"),300);
+assert.ok(Number.isNaN(trusted([{...dated,quoteSource:"none"}],"2026-11-03")));
+assert.ok(Number.isNaN(trusted([{...dated,curDate:null}],"2026-11-03")));
+assert.ok(Number.isNaN(trusted([{...dated,curDate:"2026-10-25"}],"2026-11-03")));
+assert.equal(trusted([{...dated,curDate:"2026-10-27"}],"2026-11-03"),300);
+assert.ok(Number.isNaN(trusted([{...dated,curDate:"2026-11-04"}],"2026-11-03")));
+assert.equal(trusted([],"2026-11-03"),0);
+assert.ok(html.includes("fpComputeImportedReturns(statementData,legacyAudit,cashflows,trustedHoldings"));
 console.log("UI scripts and score-history tests passed");
