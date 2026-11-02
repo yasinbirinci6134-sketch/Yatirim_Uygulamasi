@@ -1522,7 +1522,7 @@ function drawDetail(){ const el=$("det"); if(!el||!S.det) return; const {t,c}=S.
   bindRowBtns(el); }
 document.addEventListener("click",e=>{ const b=e.target.closest?.("[data-mv]"); if(b) openDetail("s",b.dataset.mv); });
 /* ---------- Tabs ---------- */
-["gundem","oneri","hisse","doviz","sanal","piyasa"].forEach(k => $("t-"+k).onclick = () => { S.tab=k; $("gtip")?.remove(); window.scrollTo({top:0}); try{localStorage.setItem("fp-tab",k)}catch(e){}; showTab(); });
+["gundem","oneri","hisse","doviz","sanal","piyasa"].forEach(k => $("t-"+k).onclick = () => { S.tab=k; $("gtip")?.remove(); window.scrollTo({top:0}); try{localStorage.setItem("fp-tab",k)}catch(e){}; showTab(); renderAll(); });
 S.tab="gundem"; try{ S.pf=localStorage.getItem("fp-pf"); }catch(e){}
 function showTab(){ ["gundem","oneri","hisse","doviz","sanal","piyasa"].forEach(k => { $("t-"+k).setAttribute("aria-selected", String(S.tab===k)); $("v-"+k).hidden = S.tab!==k; }); }
 
@@ -2258,7 +2258,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-31";
+const UI_VERSION="2026.11.02-32";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -2706,14 +2706,17 @@ function applyLive(){ const L=S.live, M=S.market; if(!M) return; SH.cache=null;
 { const _rq=requestQuick; requestQuick=function(kind){ return LIVE.ok() ? liveRefresh([kind],true) : _rq(kind); }; }
 try{ if(typeof autoQuick==="function"){ const _aq=autoQuick; autoQuick=function(){ return LIVE.ok() ? false : _aq.apply(this,arguments); }; } }catch(_){}
 document.addEventListener("visibilitychange",()=>{ if(!document.hidden && S.ready && LIVE.ok() && S.market) liveRefresh(null,false); });
-// Acik sekmeyi hemen ciz; diger sekmelerin agir DOM islerini ilk dokunmayi bloke etmeden bol.
+// Ilk acilista sadece aktif sekme cizilir. Veri abonelikleri gizli sekmeleri zorlamaz.
+const FP_STARTUP_UNTIL=Date.now()+5000;
+function fpStartupRender(tab,cb){ if(Date.now()<FP_STARTUP_UNTIL && S.tab!==tab) return; cb(); }
+// Acik sekmeyi hemen ciz; diger sekmeleri ilk acilis yukunden sonra hazirla.
 function renderAll(){ renderFresh(); const T={gundem:()=>renderGundem(),oneri:()=>renderOneri(),hisse:()=>renderHisse(),doviz:()=>renderDoviz(),sanal:()=>renderSanal(),piyasa:()=>renderPiyasa()}, cur=T[S.tab]?S.tab:"gundem";
   try{ T[cur](); }catch(e){ console.error(e); } if(S.det) drawDetail();
   clearTimeout(renderAll._t);
   const seq=Object.keys(T).filter(k=>k!==cur); let i=0;
   const rest=()=>{ if(i>=seq.length) return; const k=seq[i++]; if(k!==S.tab) try{ T[k](); }catch(e){ console.error(e); }
     if(i<seq.length) renderAll._t=setTimeout(rest,80); };
-  renderAll._t=setTimeout(rest,600); }
+  renderAll._t=setTimeout(rest,Math.max(600,FP_STARTUP_UNTIL-Date.now())); }
 showTab(); renderAll();
 
 /* ---------- Bağlantılar ---------- */
@@ -2728,18 +2731,18 @@ showTab(); renderAll();
   db.doc("market/live").onSnapshot(s => { if(LIVE.busy) return; const L=s.exists?s.data():null; if(L && (!S.live || L.at>S.live.at)){ S.live=L; applyLive(); renderAll(); } });
   db.doc("market/latest").onSnapshot(s => { S.market = s.exists ? s.data() : null; applyLive(); firstMarket=false; renderAll(); if(!maybeAuto.done) maybeAuto(); window.__anCheck?.(); });
   db.doc("config/app").onSnapshot(s => { S.cfg = s.exists ? s.data() : null; firstCfg=true; renderFresh(); if(!maybeAuto.done) maybeAuto(); });
-  db.doc("market/scorelog").onSnapshot(s => { const H={}; ((s.exists&&s.data()?.snaps)||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(sn=>(sn.items||[]).forEach(it=>{ if(it?.c&&typeof it.sc==="number") (H[it.c]=H[it.c]||[]).push({d:sn.date,sc:histSc(it),p:it.p}); })); S.hist=H; renderHisse(); renderOneri(); renderDoviz(); if(S.det) drawDetail(); });
-  db.doc("config/fundwatch").onSnapshot(s => { S.fwatch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; renderOneri(); });
-  db.doc("config/fxwatch").onSnapshot(s => { S.fxwatch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; renderDoviz(); });
-  db.doc("config/watchlist").onSnapshot(s => { S.watch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; renderHisse(); });
-  db.doc("config/status").onSnapshot(s => { S.status = s.exists ? s.data() : null; firstStatus=true; if(S.status?.requestedAt){ if(!S.preQ) S.preQ=priceSnap(); } else if(S.preQ){ const p=S.preQ; S.preQ=null; setTimeout(()=>reportRun(p),800); } renderFresh(); renderHisse(); renderOneri(); if(!maybeAuto.done) maybeAuto(); });
+  db.doc("market/scorelog").onSnapshot(s => { const H={}; ((s.exists&&s.data()?.snaps)||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(sn=>(sn.items||[]).forEach(it=>{ if(it?.c&&typeof it.sc==="number") (H[it.c]=H[it.c]||[]).push({d:sn.date,sc:histSc(it),p:it.p}); })); S.hist=H; fpStartupRender("hisse",renderHisse); fpStartupRender("oneri",renderOneri); fpStartupRender("doviz",renderDoviz); if(S.det) drawDetail(); });
+  db.doc("config/fundwatch").onSnapshot(s => { S.fwatch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; fpStartupRender("oneri",renderOneri); });
+  db.doc("config/fxwatch").onSnapshot(s => { S.fxwatch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; fpStartupRender("doviz",renderDoviz); });
+  db.doc("config/watchlist").onSnapshot(s => { S.watch = (s.exists && Array.isArray(s.data()?.codes)) ? s.data().codes : []; fpStartupRender("hisse",renderHisse); });
+  db.doc("config/status").onSnapshot(s => { S.status = s.exists ? s.data() : null; firstStatus=true; if(S.status?.requestedAt){ if(!S.preQ) S.preQ=priceSnap(); } else if(S.preQ){ const p=S.preQ; S.preQ=null; setTimeout(()=>reportRun(p),800); } renderFresh(); fpStartupRender("hisse",renderHisse); fpStartupRender("oneri",renderOneri); if(!maybeAuto.done) maybeAuto(); });
   if(S.uid){
     tradesCol().onSnapshot(q => { const all=q.docs.map(d=>({id:d.id,...d.data()}));
       if(!S.prefsLoaded){ const pr=all.find(d=>d.id==="prefs"); S.prefsLoaded=true; if(pr) loadPrefs(pr); else savePrefs(); }
       S.trades = all.filter(d=>d.kind==="trade").sort((a,b)=>String(b.buyDate||b.at).localeCompare(String(a.buyDate||a.at)));
       S.pfs = all.filter(d=>d.kind==="portfolio").sort((a,b)=>String(a.createdAt).localeCompare(String(b.createdAt)));
       const held=[...new Set(S.trades.filter(t=>t.status!=="closed").map(t=>t.code))].sort();
-      if(held.join()!==(S.heldSent||"")){ S.heldSent=held.join(); db.doc("config/held").set({codes:held}).catch(()=>{}); } renderSanal(); renderHisse(); renderOneri(); renderGundem(); });
+      if(held.join()!==(S.heldSent||"")){ S.heldSent=held.join(); db.doc("config/held").set({codes:held}).catch(()=>{}); } fpStartupRender("sanal",renderSanal); fpStartupRender("hisse",renderHisse); fpStartupRender("oneri",renderOneri); fpStartupRender("gundem",renderGundem); });
   }
   setInterval(renderFresh, 60e3);
 })();
