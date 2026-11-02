@@ -27,6 +27,7 @@ jobs:
           node tools/ledger-reconcile.test.js
           node tools/legacy-trade-audit.test.js
           node tools/verified-returns.test.js
+          node tools/ui-returns.test.js
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
