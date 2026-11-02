@@ -1,14 +1,17 @@
 "use strict";
 /* Reconcile a complete dated cash ledger against trades.
    This is a prerequisite checker, not evidence legacy records are complete. */
-function reconcileLedger({events=[],openingCash=0,terminalCash=null,complete=false}={}){
+function reconcileLedger({events=[],openingCash=0,terminalCash=null,complete=false,verifiedOpening=false,verifiedEnding=false,tradeCoverage=false}={}){
  const errors=[];
  if(!complete)errors.push("ledger completeness not verified");
+ if(!verifiedOpening)errors.push("opening cash source unverified");
+ if(!verifiedEnding)errors.push("terminal cash source unverified");
+ if(!tradeCoverage)errors.push("buy/sell coverage unverified");
  if(!Number.isFinite(openingCash)||openingCash<0)errors.push("invalid opening cash");
  if(!Number.isFinite(terminalCash)||terminalCash<0)errors.push("invalid terminal cash");
  const validDay=s=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(s||""))return false;const d=new Date(s+"T00:00:00Z");return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===s;};
  if(!Array.isArray(events))return {ready:false,errors:["events must be an array"],calculatedCash:null};
- const eventsSorted=[...events].sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")));
+ const eventsSorted=[...events].sort((a,b)=>String(a?.date||"").localeCompare(String(b?.date||"")));
  let cash=openingCash;
  const signs={deposit:1,withdrawal:-1,buy:-1,sell:1,dividend:1,fee:-1};
  for(const e of eventsSorted){
