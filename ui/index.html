@@ -2185,7 +2185,10 @@ function bindPf(pf){
   if($("pfDel")) $("pfDel").onclick = () => { $("pfDelBox").hidden=false; };
   if($("pfDelNo")) $("pfDelNo").onclick = () => { $("pfDelBox").hidden=true; };
   if($("pfDelYes")) $("pfDelYes").onclick = async () => {
-    try{ for(const t of [...pfTrades(pf),...(S.cashflows||[]).filter(x=>x.pf===pf.id),...(S.journal||[]).filter(x=>x.pf===pf.id)]) await tradesCol().doc(t.id).delete(); await tradesCol().doc(pf.id).delete(); S.pf=null; toast("Portföy silindi"); }catch(e){ toast("Silinemedi."); } };
+    try{ for(const t of [...pfTrades(pf),...(S.cashflows||[]).filter(x=>x.pf===pf.id),...(S.journal||[]).filter(x=>x.pf===pf.id)]) await tradesCol().doc(t.id).delete(); await tradesCol().doc(pf.id).delete();
+      try{fpStoreStatement(pf.id,null)}catch(_){}
+      try{const snapshots=fpPortSeries();delete snapshots[pf.id];localStorage.setItem(FP_PFV_KEY,JSON.stringify(snapshots))}catch(_){}
+      S.pf=null; toast("Portföy silindi"); }catch(e){ toast("Silinemedi."); } };
   $("pfForm").onsubmit = async e => { e.preventDefault(); const n=$("pfName").value.trim(); if(!n) return;
     try{ if(mode==="ren"){ await tradesCol().doc(pf.id).update({name:n}); }
       else { const ref=await tradesCol().add({kind:"portfolio",name:n,createdAt:new Date().toISOString(),legacy:S.pfs.length===0}); S.pf=ref.id; try{localStorage.setItem("fp-pf",S.pf)}catch(_){} }
