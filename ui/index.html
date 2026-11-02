@@ -1950,11 +1950,11 @@ function fpStatementDraft(audit,cashflows){
 /* Independent quotes required for same-day statement checks; purchase-price
    fallback and stale quotes must never certify a current holdings valuation. */
 function fpTrustedHoldingsValue(rows,today){
- if(!Array.isArray(rows)||typeof today!=="string"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(today))return NaN;
+ if(!Array.isArray(rows)||typeof today!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(today))return NaN;
  const now=Date.parse(today+"T00:00:00Z");if(!Number.isFinite(now))return NaN;
  let sum=0;
  for(const r of rows){
-  if(!r||!Number.isFinite(r.value)||r.value<0||!r.quoteSource||r.quoteSource==="none"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(String(r.curDate||"")))return NaN;
+  if(!r||!Number.isFinite(r.value)||r.value<0||!r.quoteSource||r.quoteSource==="none"||!/^\d{4}-\d{2}-\d{2}$/.test(String(r.curDate||"")))return NaN;
   const when=Date.parse(r.curDate+"T00:00:00Z"),age=(now-when)/86400000;
   if(!Number.isFinite(age)||age<0||age>7)return NaN;
   sum+=r.value;if(!Number.isFinite(sum))return NaN;
