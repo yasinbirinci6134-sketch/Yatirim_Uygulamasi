@@ -1,0 +1,16 @@
+"use strict";
+const assert=require("node:assert/strict");
+const fs=require("node:fs"),vm=require("node:vm"),path=require("node:path");
+const html=fs.readFileSync(path.join(__dirname,"../ui/index.html"),"utf8");
+const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
+assert.ok(scripts.length>=3);
+for(const [i,s] of scripts.entries())new vm.Script(s[1],{filename:"ui/index.html:script"+i});
+const start=html.indexOf("function fpSignalResults("),end=html.indexOf("\nfunction fpScoreDiary()",start);
+assert.ok(start>0&&end>start);
+const score=new Function(html.slice(start,end)+";return fpSignalResults;")();
+const snaps=Array.from({length:6},(_,i)=>({at:"2026-11-"+String(i+1).padStart(2,"0"),xu:100+i*2,items:[{code:"ABC",score:90,price:100+i*4},{code:"DEF",score:40,price:50+i}]}));
+const out=score(snaps,5);
+assert.equal(out.count,1);assert.equal(out.positive,1);assert.ok(Math.abs(out.avg-20)<1e-7);
+assert.ok(Math.abs(out.relativeAvg-10)<1e-7);
+assert.equal(score(snaps.slice(0,5),5).count,0);
+console.log("UI scripts and score-history tests passed");
