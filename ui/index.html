@@ -1833,17 +1833,17 @@ function fpPortSeries(){try{const a=JSON.parse(localStorage.getItem(FP_PFV_KEY)|
 function fpPortSnapshot(id,amount,cost){
  if(!id||!Number.isFinite(amount)||amount<0||!Number.isFinite(cost)||cost<0)return;
  const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10),all=fpPortSeries(),a=Array.isArray(all[id])?all[id]:[];
- if(a.length&&a[a.length-1].day===today)Object.assign(a[a.length-1],{value:amount,cost});else a.push({day:today,value:amount,cost});
+ if(a.length&&a[a.length-1].day===today)Object.assign(a[a.length-1],{value:amount,cost,priced:true});else a.push({day:today,value:amount,cost,priced:true});
  all[id]=a.slice(-365);try{localStorage.setItem(FP_PFV_KEY,JSON.stringify(all))}catch(_){}
 }
 function fpPortChart(id){
- const data=(fpPortSeries()[id]||[]).filter(x=>x&&Number.isFinite(x.value));
- if(data.length<2)return `<p class="small muted">Performans grafiği için farklı tarihlerde en az iki gerçek portföy değerinin kaydedilmesi gerekiyor. Geçmiş fiyatlar uydurulmaz.</p>`;
+ const data=(fpPortSeries()[id]||[]).filter(x=>x&&x.priced===true&&Number.isFinite(x.value)&&typeof x.day==="string");
+ if(data.length<2)return `<p class="small muted">Pozisyon grafiği için farklı tarihlerde doğrulanabilir fiyat kaynaklarından en az iki günlük kayıt gerekiyor. Önceki belirsiz fiyat kayıtları gösterilmez.</p>`;
  const w=320,h=110;
  const all=[...data.map(x=>x.value),...data.map(x=>x.cost).filter(Number.isFinite)],lower=Math.min(...all),upper=Math.max(...all),width=Math.max(1,upper-lower);
  const pts=field=>data.map((x,i)=>`${10+i*300/Math.max(1,data.length-1)},${100-(x[field]-lower)/width*88}`).join(" ");
  const points=pts("value"),costPoints=data.every(x=>Number.isFinite(x.cost))?pts("cost"):null;
- return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Kaydedilmiş portföy değerleri grafiği" style="width:100%;height:130px;overflow:visible"><polyline fill="none" stroke="var(--accent)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" points="${points}"/>${costPoints?`<polyline fill="none" stroke="var(--muted)" stroke-width="1.7" stroke-dasharray="4 4" stroke-linecap="round" stroke-linejoin="round" points="${costPoints}"/>`:""}</svg><div class="small muted">Düz çizgi: pozisyon değeri · Kesik çizgi: pozisyon maliyeti. Nakit ve gerçekleşmiş getiriler dahil değildir.</div>
+ return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Kaydedilmiş portföy değerleri grafiği" style="width:100%;height:130px;overflow:visible"><polyline fill="none" stroke="var(--accent)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" points="${points}"/>${costPoints?`<polyline fill="none" stroke="var(--muted)" stroke-width="1.7" stroke-dasharray="4 4" stroke-linecap="round" stroke-linejoin="round" points="${costPoints}"/>`:""}</svg><div class="small muted">Düz çizgi: fiyat kaynağı kontrol edilmiş pozisyon değeri · Kesik çizgi: pozisyon maliyeti. Bu bir TWR/NAV grafiği değildir; nakit ve gerçekleşmiş getiriler dahil değildir.</div>
  <div class="row small muted" style="justify-content:space-between"><span>${esc(data[0].day)}</span><span>${esc(data[data.length-1].day)}</span></div>`;
 }
 /* Browser and Node shared audit of user-supplied external statement data.
@@ -2052,7 +2052,9 @@ function renderSanal(){
    ${notes.length?notes.slice(0,12).map(x=>`<div class="trade"><div style="min-width:0"><b>${esc(x.title||"Yatırım notu")}</b><div class="small muted">${esc(x.date)} · ${esc(x.body||"")}</div></div><button class="btn ghost sm" data-notedel="${esc(x.id)}">Sil</button></div>`).join(""):`<p class="small muted">Bir yatırım kararı verirken nedenini kaydet; sonra dönüp sonucunu değerlendir.</p>`}</section>`;
   const rows=portfolioRows(pf), closed=pfTrades(pf).filter(t=>t.status==="closed");
   const inv=rows.reduce((s,r)=>s+r.amount,0), val=rows.reduce((s,r)=>s+r.value,0), pnl=val-inv;
-  fpPortSnapshot(pf.id,val,inv);
+  const snapshotToday=new Date(Date.now()+3*3600e3).toISOString().slice(0,10);
+  const snapshotVal=fpTrustedHoldingsValue(rows,snapshotToday);
+  if(Number.isFinite(snapshotVal))fpPortSnapshot(pf.id,snapshotVal,inv);
   const day=rows.reduce((s,r)=> s + (r.d1!=null && r.curDate && r.curDate>(r.buyDate||r.priceDate) ? r.value*(r.d1/(100+r.d1)) : 0),0);
   const realized=closed.reduce((s,t)=>s+(t.sellPrice/t.price-1)*t.amount,0);
   const totalPnl=pnl+realized, costAll=inv+closed.reduce((s,t)=>s+t.amount,0);
@@ -2071,7 +2073,7 @@ function renderSanal(){
   const reasons=[hasLegacy?"Eski alış/satış kayıtları tam nakit defterine bağlı değil":null,closedWithoutCost?"Kapanmış işlemlerde eksik satış/maliyet bilgisi var":null,missingDates.length?"Tarihi eksik nakit hareketleri var":null,invalidMovements.length?"Geçersiz nakit hareketleri var":null,!cashflows.some(x=>x.type==="deposit")?"Başlangıç para yatırma kaydı yok":null,"Nakit bakiyesi ve tüm işlem hareketleri henüz doğrulanmadı"].filter(Boolean);
   // Source records cannot independently prove opening cash, closing cash or trade coverage.
   // These are audit indicators, not authorization to publish XIRR/TWR.
-  const navSeries=(fpPortSeries()[pf.id]||[]).filter(x=>x&&typeof x.day==="string"&&Number.isFinite(x.value));
+  const navSeries=(fpPortSeries()[pf.id]||[]).filter(x=>x&&x.priced===true&&typeof x.day==="string"&&Number.isFinite(x.value));
   const verifiedFundingDates=externalEntries.every(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.date||""));
   // Historical trades and account cash are not independently certified.
   // Show exact missing prerequisites; never publish synthetic annualized returns.
