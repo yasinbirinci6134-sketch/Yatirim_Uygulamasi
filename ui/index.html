@@ -1985,6 +1985,7 @@ function renderDoviz(){
       ${S.db?`<form id="fxAddForm" class="addrow"><input id="fxAddCode" placeholder="Döviz ekle (ör. CHF, platin)" maxlength="20" autocomplete="off" aria-label="Döviz ya da emtia"><button class="btn" type="submit">Ekle</button></form>`:""}
       ${waiting.length?`<p class="note">Analiz ediliyor: ${waiting.map(esc).join(", ")}</p>`:""}
       ${fx.length?["altin","gumus","doviz"].map(c=>{const a=applyLF("doviz",fx.filter(x=>x.cat===c));return a.length?(studioOn()?`<div class="fgh studio-asset-category">${esc(FXCAT[c])}</div>`+studioTableHead():"")+a.map(fxRow).join(""):"";}).join(""):`<div class="empty">Veriler bir sonraki tam güncellemede gelecek.</div>`}</section>
+    ${studioOn()?fpFundCompareMarkup(m):""}
     <section class="card"><details><summary class="code" style="cursor:pointer">Puan nasıl hesaplanıyor?</summary>
       <p class="why" style="margin-top:8px">TL ile yaşayan biri için: <b>Taşıma (25):</b> dövize ya da altına geçince vazgeçtiğin TL faiz getirisi ile beklenen kur artışının karşılaştırması (TCMB Piyasa Katılımcıları Anketi). Reel faiz yüksekken dolar tutmak genelde para piyasası fonunun gerisinde kalır. <b>Trend (30):</b> 12 ay ve 3 ay getirisi, fiyatın 1 yıllık aralıktaki yeri; döviz ve emtiada en güçlü kanıtı olan ölçüt (zaman serisi momentumu). <b>Değerleme (15):</b> reel kur (TL aşırı değerli mi), altında ABD reel faizi, altın/gümüş oranı. <b>Makro (20):</b> Fed ve TCMB kararları, jeopolitik risk, merkez bankası altın alımları, CDS. <b>Risk (10):</b> oynaklık ve büyük düşüşler. "Alınabilir" 62+, "Uzak dur" 42 altı.</p></details></section>`;
   bindFunds(v);
@@ -2050,6 +2051,27 @@ function renderPiyasa(){
     ${moversBlock(m.stocks||[])}
 `;
 }
+/* Fon Pusulasi 2.0 - basic 2-fund comparison using published, dated market fields. */
+function fpFundCompareMarkup(m){
+ const funds=(m?.funds||[]).filter(x=>x.code),opts=funds.map(x=>`<option value="${esc(x.code)}">${esc(x.code)} · ${esc(x.name||"")}</option>`).join("");
+ if(funds.length<2)return "";
+ return `<section class="card"><div class="horizon"><h2>Fon karşılaştırması</h2><span class="small muted">2 fon</span></div>
+ <div class="formgrid"><label>Birinci fon<select id="v2-fundA">${opts}</select></label><label>İkinci fon<select id="v2-fundB">${opts}</select></label></div>
+ <div id="v2-fund-result" class="small muted" style="margin-top:10px"></div>
+ <p class="small muted">Aynı tarihli ve tanımlı veriler karşılaştırılır. Puan ve geçmiş getiri gelecekteki getirinin garantisi değildir.</p></section>`;
+}
+function fpBindFundCompare(v){
+ const a=v.querySelector("#v2-fundA"),b=v.querySelector("#v2-fundB"),out=v.querySelector("#v2-fund-result");if(!a||!b||!out)return;
+ if(b.options.length>1)b.selectedIndex=1;
+ const render=()=>{
+  const funds=S.market?.funds||[],fa=funds.find(x=>x.code===a.value),fb=funds.find(x=>x.code===b.value);
+  if(!fa||!fb||fa.code===fb.code){out.textContent="Karşılaştırmak için iki farklı fon seç.";return;}
+  const fields=[["Puan","score",0],["1 ay (%)","m1",2],["3 ay (%)","m3",2],["1 yıl (%)","y1",2],["Günlük değişim (%)","d1",2],["Fiyat","price",6]];
+  const cell=(f,key,d)=>typeof f[key]==="number"&&Number.isFinite(f[key])?num(f[key],d):"Veri yok";
+  out.innerHTML=`<table style="width:100%;font-size:12px"><thead><tr><th style="text-align:left">Ölçüt</th><th>${esc(fa.code)}</th><th>${esc(fb.code)}</th></tr></thead><tbody>${fields.map(([label,key,d])=>`<tr><td>${label}</td><td style="text-align:right">${cell(fa,key,d)}</td><td style="text-align:right">${cell(fb,key,d)}</td></tr>`).join("")}</tbody></table>`;
+ };
+ a.onchange=render;b.onchange=render;render();
+}
 function fundsHtml(m){
   const groups=["para","altin","hisse","diger"].map(c=>({c, list:applyLF("oneri",(m.funds||[]).filter(f=>f.cat===c&&akVis(f)))})).filter(g=>g.list.length);
   return `    ${S.db?`<section class="card"><div class="horizon"><h2>Fonlar <span class="small muted">${(m.funds||[]).length}</span></h2>${quickBtn("fon")}</div>${lfBar("oneri","Fon ara: kod ya da ad")}<form id="fAddForm" class="addrow"><input id="fAddCode" placeholder="Fon ekle (ör. ZBJ)" maxlength="4" autocomplete="off" aria-label="Fon kodu"><button class="btn" type="submit">Ekle</button></form>
@@ -2060,6 +2082,7 @@ function fundsHtml(m){
       <p class="why" style="margin-top:8px"><b>Getiri (30):</b> tek döneme değil 1, 3, 6 ay ve 1 yılın tutarlılığına bakılır; geçen yılın en iyi fonları ertesi yıl çoğunlukla öne çıkmıyor. <b>Maliyet (20):</b> yönetim ücreti; araştırmalarda gelecek performansı en güvenilir öngören ölçüt düşük ücret. Endeks ve altın fonunda takip ettiği varlıktan sapma da burada. <b>Risk kontrolü (25):</b> TEFAS risk değeri, en büyük düşüş, Sharpe oranı. <b>Kalite (15):</b> fon büyüklüğü, yatırımcı sayısı, fon yaşı, portföy şirketi. <b>Ortama uyum (10):</b> faiz, enflasyon ve kur ortamının fon türünü destekleyip desteklemediği.</p><p class="why">Ağırlıklar sabit değil: her güncellemede eski puanlar sonraki gerçek getiriyle karşılaştırılır, isabetli ölçütlerin payı artar, yanıltanların azalır (çubuklardaki üst sınırlar güncel ağırlıkları gösterir).</p></details></section>`;
 }
 function bindFunds(v){
+  fpBindFundCompare(v);
   v.querySelectorAll("[data-buy]").forEach(b=> b.onclick = () => openBuy(b.dataset.buy));
   bindRowBtns(v);
   const s2=$("setBtn2"); if(s2) s2.onclick=openSettings;
