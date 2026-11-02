@@ -2058,7 +2058,7 @@ function fpFundCompareMarkup(m){
  return `<section class="card"><div class="horizon"><h2>Fon karşılaştırması</h2><span class="small muted">2 fon</span></div>
  <div class="formgrid"><label>Birinci fon<select id="v2-fundA">${opts}</select></label><label>İkinci fon<select id="v2-fundB">${opts}</select></label></div>
  <div id="v2-fund-result" class="small muted" style="margin-top:10px"></div>
- <p class="small muted">Aynı tarihli ve tanımlı veriler karşılaştırılır. Puan ve geçmiş getiri gelecekteki getirinin garantisi değildir.</p></section>`;
+ <p class="small muted">Veri tarihleri farklı olabilir; güncelliği fon detayında kontrol et. Yönetim ücreti mevcutsa bilgi amaçlı gösterilir, fiyat getirilerinden tekrar düşülmez. Geçmiş getiri gelecek getirinin garantisi değildir.</p></section>`;
 }
 function fpBindFundCompare(v){
  const a=v.querySelector("#v2-fundA"),b=v.querySelector("#v2-fundB"),out=v.querySelector("#v2-fund-result");if(!a||!b||!out)return;
@@ -2066,7 +2066,7 @@ function fpBindFundCompare(v){
  const render=()=>{
   const funds=S.market?.funds||[],fa=funds.find(x=>x.code===a.value),fb=funds.find(x=>x.code===b.value);
   if(!fa||!fb||fa.code===fb.code){out.textContent="Karşılaştırmak için iki farklı fon seç.";return;}
-  const fields=[["Puan","score",0],["1 ay (%)","m1",2],["3 ay (%)","m3",2],["1 yıl (%)","y1",2],["Günlük değişim (%)","d1",2],["Fiyat","price",6]];
+  const fields=[["Puan","score",0],["Risk değeri","riskValue",0],["Yönetim ücreti (%)","fee",2],["1 ay (%)","m1",2],["3 ay (%)","m3",2],["6 ay (%)","m6",2],["1 yıl (%)","y1",2],["Günlük değişim (%)","d1",2],["Fiyat (TL)","price",6]];
   const cell=(f,key,d)=>typeof f[key]==="number"&&Number.isFinite(f[key])?num(f[key],d):"Veri yok";
   out.innerHTML=`<table style="width:100%;font-size:12px"><thead><tr><th style="text-align:left">Ölçüt</th><th>${esc(fa.code)}</th><th>${esc(fb.code)}</th></tr></thead><tbody>${fields.map(([label,key,d])=>`<tr><td>${label}</td><td style="text-align:right">${cell(fa,key,d)}</td><td style="text-align:right">${cell(fb,key,d)}</td></tr>`).join("")}</tbody></table>`;
  };
@@ -2390,7 +2390,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-v2-preview2";
+const UI_VERSION="2026.11.02-v2-preview3";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
