@@ -18,8 +18,20 @@ function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=nul
  if(!errors.length){rate=xirr(flows.flows);if(rate===null)errors.push("XIRR undefined or ambiguous");}
  let twr=null;
  if(navVerified&&errors.length===0&&Array.isArray(valuations)&&valuations.length>=2){
-  twr=timeWeightedReturn(valuations);
-  if(twr===null)errors.push("TWR history invalid");
+  const ordered=[...valuations].sort((a,b)=>String(a?.date||"").localeCompare(String(b?.date||""));
+  const first=ordered[0],last=ordered[ordered.length-1];
+  if(!first||!last||last.date!==terminal.date||Math.abs(last.value-terminal.value)>0.01)errors.push("TWR ending valuation differs from verified terminal NAV");
+  if(first&&!(Number.isFinite(first.value)&&first.value>0))errors.push("TWR opening NAV unverified");
+  const movementByDay=new Map();
+  for(const e of events){if(e.type==="deposit"||e.type==="withdrawal")movementByDay.set(e.date,(movementByDay.get(e.date)||0)+(e.type==="deposit"?e.amount:-e.amount));}
+  for(let i=1;i<ordered.length;i++){
+   const p=ordered[i],previous=ordered[i-1];
+   if(!p||!previous||typeof p.date!=="string"||typeof previous.date!=="string")continue;
+   let sum=0;for(const [date,amount] of movementByDay)if(date>previous.date&&date<=p.date)sum+=amount;
+   if(!Number.isFinite(p.externalFlow||0)||Math.abs((p.externalFlow||0)-sum)>0.01)errors.push("TWR external flows do not match dated cash movements");
+  }
+  if(!errors.length)twr=timeWeightedReturn(ordered);
+  if(twr===null&&!errors.length)errors.push("TWR history invalid");
  }else errors.push("verified dated NAV history missing");
  return {ready:errors.length===0,xirr:rate,twr,errors,ledgerReady:ledger.ready};
 }
