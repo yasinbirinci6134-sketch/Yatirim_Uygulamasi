@@ -88,4 +88,23 @@ assert.ok(html.includes("fpComputeImportedReturns(statementData,legacyAudit,cash
 assert.ok(html.includes("x.priced===true"),"legacy position snapshots must not pose as verified quotes");
 assert.ok(html.includes("if(Number.isFinite(snapshotVal))fpPortSnapshot"),"only externally priced holdings should be recorded");
 assert.ok(html.includes("Bu bir TWR/NAV grafiği değildir"),"position charts must distinguish from return metrics");
+const chartStart=html.indexOf('const FP_PFV_KEY=');
+const chartEnd=html.indexOf('/* Browser and Node shared audit',chartStart);
+assert.ok(chartStart>0&&chartEnd>chartStart);
+const db=new Map(),localStorage={getItem:key=>db.get(key)||null,setItem:(key,val)=>db.set(key,val)};
+const chart=new Function("localStorage","esc",html.slice(chartStart,chartEnd)+";return {fpPortSeries,fpPortSnapshot,fpPortChart};")(localStorage,x=>String(x));
+const yday=new Date(Date.now()+3*3600e3-86400000).toISOString().slice(0,10);
+const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10);
+db.set("fp-v2-portfolio-values",JSON.stringify({p:[
+ {day:"2026-01-01",value:999999,cost:30}, // old values are retained, never certified
+ {day:yday,value:100,cost:80,priced:true}
+]}));
+chart.fpPortSnapshot("p",120,80);
+const history=chart.fpPortSeries().p;
+assert.ok(history.some(x=>x.day==="2026-01-01"),"legacy history must be preserved");
+assert.ok(history.some(x=>x.day===today&&x.priced===true),"new snapshots must record pricing evidence");
+const svg=chart.fpPortChart("p");
+assert.ok(svg.includes("<svg"),"two priced points should render the position chart");
+assert.ok(!svg.includes("2026-01-01"),"unverified historical price must be excluded");
+assert.ok(svg.includes(yday)&&svg.includes(today),"graph must show trusted price dates");
 console.log("UI scripts and score-history tests passed");
