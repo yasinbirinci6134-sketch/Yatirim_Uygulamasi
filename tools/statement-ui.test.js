@@ -87,6 +87,7 @@ console.log("statement modal interaction tests passed");
 (async()=>{
  const fresh=elements.length;
  getHandlers.fpReturnEvidenceSheet({id:"pf1",name:"Ornek"});
+ const beforeFileSelection=getHandlers.fpImportedStatement("pf1");
  const csvSheet=elements.slice(fresh).find(el=>el.innerHTML.includes('id="pfCsvFile"'));
  assert.ok(csvSheet,"file picker must be offered in statement modal");
  const fileInput=csvSheet.querySelector("#pfCsvFile");
@@ -95,7 +96,7 @@ console.log("statement modal interaction tests passed");
  await fileInput.onchange();
  assert.equal(csvSheet.querySelector("#pfCsvText").value,sampleFile,"chosen file should fill CSV textarea only");
  assert.equal(fileInput.value,"","file chooser should reset after reading");
- assert.equal(getHandlers.fpImportedStatement("pf1"),null,"file selection must not certify statement");
+ assert.deepEqual(getHandlers.fpImportedStatement("pf1"),beforeFileSelection,"file selection must not modify independently checked evidence");
  fileInput.files=[{name:"huge.csv",size:250001,text:async()=>{throw Error("should not read oversize files")}}];
  await fileInput.onchange();
  assert.equal(csvSheet.querySelector("#pfCsvText").value,sampleFile,"oversized file should not overwrite CSV text");
