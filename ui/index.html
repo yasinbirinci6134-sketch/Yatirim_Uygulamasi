@@ -1279,7 +1279,7 @@ html[data-design="modern"] #v-hisse .st-view .card{
 </script>
 <script>
 const CAT = {para:"Para piyasası", altin:"Altın", hisse:"Hisse", diger:"Diğer", gumus:"Gümüş", doviz:"Döviz"};
-const S = { fxwatch:[], fwatch:[], pfs:[], pf:null, watch:[], market:null, trades:[], cfg:null, status:null, uid:null, tab:"oneri", db:null, mcp:null, sample:null, busy:false, ready:false };
+const S = { fxwatch:[], fwatch:[], pfs:[], pf:null, watch:[], market:null, trades:[], cashflows:[], cfg:null, status:null, uid:null, tab:"oneri", db:null, mcp:null, sample:null, busy:false, ready:false };
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const tl = (n, d=0) => (n==null||isNaN(n)) ? "–" : n.toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d}) + " TL";
@@ -1836,6 +1836,13 @@ function renderSanal(){
       <form id="pfForm" class="addrow" hidden><input id="pfName" maxlength="30" placeholder="Portföy adı (ör. Gerçek 1)" aria-label="Portföy adı"><button class="btn" type="submit">Kaydet</button></form>
       <div id="pfDelBox" class="row" hidden><span class="small" style="margin-right:auto">"${esc(pf?.name)}" ve içindeki tüm işlemler silinsin mi?</span><button class="btn ghost sm" id="pfDelNo">Vazgeç</button><button class="btn sm" id="pfDelYes" style="background:var(--down);border-color:var(--down)">Sil</button></div></section>`;
   if(!pf){ v.innerHTML = head + `<section class="card empty">İlk portföyünü oluştur: "Yeni"ye bas ve bir ad ver (ör. Gerçek 1 ya da Test 1).</section>`; bindPf(pf); return; }
+  const cashflows=(S.cashflows||[]).filter(x=>x.pf===pf.id).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  const cashTotals=cashflows.reduce((a,x)=>{if(x.type==="deposit")a.deposit+=x.amount;else if(x.type==="withdrawal")a.withdrawal+=x.amount;else if(x.type==="dividend")a.dividend+=x.amount;else if(x.type==="fee")a.fee+=x.amount;return a;},{deposit:0,withdrawal:0,dividend:0,fee:0});
+  const cashNames={deposit:"Para yatırma",withdrawal:"Para çekme",dividend:"Temettü",fee:"Komisyon"};
+  const cashCard=`<section class="card"><div class="horizon"><h2>Nakit ve gelir hareketleri</h2><button class="btn sm" id="pfCashAdd">+ Hareket</button></div>
+    <p class="small muted">Bu kayıtlar ayrı tutulur; eski işlemler için alış/satış nakit kayıtları bulunmadığından toplam portföy değerine otomatik eklenmez.</p>
+    <div class="pfstats"><div><span>Yatırılan nakit</span><b class="num">${tl(cashTotals.deposit,2)}</b></div><div><span>Çekilen nakit</span><b class="num">${tl(cashTotals.withdrawal,2)}</b></div><div><span>Temettü</span><b class="num">${tl(cashTotals.dividend,2)}</b></div><div><span>Komisyon</span><b class="num">${tl(cashTotals.fee,2)}</b></div></div>
+    ${cashflows.length?cashflows.slice(0,20).map(x=>`<div class="trade"><div><b>${cashNames[x.type]||"Hareket"}</b><div class="small muted">${esc(x.date)}${x.note?" · "+esc(x.note):""}</div></div><div class="right"><b class="num">${tl(x.amount,2)}</b><button class="btn ghost sm" data-cashdel="${esc(x.id)}">Sil</button></div></div>`).join(""):`<p class="small muted">Henüz nakit hareketi kaydedilmedi.</p>`}</section>`;
   const rows=portfolioRows(pf), closed=pfTrades(pf).filter(t=>t.status==="closed");
   const inv=rows.reduce((s,r)=>s+r.amount,0), val=rows.reduce((s,r)=>s+r.value,0), pnl=val-inv;
   const day=rows.reduce((s,r)=> s + (r.d1!=null && r.curDate && r.curDate>(r.buyDate||r.priceDate) ? r.value*(r.d1/(100+r.d1)) : 0),0);
@@ -1853,6 +1860,7 @@ function renderSanal(){
         <div><span>Gerçekleşen</span><b class="num ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</b></div></div>
     </section>
     ${head}
+    ${cashCard}
     <section class="card"><div class="horizon"><h2>Pozisyonlar</h2><button class="btn sm" id="goAdd">+ Ekle</button></div>
       ${rows.length ? groupRows(rows).map(g=>{ const [k,lab,why]=advise(g,val), one=g.lots.length===1, r0=g.lots[0];
         const lotLine=(r,nd)=>`<div class="small muted num">${nd?"":fmtDate(r.buyDate||r.priceDate)+" · "}${tl2(r.amount)} · ${num(r.units,r.units<100?4:0)} adet · alış ${num(r.price,6)} → ${num(r.cur,6)}${r.days?` · günlük ort. ${pc(r.pnlPct/r.days,2)}`:""}</div>`;
@@ -1875,10 +1883,30 @@ function renderSanal(){
     <div id="planBox" style="display:flex;flex-direction:column;gap:inherit"></div>`;
   bindPf(pf);
   $("goAdd").onclick = () => openBuy(null);
+  $("pfCashAdd").onclick=()=>openCashflow(pf);
+  v.querySelectorAll("[data-cashdel]").forEach(b=>b.onclick=async()=>{if(!confirm("Bu nakit hareketi silinsin mi?"))return;try{await tradesCol().doc(b.dataset.cashdel).delete();}catch(e){toast("Silinemedi.");}});
   v.querySelectorAll("[data-sell]").forEach(b=> b.onclick = () => sell(b.dataset.sell));
   v.querySelectorAll("[data-edit]").forEach(b=> b.onclick = () => openBuy(null, S.trades.find(t=>t.id===b.dataset.edit)));
   v.querySelectorAll("[data-del]").forEach(b=> b.onclick = () => delTrade(b.dataset.del));
   renderPlan();
+}
+function openCashflow(pf){
+  const scrim=document.createElement("div"),sh=document.createElement("div");scrim.className="scrim";sh.className="sheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-label","Nakit hareketi ekle");
+  const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10);
+  sh.innerHTML=`<h2>Nakit hareketi ekle</h2><div class="formgrid">
+    <label>İşlem türü<select id="cfType"><option value="deposit">Para yatırma</option><option value="withdrawal">Para çekme</option><option value="dividend">Temettü</option><option value="fee">Komisyon</option></select></label>
+    <label>Tarih<input type="date" id="cfDate" max="${today}" value="${today}"></label>
+    <label>Tutar (TL)<input type="number" id="cfAmount" min="0.01" step="0.01" inputmode="decimal" placeholder="1000.00"></label>
+    <label>Not (isteğe bağlı)<input id="cfNote" maxlength="100" placeholder="Örn. THYAO temettü"></label></div>
+    <p class="note">Nakit hareketleri mevcut pozisyon tutarlarını değiştirmez.</p>
+    <div class="row"><button class="btn ghost" id="cfCancel">Vazgeç</button><button class="btn" id="cfSave">Kaydet</button></div>`;
+  document.body.append(scrim,sh);const q=id=>sh.querySelector(id),close=()=>{scrim.remove();sh.remove()};scrim.onclick=close;q("#cfCancel").onclick=close;
+  q("#cfSave").onclick=async()=>{const amount=Number(q("#cfAmount").value),date=q("#cfDate").value,type=q("#cfType").value,note=q("#cfNote").value.trim();
+    if(!Number.isFinite(amount)||amount<=0||!/^\\d{4}-\\d{2}-\\d{2}$/.test(date)||date>today||!["deposit","withdrawal","dividend","fee"].includes(type)){toast("Geçerli tarih ve pozitif tutar gir.");return;}
+    q("#cfSave").disabled=true;
+    try{await tradesCol().add({kind:"cashflow",pf:pf.id,type,amount,date,note,createdAt:new Date().toISOString()});close();toast("Nakit hareketi kaydedildi.");}
+    catch(e){toast("Kaydedilemedi.");q("#cfSave").disabled=false;}
+  };
 }
 function bindPf(pf){
   document.querySelectorAll("[data-pfsel]").forEach(b=>b.onclick=()=>{ S.pf=b.dataset.pfsel; try{localStorage.setItem("fp-pf",S.pf)}catch(_){}; renderSanal(); });
@@ -1890,7 +1918,7 @@ function bindPf(pf){
   if($("pfDel")) $("pfDel").onclick = () => { $("pfDelBox").hidden=false; };
   if($("pfDelNo")) $("pfDelNo").onclick = () => { $("pfDelBox").hidden=true; };
   if($("pfDelYes")) $("pfDelYes").onclick = async () => {
-    try{ for(const t of pfTrades(pf)) await tradesCol().doc(t.id).delete(); await tradesCol().doc(pf.id).delete(); S.pf=null; toast("Portföy silindi"); }catch(e){ toast("Silinemedi."); } };
+    try{ for(const t of [...pfTrades(pf),...(S.cashflows||[]).filter(x=>x.pf===pf.id)]) await tradesCol().doc(t.id).delete(); await tradesCol().doc(pf.id).delete(); S.pf=null; toast("Portföy silindi"); }catch(e){ toast("Silinemedi."); } };
   $("pfForm").onsubmit = async e => { e.preventDefault(); const n=$("pfName").value.trim(); if(!n) return;
     try{ if(mode==="ren"){ await tradesCol().doc(pf.id).update({name:n}); }
       else { const ref=await tradesCol().add({kind:"portfolio",name:n,createdAt:new Date().toISOString(),legacy:S.pfs.length===0}); S.pf=ref.id; try{localStorage.setItem("fp-pf",S.pf)}catch(_){} }
@@ -2278,7 +2306,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-41";
+const UI_VERSION="2026.11.02-v2-preview1";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -2784,6 +2812,7 @@ showTab(); renderAll();
   if(S.uid){
     tradesCol().onSnapshot(q => { const all=q.docs.map(d=>({id:d.id,...d.data()}));
       if(!S.prefsLoaded){ const pr=all.find(d=>d.id==="prefs"); S.prefsLoaded=true; if(pr) loadPrefs(pr); else savePrefs(); }
+      S.cashflows = all.filter(d=>d.kind==="cashflow"&&["deposit","withdrawal","dividend","fee"].includes(d.type)&&Number.isFinite(d.amount)&&d.amount>0);
       S.trades = all.filter(d=>d.kind==="trade").sort((a,b)=>String(b.buyDate||b.at).localeCompare(String(a.buyDate||a.at)));
       S.pfs = all.filter(d=>d.kind==="portfolio").sort((a,b)=>String(a.createdAt).localeCompare(String(b.createdAt)));
       const held=[...new Set(S.trades.filter(t=>t.status!=="closed").map(t=>t.code))].sort();
