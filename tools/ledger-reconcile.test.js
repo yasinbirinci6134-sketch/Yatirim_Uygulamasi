@@ -12,4 +12,7 @@ assert.equal(reconcileLedger({events:"invalid",openingCash:0,terminalCash:0,comp
 assert.equal(reconcileLedger({events:[{type:"deposit",date:"2026-01-01",amount:0.1},{type:"deposit",date:"2026-01-02",amount:0.2}],terminalCash:0.3,complete:true,verifiedOpening:true,verifiedEnding:true,tradeCoverage:true}).ready,true);
 assert.equal(reconcileLedger({events,terminalCash:1070,complete:true}).ready,false,"self-declared completeness must not certify cash ledger");
 assert.equal(reconcileLedger({events,terminalCash:1070,complete:true,verifiedOpening:true,verifiedEnding:true}).ready,false,"missing trade coverage");
+assert.equal(reconcileLedger({events:[],terminalCash:0,complete:true,verifiedOpening:true,verifiedEnding:true,tradeCoverage:true}).ready,false,"empty ledger must not be certified");
+assert.equal(reconcileLedger({events:[{id:"a",type:"deposit",date:"2026-01-01",amount:50},{id:"a",type:"deposit",date:"2026-01-02",amount:50}],terminalCash:100,complete:true,verifiedOpening:true,verifiedEnding:true,tradeCoverage:true}).ready,false,"duplicate transaction identity must not be certified");
+assert.equal(reconcileLedger({events:[{type:"deposit",date:"2026-01-01",amount:1e20}],terminalCash:1e20,complete:true,verifiedOpening:true,verifiedEnding:true,tradeCoverage:true}).ready,false,"unsafe monetary precision must not be certified");
 console.log("ledger reconciliation tests passed");
