@@ -31,4 +31,17 @@ const txt=report("Örnek",{candidates:[{id:"x",type:"buy",date:"2026-01-01",amou
 assert.ok(txt.includes("BANKA DOĞRULAMASI YOK"));
 assert.ok(txt.includes("100.00"));
 assert.ok(html.includes('id="pfAuditShare"'));
+const {auditLegacyTrades}=require("./legacy-trade-audit");
+for(const tradeSet of [
+ [{id:"a",amount:100,price:10,buyDate:"2026-01-01",status:"closed",sellPrice:12,sellDate:"2026-02-01"}],
+ [{id:"a",amount:100,buyDate:"2026-02-30"}],
+ [{id:"a",amount:100,price:10,buyDate:"2026-02-02",status:"closed",sellPrice:12,sellDate:"2026-02-01"}],
+ [{id:"a",amount:100,buyDate:"2026-01-01"},{id:"a",amount:120,buyDate:"2026-01-02"}]
+]){
+ const uiAudit=audit(tradeSet),engineAudit=auditLegacyTrades(tradeSet);
+ assert.deepEqual(uiAudit.candidates.map(x=>[x.type,x.date,Math.round(x.amount*100)]),
+  engineAudit.candidates.map(x=>[x.type,x.date,Math.round(x.amount*100)]),
+  "UI and reconciliation engine candidate totals must agree");
+ assert.equal(uiAudit.verified,false);
+}
 console.log("UI scripts and score-history tests passed");
