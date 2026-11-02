@@ -2021,7 +2021,18 @@ function fpReturnEvidenceSheet(pf){
  const example={source:{institution:"ARACI_KURUM_ADI",reference:"EKSTRE_REFERANSI"},openingCash:0,terminalCash:0,positionsValue:0,terminal:{date:"YYYY-AA-GG",value:0},events:[{id:"hareket-1",reference:"ekstre-satır-1",type:"deposit",date:"YYYY-AA-GG",amount:1000}],valuations:[]};
  sh.innerHTML=`<h2>Ekstre verisi yükle</h2>
   <p class="small muted">Yalnız bu portföyün işlemleriyle birebir eşleşen, kurum ekstresinden alınmış tarihli hareket ve bakiye verilerini kullan. Kopyalanan JSON sadece bu cihazda saklanır; otomatik olarak dışarı gönderilmez. Kaynağın gerçekliğini uygulama doğrulayamaz. İsim, hesap numarası veya başka kişisel bilgi ekleme.</p>
-  <label>Ekstre verisi (JSON)<textarea id="pfEvidenceText" rows="9" maxlength="250000" style="width:100%;box-sizing:border-box;font:12px monospace" placeholder="Ekstre hareketlerini ve kapanış değerlemesini içeren JSON yapıştırın"></textarea></label>
+  <div class="formgrid">
+    <label>Aracı kurum<input id="pfEvidenceInstitution" maxlength="100" placeholder="Kurum adı"></label>
+    <label>Ekstre referansı<input id="pfEvidenceReference" maxlength="100" placeholder="Rapor/döküm referansı"></label>
+    <label>Açılış nakdi (TL)<input id="pfEvidenceOpening" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0"></label>
+    <label>Kapanış nakdi (TL)<input id="pfEvidenceClosing" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0"></label>
+    <label>Kapanış tarihi<input id="pfEvidenceAsOf" type="date"></label>
+    <label>Kapanış pozisyon değeri (TL)<input id="pfEvidenceHoldings" type="number" min="0" step="0.01" inputmode="decimal"></label>
+    <label>Toplam değer — nakit dahil (TL)<input id="pfEvidenceNav" type="number" min="0" step="0.01" inputmode="decimal"></label>
+  </div>
+  <details><summary class="small">Gelişmiş: JSON ve NAV değerleme geçmişi</summary>
+  <textarea id="pfEvidenceText" rows="9" maxlength="250000" style="width:100%;box-sizing:border-box;font:12px monospace" placeholder="Ekstre hareketlerini ve nakit dahil değerleme geçmişini içeren JSON"></textarea>
+  </details>
   <details><summary class="small">CSV hareketlerini içe aktar</summary>
     <p class="small muted">Sütunlar: tarih;tür;tutar;referans. Örnek: 01.01.2025;Para yatırma;1.000,00;dekont-1. Kurum ekstresini kendin kontrol et; CSV, bakiye veya NAV doğrulamaz.</p>
     <label class="small">CSV/TXT dosyasını seç<input id="pfCsvFile" type="file" accept=".csv,.txt,text/csv,text/plain" style="width:100%;margin:6px 0 8px"></label>
@@ -2034,6 +2045,15 @@ function fpReturnEvidenceSheet(pf){
  document.body.append(scrim,sh);
  const get=id=>sh.querySelector("#"+id),close=()=>{scrim.remove();sh.remove()};
  get("pfEvidenceText").value=old?JSON.stringify(old,null,2):"";
+ if(old){
+  get("pfEvidenceInstitution").value=old.source?.institution||"";
+  get("pfEvidenceReference").value=old.source?.reference||"";
+  get("pfEvidenceOpening").value=Number.isFinite(old.openingCash)?String(old.openingCash):"";
+  get("pfEvidenceClosing").value=Number.isFinite(old.terminalCash)?String(old.terminalCash):"";
+  get("pfEvidenceAsOf").value=old.terminal?.date||"";
+  get("pfEvidenceHoldings").value=Number.isFinite(old.positionsValue)?String(old.positionsValue):"";
+  get("pfEvidenceNav").value=Number.isFinite(old.terminal?.value)?String(old.terminal.value):"";
+ }
  get("pfEvidenceCancel").onclick=close;scrim.onclick=close;
  get("pfCsvFile").onchange=async()=>{
   const input=get("pfCsvFile"),file=input.files?.[0];
@@ -2076,7 +2096,24 @@ function fpReturnEvidenceSheet(pf){
   try{
    const txt=get("pfEvidenceText").value;
    if(!txt||txt.length>250000)throw Error("Ekstre verisi eksik veya fazla uzun");
-   const data=JSON.parse(txt);
+   const parsed=JSON.parse(txt);
+   if(!parsed||typeof parsed!=="object"||Array.isArray(parsed))throw Error("Ekstre JSON nesnesi gerekli");
+   const formText=id=>String(get(id).value||"").trim();
+   const formNumber=id=>{
+    const raw=formText(id);
+    if(!raw)return undefined;
+    const n=Number(raw);
+    if(!Number.isFinite(n)||n<0||Math.round(n*100)/100!==n)throw Error("Geçersiz parasal değer: "+id);
+    return n;
+   };
+   const data={...parsed,source:{...(parsed.source||{})},terminal:{...(parsed.terminal||{})}};
+   if(formText("pfEvidenceInstitution"))data.source.institution=formText("pfEvidenceInstitution");
+   if(formText("pfEvidenceReference"))data.source.reference=formText("pfEvidenceReference");
+   if(formText("pfEvidenceAsOf"))data.terminal.date=formText("pfEvidenceAsOf");
+   for(const [field,input] of [["openingCash","pfEvidenceOpening"],["terminalCash","pfEvidenceClosing"],["positionsValue","pfEvidenceHoldings"]]){
+    const n=formNumber(input);if(n!==undefined)data[field]=n;
+   }
+   const nav=formNumber("pfEvidenceNav");if(nav!==undefined)data.terminal.value=nav;
    const audit=fpLegacyAudit(pfTrades(pf)),cfs=(S.cashflows||[]).filter(x=>x.pf===pf.id);
    const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10);
    const holdings=fpTrustedHoldingsValue(portfolioRows(pf),today);
