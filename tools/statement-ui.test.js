@@ -73,3 +73,21 @@ savedSheet.querySelector("#pfEvidenceDelete").onclick();
 assert.equal(getHandlers.fpImportedStatement("pf1"),null,"deleting evidence must clear local storage");
 assert.equal(redraws,3,"deleting evidence must rerender");
 console.log("statement modal interaction tests passed");
+(async()=>{
+ const fresh=elements.length;
+ getHandlers.fpReturnEvidenceSheet({id:"pf1",name:"Ornek"});
+ const csvSheet=elements.slice(fresh).find(el=>el.innerHTML.includes('id="pfCsvFile"'));
+ assert.ok(csvSheet,"file picker must be offered in statement modal");
+ const fileInput=csvSheet.querySelector("#pfCsvFile");
+ const sampleFile="tarih;tür;tutar;referans\\n01.01.2025;Para yatırma;1000;broker-1";
+ fileInput.files=[{name:"ekstre.csv",size:sampleFile.length,text:async()=>sampleFile}];
+ await fileInput.onchange();
+ assert.equal(csvSheet.querySelector("#pfCsvText").value,sampleFile,"chosen file should fill CSV textarea only");
+ assert.equal(fileInput.value,"","file chooser should reset after reading");
+ assert.equal(getHandlers.fpImportedStatement("pf1"),null,"file selection must not certify statement");
+ fileInput.files=[{name:"huge.csv",size:250001,text:async()=>{throw Error("should not read oversize files")}}];
+ await fileInput.onchange();
+ assert.equal(csvSheet.querySelector("#pfCsvText").value,sampleFile,"oversized file should not overwrite CSV text");
+ console.log("statement native-file import tests passed");
+})().catch(e=>{console.error(e);process.exitCode=1;});
+
