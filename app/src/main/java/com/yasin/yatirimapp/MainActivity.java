@@ -18,6 +18,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.ValueCallback;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.File;
@@ -39,6 +40,8 @@ public class MainActivity extends Activity {
   static final java.util.concurrent.ConcurrentHashMap<String, String> RES = new java.util.concurrent.ConcurrentHashMap<>();
   final Handler ui = new Handler(Looper.getMainLooper());
   WebView web; boolean ready, checked; long lastCheck, stoppedAt; String source = "asset", curSha = ""; String pendingOpen;
+  static final int STATEMENT_FILE_PICKER_REQUEST = 2045;
+  ValueCallback<Uri[]> pendingFileChooser;
 
   SharedPreferences up() { return getSharedPreferences("ui", MODE_PRIVATE); }
   File uiFile() { return new File(getFilesDir(), "ui.html"); }
@@ -115,7 +118,24 @@ public class MainActivity extends Activity {
     s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setDatabaseEnabled(true);
     // Required for JavaScript confirm()/alert()/prompt() on Android WebView.
     // Without a WebChromeClient confirm() silently returns false.
-    web.setWebChromeClient(new WebChromeClient());
+    web.setWebChromeClient(new WebChromeClient() {
+      @Override public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> callback, FileChooserParams params) {
+        if (pendingFileChooser != null) pendingFileChooser.onReceiveValue(null);
+        pendingFileChooser = callback;
+        Intent pick = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        pick.addCategory(Intent.CATEGORY_OPENABLE);
+        pick.setType("*/*");
+        pick.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"text/csv", "text/plain", "application/csv", "application/vnd.ms-excel", "application/octet-stream"});
+        try {
+          startActivityForResult(pick, STATEMENT_FILE_PICKER_REQUEST);
+          return true;
+        } catch (Exception e) {
+          pendingFileChooser = null;
+          callback.onReceiveValue(null);
+          return true;
+        }
+      }
+    });
     Net.UA = s.getUserAgentString().replace("; wv", "").replace("Version/4.0 ", "");
     web.addJavascriptInterface(new Bridge(), "YatirimApp");
     web.setWebViewClient(new WebViewClient() {
@@ -128,6 +148,16 @@ public class MainActivity extends Activity {
     pendingOpen = getIntent() == null ? null : getIntent().getStringExtra("open");
     load();
     NotifyJob.schedule(this);
+  }
+
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode != STATEMENT_FILE_PICKER_REQUEST) return;
+    ValueCallback<Uri[]> callback = pendingFileChooser;
+    pendingFileChooser = null;
+    if (callback == null) return;
+    Uri picked = resultCode == RESULT_OK && data != null ? data.getData() : null;
+    callback.onReceiveValue(picked == null ? null : new Uri[]{picked});
   }
 
   @Override protected void onNewIntent(Intent i) {
