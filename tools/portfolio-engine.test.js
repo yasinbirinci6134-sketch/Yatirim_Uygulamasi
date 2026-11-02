@@ -19,4 +19,7 @@ assert.equal(w.netDeposits,700);assert.equal(w.equityGain,0);
 const bad=summarizePortfolio({events:[{type:"deposit",amount:-5,date:"2026-02-01"}]});
 assert.equal(bad.errors.length,1);
 assert.deepEqual(events.map(x=>x.amount),[10000,6000,125.25,5.25]);
+assert.ok(summarizePortfolio({events:[{type:"deposit",amount:5,date:"2026-02-30"}]}).errors.length>0,"invalid calendar date");
+assert.ok(summarizePortfolio({events:[{id:"x",type:"deposit",amount:50,date:"2026-01-01"},{id:"x",type:"deposit",amount:50,date:"2026-01-02"}]}).errors.length>0,"duplicate event identifiers");
+assert.ok(summarizePortfolio({events:[{type:"buy",amount:50,date:"2026-01-01"}]}).errors.length>0,"insufficient funding");
 console.log("portfolio-engine tests passed");
