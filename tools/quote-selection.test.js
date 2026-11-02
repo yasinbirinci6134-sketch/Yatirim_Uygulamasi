@@ -1,0 +1,18 @@
+"use strict";
+const assert=require("node:assert/strict");
+const fs=require("node:fs"),path=require("node:path");
+const html=fs.readFileSync(path.join(__dirname,"../ui/index.html"),"utf8");
+const a=html.indexOf("function fpQuote("),b=html.indexOf("\nconst asset =",a);
+assert.ok(a>0&&b>a,"fpQuote source is available");
+const fn=new Function("S","LIVE",html.slice(a,b)+"\nreturn fpQuote;");
+const S={live:{stocks:{ABC:{price:52,d1:1.1,at:"2026-11-02T12:00:00Z"}}}};
+const LIVE={shortQuotes:{ABC:{price:53,d1:1.9,at:Date.parse("2026-11-02T12:01:00Z")}}};
+const quote=fn(S,LIVE);
+let q=quote("ABC",{price:50,d1:-0.5,priceDate:"2026-11-01"},{price:49,d1:0.4,date:"2026-10-31"});
+assert.equal(q.price,53);assert.equal(q.d1,1.9);assert.equal(q.priceAt,"2026-11-02");assert.equal(q.source,"tick");
+delete LIVE.shortQuotes.ABC;q=quote("ABC",{price:50,d1:-0.5,priceDate:"2026-11-01"},{price:49,date:"2026-10-31"});
+assert.equal(q.price,52);assert.equal(q.d1,1.1);
+q=quote("DEF",{price:0,d1:3,priceDate:"2026-11-01"},{price:18,d1:1.2,date:"2026-11-02"});
+assert.equal(q.price,18);assert.equal(q.d1,1.2);
+q=quote("NONE",null,null);assert.equal(q.price,null);assert.equal(q.d1,null);
+console.log("quote selection tests passed");
