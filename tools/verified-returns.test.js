@@ -13,4 +13,8 @@ const mismatch=verifiedReturns({...args,valuations:[{date:"2025-01-01",value:100
 assert.equal(mismatch.twr,null);assert.equal(mismatch.ready,false);
 const extraFlow=verifiedReturns({...args,valuations:[{date:"2025-01-01",value:1000},{date:"2026-01-01",value:1100,externalFlow:100}]});
 assert.equal(extraFlow.twr,null);assert.equal(extraFlow.ready,false);
+const duplicateNAV=verifiedReturns({...args,valuations:[...args.valuations,{date:"2026-01-01",value:1100}]});
+assert.equal(duplicateNAV.ready,false);assert.equal(duplicateNAV.twr,null);
+const noEvidence=verifiedReturns({...args,ledgerEvidence:null});
+assert.equal(noEvidence.ready,false);assert.equal(noEvidence.xirr,null);
 console.log("verified returns tests passed");
