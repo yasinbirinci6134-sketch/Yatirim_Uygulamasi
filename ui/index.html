@@ -2892,9 +2892,16 @@ async function shortRefresh(force){ if(SH.busy||!LIVE.ok()) return; if(!force&&D
 const FP_HIST_KEY="fp-v2-short-history";
 function fpHistory(){try{const a=JSON.parse(localStorage.getItem(FP_HIST_KEY)||"[]");return Array.isArray(a)?a:[]}catch(_){return []}}
 function fpSaveScanHistory(scan){
- if(!scan?.at||!Array.isArray(scan.items))return;
- const h=fpHistory();if(h.some(x=>x.at===scan.at))return;
- h.push({at:scan.at,asOf:scan.asOf,xu:scan.xu?.price>0?scan.xu.price:null,items:scan.items.map(x=>({code:x.code,score:x.score,price:x.price}))});
+ // Save at most one immutable market observation per trading date; cron reruns are not extra trading days.
+ const day=scan?.asOf,validDay=s=>{if(typeof s!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(s))return false;const t=Date.parse(s+"T00:00:00Z");return Number.isFinite(t)&&new Date(t).toISOString().slice(0,10)===s;};
+ if(!validDay(day)||!Number.isFinite(Date.parse(scan.at))||!Array.isArray(scan.items))return;
+ const h=fpHistory();
+ if(h.some(x=>String(x?.asOf||x?.at||"").slice(0,10)===day))return;
+ const items=scan.items.filter(x=>x&&/^[A-Z0-9]{3,7}$/.test(x.code||"")&&Number.isInteger(x.score)&&x.score>=0&&x.score<=100&&Number.isFinite(x.price)&&x.price>0);
+ if(items.length<40)return;
+ h.push({at:scan.at,asOf:day,xu:Number.isFinite(scan.xu?.price)&&scan.xu.price>0?scan.xu.price:null,
+  items:items.map(x=>({code:x.code,score:x.score,price:x.price,...(x.date?{date:x.date}:{})}))});
+ h.sort((a,b)=>String(a.asOf||a.at).localeCompare(String(b.asOf||b.at)));
  try{localStorage.setItem(FP_HIST_KEY,JSON.stringify(h.slice(-95)))}catch(_){}
 }
 function fpScoreDelta(code){const h=fpHistory().filter(x=>x.items?.some(z=>z.code===code));
@@ -2903,17 +2910,24 @@ function fpScoreDelta(code){const h=fpHistory().filter(x=>x.items?.some(z=>z.cod
 }
 /* Recorded-signal evaluation: 5 distinct future scans; never future-leaking. */
 function fpSignalResults(history,hold=5){
- const a=(history||[]).filter(x=>x?.at&&Array.isArray(x.items)).slice().sort((x,y)=>String(x.at).localeCompare(String(y.at)));
+ const empty=()=>({count:0,positive:0,avg:null,hitRate:null,relativeAvg:null,relativeCount:0});
+ if(!Number.isInteger(hold)||hold<1||hold>90||!Array.isArray(history))return empty();
+ const dateOf=x=>{const s=String(x?.asOf||x?.at||"").slice(0,10),t=Date.parse(s+"T00:00:00Z");return /^\d{4}-\d{2}-\d{2}$/.test(s)&&Number.isFinite(t)&&new Date(t).toISOString().slice(0,10)===s?s:null;};
+ const sorted=history.filter(x=>x?.at&&Array.isArray(x.items)&&Number.isFinite(Date.parse(x.at))).slice().sort((x,y)=>String(x.at).localeCompare(String(y.at)));
+ const a=[],seenDays=new Set();
+ for(const x of sorted){const day=dateOf(x);if(!day||seenDays.has(day))continue;seenDays.add(day);a.push({...x,asOf:day});}
  let eligible=0,positive=0,sum=0,relativeSum=0,relativeN=0;
  for(let i=0;i+hold<a.length;i++){
-   const before=a[i],after=a[i+hold],future=new Map(after.items.map(x=>[x.code,x]));
+   const before=a[i],after=a[i+hold],future=new Map(after.items.filter(x=>x&&typeof x.code==="string"&&Number.isFinite(x.price)&&x.price>0&&(!x.date||x.date===after.asOf)).map(x=>[x.code,x]));
+   const seenCodes=new Set();
    for(const x of before.items){
-     if(x.score<80||!(x.price>0))continue;
-     const y=future.get(x.code);if(!(y?.price>0))continue;
+     if(!x||typeof x.code!=="string"||seenCodes.has(x.code)||!Number.isInteger(x.score)||x.score<80||x.score>100||!Number.isFinite(x.price)||x.price<=0||(x.date&&x.date!==before.asOf))continue;
+     seenCodes.add(x.code);
+     const y=future.get(x.code);if(!y)continue;
      const change=(y.price/x.price-1)*100;
      if(!Number.isFinite(change))continue;
      eligible++;if(change>0)positive++;sum+=change;
-     if(before.xu>0&&after.xu>0){relativeSum+=change-(after.xu/before.xu-1)*100;relativeN++;}
+     if(Number.isFinite(before.xu)&&before.xu>0&&Number.isFinite(after.xu)&&after.xu>0){relativeSum+=change-(after.xu/before.xu-1)*100;relativeN++;}
    }
  }
  return {count:eligible,positive,avg:eligible?sum/eligible:null,hitRate:eligible?100*positive/eligible:null,relativeAvg:relativeN?relativeSum/relativeN:null,relativeCount:relativeN};

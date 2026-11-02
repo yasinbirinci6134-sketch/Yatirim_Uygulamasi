@@ -89,3 +89,8 @@ node tools/verified-returns.test.js
 node tools/ui-returns.test.js
 
 Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
+
+## Skor gecmisi veri guvenligi
+- Ayni piyasa tarihine ait tekrar taramalar tek gun sayilir; ilk kayit korunur.
+- Gerceklesen sonuclar icin gecerli 80+ puan, tarihli fiyat ve 5 ayri tarih gerekir.
+- Fiyat/borsa getirisi bolunme ve temettu duzeltmeli degildir; gecmis tutarlar uydurulmaz.
