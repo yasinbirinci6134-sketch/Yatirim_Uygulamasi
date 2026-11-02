@@ -2074,6 +2074,12 @@ function fpReturnEvidenceSheet(pf){
     <textarea id="pfCsvText" rows="4" maxlength="250000" style="width:100%;box-sizing:border-box;font:12px monospace" placeholder="tarih;tür;tutar;referans"></textarea>
     <button class="btn ghost sm" id="pfCsvApply" type="button">CSV hareketlerini aktar</button>
    </details>
+  <details><summary class="small">TWR için portföy değer geçmişi (NAV CSV)</summary>
+   <p class="small muted">Yalnız kurum kayıtlarındaki <b>nakit dahil toplam portföy değerini</b> kullan. Sütunlar: tarih;değer;dışNakit. Dış nakit, o günkü yatırma eksi çekmedir. Tarihler ve tutarlar XIRR ekstresiyle eşleşmeden TWR gösterilmez.</p>
+   <label class="small">NAV CSV/TXT dosyasını seç<input id="pfNavCsvFile" type="file" accept=".csv,.txt,text/csv,text/plain" style="width:100%;margin:6px 0 8px"></label>
+   <textarea id="pfNavCsvText" rows="4" maxlength="250000" style="width:100%;box-sizing:border-box;font:12px monospace" placeholder="tarih;değer;dışNakit"></textarea>
+   <button class="btn ghost sm" id="pfNavApply" type="button">NAV geçmişini aktar</button>
+  </details>
   <details><summary class="small">Beklenen veri yapısı</summary><pre class="small" style="white-space:pre-wrap;word-break:break-word">${esc(JSON.stringify(example,null,2))}</pre></details>
   <p class="small muted">Taslak, uygulamadaki işlem tarihleri ve tutarlarıyla oluşturulur. Ekstre referansları, açılış/kapanış nakdi ve nakit dahil NAV boş bırakılır; bunları gerçek kurum ekstresinden tamamlamalısın.</p>
   <p id="pfEvidenceIssues" role="alert" aria-live="polite" class="small muted"></p>
@@ -2120,6 +2126,33 @@ function fpReturnEvidenceSheet(pf){
   }catch(err){toast("CSV aktarılamadı: "+String(err.message||err),4500)}
  };
 
+ get("pfNavCsvFile").onchange=async()=>{
+  const input=get("pfNavCsvFile"),file=input.files?.[0];
+  if(!file)return;
+  try{
+   if(file.size>250000)throw Error("NAV CSV en fazla 250 KB olabilir.");
+   if(!/\.(csv|txt)$/i.test(file.name||""))throw Error("Yalnız CSV/TXT dosyası seç.");
+   const value=await file.text();
+   if(!value.trim()||value.length>250000)throw Error("NAV CSV boş veya fazla büyük.");
+   get("pfNavCsvText").value=value;
+   toast("NAV dosyası okundu; aktarmadan önce verileri kontrol et.");
+  }catch(e){toast(String(e.message||e),4500)}
+  finally{input.value="";}
+ };
+ get("pfNavApply").onclick=()=>{
+  const imported=fpParseNavCsv(get("pfNavCsvText").value);
+  if(imported.errors.length){toast(imported.errors.slice(0,2).join("; "),4500);return;}
+  const textArea=get("pfEvidenceText");
+  try{
+   const present=textArea.value.trim()?JSON.parse(textArea.value):fpStatementDraft(fpLegacyAudit(pfTrades(pf)),(S.cashflows||[]).filter(x=>x.pf===pf.id));
+   if(!present||typeof present!=="object"||Array.isArray(present))throw Error("JSON nesnesi gerekli");
+   if(Array.isArray(present.valuations)&&present.valuations.length&&!confirm("Önceki NAV geçmişi yeni CSV ile değiştirilsin mi? Kaydedilen ekstre bu işlemle değişmez."))return;
+   const next=JSON.stringify({...present,valuations:imported.valuations},null,2);
+   if(next.length>250000)throw Error("NAV CSV çok büyük");
+   textArea.value=next;
+   toast(imported.valuations.length+" tarihli NAV değeri aktarıldı. Kaydetmeden önce mutabakat kontrolü yapılacak.");
+  }catch(e){toast(String(e.message||e),4500)}
+ };
  get("pfEvidenceDraft").onclick=()=>{
   const textArea=get("pfEvidenceText");
   if(textArea.value.trim()&&!confirm("Metin alanındaki veriler taslakla değiştirilsin mi? Kaydedilmiş ekstre bu işlemle değişmez."))return;
