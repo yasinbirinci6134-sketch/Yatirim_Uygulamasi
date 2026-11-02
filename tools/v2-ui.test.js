@@ -21,6 +21,7 @@ assert.deepEqual(review.candidates.map(x=>x.amount),[100,120]);
 assert.equal(review.verified,false);
 assert.equal(audit([{id:"bad",amount:20,buyDate:"2026-02-30"}]).issues.length,1);
 assert.ok(html.includes("${legacyAuditCard}"));
-assert.ok(html.includes("const auditChecks=["),"return readiness checklist should render");
+assert.ok(html.includes("const returnRequirements=["),"return readiness checklist should render");
 assert.ok(html.includes("Bağımsız nakit mutabakatı"),"opening and closing cash must stay unverified");
+assert.ok(html.includes("Pozisyon grafiği nakit içermiyor"),"do not mislabel position-only chart as verified NAV");
 console.log("UI scripts and score-history tests passed");
