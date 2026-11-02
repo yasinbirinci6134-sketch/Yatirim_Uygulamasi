@@ -1846,6 +1846,26 @@ function fpPortChart(id){
  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Kaydedilmiş portföy değerleri grafiği" style="width:100%;height:130px;overflow:visible"><polyline fill="none" stroke="var(--accent)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" points="${points}"/>${costPoints?`<polyline fill="none" stroke="var(--muted)" stroke-width="1.7" stroke-dasharray="4 4" stroke-linecap="round" stroke-linejoin="round" points="${costPoints}"/>`:""}</svg><div class="small muted">Düz çizgi: pozisyon değeri · Kesik çizgi: pozisyon maliyeti. Nakit ve gerçekleşmiş getiriler dahil değildir.</div>
  <div class="row small muted" style="justify-content:space-between"><span>${esc(data[0].day)}</span><span>${esc(data[data.length-1].day)}</span></div>`;
 }
+/* V2: review legacy records without rewriting or certifying their cash movements. */
+function fpLegacyAudit(trades){
+ const candidates=[],issues=[],seen=new Set();
+ const validDate=d=>{if(typeof d!=="string"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(d))return false;const x=new Date(d+"T00:00:00Z");return Number.isFinite(x.getTime())&&x.toISOString().slice(0,10)===d;};
+ for(const t of trades||[]){
+  if(!t||typeof t!=="object"){issues.push("Geçersiz işlem");continue;}
+  if(typeof t.id!=="string"||!t.id.trim()||seen.has(t.id)){issues.push("Tekrarlanan veya eksik işlem kimliği");continue;}
+  seen.add(t.id);
+  const day=t.buyDate||t.priceDate;
+  if(!validDate(day)||!Number.isFinite(t.amount)||t.amount<=0){issues.push("Eksik alış tarihi veya tutarı: "+(t.code||t.id));continue;}
+  candidates.push({id:t.id+":buy",type:"buy",date:day,amount:t.amount,verified:false});
+  if(t.status==="closed"){
+   if(!validDate(t.sellDate)||!Number.isFinite(t.price)||t.price<=0||!Number.isFinite(t.sellPrice)||t.sellPrice<=0||t.sellDate<day){issues.push("Eksik veya tutarsız satış: "+(t.code||t.id));continue;}
+   const amount=t.amount*t.sellPrice/t.price;
+   if(!Number.isFinite(amount)||amount<=0){issues.push("Geçersiz satış tutarı: "+(t.code||t.id));continue;}
+   candidates.push({id:t.id+":sell",type:"sell",date:t.sellDate,amount,verified:false});
+  } else if(t.status&&t.status!=="open"){issues.push("Bilinmeyen işlem durumu: "+(t.code||t.id));}
+ }
+ return {candidates,issues,verified:false};
+}
 function renderSanal(){
   const tl2=n=>tl(n,2);
   const v=$("v-sanal");
@@ -1874,6 +1894,11 @@ function renderSanal(){
   const realized=closed.reduce((s,t)=>s+(t.sellPrice/t.price-1)*t.amount,0);
   const totalPnl=pnl+realized, costAll=inv+closed.reduce((s,t)=>s+t.amount,0);
   const allPfTrades=pfTrades(pf),hasLegacy=allPfTrades.length>0;
+  const legacyAudit=fpLegacyAudit(allPfTrades);
+  const legacyAuditCard=`<section class="card"><div class="horizon"><h2>Eski işlem denetimi</h2><span class="small muted">Kontrol amaçlı</span></div>
+    <div class="pfstats"><div><span>İşlem kaydı</span><b class="num">${allPfTrades.length}</b></div><div><span>Olası nakit kaydı</span><b class="num">${legacyAudit.candidates.length}</b></div><div><span>Eksik/hatalı kayıt</span><b class="num">${legacyAudit.issues.length}</b></div></div>
+    ${legacyAudit.issues.length?`<div class="small muted">${legacyAudit.issues.slice(0,8).map(x=>`<div>• ${esc(x)}</div>`).join("")}${legacyAudit.issues.length>8?"<div>• Diğer sorunlar da mevcut.</div>":""}</div>`:""}
+    <p class="small muted">Alış/satış tarihleri ve tutarlarından yalnızca kontrol amaçlı adaylar çıkarıldı. Banka hareketleri doğrulanmadığı için otomatik nakit bakiyesi, XIRR veya TWR hesabına eklenmez.</p></section>`;
   const closedWithoutCost=closed.some(t=>!(t.price>0&&t.sellPrice>0&&t.amount>0&&t.sellDate));
   const flowDates=cashflows.every(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.date||""));
   const externalEntries=cashflows.filter(x=>x.type==="deposit"||x.type==="withdrawal");
@@ -1912,6 +1937,7 @@ function renderSanal(){
     ${head}
     <section class="card"><div class="horizon"><h2>Portföy değer geçmişi</h2><span class="small muted">Gerçek kayıtlar</span></div>${fpPortChart(pf.id)}</section>
     ${cashCard}
+    ${legacyAuditCard}
     ${journalCard}
     ${metricStatus}
     ${riskBlock}
