@@ -16,13 +16,13 @@ const document={
 };
 const localStorage={getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,value)};
 const S={uid:"test-user",cashflows:[{id:"c1",pf:"pf1",date:"2025-01-01",type:"deposit",amount:1000}]};
-let redraws=0;
+let redraws=0,pricedRows=[{value:900}];
 const getHandlers=new Function("document","localStorage","S","fpLegacyAudit","pfTrades","portfolioRows","fpComputeImportedReturns","toast","confirm","renderSanal","esc",
  html.slice(from,to)+";return {fpReturnEvidenceSheet,fpImportedStatement};")(
  document,localStorage,S,
  ()=>({issues:[],candidates:[{id:"x:buy",date:"2025-01-02",type:"buy",amount:800}]}),
  ()=>[{id:"x",date:"2025-01-02",amount:800}],
- ()=>[{value:900}],
+ ()=>pricedRows,
  fpComputeImportedReturns,msg=>messages.push(msg),()=>true,()=>{redraws++},x=>String(x));
 getHandlers.fpReturnEvidenceSheet({id:"pf1",name:"Ornek"});
 const sheet=elements.find(el=>el.tag==="div"&&el.innerHTML.includes('id="pfEvidenceDraft"'));
@@ -57,7 +57,12 @@ savedSheet.querySelector("#pfEvidenceSave").onclick();
 assert.deepEqual(getHandlers.fpImportedStatement("pf1"),real,
  "unverified same-day holdings must not overwrite validated historical statement");
 assert.equal(redraws,1);
+pricedRows=[{value:900,quoteSource:"live",curDate:today}];
+savedSheet.querySelector("#pfEvidenceSave").onclick();
+assert.deepEqual(getHandlers.fpImportedStatement("pf1"),current,
+ "same-day evidence should be accepted once independently dated quotes are present");
+assert.equal(redraws,2);
 savedSheet.querySelector("#pfEvidenceDelete").onclick();
 assert.equal(getHandlers.fpImportedStatement("pf1"),null,"deleting evidence must clear local storage");
-assert.equal(redraws,2,"deleting evidence must rerender");
+assert.equal(redraws,3,"deleting evidence must rerender");
 console.log("statement modal interaction tests passed");
