@@ -2258,7 +2258,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-39";
+const UI_VERSION="2026.11.02-40";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -2283,12 +2283,23 @@ async function fhRefresh(){ if(FH.busy||!LIVE.ok()||!S.market||Date.now()-(FH.fa
       if(h.length&&S.det&&S.det.c===x.code) drawDetail(); await new Promise(r=>setTimeout(r,9000)); } }
   finally{ FH.busy=false; } }
 /* Kısa vade taraması: her iş günü kapanıştan sonra GitHub'da BIST 100 için üretilir (tools/short.js); telefonda 30 dk'da bir yoklanır */
-const SH={ d:(()=>{ try{ return JSON.parse(localStorage.getItem("fp-short")||"null"); }catch(_){ return null; } })(), at:0, busy:false, cache:null };
+const SH={ d:(()=>{ try{ return JSON.parse(localStorage.getItem("fp-short")||"null"); }catch(_){ return null; } })(), at:0, busy:false, cache:null, missingCheckAt:0 };
 async function shortRefresh(force){ if(SH.busy||!LIVE.ok()) return; if(!force&&Date.now()-SH.at<30*60e3) return; SH.busy=true; SH.at=Date.now();
-  try{ const o=await nget("GET","https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/scan/short.json?t="+Math.floor(Date.now()/600000));
+  try{ const o=await nget("GET","https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/scan/short.json?t="+(force?Date.now():Math.floor(Date.now()/600000)));
     let j=null; try{ j=JSON.parse(o.body||"null"); }catch(_){}
     if(j&&Array.isArray(j.items)&&j.items.length>=40&&(!SH.d||String(j.at)>=String(SH.d.at))){ const ch=!SH.d||j.at!==SH.d.at; SH.d=j; SH.cache=null; try{ localStorage.setItem("fp-short",JSON.stringify(j)); }catch(_){} if(ch) renderAll(); } }
   catch(_){} finally{ SH.busy=false; } }
+/* Kisa vadede eksik gunluk yuzde varsa sunucudaki yeni taramayi bir kez kontrol et.
+   Eski localStorage verisiyle acilsa bile 30 dakika engeline takilmasin.
+   2 dakikalik sinir, sekmeler arasi geciste tekrarlanan istekleri onler. */
+function shortEnsureDaily(){
+  if(!studioOn()||S.tab!=="hisse"||S.hmode!=="kisa"||!LIVE.ok()||SH.busy)return;
+  const top=SH.d?.items?.filter(x=>x.score>=80).slice(0,15)||[];
+  if(top.length&&top.every(x=>typeof x.d1==="number"))return;
+  if(Date.now()-(SH.missingCheckAt||0)<120000)return;
+  SH.missingCheckAt=Date.now();
+  shortRefresh(true).catch(()=>{});
+}
 /* Bir hissenin kısa vade puanı: taramada varsa oradan; yoksa (ör. kendi eklediğin hisse) telefondaki 1 yıllık fiyatlarla aynı formül, BIST 100'e göre sıralanır */
 function shortFor(code,x){ const d=SH.d; if(!d||!code) return null; if(!SH.cache) SH.cache={}; if(code in SH.cache) return SH.cache[code];
   const it=d.items.find(i=>i.code===code); let r=null;
@@ -3292,7 +3303,7 @@ if(window.__standalone){
       } else {
         v.innerHTML=modern?`<section class="card"><div class="horizon"><h2>Hisseler <span class="small muted">${(S.market?.stocks||[]).length}</span></h2>${seg}</div></section><div class="st-view">${shortView()}</div>`:
           seg+`<div class="st-view">${shortView()}</div>`;
-        bindSt(v); prefetchScan((SH.d?.items||[]).filter(i=>i.score>=80).slice(0,15).map(i=>i.code));
+        bindSt(v); prefetchScan((SH.d?.items||[]).filter(i=>i.score>=80).slice(0,15).map(i=>i.code)); if(modern) setTimeout(shortEnsureDaily,100);
       }
       v.querySelectorAll("[data-hm]").forEach(b=>b.onclick=()=>{ S.hmode=b.dataset.hm; try{ localStorage.setItem("fp-hmode",S.hmode); }catch(_){} renderHisse(); }); return r; };
     try{ S.hmode=localStorage.getItem("fp-hmode")||"uzun"; }catch(_){} }
