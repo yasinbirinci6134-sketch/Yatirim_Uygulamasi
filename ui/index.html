@@ -4,7 +4,7 @@
    Kopyada animasyon/geçiş yok (sekme açılış kayması kopyayı oynatıyordu). */
 try{ var B=window.YatirimApp&&JSON.parse(localStorage.getItem("fp-boot")||"null"), R=null; try{ R=JSON.parse(localStorage.getItem("fp-restore")||"null"); }catch(e){}
   if(R&&Date.now()-R.at<60e3&&((R.tab&&R.tab!=="gundem")||R.y>0)) B=null;   /* güncelleme sonrası başka sekmeye/konuma dönülecekse kopya gösterilmez */
-  if(B&&B.html&&B.v===2&&B.st){ window.__boot=B; var de=document.documentElement; if(B.cls) de.className=B.cls; if(B.attr) for(var k in B.attr) de.setAttribute(k,B.attr[k]);
+  if(B&&B.html&&B.v===2&&B.st&&!(function(){try{return JSON.parse(localStorage.getItem("fp-theme")||"{}").design==="modern"}catch(_){return false}})()){ window.__boot=B; var de=document.documentElement; if(B.cls) de.className=B.cls; if(B.attr) for(var k in B.attr) de.setAttribute(k,B.attr[k]);
     var st=document.createElement("style"); st.id="bootcss"; st.textContent=B.css+"\n#bootshot{position:fixed;inset:0;z-index:9999;overflow:hidden;box-sizing:border-box;background:var(--bg);pointer-events:none}#bootshot *{animation:none!important;transition:none!important}"; document.body.appendChild(st);
     var d=document.createElement("div"); d.id="bootshot"; d.setAttribute("aria-hidden","true"); for(var q in B.st) d.style.setProperty(q,B.st[q]);
     d.style.paddingTop="calc("+(B.st["padding-top"]||"0px")+" + env(safe-area-inset-top,0px))"; d.innerHTML=B.html; de.appendChild(d);
@@ -2258,7 +2258,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-32";
+const UI_VERSION="2026.11.02-33";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -3066,7 +3066,7 @@ if(window.__standalone){
     html.apk .fresh{font-size:12px;font-weight:600}
     html.apk.scrolled .fresh{display:none}
     /* alt menü: buzlu cam */
-    html.apk nav.tabs{background:color-mix(in srgb,var(--card) 82%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:0;box-shadow:0 -1px 0 color-mix(in srgb,var(--ink) 7%,transparent)}
+    html.apk nav.tabs{background:var(--card);backdrop-filter:none;-webkit-backdrop-filter:none;border-top:0;box-shadow:0 -1px 0 color-mix(in srgb,var(--ink) 7%,transparent)}
     html.apk nav.tabs button{font:700 10.5px var(--f-body)}
     /* kartlar: kenarlıksız, yumuşak gölge, büyük köşe */
     html.apk .card{border:0;border-radius:var(--r);box-shadow:var(--sh);padding:16px}
@@ -3292,7 +3292,7 @@ if(window.__standalone){
         bindSt(card); prefetchScan(top.map(i=>i.code)); card.querySelector("#hmShort")?.addEventListener("click",()=>{ S.hmode="kisa"; S.tab="hisse"; showTab(); renderHisse(); window.scrollTo({top:0}); }); }
       card.querySelectorAll("[data-gm]").forEach(b=>b.onclick=()=>{ S.gmode=b.dataset.gm; renderGundem(); });
       if(S.market){ window.__bootOff&&window.__bootOff(); clearTimeout(window.__bootT); window.__bootT=setTimeout(()=>{ if('requestIdleCallback' in window) requestIdleCallback(saveBoot,{timeout:4000}); else saveBoot(); },12000); } return r; }; }
-  function saveBoot(){ try{ if(S.tab!=="gundem"||S.det||!S.market||window.scrollY>2||S.gmode==="kisa"||document.getElementById("fresh")?.hidden===false) return;   /* açılış hep "Uzun" ile gelir */
+  function saveBoot(){ try{ if(studioOn()||S.tab!=="gundem"||S.det||!S.market||window.scrollY>2||S.gmode==="kisa"||document.getElementById("fresh")?.hidden===false) return;   /* açılış hep "Uzun" ile gelir */
       /* animasyon sürerken ölçme (konum kayar) */
       if(document.getAnimations&&document.getAnimations().some(x=>x.playState==="running"&&isFinite(x.effect?.getTiming?.().iterations))&&(saveBoot.n=(saveBoot.n||0)+1)<8){ clearTimeout(window.__bootT); window.__bootT=setTimeout(saveBoot,400); return; }
       const bd=document.body.cloneNode(true);
