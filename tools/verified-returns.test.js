@@ -1,0 +1,12 @@
+"use strict";
+const assert=require("node:assert/strict");
+const {verifiedReturns}=require("./verified-returns");
+const events=[{id:"d",type:"deposit",date:"2025-01-01",amount:1000},{id:"b",type:"buy",date:"2025-01-02",amount:800}];
+const args={events,terminalCash:200,positionsValue:900,terminal:{date:"2026-01-01",value:1100},ledgerEvidence:{complete:true,verifiedOpening:true,verifiedEnding:true,tradeCoverage:true},valuations:[{date:"2025-01-01",value:1000},{date:"2026-01-01",value:1100}],navVerified:true};
+const ok=verifiedReturns(args);
+assert.equal(ok.ready,true);assert.ok(ok.xirr>0.09&&ok.xirr<0.11);assert.ok(Math.abs(ok.twr-0.1)<1e-9);
+assert.equal(verifiedReturns({...args,ledgerEvidence:{complete:true}}).xirr,null);
+assert.equal(verifiedReturns({...args,terminal:{date:"2026-01-01",value:1200}}).ready,false);
+const noNav=verifiedReturns({...args,navVerified:false});assert.equal(noNav.ready,false);assert.equal(noNav.twr,null);
+assert.ok(noNav.xirr!==null,"verified XIRR independent of TWR NAV availability");
+console.log("verified returns tests passed");
