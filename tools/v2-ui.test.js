@@ -22,7 +22,7 @@ assert.equal(review.verified,false);
 assert.equal(audit([{id:"bad",amount:20,buyDate:"2026-02-30"}]).issues.length,1);
 assert.ok(html.includes("${legacyAuditCard}"));
 assert.ok(html.includes("const returnRequirements=["),"return readiness checklist should render");
-assert.ok(html.includes("Bağımsız nakit mutabakatı"),"opening and closing cash must stay unverified");
+assert.ok(html.includes("Ekstre nakit mutabakatı"),"external statement reconciliation must be visible");
 assert.ok(html.includes("Pozisyon grafiği nakit içermiyor"),"do not mislabel position-only chart as verified NAV");
 const repStart=html.indexOf("function fpAuditReport("),repEnd=html.indexOf("function renderSanal()",repStart);
 assert.ok(repStart>0&&repEnd>repStart);
