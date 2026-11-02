@@ -15,4 +15,8 @@ assert.equal(q.price,52);assert.equal(q.d1,1.1);
 q=quote("DEF",{price:0,d1:3,priceDate:"2026-11-01"},{price:18,d1:1.2,date:"2026-11-02"});
 assert.equal(q.price,18);assert.equal(q.d1,1.2);
 q=quote("NONE",null,null);assert.equal(q.price,null);assert.equal(q.d1,null);
+const mixed=fn({live:{stocks:{ABC:{price:999,at:"2026-11-02"}},fx:{ABC:{price:43,at:"2026-11-02"}},funds:{FND:{price:5,at:"2026-11-02"}}}}, {shortQuotes:{ABC:{p:950,t:Date.parse("2026-11-02T12:00:00Z")}}});
+assert.equal(mixed("ABC",{isFx:true,price:40,priceDate:"2026-11-01"},null).price,43);
+assert.equal(mixed("FND",{cat:"altin",price:4,priceDate:"2026-11-01"},null).price,5);
+assert.equal(mixed("ABC",{isStock:true,price:40,priceDate:"2026-11-01"},null).price,950);
 console.log("quote selection tests passed");
