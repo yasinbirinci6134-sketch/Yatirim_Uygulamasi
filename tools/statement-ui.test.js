@@ -1,6 +1,7 @@
 "use strict";
 const assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path");
 const {fpComputeImportedReturns}=require("./ui-returns");
+const {fpParseStatementCsv}=require("./statement-csv");
 const html=fs.readFileSync(path.join(__dirname,"../ui/index.html"),"utf8");
 const from=html.indexOf('const FP_IMPORT_KEY='),to=html.indexOf('/* V2: review legacy records',from);
 assert.ok(from>0&&to>from);
@@ -17,13 +18,13 @@ const document={
 const localStorage={getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,value)};
 const S={uid:"test-user",cashflows:[{id:"c1",pf:"pf1",date:"2025-01-01",type:"deposit",amount:1000}]};
 let redraws=0,pricedRows=[{value:900}];
-const getHandlers=new Function("document","localStorage","S","fpLegacyAudit","pfTrades","portfolioRows","fpComputeImportedReturns","toast","confirm","renderSanal","esc",
+const getHandlers=new Function("document","localStorage","S","fpLegacyAudit","pfTrades","portfolioRows","fpComputeImportedReturns","fpParseStatementCsv","toast","confirm","renderSanal","esc",
  html.slice(from,to)+";return {fpReturnEvidenceSheet,fpImportedStatement};")(
  document,localStorage,S,
  ()=>({issues:[],candidates:[{id:"x:buy",date:"2025-01-02",type:"buy",amount:800}]}),
  ()=>[{id:"x",date:"2025-01-02",amount:800}],
  ()=>pricedRows,
- fpComputeImportedReturns,msg=>messages.push(msg),()=>true,()=>{redraws++},x=>String(x));
+ fpComputeImportedReturns,fpParseStatementCsv,msg=>messages.push(msg),()=>true,()=>{redraws++},x=>String(x));
 getHandlers.fpReturnEvidenceSheet({id:"pf1",name:"Ornek"});
 const sheet=elements.find(el=>el.tag==="div"&&el.innerHTML.includes('id="pfEvidenceDraft"'));
 assert.ok(sheet,"statement sheet should include draft action");
@@ -32,6 +33,13 @@ const draft=JSON.parse(sheet.querySelector("#pfEvidenceText").value);
 assert.equal(draft.events.length,2);assert.equal(draft.source.institution,"");
 assert.equal(draft.openingCash,null);
 assert.ok(draft.events.every(x=>x.reference===""));
+sheet.querySelector("#pfCsvText").value="tarih;tür;tutar;referans\\n01.01.2025;Para yatırma;1000;dekont-1\\n02.01.2025;Alış;800;dekont-2";
+sheet.querySelector("#pfCsvText").value=sheet.querySelector("#pfCsvText").value.replaceAll("\\\\n","\\n");
+sheet.querySelector("#pfCsvApply").onclick();
+const csvDraft=JSON.parse(sheet.querySelector("#pfEvidenceText").value);
+assert.deepEqual(csvDraft.events.map(e=>[e.type,e.amount,e.reference]),[["deposit",1000,"dekont-1"],["buy",800,"dekont-2"]]);
+assert.equal(csvDraft.openingCash,null,"CSV must not invent broker cash balances");
+assert.equal(getHandlers.fpImportedStatement("pf1"),null,"CSV conversion must not auto-save");
 sheet.querySelector("#pfEvidenceSave").onclick();
 assert.equal(getHandlers.fpImportedStatement("pf1"),null,"unverified draft must never be saved");
 assert.equal(redraws,0);
