@@ -2054,6 +2054,7 @@ function fpReturnEvidenceSheet(pf){
   get("pfEvidenceHoldings").value=Number.isFinite(old.positionsValue)?String(old.positionsValue):"";
   get("pfEvidenceNav").value=Number.isFinite(old.terminal?.value)?String(old.terminal.value):"";
  }
+ const initialFormValues=Object.fromEntries(["pfEvidenceInstitution","pfEvidenceReference","pfEvidenceOpening","pfEvidenceClosing","pfEvidenceAsOf","pfEvidenceHoldings","pfEvidenceNav"].map(id=>[id,String(get(id).value||"").trim()]));
  get("pfEvidenceCancel").onclick=close;scrim.onclick=close;
  get("pfCsvFile").onchange=async()=>{
   const input=get("pfCsvFile"),file=input.files?.[0];
@@ -2107,13 +2108,17 @@ function fpReturnEvidenceSheet(pf){
     return n;
    };
    const data={...parsed,source:{...(parsed.source||{})},terminal:{...(parsed.terminal||{})}};
-   if(formText("pfEvidenceInstitution"))data.source.institution=formText("pfEvidenceInstitution");
-   if(formText("pfEvidenceReference"))data.source.reference=formText("pfEvidenceReference");
-   if(formText("pfEvidenceAsOf"))data.terminal.date=formText("pfEvidenceAsOf");
-   for(const [field,input] of [["openingCash","pfEvidenceOpening"],["terminalCash","pfEvidenceClosing"],["positionsValue","pfEvidenceHoldings"]]){
-    const n=formNumber(input);if(n!==undefined)data[field]=n;
+   // Unedited form fields must not silently override a freshly pasted JSON statement.
+   for(const [field,input] of [["institution","pfEvidenceInstitution"],["reference","pfEvidenceReference"]])
+    if(formText(input)!==initialFormValues[input])data.source[field]=formText(input);
+   if(formText("pfEvidenceAsOf")!==initialFormValues.pfEvidenceAsOf)data.terminal.date=formText("pfEvidenceAsOf");
+   for(const [field,input] of [["openingCash","pfEvidenceOpening"],["terminalCash","pfEvidenceClosing"],["positionsValue","pfEvidenceHoldings"]])
+    if(formText(input)!==initialFormValues[input]){
+     const n=formNumber(input);data[field]=n===undefined?null:n;
+    }
+   if(formText("pfEvidenceNav")!==initialFormValues.pfEvidenceNav){
+    const n=formNumber("pfEvidenceNav");data.terminal.value=n===undefined?null:n;
    }
-   const nav=formNumber("pfEvidenceNav");if(nav!==undefined)data.terminal.value=nav;
    const audit=fpLegacyAudit(pfTrades(pf)),cfs=(S.cashflows||[]).filter(x=>x.pf===pf.id);
    const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10);
    const holdings=fpTrustedHoldingsValue(portfolioRows(pf),today);
