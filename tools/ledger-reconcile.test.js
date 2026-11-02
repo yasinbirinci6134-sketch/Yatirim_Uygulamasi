@@ -7,4 +7,7 @@ assert.equal(reconcileLedger({events,terminalCash:1070}).ready,false);
 assert.equal(reconcileLedger({events,terminalCash:1100,complete:true}).ready,false);
 assert.equal(reconcileLedger({events:[{type:"buy",date:"2026-01-01",amount:100}],terminalCash:0,complete:true}).ready,false);
 assert.equal(reconcileLedger({events:[{type:"deposit",date:"2026-02-30",amount:10}],terminalCash:10,complete:true}).ready,false);
+assert.equal(reconcileLedger({events:[null],openingCash:0,terminalCash:0,complete:true}).ready,false);
+assert.equal(reconcileLedger({events:"invalid",openingCash:0,terminalCash:0,complete:true}).ready,false);
+assert.equal(reconcileLedger({events:[{type:"deposit",date:"2026-01-01",amount:0.1},{type:"deposit",date:"2026-01-02",amount:0.2}],terminalCash:0.3,complete:true}).ready,true);
 console.log("ledger reconciliation tests passed");
