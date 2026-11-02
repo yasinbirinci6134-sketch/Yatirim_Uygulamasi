@@ -48,6 +48,15 @@ assert.ok(messages.some(x=>String(x).includes("mutabakat")));
 getHandlers.fpReturnEvidenceSheet({id:"pf1",name:"Ornek"});
 const savedSheet=elements.filter(el=>el.tag==="div"&&el.innerHTML.includes('id="pfEvidenceDraft"')).at(-1);
 assert.ok(savedSheet.querySelector("#pfEvidenceText").value.includes('"broker-deposit"'));
+// A matching statement cannot make today's return credible when the WebView
+// only has fallback purchase prices instead of dated market quotes.
+const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10);
+const current={...real,terminal:{...real.terminal,date:today},valuations:[real.valuations[0],{date:today,value:1100}]};
+savedSheet.querySelector("#pfEvidenceText").value=JSON.stringify(current);
+savedSheet.querySelector("#pfEvidenceSave").onclick();
+assert.deepEqual(getHandlers.fpImportedStatement("pf1"),real,
+ "unverified same-day holdings must not overwrite validated historical statement");
+assert.equal(redraws,1);
 savedSheet.querySelector("#pfEvidenceDelete").onclick();
 assert.equal(getHandlers.fpImportedStatement("pf1"),null,"deleting evidence must clear local storage");
 assert.equal(redraws,2,"deleting evidence must rerender");
