@@ -1,0 +1,13 @@
+"use strict";
+const assert=require("node:assert/strict");
+const {fpParseStatementCsv:parse}=require("./statement-csv");
+const csv="Tarih;Tür;Tutar;Referans\n01.01.2025;Para yatırma;1.000,00;dekont 1\n02.01.2025;Alış;800,00;dekont 2";
+assert.deepEqual(parse(csv).errors,[]);
+assert.deepEqual(parse(csv).events.map(x=>[x.date,x.type,x.amount]),[["2025-01-01","deposit",1000],["2025-01-02","buy",800]]);
+assert.equal(parse('date,type,amount,reference\n2025-02-01,sell,15.40,"işlem, 5"').events[0].reference,"işlem, 5");
+assert.equal(parse("tarih;tür;tutar;referans\n31.02.2025;Satış;50;a").events.length,0);
+assert.equal(parse("tarih;tür;tutar;referans\n01.01.2025;Komisyon;-5;x").events.length,0);
+assert.ok(parse("foo,bar\na,b").errors.length);
+assert.equal(parse("date,type,amount,reference\n2025-01-01,deposit,1,x\n2025-02-01,withdrawal,2,").events.length,0);
+assert.equal(parse("date,type,amount,reference\n2025-01-01,deposit,1,x").events.length,1);
+console.log("CSV statement parser tests passed");
