@@ -2,7 +2,7 @@
 const assert=require("node:assert/strict");
 const {fpComputeImportedReturns:compute}=require("./ui-returns");
 const data={source:{institution:"Örnek Aracı Kurum",reference:"Kurum-2025-01"},openingCash:0,terminalCash:200,positionsValue:900,
- terminal:{date:"2026-01-01",value:1100,externalFlow:0},events:[
+ terminal:{date:"2026-01-01",value:1100},events:[
  {id:"d",reference:"ekstre-deposit",date:"2025-01-01",type:"deposit",amount:1000},
  {id:"b",reference:"ekstre-buy",date:"2025-01-02",type:"buy",amount:800}],
  valuations:[{date:"2025-01-01",value:1000,externalFlow:0},{date:"2026-01-01",value:1100,externalFlow:0}]};
