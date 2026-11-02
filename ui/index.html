@@ -1319,7 +1319,7 @@ function fpQuote(code,base,scan){
   const valid=c=>c.v&&typeof c.v.price==="number"&&Number.isFinite(c.v.price)&&c.v.price>0&&ts(c.at)<=Date.now()+3600000;
   const available=candidates.filter(valid).sort((a,b)=>ts(b.at)-ts(a.at));
   const winner=available[0];
-  const daily=candidates.filter(c=>typeof c.v?.d1==="number"&&Number.isFinite(c.v.d1))
+  const daily=candidates.filter(c=>typeof c.v?.d1==="number"&&Number.isFinite(c.v.d1)&&ts(c.at)<=Date.now()+3600000&&(!winner||!ts(winner.at)||!ts(c.at)||Math.abs(ts(c.at)-ts(winner.at))<=36*3600000))
     .sort((a,b)=>ts(b.at)-ts(a.at))[0];
   return {price:winner?.v.price??null,d1:daily?.v.d1??null,
     source:winner?.src||"none",priceAt:winner?.at?new Date(ts(winner.at)).toISOString().slice(0,10):null,dailySource:daily?.src||"none"};
@@ -1795,7 +1795,7 @@ function daysSince(d){ const t=new Date(d+"T00:00:00"); return isNaN(t) ? null :
 function portfolioRows(pf){
   pf = pf || curPf();
   return pfTrades(pf).filter(t=>t.status!=="closed").map(t => {
-    const f=asset(t.code), q=fpQuote(t.code,f,null), cur = q.price ?? f?.price ?? t.price, units = t.units || t.amount/t.price, value=units*cur;
+    const f=asset(t.code), q=fpQuote(t.code,f,null), cur = q.price ?? f?.price ?? t.price, units = Number.isFinite(t.units)&&t.units>0?t.units:(t.price>0?t.amount/t.price:0), value=units*cur;
     return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:q.d1??f?.d1, curDate:q.priceAt||f?.priceDate, quoteSource:q.source, days:daysSince(t.buyDate||t.priceDate)};
   });
 }
