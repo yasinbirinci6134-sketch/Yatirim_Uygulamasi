@@ -1874,11 +1874,14 @@ function renderSanal(){
   const allPfTrades=pfTrades(pf),hasLegacy=allPfTrades.length>0;
   const closedWithoutCost=closed.some(t=>!(t.price>0&&t.sellPrice>0&&t.amount>0&&t.sellDate));
   const flowDates=cashflows.every(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.date||""));
+  const externalEntries=cashflows.filter(x=>x.type==="deposit"||x.type==="withdrawal");
+  const initialFunding=cashTotals.deposit, netFunding=cashTotals.deposit-cashTotals.withdrawal;
   const ledgerReady=!hasLegacy&&flowDates&&cashflows.some(x=>x.type==="deposit");
   const metricStatus=`<section class="card"><div class="horizon"><h2>Gerçek getiri · Veri kontrolü</h2><span class="small muted">${ledgerReady?"Nakit defteri var":"Eksik geçmiş"}</span></div>
     ${ledgerReady?`<p class="small muted">Para yatırma kayıtları var; ancak günlük toplam portföy değerleri ve alış/satış nakit kayıtları olmadan XIRR/TWR hesaplaması yayınlanmaz.</p>`:
     `<p class="small muted">${hasLegacy?"Önceki alım/satım kayıtları nakit defterinde eksik. ":""}${!flowDates?"Bazı nakit hareketlerinde tarih eksik. ":""}${closedWithoutCost?"Kapanmış işlemlerden bazıları için maliyet veya satış bilgisi eksik. ":""}Gerçek getiri göstermek için tarihli dış nakit hareketleri ve eksiksiz işlem geçmişi gerekiyor.</p>`}
-    <p class="small muted">Görünen açık/gerçekleşmiş K/Z mevcut pozisyon hesaplarıdır; yıllıklandırılmış XIRR veya TWR değildir. Veriler tamamlanana kadar bu oranlar bilinmiyor olarak kalır.</p></section>`;
+    <div class="pfstats"><div><span>Dış nakit hareketi</span><b class="num">${externalEntries.length}</b></div><div><span>Net nakit girişi</span><b class="num">${tl(netFunding,2)}</b></div></div>
+    <p class="small muted">Dış nakit hareketleri: yalnız para yatırma ve çekme. Temettü, komisyon ve işlemler dış sermaye akışı değildir. Görünen açık/gerçekleşmiş K/Z yıllıklandırılmış XIRR/TWR değildir.</p></section>`;
   const groups=groupRows(rows),maxPosition=groups[0],maxWeight=val>0&&maxPosition?100*maxPosition.value/val:0;
   const riskBlock=`<section class="card"><div class="horizon"><h2>Portföy risk radarı</h2></div>
    <div class="pfstats"><div><span>Farklı varlık</span><b class="num">${groups.length}</b></div>
