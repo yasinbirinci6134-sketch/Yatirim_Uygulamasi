@@ -1,0 +1,11 @@
+"use strict";
+const assert=require("node:assert/strict");
+const {xirr}=require("./return-metrics");
+const simple=xirr([{date:"2025-01-01",amount:-1000},{date:"2026-01-01",amount:1100}]);
+assert.ok(simple>0.09&&simple<0.11, "10% annual return");
+const loss=xirr([{date:"2025-01-01",amount:-1000},{date:"2026-01-01",amount:900}]);
+assert.ok(loss<0&&loss>-.11);
+assert.equal(xirr([{date:"2025-01-01",amount:-1000}]),null);
+assert.equal(xirr([{date:"2025-01-01",amount:1000},{date:"2026-01-01",amount:1200}]),null);
+assert.equal(xirr([{date:"bad",amount:-1000},{date:"2026-01-01",amount:1100}]),null);
+console.log("XIRR math tests passed");
