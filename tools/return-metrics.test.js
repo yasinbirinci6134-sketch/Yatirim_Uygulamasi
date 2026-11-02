@@ -9,4 +9,5 @@ assert.equal(xirr([{date:"2025-01-01",amount:-1000}]),null);
 assert.equal(xirr([{date:"2025-01-01",amount:1000},{date:"2026-01-01",amount:1200}]),null);
 assert.equal(xirr([{date:"bad",amount:-1000},{date:"2026-01-01",amount:1100}]),null);
 assert.equal(xirr([{date:"2026-02-30",amount:-100},{date:"2027-01-01",amount:120}]),null);
+assert.equal(xirr([{date:"2025-01-01",amount:-1000},{date:"2025-04-01",amount:1500},{date:"2025-07-01",amount:-800},{date:"2026-01-01",amount:1000}]),null,"multiple sign reversals must not return ambiguous XIRR");
 console.log("XIRR math tests passed");
