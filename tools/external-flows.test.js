@@ -10,4 +10,8 @@ assert.equal(externalFlows([{type:"deposit",date:"bad",amount:100}],t,{complete:
 assert.equal(externalFlows([{type:"deposit",amount:1000,date:"2026-02-30"}],t,{complete:true}).ready,false);
 assert.equal(externalFlows([{type:"deposit",amount:1000,date:"2027-01-01"}],t,{complete:true}).ready,false);
 assert.equal(externalFlows([{type:"deposit",amount:1000,date:"2026-01-01"}],t,{complete:true}).ready,false);
+assert.equal(externalFlows([{type:"withdrawal",amount:100,date:"2025-01-01"},{type:"deposit",amount:1000,date:"2025-01-02"}],t,{complete:true}).ready,false);
+const profits=externalFlows([{type:"deposit",amount:1000,date:"2025-01-01"},{type:"withdrawal",amount:1500,date:"2025-06-01"}],t,{complete:true});
+assert.equal(profits.ready,true,"profit withdrawals are valid");
+assert.equal(externalFlows([{type:"deposit",amount:100,date:"2025-01-01"},{type:"withdrawal",amount:50,date:"2026-01-01"}],t,{complete:true}).ready,false);
 console.log("external-flows tests passed");
