@@ -1730,7 +1730,7 @@ function histBlock(code){ const h=(S.hist||{})[code]; if(!h||h.length<2) return 
 
 /* ---------- Hisse ---------- */
 const SIG = {al:"Alınabilir", izle:"İzle", uzak:"Uzak dur"};
-const pickBadge = x => x?.pick ? `<span class="pick">${x.pickAt && (Date.now()-new Date(x.pickAt).getTime() < 2*864e5) ? "YENİ KEŞİF" : "KEŞİF"}</span>` : "";
+const pickBadge = x => x?.pick ? `<span class="pick">${x.pickAt && (Date.now()-new Date(x.pickAt).getTime() < (studioOn()?2:7)*864e5) ? "YENİ KEŞİF" : "KEŞİF"}</span>` : "";
 function riskBars(r){ r=Math.max(0,Math.min(5,Number(r)||0)); return `<span class="risk g" data-g="Risk" title="Risk ${r}/5">${[1,2,3,4,5].map(i=>`<i class="${i<=r?"on":""}"></i>`).join("")} risk ${r}/5</span>`; }
 function stockRow(x){ return listRow("s",x); }
 function renderHisse(){
