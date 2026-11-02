@@ -5,7 +5,7 @@
 function validDay(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return false;const d=new Date(s+'T00:00:00Z');return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===s;}
 function timeWeightedReturn(points){
  if(!Array.isArray(points)||points.length<2)return null;
- const arr=[...points].sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+ const arr=[...points].sort((a,b)=>String(a?.date||"").localeCompare(String(b?.date||"")));
  let compound=1;
  for(let i=0;i<arr.length;i++){
   const p=arr[i];
