@@ -20,6 +20,7 @@ jobs:
           node tools/data-quality.test.js
           node tools/quote-selection.test.js
           node tools/portfolio-engine.test.js
+          node tools/return-metrics.test.js
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
