@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.view.View;
 import android.view.Window;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -112,6 +113,9 @@ public class MainActivity extends Activity {
     web.setOverScrollMode(View.OVER_SCROLL_NEVER);
     WebSettings s = web.getSettings();
     s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setDatabaseEnabled(true);
+    // Required for JavaScript confirm()/alert()/prompt() on Android WebView.
+    // Without a WebChromeClient confirm() silently returns false.
+    web.setWebChromeClient(new WebChromeClient());
     Net.UA = s.getUserAgentString().replace("; wv", "").replace("Version/4.0 ", "");
     web.addJavascriptInterface(new Bridge(), "YatirimApp");
     web.setWebViewClient(new WebViewClient() {
