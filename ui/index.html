@@ -2317,7 +2317,7 @@ function applyTabs(){
   const vis=LAY.tabs.filter(t=>!LAY.hiddenTabs.includes(t));
   LAY.tabs.forEach(t=>{ const b=$("t-"+t); nav.appendChild(b); b.hidden=!vis.includes(t); });
   nav.style.gridTemplateColumns=`repeat(${Math.max(1,vis.length)},1fr)`;
-  if(!vis.includes(S.tab) && vis.length){ S.tab=vis[0]; }
+  if(!studioOn()&&!vis.includes(S.tab) && vis.length){ S.tab=vis[0]; }
 }
 /* V2 Tema 2: four primary destinations, with existing three discovery pages retained. */
 let FP_DISCOVERY_TAB="oneri";
