@@ -4,6 +4,10 @@ on:
     branches:
       - feature/fon-pusulasi-v2-phase1
   workflow_dispatch:
+# Only the newest preview commit may publish the rolling APK.
+concurrency:
+  group: fon-pusulasi-v2-preview
+  cancel-in-progress: true
 permissions:
   contents: write
 jobs:
@@ -44,6 +48,9 @@ jobs:
           apk=app/build/outputs/apk/debug/app-debug.apk
           test -s "$apk"
           unzip -tq "$apk" >/dev/null
+          # The bundled WebView UI must be byte-identical to this checkout.
+          unzip -p "$apk" assets/index.html | cmp - ui/index.html
+          test -s ui/index.html
           cp "$apk" Fon-Pusulasi-2-Preview.apk
           sha256sum Fon-Pusulasi-2-Preview.apk > Fon-Pusulasi-2-Preview.apk.sha256
           printf 'commit=%s\nrun=%s\nbranch=%s\n' "$GITHUB_SHA" "$GITHUB_RUN_NUMBER" "$GITHUB_REF_NAME" > Fon-Pusulasi-2-Preview-build.txt
