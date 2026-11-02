@@ -21,8 +21,11 @@ Test uygulamasi GitHub'dan feature/fon-pusulasi-v2-phase1 dalindaki arayuzu alir
 - Eski alim/satim kayitlari nakit defterine otomatik eklenmez.
 - Nakit hareketleri bu onizlemede mevcut portfoy piyasa degerine EKLENMEZ;
   cunku eski islemlerin nakit bileseni eksik ve aksi halde iki kez sayma riski var.
-- XIRR/TWR, performans grafigi, skor gecmisi basari analizleri ve tam UI revizyonu
-  bu onizleme paketinde henuz uygulanmadi.
+- XIRR/TWR hesaplama ekranı: Kullanıcının içe aktardığı referanslı ekstre hareketlerinin
+  tarih, tutar, bakiye ve portföy kayıtlarıyla mutabakatı sağlanırsa oran gösterilir.
+  Kaynağın gerçekliği otomatik olarak doğrulanmaz; başlangıç nakdi sıfır olmalıdır.
+- Gerçek portföy için nakit dahil NAV geçmişi zorunludur. Eski pozisyon grafiği TWR değildir.
+- Skor geçmişi başarı analizleri ve tam görsel son rötuşlar ayrıca test edilecektir.
 - Tarama veri dogrulama akisi degistirilmis olsa bile main dalindaki zamanlayici main'i kullanir;
   burada test edilebilir kaynak kodudur, canli akis degildir.
 
