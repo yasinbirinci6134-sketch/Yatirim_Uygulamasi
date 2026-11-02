@@ -21,6 +21,8 @@ assert.equal(run({...data,source:null}).xirr,null);
 assert.equal(run({...data,events:[...data.events,{id:"fee",reference:"r3",type:"fee",date:"2025-06-01",amount:1}]}).ledgerReady,false);
 assert.equal(run(data,{...audit,issues:["incomplete trade"]}).xirr,null);
 assert.equal(run(data,audit,cash,800).ledgerReady,false);
+assert.equal(run(data,audit,cash,NaN).ledgerReady,false,"unknown live holdings must not pass current-day reconciliation");
+assert.equal(run(data,audit,cash,Infinity).xirr,null,"non-finite quote valuation must block XIRR");
 assert.equal(run({...data,valuations:[data.valuations[0],{date:"2026-01-01",value:1100,externalFlow:10}]}).twr,null);
 assert.equal(run({...data,valuations:[]}).twr,null);
 assert.ok(run({...data,valuations:[]}).xirr!==null);
