@@ -29,6 +29,7 @@ import java.security.MessageDigest;
 public class MainActivity extends Activity {
   static final String BASE = "https://yatirim.app/";
   static final String OLD_APP = "https://claude.ai/artifact/KGLuNpASfKJZT1QXGir68H";
+  static final String PREVIEW_BRANCH = "feature/fon-pusulasi-v2-phase1";
   static final String UI_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/main/ui/index.html";
   // GitHub API: önbelleği kısa (raw ~5 dk bekletir); ETag ile 304 dönen istekler kota yemez
   static final String UI_API = "https://api.github.com/repos/yasinbirinci6134-sketch/Yatirim_Uygulamasi/contents/ui/index.html?ref=main";
@@ -85,9 +86,12 @@ public class MainActivity extends Activity {
       try {
         JSONObject h = new JSONObject(); String et = up().getString("etag2", null); if (et != null && uiFile().exists()) h.put("If-None-Match", et);
         h.put("Accept", "application/vnd.github.raw");
-        JSONObject r = Net.req("GET", UI_API, null, h.toString());
+        boolean preview = getPackageName().endsWith(".preview");
+        String api = preview ? UI_API.replace("ref=main", "ref=" + PREVIEW_BRANCH) : UI_API;
+        String raw = preview ? UI_URL.replace("/main/", "/" + PREVIEW_BRANCH + "/") : UI_URL;
+        JSONObject r = Net.req("GET", api, null, h.toString());
         if (r.optInt("code") == 304) return;
-        if (!r.optBoolean("ok") || r.optInt("code") != 200) { r = Net.req("GET", UI_URL + "?t=" + (System.currentTimeMillis() / 60000), null, "{}"); if (!r.optBoolean("ok") || r.optInt("code") != 200) return; r.remove("etag"); }
+        if (!r.optBoolean("ok") || r.optInt("code") != 200) { r = Net.req("GET", raw + "?t=" + (System.currentTimeMillis() / 60000), null, "{}"); if (!r.optBoolean("ok") || r.optInt("code") != 200) return; r.remove("etag"); }
         String body = r.optString("body"), s = sha(body);
         if (!body.contains(MARK) || !body.contains("</html>") || s.equals(curSha) || s.equals(up().getString("bad", ""))) return;
         try (FileOutputStream o = new FileOutputStream(newFile())) { o.write(body.getBytes("UTF-8")); }
