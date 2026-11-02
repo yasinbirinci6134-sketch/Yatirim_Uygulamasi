@@ -1306,7 +1306,7 @@ const fmtTime = s => { const d=new Date(s); return isNaN(d) ? "–" : d.toLocale
 /* V2 veri katmani: fiyatin kaynagini ve zamanini tek noktadan belirle.
    Puan ve fiyat ayri tutulur; gecersiz fiyatlar kullanilmaz. */
 function fpQuote(code,base,scan){
-  const live=S.live?.stocks?.[code], tick=LIVE.shortQuotes?.[code];
+  const live=S.live?.stocks?.[code], raw=LIVE.shortQuotes?.[code], tick=raw?{...raw,price:raw.price??raw.p,at:raw.at??raw.t}:null;
   const candidates=[
     {src:"scan",v:scan,at:scan?.date},
     {src:"market",v:base,at:base?.priceDate||base?.updatedAt},
