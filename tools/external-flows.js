@@ -17,8 +17,7 @@ function externalFlows(events,terminal,{complete=false}={}){
  }
  if(!investor.some(x=>x.amount<0))errors.push("no capital deposits");
  investor.sort((a,b)=>a.date.localeCompare(b.date));
- let balance=0;
- for(const f of investor){balance-=f.amount;if(balance< -1e-7){errors.push("withdrawal exceeds cumulative deposits");break;}}
+ if(investor.length&&investor[0].amount>0)errors.push("withdrawal precedes first deposit");
  if(terminal&&validDate(terminal.date)&&investor.some(x=>x.date===terminal.date))errors.push("terminal date has external flows; intraday sequence unknown");
  if(terminal&&validDate(terminal.date)&&investor.some(x=>x.date>terminal.date))errors.push("cashflow after terminal valuation");
  if(investor.some(x=>x.amount<0)&&terminal&&validDate(terminal.date)&&!investor.some(x=>x.amount<0&&x.date<terminal.date))errors.push("no deposit prior to valuation");
