@@ -1871,6 +1871,14 @@ function renderSanal(){
   const day=rows.reduce((s,r)=> s + (r.d1!=null && r.curDate && r.curDate>(r.buyDate||r.priceDate) ? r.value*(r.d1/(100+r.d1)) : 0),0);
   const realized=closed.reduce((s,t)=>s+(t.sellPrice/t.price-1)*t.amount,0);
   const totalPnl=pnl+realized, costAll=inv+closed.reduce((s,t)=>s+t.amount,0);
+  const allPfTrades=pfTrades(pf),hasLegacy=allPfTrades.length>0;
+  const closedWithoutCost=closed.some(t=>!(t.price>0&&t.sellPrice>0&&t.amount>0&&t.sellDate));
+  const flowDates=cashflows.every(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.date||""));
+  const ledgerReady=!hasLegacy&&flowDates&&cashflows.some(x=>x.type==="deposit");
+  const metricStatus=`<section class="card"><div class="horizon"><h2>Gerçek getiri · Veri kontrolü</h2><span class="small muted">${ledgerReady?"Nakit defteri var":"Eksik geçmiş"}</span></div>
+    ${ledgerReady?`<p class="small muted">Para yatırma kayıtları var; ancak günlük toplam portföy değerleri ve alış/satış nakit kayıtları olmadan XIRR/TWR hesaplaması yayınlanmaz.</p>`:
+    `<p class="small muted">${hasLegacy?"Önceki alım/satım kayıtları nakit defterinde eksik. ":""}${!flowDates?"Bazı nakit hareketlerinde tarih eksik. ":""}${closedWithoutCost?"Kapanmış işlemlerden bazıları için maliyet veya satış bilgisi eksik. ":""}Gerçek getiri göstermek için tarihli dış nakit hareketleri ve eksiksiz işlem geçmişi gerekiyor.</p>`}
+    <p class="small muted">Görünen açık/gerçekleşmiş K/Z mevcut pozisyon hesaplarıdır; yıllıklandırılmış XIRR veya TWR değildir. Veriler tamamlanana kadar bu oranlar bilinmiyor olarak kalır.</p></section>`;
   const groups=groupRows(rows),maxPosition=groups[0],maxWeight=val>0&&maxPosition?100*maxPosition.value/val:0;
   const riskBlock=`<section class="card"><div class="horizon"><h2>Portföy risk radarı</h2></div>
    <div class="pfstats"><div><span>Farklı varlık</span><b class="num">${groups.length}</b></div>
@@ -1893,6 +1901,7 @@ function renderSanal(){
     <section class="card"><div class="horizon"><h2>Portföy değer geçmişi</h2><span class="small muted">Gerçek kayıtlar</span></div>${fpPortChart(pf.id)}</section>
     ${cashCard}
     ${journalCard}
+    ${metricStatus}
     ${riskBlock}
     <section class="card"><div class="horizon"><h2>Pozisyonlar</h2><button class="btn sm" id="goAdd">+ Ekle</button></div>
       ${rows.length ? groupRows(rows).map(g=>{ const [k,lab,why]=advise(g,val), one=g.lots.length===1, r0=g.lots[0];
@@ -2411,7 +2420,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-v2-preview4";
+const UI_VERSION="2026.11.02-v2-preview5";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
