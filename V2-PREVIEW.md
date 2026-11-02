@@ -54,6 +54,12 @@ Portfoy > Gercek getiri > Ekstre yukle > Taslak olustur:
   CSV satirlarinda referans zorunludur; hatali tek satir varsa hicbir hareket aktarilmaz.
   CSV yalnız hareketleri doldurur; kurum kimligi, acilis/kapanis nakdi, pozisyon
   degeri ve toplam NAV kayitlari eksik kalir. Icerik kendi kendini dogrulamaz.
+- Yeni form alanlariyla kurum adini, ekstre referansini, acilis/kapanis nakdini,
+  kapanis tarihini, kapanis pozisyon degerini ve toplam portfoy degerini dogrudan
+  telefondan girebilirsin. Bu alanlara gercek kurum dokumundeki degerleri gir.
+  Mevcut JSON'u degistirip form alanlarina dokunmazsan eski alanlar JSON'un
+  uzerine yazilmaz. TWR'nin ara NAV tarihlerindeki degerleri halen gelismis
+  JSON bolumunden saglanir; bunlar otomatik tahmin edilmez.
 
 ## APK derlemesini dogrulama
 GitHub Actions > Fon Pusulasi 2.0 Test APK > basarili calisma.
