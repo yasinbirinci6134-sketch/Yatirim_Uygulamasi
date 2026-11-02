@@ -5,7 +5,7 @@ on:
       - feature/fon-pusulasi-v2-phase1
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   preview:
     runs-on: ubuntu-latest
@@ -35,3 +35,13 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
+      - name: Publish direct APK download
+        run: cp app/build/outputs/apk/debug/app-debug.apk Fon-Pusulasi-2-Preview.apk
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v2-preview-current
+          name: Fon Pusulasi 2.0 - Test APK
+          prerelease: true
+          make_latest: false
+          overwrite_files: true
+          files: Fon-Pusulasi-2-Preview.apk
