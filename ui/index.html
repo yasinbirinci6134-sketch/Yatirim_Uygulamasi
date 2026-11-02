@@ -1882,11 +1882,13 @@ function renderSanal(){
   const missingDates=cashflows.filter(x=>!/^\d{4}-\d{2}-\d{2}$/.test(x.date||""));
   const reasons=[hasLegacy?"Eski alış/satış kayıtları tam nakit defterine bağlı değil":null,closedWithoutCost?"Kapanmış işlemlerde eksik satış/maliyet bilgisi var":null,missingDates.length?"Tarihi eksik nakit hareketleri var":null,invalidMovements.length?"Geçersiz nakit hareketleri var":null,!cashflows.some(x=>x.type==="deposit")?"Başlangıç para yatırma kaydı yok":null,"Nakit bakiyesi ve tüm işlem hareketleri henüz doğrulanmadı"].filter(Boolean);
   const ledgerReady=false; // Complete reconciliation and historical NAV not implemented yet.
+  const auditItems=[["Başlangıç nakdi","Bağımsız başlangıç bakiyesi eksik"],["İşlem kapsamı","Alış ve satışların eksiksizliği doğrulanmadı"],["Bitiş nakdi","Bağımsız nakit bakiyesi doğrulanmadı"],["TWR değerleme geçmişi","Nakit hareketleriyle eşzamanlı toplam portföy değerleri eksik"]];
 
   const metricStatus=`<section class="card"><div class="horizon"><h2>Gerçek getiri · Veri kontrolü</h2><span class="small muted">${ledgerReady?"Doğrulandı":"Tam doğrulanmadı"}</span></div>
     ${ledgerReady?`<p class="small muted">Para yatırma kayıtları var; ancak günlük toplam portföy değerleri ve alış/satış nakit kayıtları olmadan XIRR/TWR hesaplaması yayınlanmaz.</p>`:
     `<p class="small muted">${hasLegacy?"Önceki alım/satım kayıtları nakit defterinde eksik. ":""}${!flowDates?"Bazı nakit hareketlerinde tarih eksik. ":""}${closedWithoutCost?"Kapanmış işlemlerden bazıları için maliyet veya satış bilgisi eksik. ":""}Gerçek getiri göstermek için tarihli dış nakit hareketleri ve eksiksiz işlem geçmişi gerekiyor.</p>`}
     <div class="small muted" style="margin:7px 0">${reasons.map(x=>`<div>• ${esc(x)}</div>`).join("")}</div>
+    <div class="small muted" style="margin:7px 0">${auditItems.map(x=>`<div>○ ${esc(x[0])}: ${esc(x[1])}</div>`).join("")}</div>
     <div class="pfstats"><div><span>Dış nakit hareketi</span><b class="num">${externalEntries.length}</b></div><div><span>Net nakit girişi</span><b class="num">${tl(netFunding,2)}</b></div></div>
     <p class="small muted">Dış nakit hareketleri: yalnız para yatırma ve çekme. Temettü, komisyon ve işlemler dış sermaye akışı değildir. Görünen açık/gerçekleşmiş K/Z yıllıklandırılmış XIRR/TWR değildir.</p></section>`;
   const groups=groupRows(rows),maxPosition=groups[0],maxWeight=val>0&&maxPosition?100*maxPosition.value/val:0;
