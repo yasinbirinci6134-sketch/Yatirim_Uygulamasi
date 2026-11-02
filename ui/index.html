@@ -3275,7 +3275,7 @@ if(window.__standalone){
           else v.insertAdjacentHTML("afterbegin",seg);
         } else v.insertAdjacentHTML("afterbegin",seg);
       } else {
-        v.innerHTML=modern?`<div class="studio-hm-strip"><span>Hisseler</span>${seg}</div><div class="st-view">${shortView()}</div>`:
+        v.innerHTML=modern?`<section class="card"><div class="horizon"><h2>Hisseler <span class="small muted">${(S.market?.stocks||[]).length}</span></h2>${seg}</div></section><div class="st-view">${shortView()}</div>`:
           seg+`<div class="st-view">${shortView()}</div>`;
         bindSt(v); prefetchScan((SH.d?.items||[]).filter(i=>i.score>=80).slice(0,15).map(i=>i.code));
       }
