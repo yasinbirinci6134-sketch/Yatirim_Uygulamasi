@@ -68,4 +68,8 @@ assert.equal(draft.positionsValue,null);
 assert.equal(draft.valuations.length,0);
 assert.ok(html.includes('id="pfEvidenceDraft"'));
 assert.deepEqual(sampleTrades.candidates,[{type:"buy",date:"2025-01-02",amount:120}],"draft must not mutate trades");
+assert.ok(html.includes("statementIsHistorical"),"returns must identify historical valuations");
+assert.ok(html.includes("Bu geçmiş tarihli getiri hesabıdır"),"stale returns cannot look current");
+assert.ok(html.includes("İşlem eşleştirmesi"),"legacy trades must be presented as matched when reconciled");
+assert.ok(html.includes("TWR verisi değildir"),"position-only historical chart is not total NAV");
 console.log("UI scripts and score-history tests passed");
