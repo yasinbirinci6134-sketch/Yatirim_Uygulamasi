@@ -2024,6 +2024,7 @@ function fpReturnEvidenceSheet(pf){
   <label>Ekstre verisi (JSON)<textarea id="pfEvidenceText" rows="9" maxlength="250000" style="width:100%;box-sizing:border-box;font:12px monospace" placeholder="Ekstre hareketlerini ve kapanış değerlemesini içeren JSON yapıştırın"></textarea></label>
   <details><summary class="small">CSV hareketlerini içe aktar</summary>
     <p class="small muted">Sütunlar: tarih;tür;tutar;referans. Örnek: 01.01.2025;Para yatırma;1.000,00;dekont-1. Kurum ekstresini kendin kontrol et; CSV, bakiye veya NAV doğrulamaz.</p>
+    <label class="small">CSV/TXT dosyasını seç<input id="pfCsvFile" type="file" accept=".csv,.txt,text/csv,text/plain" style="width:100%;margin:6px 0 8px"></label>
     <textarea id="pfCsvText" rows="4" maxlength="250000" style="width:100%;box-sizing:border-box;font:12px monospace" placeholder="tarih;tür;tutar;referans"></textarea>
     <button class="btn ghost sm" id="pfCsvApply" type="button">CSV hareketlerini aktar</button>
    </details>
@@ -2034,6 +2035,19 @@ function fpReturnEvidenceSheet(pf){
  const get=id=>sh.querySelector("#"+id),close=()=>{scrim.remove();sh.remove()};
  get("pfEvidenceText").value=old?JSON.stringify(old,null,2):"";
  get("pfEvidenceCancel").onclick=close;scrim.onclick=close;
+ get("pfCsvFile").onchange=async()=>{
+  const input=get("pfCsvFile"),file=input.files?.[0];
+  if(!file)return;
+  try{
+   if(file.size>250000)throw Error("Dosya 250 KB sınırını aşıyor.");
+   if(!/\.(csv|txt)$/i.test(file.name||""))throw Error("Yalnız CSV veya TXT dosyası seç.");
+   const raw=await file.text();
+   if(!raw.trim()||raw.length>250000)throw Error("Dosya boş veya çok uzun.");
+   get("pfCsvText").value=raw;
+   toast("CSV dosyası okundu. Kontrol etmek için 'CSV hareketlerini aktar' seç.");
+  }catch(e){toast(String(e.message||e),4500)}
+  finally{input.value="";}
+ };
  get("pfCsvApply").onclick=()=>{
   const imported=fpParseStatementCsv(get("pfCsvText").value);
   if(imported.errors.length){toast(imported.errors.slice(0,2).join("; "),4500);return;}
