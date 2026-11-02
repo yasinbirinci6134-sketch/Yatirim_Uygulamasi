@@ -2064,15 +2064,17 @@ function renderSanal(){
   const statementData=fpImportedStatement(pf.id);
   const statementToday=new Date(Date.now()+3*3600e3).toISOString().slice(0,10);
   const statementResult=statementData?fpComputeImportedReturns(statementData,legacyAudit,cashflows,val,statementToday):null;
+  const statementAsOf=statementData?.terminal?.date&&statementResult?.ledgerReady?statementData.terminal.date:null;
+  const statementIsHistorical=!!(statementAsOf&&statementAsOf<statementToday);
   const returnRequirements=[
-    {name:"İşlem geçmişi",ready:!hasLegacy&&legacyAudit.issues.length===0,detail:hasLegacy?"Eski işlemlerin nakit karşılığı doğrulanmalı":"Eski işlem kaydı yok"},
-    {name:"Dış nakit hareketleri",ready:verifiedFundingDates&&externalEntries.length>0,detail:externalEntries.length+" kayıt"},
-    {name:"Portföy değer geçmişi",ready:navSeries.length>1,detail:navSeries.length+" kayıt (pozisyon değeri; nakit dahil değil)"},
+    {name:"İşlem eşleştirmesi",ready:!!statementResult?.ledgerReady,detail:statementResult?.ledgerReady?"İşlem kayıtları yüklenen ekstreyle eşleşiyor":hasLegacy?"Alış/satış kayıtları ekstreyle eşleştirilmeli":"Doğrulanmış ekstre henüz yok"},
+    {name:"Kayıtlı dış nakit hareketleri",ready:verifiedFundingDates&&externalEntries.length>0,detail:externalEntries.length+" kullanıcı kaydı; bağımsız onay anlamına gelmez"},
+    {name:"Pozisyon grafiği (nakit hariç)",ready:navSeries.length>1,detail:navSeries.length+" pozisyon değeri kaydı; TWR verisi değildir"},
     {name:"Ekstre nakit mutabakatı",ready:!!statementResult?.ledgerReady,detail:statementResult?.ledgerReady?"Yüklenen ekstre ile kayıtlar eşleşiyor":"Ekstre veya tam işlem geçmişi eksik"},
     {name:"TWR için nakit dahil NAV",ready:statementResult?.twr!=null,detail:statementResult?.twr!=null?"Ekstre değerlemeleri karşılaştırıldı":"Dış nakit günlerinde toplam portföy değeri gerekli"}
   ];
   const metricStatus=`<section class="card"><div class="horizon"><h2>Gerçek getiri · Veri kontrolü</h2><button class="btn ghost sm" id="pfReturnImport">Ekstre yükle</button></div>
-    ${statementResult?.xirr!=null?`<div class="pfstats"><div><span>XIRR (yıllık)</span><b class="num">${pc(statementResult.xirr*100)}</b></div><div><span>TWR (toplam)</span><b class="num">${statementResult.twr!=null?pc(statementResult.twr*100):"—"}</b></div></div><p class="small muted">Yüklenen ekstre verilerine göre hesaplandı; ekstre kaynağının gerçekliği uygulama tarafından teyit edilemez.</p>`:
+    ${statementResult?.xirr!=null?`<div class="pfstats"><div><span>XIRR (yıllık)</span><b class="num">${pc(statementResult.xirr*100)}</b></div><div><span>TWR (toplam)</span><b class="num">${statementResult.twr!=null?pc(statementResult.twr*100):"—"}</b></div></div><p class="small muted">Ekstre kapanışı: ${esc(statementAsOf||"bilinmiyor")}. ${statementIsHistorical?"Bu geçmiş tarihli getiri hesabıdır; güncel portföy getirisi değildir. ":""}Ekstre kaynağının gerçekliği uygulama tarafından teyit edilemez.</p>`:
       `<p class="small muted">XIRR/TWR için eksiksiz ekstre ve nakit dahil portföy değerlemeleri gerekli. Gerçek dışı getiri sonucu gösterilmez.</p>`}
     ${statementResult?.errors?.length?`<div class="small muted">${statementResult.errors.slice(0,5).map(e=>`<div>• ${esc(e)}</div>`).join("")}</div>`:""}
     <div class="small muted" style="margin:7px 0">${returnRequirements.map(x=>`<div>${x.ready?"✓":"○"} ${esc(x.name)}: ${esc(x.detail)}</div>`).join("")}</div>
