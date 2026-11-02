@@ -5,7 +5,14 @@ Geri donus: backup/v41-before-v2-2026-11-02.
 
 ## Deneme APK
 GitHub Actions > "Fon Pusulasi 2.0 Test APK" > basarili son run > Artifacts >
-"Fon-Pusulasi-2-Preview-APK" ZIP dosyasini indir. ZIP'teki app-debug.apk'yi telefona yukle.
+"Fon-Pusulasi-2-Preview-APK" ZIP dosyasini indir. ZIP'teki
+"Fon-Pusulasi-2-Preview.apk" dosyasini telefona yukle.
+ZIP'te "Fon-Pusulasi-2-Preview-build.txt" ve
+"Fon-Pusulasi-2-Preview.apk.sha256" da vardir.
+Ilk dosyadaki commit ile denedigini dusundugun kaynak surumu ayni olmalidir.
+SHA-256 dosyasi APK'nin indirildikten sonra degismedigini kontrol etmek icindir.
+Alternatif: GitHub Releases > v2-preview-current > Fon-Pusulasi-2-Preview.apk.
+Releases etiketinin sabit oldugunu ve yeni basarili derlemelerde guncellendigini unut.
 Paket adi com.yasin.yatirimapp.preview oldugu icin ana uygulamayla yan yana kurulur.
 Debug sertifikasiyla imzali test uygulamasidir, magazaya uygun release surumu degildir.
 Test uygulamasi GitHub'dan feature/fon-pusulasi-v2-phase1 dalindaki arayuzu alir.
@@ -29,9 +36,34 @@ Test uygulamasi GitHub'dan feature/fon-pusulasi-v2-phase1 dalindaki arayuzu alir
 - Tarama veri dogrulama akisi degistirilmis olsa bile main dalindaki zamanlayici main'i kullanir;
   burada test edilebilir kaynak kodudur, canli akis degildir.
 
-## Testler
+## Ekstre yukleme
+Portfoy > Gercek getiri > Ekstre yukle > Taslak olustur:
+- Uygulamadaki mevcut alis/satis ve nakit hareketlerinden taslak olusturur.
+- Kurum adi, ekstre referansi, her hareketin referansi, acilis/kapanis nakdi,
+  son portfoy degeri ve nakit dahil NAV gecmisi kurum ekstresinden tamamlanmalidir.
+- Taslak kendi basina dogrulanmis hesaplama ya da banka ekstresi degildir.
+- JSON cihazdaki localStorage alaninda tutulur; hesap / kisi bilgisi ekleme.
+
+## APK derlemesini dogrulama
+GitHub Actions > Fon Pusulasi 2.0 Test APK > basarili calisma.
+Gecmis calismalarin testini incelemek icin ilgili is akisinin adimlarini ac.
+Build is akisinin sonuna .github/status/v2-preview-build.json durum dosyasi eklenmistir.
+Dosyadaki source_commit derlenen kaynak kodudur; yeni commit sonrasi eski
+basarili sonucu yeni surum olarak yorumlama.
+Arsiv, kaynak HTML'ye byte-byte esit arayuz paketi icermelidir.
+Eski bir is akisi devam ederken yeni commit olursa eskisi iptal edilir.
+
+## Otomatik testler
 node tools/data-quality.test.js
 node tools/quote-selection.test.js
 node tools/portfolio-engine.test.js
+node tools/return-metrics.test.js
+node tools/v2-ui.test.js
+node tools/twr.test.js
+node tools/external-flows.test.js
+node tools/ledger-reconcile.test.js
+node tools/legacy-trade-audit.test.js
+node tools/verified-returns.test.js
+node tools/ui-returns.test.js
 
-Bu komutlar her preview APK GitHub Actions derlemesinden once calistirilir.
+Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
