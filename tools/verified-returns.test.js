@@ -9,4 +9,8 @@ assert.equal(verifiedReturns({...args,ledgerEvidence:{complete:true}}).xirr,null
 assert.equal(verifiedReturns({...args,terminal:{date:"2026-01-01",value:1200}}).ready,false);
 const noNav=verifiedReturns({...args,navVerified:false});assert.equal(noNav.ready,false);assert.equal(noNav.twr,null);
 assert.ok(noNav.xirr!==null,"verified XIRR independent of TWR NAV availability");
+const mismatch=verifiedReturns({...args,valuations:[{date:"2025-01-01",value:1000},{date:"2025-12-30",value:1100}]});
+assert.equal(mismatch.twr,null);assert.equal(mismatch.ready,false);
+const extraFlow=verifiedReturns({...args,valuations:[{date:"2025-01-01",value:1000},{date:"2026-01-01",value:1100,externalFlow:100}]});
+assert.equal(extraFlow.twr,null);assert.equal(extraFlow.ready,false);
 console.log("verified returns tests passed");
