@@ -1320,7 +1320,7 @@ function fpQuote(code,base,scan){
   const daily=candidates.filter(c=>typeof c.v?.d1==="number"&&Number.isFinite(c.v.d1))
     .sort((a,b)=>ts(b.at)-ts(a.at))[0];
   return {price:winner?.v.price??null,d1:daily?.v.d1??null,
-    source:winner?.src||"none",priceAt:winner?.at||null,dailySource:daily?.src||"none"};
+    source:winner?.src||"none",priceAt:winner?.at?(typeof winner.at==="number"?new Date(winner.at).toISOString().slice(0,10):String(winner.at).slice(0,10)):null,dailySource:daily?.src||"none"};
 }
 const asset = code => (S.market?.funds||[]).find(f => f.code===code) || (()=>{ const x=(S.market?.stocks||[]).find(f=>f.code===code); if(x) return {...x, cat:"hisse", isStock:true}; const y=(S.market?.fx||[]).find(f=>f.code===code); return y ? {...y, isFx:true} : null; })();
 function toast(msg,ms){ document.querySelectorAll(".toast").forEach(x=>x.remove()); const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),ms||2600); }
