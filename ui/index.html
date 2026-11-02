@@ -2258,7 +2258,7 @@ function openLayout(){
 }
 
 /* ---------- Canlı fiyat (APK): hisse/endeks/döviz Yahoo (15 dk gecikmeli), fon fvt.com.tr; ücretsiz, yapay zekâ kullanmaz ---------- */
-const UI_VERSION="2026.11.02-34";
+const UI_VERSION="2026.11.02-35";
 const LIVE={ busy:false, primed:false, err:null, ok(){ try{ return !!(window.YatirimApp && typeof YatirimApp.http==="function"); }catch(_){ return false; } } };
 function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{ id=YatirimApp.http(method,url,body||"",JSON.stringify(hdr||{})); }catch(e){ return rej(e); }
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
@@ -3228,7 +3228,7 @@ if(window.__standalone){
   const stRow=it=>{ const own=(S.market?.stocks||[]).find(x=>x.code===it.code), inL=!!own, day=typeof own?.d1==="number"?own.d1:typeof S.live?.stocks?.[it.code]?.d1==="number"?S.live.stocks[it.code].d1:typeof it.d1==="number"?it.d1:null;
     return `<div class="fund lrow st-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div>
       <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${studioOn()?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${num(it.score,0)}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
-      ${(it.tags||[]).length?`<div class="st-tags">${it.tags.map(esc).join(" · ")}</div>`:""}</div>
+      ${!studioOn()&&(it.tags||[]).length?`<div class="st-tags">${it.tags.map(esc).join(" · ")}</div>`:""}</div>
       <div class="right"><div class="num lp">${it.price>0?Number(it.price).toLocaleString("tr-TR",{maximumFractionDigits:it.price<10?4:2}):"–"}</div>${day!=null?`<div class="small num ${cls(day)}">${pc(day,2)}</div>`:""}</div></div>`; };
   const mkText=mk=>!mk?"":mk.up?`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} üstünde. Kısa vadeli alım için ortam uygun; yine de küçük tutarla gir.`
     :`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} altında. Geçmişte böyle dönemlerde kısa vadeli alımlar kazandırmadı; şimdilik izlemek, piyasa toparlanınca girmek daha iyi.`;
@@ -3236,17 +3236,18 @@ if(window.__standalone){
     if(!d) return `<section class="card empty">Kısa vade listesi yükleniyor… (internet gerekir)</section>`;
     const strong=d.items.filter(i=>i.score>=80).slice(0,15), weak=d.items.filter(i=>i.score<20).sort((a,b)=>a.score-b.score).slice(0,10);
     const mine=(S.market?.stocks||[]).map(x=>{ const s=shortFor(x.code,x); return s?{code:x.code,name:x.name,price:x.price,score:s.score,tags:s.tags,f:s.f,d1:x.d1}:null; }).filter(Boolean).sort((a,b)=>b.score-a.score);
-    return `${mk?`<section class="card st-mk ${mk.up?"up":"down"}"><b>${mk.up?"Piyasa yükseliş eğiliminde":"Piyasa düşüş eğiliminde"}</b><p>${esc(mkText(mk))}</p></section>`:""}
+    return `${!studioOn()&&mk?`<section class="card st-mk ${mk.up?"up":"down"}"><b>${mk.up?"Piyasa yükseliş eğiliminde":"Piyasa düşüş eğiliminde"}</b><p>${esc(mkText(mk))}</p></section>`:""}
       <section class="card"><div class="horizon"><h2>Kısa vadede güçlü</h2><span class="small muted">BIST 100 · ${esc(fmtDate(d.asOf)||"")}</span></div>
-        <p class="small muted" style="margin:0 0 4px">Puan, hissenin BIST 100'deki diğer hisselere göre sırasıdır; en güçlü hisse her zaman 100'e yakın çıkar.${mk&&!mk.up?" Piyasa düşüşteyken yüksek puan 'al' demek değildir, 'diğerlerinden daha az düşüyor' demektir.":""}</p>
+        ${studioOn()?"":`<p class="small muted" style="margin:0 0 4px">Puan, hissenin BIST 100'deki diğer hisselere göre sırasıdır; en güçlü hisse her zaman 100'e yakın çıkar.${mk&&!mk.up?" Piyasa düşüşteyken yüksek puan 'al' demek değildir, 'diğerlerinden daha az düşüyor' demektir.":""}</p>`}
         ${strong.map(stRow).join("")||`<div class="empty">Şu an güçlü aday yok.</div>`}</section>
       ${mine.length?`<section class="card"><div class="horizon"><h2>Senin listendekiler</h2><span class="small muted">kısa vade puanı</span></div>${mine.map(stRow).join("")}</section>`:""}
       ${weak.length?`<section class="card"><details><summary class="code" style="cursor:pointer">Kısa vadede zayıf olanlar (${weak.length})</summary><p class="small muted" style="margin:6px 0">Bunlarda kısa vadeli alımdan kaçın.</p>${weak.map(stRow).join("")}</details></section>`:""}
-      <section class="card"><h3 style="margin-top:0">Nasıl kullanılır?</h3>
+      ${studioOn()&&mk?`<section class="card st-mk ${mk.up?"up":"down"}"><b>${mk.up?"Piyasa yükseliş eğiliminde":"Piyasa düşüş eğiliminde"}</b><p>${esc(mkText(mk))}</p></section>`:""}
+      <section class="card"><details ${studioOn()?"":"open"}><summary class="code">Nasıl kullanılır?</summary>
         <p class="why">Kısa vade puanı (0–100) mutlak bir not değil, sıralamadır: hissenin son aylardaki gidişini BIST 100'deki diğer hisselerle karşılaştırır. Bu yüzden piyasa ne durumda olursa olsun en iyiler 90'ların üstünde çıkar; ne zaman girileceğini piyasanın durumu söyler. Karşılaştırılanlar: son 1 yılda piyasadan güçlü mü, uzun vadeli ortalamasının üstünde mi, 1 yıllık fiyat aralığının neresinde, ne kadar dalgalı. 80 ve üstü en iyi %20'dir.</p>
         <p class="why"><b>Kural:</b> Birikiminin küçük bir kısmıyla (en fazla %10) gir, en fazla 1 ay tut, aldığın fiyattan %8 düşerse sat. Piyasa düşüş eğilimindeyken girme.</p>
         <p class="why"><b>Geçmişte nasıl çalıştı (2017–2026):</b> En yüksek puanlı 5 hisseyle 680 geçmiş işlem denendi: sinyalden sonraki gün alış, %8 zarar-kes, işlem başına %0,3 maliyet. 20 işlem gününde ortalama getiri %5,0; aynı hisselerin ortalamasından 1,2 puan fazla. İşlemlerin %56'sı kârla kapandı (ortalama +%15), %44'ü zararla (ortalama −%8); %31'i en az %10 kazandırdı. 2023–2024'te model hisselerin ortalamasının gerisinde kaldı.</p>
-        <p class="why"><b>Dikkat:</b> %8 zarar-kes kaybı her zaman %8'de durdurmaz; sert düşüşte ya da boşlukla açılışta en kötü işlemde kayıp %29'a ulaştı. Geçmiş testte bugün borsada olan hisseler kullanıldı; gelecekte aynı sonuç garanti değildir.</p></section>`; }
+        <p class="why"><b>Dikkat:</b> %8 zarar-kes kaybı her zaman %8'de durdurmaz; sert düşüşte ya da boşlukla açılışta en kötü işlemde kayıp %29'a ulaştı. Geçmiş testte bugün borsada olan hisseler kullanıldı; gelecekte aynı sonuç garanti değildir.</p></details></section>`; }
   // Listede olmayan hisse: aynı detay ekranı; fiyat geçmişi, bilanço ve analist verisi çekilip puan aynı formülle hesaplanır
   // Listede olmayan hisse için kalem: tarama verisiyle hemen, fiyat geçmişi/bilanço/analist arkadan (önceden de çekilir)
   function scanItem(code){ S.scanItems=S.scanItems||[]; let x=S.scanItems.find(z=>z.code===code); if(x) return x; const it=SH.d?.items.find(i=>i.code===code);
