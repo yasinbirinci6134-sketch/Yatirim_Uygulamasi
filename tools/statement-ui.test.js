@@ -83,6 +83,20 @@ for(const [id,value] of Object.entries({
 }))formSheet.querySelector("#"+id).value=value;
 formSheet.querySelector("#pfEvidenceSave").onclick();
 assert.deepEqual(getHandlers.fpImportedStatement("pf1"),real,"form fields must merge into final checked statement");
+// Form-first flow never needs hand-written JSON, but guessed trades lack
+// institution references and must fail visibly without replacing old evidence.
+getHandlers.fpReturnEvidenceSheet({id:"pf2",name:"Form testi"});
+const simpleSheet=elements.filter(el=>el.tag==="div"&&el.innerHTML.includes('id="pfEvidenceInstitution"')).at(-1);
+assert.equal(simpleSheet.querySelector("#pfEvidenceText").value,"");
+for(const [id,value] of Object.entries({
+ pfEvidenceInstitution:"Broker",pfEvidenceReference:"Döküm",pfEvidenceOpening:"0",
+ pfEvidenceClosing:"200",pfEvidenceAsOf:"2026-01-01",
+ pfEvidenceHoldings:"900",pfEvidenceNav:"1100"
+}))simpleSheet.querySelector("#"+id).value=value;
+simpleSheet.querySelector("#pfEvidenceSave").onclick();
+assert.equal(getHandlers.fpImportedStatement("pf2"),null,"form-only draft must not bypass independent transaction references");
+assert.ok(String(simpleSheet.querySelector("#pfEvidenceIssues").textContent||"").length>0,
+ "reconciliation errors should remain visible in the form");
 console.log("statement modal interaction tests passed");
 (async()=>{
  const fresh=elements.length;
