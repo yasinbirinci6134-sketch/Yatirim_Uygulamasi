@@ -1936,6 +1936,15 @@ function fpStoreStatement(pfId,obj){
  if(obj===null)delete all[S.uid+":"+pfId];else all[S.uid+":"+pfId]=obj;
  localStorage.setItem(FP_IMPORT_KEY,JSON.stringify(all));
 }
+/* Create a local worksheet from portfolio records, not independent evidence. */
+function fpStatementDraft(audit,cashflows){
+ const movements=[...(audit?.candidates||[]),...(cashflows||[])].filter(x=>x&&typeof x==="object");
+ const events=movements.map((x,i)=>({
+  id:"draft-"+(i+1),reference:"",type:x.type||"",date:x.date||"",amount:Number.isFinite(x.amount)?Math.round(x.amount*100)/100:null
+ })).sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
+ return {source:{institution:"",reference:""},openingCash:null,terminalCash:null,positionsValue:null,
+  terminal:{date:"",value:null},events,valuations:[]};
+}
 function fpReturnEvidenceSheet(pf){
  const old=fpImportedStatement(pf.id),scrim=document.createElement("div"),sh=document.createElement("div");
  scrim.className="scrim";sh.className="sheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-label","Ekstre verisiyle getiri hesaplama");
@@ -1944,11 +1953,20 @@ function fpReturnEvidenceSheet(pf){
   <p class="small muted">Yalnız bu portföyün işlemleriyle birebir eşleşen, kurum ekstresinden alınmış tarihli hareket ve bakiye verilerini kullan. Kopyalanan JSON sadece bu cihazda saklanır; otomatik olarak dışarı gönderilmez. Kaynağın gerçekliğini uygulama doğrulayamaz. İsim, hesap numarası veya başka kişisel bilgi ekleme.</p>
   <label>Ekstre verisi (JSON)<textarea id="pfEvidenceText" rows="9" maxlength="250000" style="width:100%;box-sizing:border-box;font:12px monospace" placeholder="Ekstre hareketlerini ve kapanış değerlemesini içeren JSON yapıştırın"></textarea></label>
   <details><summary class="small">Beklenen veri yapısı</summary><pre class="small" style="white-space:pre-wrap;word-break:break-word">${esc(JSON.stringify(example,null,2))}</pre></details>
-  <div class="row"><button class="btn ghost sm" id="pfEvidenceCancel">Kapat</button><button class="btn ghost sm" id="pfEvidenceDelete">Veriyi sil</button><button class="btn sm" id="pfEvidenceSave">Kontrol et ve kaydet</button></div>`;
+  <p class="small muted">Taslak, uygulamadaki işlem tarihleri ve tutarlarıyla oluşturulur. Ekstre referansları, açılış/kapanış nakdi ve nakit dahil NAV boş bırakılır; bunları gerçek kurum ekstresinden tamamlamalısın.</p>
+  <div class="row"><button class="btn ghost sm" id="pfEvidenceCancel">Kapat</button><button class="btn ghost sm" id="pfEvidenceDraft">Taslak oluştur</button><button class="btn ghost sm" id="pfEvidenceDelete">Veriyi sil</button><button class="btn sm" id="pfEvidenceSave">Kontrol et ve kaydet</button></div>`;
  document.body.append(scrim,sh);
  const get=id=>sh.querySelector("#"+id),close=()=>{scrim.remove();sh.remove()};
  get("pfEvidenceText").value=old?JSON.stringify(old,null,2):"";
  get("pfEvidenceCancel").onclick=close;scrim.onclick=close;
+ get("pfEvidenceDraft").onclick=()=>{
+  const textArea=get("pfEvidenceText");
+  if(textArea.value.trim()&&!confirm("Metin alanındaki veriler taslakla değiştirilsin mi? Kaydedilmiş ekstre bu işlemle değişmez."))return;
+  const audit=fpLegacyAudit(pfTrades(pf)),cash=(S.cashflows||[]).filter(x=>x.pf===pf.id);
+  const draft=fpStatementDraft(audit,cash),json=JSON.stringify(draft,null,2);
+  if(json.length>250000){toast("Taslak çok büyük. İşlemleri parçalar halinde kontrol et.");return;}
+  textArea.value=json;textArea.focus();toast("Taslak hazır. Ekstreyle tamamlamadan kaydedilemez.");
+ };
  get("pfEvidenceDelete").onclick=()=>{if(!old)return close();if(!confirm("Bu portföye ait yerel ekstre verisini silmek istiyor musun?"))return;try{fpStoreStatement(pf.id,null);close();renderSanal()}catch(_){toast("Silinemedi.")}};
  get("pfEvidenceSave").onclick=()=>{
   try{
