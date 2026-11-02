@@ -7,4 +7,6 @@ assert.equal(timeWeightedReturn([{date:"2026-01-01",value:0},{date:"2026-02-01",
 assert.equal(timeWeightedReturn([{date:"2026-01-01",value:1000},{date:"2026-01-01",value:1100}]),null);
 assert.equal(timeWeightedReturn([{date:"2026-01-01",value:1000}]),null);
 assert.equal(timeWeightedReturn([{date:"2026-02-30",value:100},{date:"2026-03-01",value:110}]),null);
+assert.equal(timeWeightedReturn([{date:"2026-01-01",value:100},null]),null);
+assert.equal(timeWeightedReturn([{date:"2026-01-01",value:100},{date:"2026-02-01",value:Infinity}]),null);
 console.log("TWR tests passed");
