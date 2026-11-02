@@ -9,7 +9,9 @@ function externalFlows(events,terminal,{complete=false}={}){
  if(!complete) errors.push("external funding ledger not marked complete");
  if(!terminal||!validDate(terminal.date)||!(Number.isFinite(terminal.value)&&terminal.value>=0))errors.push("invalid terminal valuation");
  const investor=[];
- for(const e of events||[]){
+ if(!Array.isArray(events))return {ready:false,errors:["cash movements must be an array"],flows:[]};
+ for(const e of events){
+  if(!e||typeof e!=="object"){errors.push("invalid cash movement");continue;}
   if(!validDate(e.date)||!Number.isFinite(e.amount)||e.amount<=0){errors.push("invalid cash movement");continue;}
   if(e.type==="deposit")investor.push({date:e.date,amount:-e.amount});
   else if(e.type==="withdrawal")investor.push({date:e.date,amount:e.amount});
