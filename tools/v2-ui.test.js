@@ -13,7 +13,7 @@ const out=score(snaps,5);
 assert.equal(out.count,1);assert.equal(out.positive,1);assert.ok(Math.abs(out.avg-20)<1e-7);
 assert.ok(Math.abs(out.relativeAvg-10)<1e-7);
 assert.equal(score(snaps.slice(0,5),5).count,0);
-const auditStart=html.indexOf("function fpLegacyAudit("),auditEnd=html.indexOf("\\nfunction renderSanal()",auditStart);
+const auditStart=html.indexOf("function fpLegacyAudit("),auditEnd=html.indexOf("function renderSanal()",auditStart);
 assert.ok(auditStart>0&&auditEnd>auditStart);
 const audit=new Function(html.slice(auditStart,auditEnd)+";return fpLegacyAudit;")();
 const review=audit([{id:"one",code:"ABC",amount:100,price:10,buyDate:"2026-01-01",status:"closed",sellPrice:12,sellDate:"2026-02-01"}]);
