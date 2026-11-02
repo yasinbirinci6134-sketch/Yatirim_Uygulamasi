@@ -7,4 +7,7 @@ assert.equal(externalFlows(events,t).ready,false);
 const x=externalFlows(events,t,{complete:true});
 assert.equal(x.ready,true);assert.deepEqual(x.flows.map(f=>f.amount),[-1000,200,1200]);
 assert.equal(externalFlows([{type:"deposit",date:"bad",amount:100}],t,{complete:true}).ready,false);
+assert.equal(externalFlows([{type:"deposit",amount:1000,date:"2026-02-30"}],t,{complete:true}).ready,false);
+assert.equal(externalFlows([{type:"deposit",amount:1000,date:"2027-01-01"}],t,{complete:true}).ready,false);
+assert.equal(externalFlows([{type:"deposit",amount:1000,date:"2026-01-01"}],t,{complete:true}).ready,false);
 console.log("external-flows tests passed");
