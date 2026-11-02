@@ -1866,6 +1866,17 @@ function fpLegacyAudit(trades){
  }
  return {candidates,issues,verified:false};
 }
+function fpAuditReport(name,audit,cashflows){
+ const lines=["Fon Pusulası 2.0 - Nakit doğrulama raporu","Portföy: "+String(name||""),"","Eski işlem adayları - BANKA DOĞRULAMASI YOK","Tür;Tarih;Tutar TL;Referans"];
+ for(const x of audit.candidates||[])lines.push([x.type,x.date,Number(x.amount).toFixed(2),x.id].join(";"));
+ lines.push("","Kaydedilmiş nakit hareketleri - KULLANICI KAYDI","Tür;Tarih;Tutar TL;Referans");
+ for(const x of cashflows||[])lines.push([x.type,x.date,Number(x.amount).toFixed(2),x.id||""].join(";"));
+ lines.push("","Eksikler");
+ for(const x of audit.issues||[])lines.push("- "+x);
+ lines.push("- Açılış ve bitiş nakdi bağımsız doğrulanmalı.");
+ lines.push("- Alış/satış kapsamı doğrulanmalı. Bu rapor XIRR/TWR doğrulaması değildir.");
+ return lines.join("\n");
+}
 function renderSanal(){
   const tl2=n=>tl(n,2);
   const v=$("v-sanal");
@@ -1895,7 +1906,7 @@ function renderSanal(){
   const totalPnl=pnl+realized, costAll=inv+closed.reduce((s,t)=>s+t.amount,0);
   const allPfTrades=pfTrades(pf),hasLegacy=allPfTrades.length>0;
   const legacyAudit=fpLegacyAudit(allPfTrades);
-  const legacyAuditCard=`<section class="card"><div class="horizon"><h2>Eski işlem denetimi</h2><span class="small muted">Kontrol amaçlı</span></div>
+  const legacyAuditCard=`<section class="card"><div class="horizon"><h2>Eski işlem denetimi</h2><button class="btn ghost sm" id="pfAuditShare">Rapor paylaş</button></div>
     <div class="pfstats"><div><span>İşlem kaydı</span><b class="num">${allPfTrades.length}</b></div><div><span>Olası nakit kaydı</span><b class="num">${legacyAudit.candidates.length}</b></div><div><span>Eksik/hatalı kayıt</span><b class="num">${legacyAudit.issues.length}</b></div></div>
     ${legacyAudit.issues.length?`<div class="small muted">${legacyAudit.issues.slice(0,8).map(x=>`<div>• ${esc(x)}</div>`).join("")}${legacyAudit.issues.length>8?"<div>• Diğer sorunlar da mevcut.</div>":""}</div>`:""}
     <p class="small muted">Alış/satış tarihleri ve tutarlarından yalnızca kontrol amaçlı adaylar çıkarıldı. Banka hareketleri doğrulanmadığı için otomatik nakit bakiyesi, XIRR veya TWR hesabına eklenmez.</p></section>`;
@@ -1971,6 +1982,13 @@ function renderSanal(){
     <div id="planBox" style="display:flex;flex-direction:column;gap:inherit"></div>`;
   bindPf(pf);
   $("goAdd").onclick = () => openBuy(null);
+  $("pfAuditShare").onclick=()=>{
+    const report=fpAuditReport(pf.name,legacyAudit,cashflows);
+    if(window.YatirimApp&&typeof window.YatirimApp.share==="function")window.YatirimApp.share(report,"Fon Pusulası nakit doğrulama");
+    else if(navigator.share)navigator.share({title:"Fon Pusulası nakit doğrulama",text:report}).catch(()=>{});
+    else if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(report).then(()=>toast("Rapor kopyalandı.")).catch(()=>toast("Rapor paylaşılamadı."));
+    else toast("Bu cihazda paylaşım kullanılamıyor.");
+  };
   $("pfCashAdd").onclick=()=>openCashflow(pf);
   $("pfNoteAdd").onclick=()=>openInvestmentNote(pf);
   v.querySelectorAll("[data-notedel]").forEach(b=>b.onclick=async()=>{if(!confirm("Bu not silinsin mi?"))return;try{await tradesCol().doc(b.dataset.notedel).delete();}catch(e){toast("Silinemedi.");}});
