@@ -85,4 +85,7 @@ assert.equal(trusted([{...dated,curDate:"2026-10-27"}],"2026-11-03"),300);
 assert.ok(Number.isNaN(trusted([{...dated,curDate:"2026-11-04"}],"2026-11-03")));
 assert.equal(trusted([],"2026-11-03"),0);
 assert.ok(html.includes("fpComputeImportedReturns(statementData,legacyAudit,cashflows,trustedHoldings"));
+assert.ok(html.includes("x.priced===true"),"legacy position snapshots must not pose as verified quotes");
+assert.ok(html.includes("if(Number.isFinite(snapshotVal))fpPortSnapshot"),"only externally priced holdings should be recorded");
+assert.ok(html.includes("Bu bir TWR/NAV grafiği değildir"),"position charts must distinguish from return metrics");
 console.log("UI scripts and score-history tests passed");
