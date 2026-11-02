@@ -1860,6 +1860,7 @@ function fpComputeImportedReturns(data,audit,cashflows,liveHoldings,today){
  if(!Array.isArray(data.events)||!data.events.length)missing("Ekstre işlem listesi eksik");
  if(!data.terminal||!validDate(data.terminal.date)||!Number.isFinite(data.terminal.value)||data.terminal.value<0)missing("Kapanış portföy değerlemesi eksik");
  if(!Number.isFinite(data.positionsValue)||data.positionsValue<0)missing("Pozisyon değerlemesi eksik");
+ if(validDate(today)&&validDate(data.terminal?.date)&&data.terminal.date>today)missing("Kapanış tarihi gelecekte olamaz");
  if(audit?.issues?.length)missing("Eski işlem denetiminde giderilmemiş hatalar var");
  if(!Array.isArray(audit?.candidates)||!Array.isArray(cashflows))missing("Portföy kayıtları okunamadı");
  if(errors.length)return fail();
@@ -1867,6 +1868,7 @@ function fpComputeImportedReturns(data,audit,cashflows,liveHoldings,today){
  let running=data.openingCash;
  for(const e of events){
   if(!e||!validDate(e.date)||!validAmount(e.amount)||!Object.prototype.hasOwnProperty.call(signs,e.type)||typeof e.id!=="string"||!e.id.trim()||ids.has(e.id)||typeof e.reference!=="string"||!e.reference.trim()){missing("Geçersiz, tekrarlanan veya referanssız ekstre hareketi");continue}
+  if(e.date>data.terminal.date)missing("Kapanış değerlemesinden sonraki işlemler ekstreye dahil edilmiş");
   ids.add(e.id);running=Math.round((running+e.amount*signs[e.type])*100)/100;
   if(running< -0.005)missing("Ekstrede negatif nakit bakiyesi");
  }
