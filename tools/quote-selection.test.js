@@ -19,4 +19,8 @@ const mixed=fn({live:{stocks:{ABC:{price:999,at:"2026-11-02"}},fx:{ABC:{price:43
 assert.equal(mixed("ABC",{isFx:true,price:40,priceDate:"2026-11-01"},null).price,43);
 assert.equal(mixed("FND",{cat:"altin",price:4,priceDate:"2026-11-01"},null).price,5);
 assert.equal(mixed("ABC",{isStock:true,price:40,priceDate:"2026-11-01"},null).price,950);
+const dated=fn({live:{stocks:{ABC:{price:110,d1:2,at:"2026-11-02T12:00:00Z"}}}}, {shortQuotes:{ABC:{p:111,t:Date.parse("2026-11-02T12:01:00Z")}}});
+const oldDaily=dated("ABC",{isStock:true,price:100,d1:8,priceDate:"2026-10-01"},null);
+assert.equal(oldDaily.price,111);
+assert.equal(oldDaily.d1,2);
 console.log("quote selection tests passed");
