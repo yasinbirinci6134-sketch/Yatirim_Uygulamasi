@@ -1,0 +1,10 @@
+"use strict";
+const assert=require("node:assert/strict");
+const {reconcileLedger}=require("./ledger-reconcile");
+const events=[{type:"deposit",amount:1000,date:"2026-01-01"},{type:"buy",amount:800,date:"2026-01-02"},{type:"dividend",amount:30,date:"2026-02-01"},{type:"sell",amount:850,date:"2026-03-01"},{type:"fee",amount:10,date:"2026-03-02"}];
+assert.deepEqual(reconcileLedger({events,terminalCash:1070,complete:true}).ready,true);
+assert.equal(reconcileLedger({events,terminalCash:1070}).ready,false);
+assert.equal(reconcileLedger({events,terminalCash:1100,complete:true}).ready,false);
+assert.equal(reconcileLedger({events:[{type:"buy",date:"2026-01-01",amount:100}],terminalCash:0,complete:true}).ready,false);
+assert.equal(reconcileLedger({events:[{type:"deposit",date:"2026-02-30",amount:10}],terminalCash:10,complete:true}).ready,false);
+console.log("ledger reconciliation tests passed");
