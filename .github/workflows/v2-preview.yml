@@ -1,0 +1,37 @@
+name: Fon Pusulasi 2.0 Test APK
+on:
+  push:
+    branches:
+      - feature/fon-pusulasi-v2-phase1
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Portfolio and quote tests
+        run: |
+          node tools/data-quality.test.js
+          node tools/quote-selection.test.js
+          node tools/portfolio-engine.test.js
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Build independently installable preview
+        run: gradle assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Fon-Pusulasi-2-Preview-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
