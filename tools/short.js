@@ -21,7 +21,7 @@ async function closes(sym){ const o=await get(`https://query1.finance.yahoo.com/
   const items=[]; let i=0;
   await Promise.all([0,1,2].map(async()=>{ while(i<UNIVERSE.length){ const code=UNIVERSE[i++]; const s=await closes(code+'.IS'); await sl(250);
     if(!s||s.c.length<210) continue; const f=SHORT.feat(s.c); if(!f) continue; const n=s.c.length;
-    items.push({code,name:s.name,price:+s.c[n-1].toFixed(4),date:new Date(s.t[n-1]*1000+3*3600e3).toISOString().slice(0,10),f:Object.fromEntries(Object.entries(f).map(([k,v])=>[k,+(+v).toFixed(5)]))}); } }));
+    items.push({code,name:s.name,price:+s.c[n-1].toFixed(4),d1:s.c[n-2]>0?+((s.c[n-1]/s.c[n-2]-1)*100).toFixed(2):null,date:new Date(s.t[n-1]*1000+3*3600e3).toISOString().slice(0,10),f:Object.fromEntries(Object.entries(f).map(([k,v])=>[k,+(+v).toFixed(5)]))}); } }));
   if(items.length<50){ console.error('az hisse:',items.length); process.exit(1); }
   const F=items.map(x=>x.f); items.forEach(x=>x.cv=+SHORT.comp(x.f,F).toFixed(5)); const C=items.map(x=>x.cv); items.forEach(x=>{ x.score=SHORT.score(x.cv,C); x.tags=SHORT.tags(x.f,F); });
   items.sort((p,q)=>q.score-p.score);
