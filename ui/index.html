@@ -1910,23 +1910,20 @@ function renderSanal(){
   // These are audit indicators, not authorization to publish XIRR/TWR.
   const navSeries=(fpPortSeries()[pf.id]||[]).filter(x=>x&&typeof x.day==="string"&&Number.isFinite(x.value));
   const verifiedFundingDates=externalEntries.every(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.date||""));
-  const auditChecks=[
-   {name:"Eski işlem eşleştirmesi",ok:!hasLegacy&&legacyAudit.issues.length===0,detail:hasLegacy?"Eski alım/satımların banka hareketleri henüz doğrulanmadı":"Eski işlem bulunmuyor"},
-   {name:"Dış nakit hareketi",ok:verifiedFundingDates&&externalEntries.length>0,detail:externalEntries.length?externalEntries.length+" tarihli hareket kaydı":"Para yatırma/çekme kaydı yok"},
-   {name:"Günlük değer geçmişi",ok:navSeries.length>1,detail:navSeries.length+" farklı gün kaydı"},
-   {name:"Bağımsız nakit mutabakatı",ok:false,detail:"Açılış ve kapanış nakdi doğrulanmadı"}
+  // Historical trades and account cash are not independently certified.
+  // Show exact missing prerequisites; never publish synthetic annualized returns.
+  const returnRequirements=[
+    {name:"İşlem geçmişi",ready:!hasLegacy&&legacyAudit.issues.length===0,detail:hasLegacy?"Eski işlemlerin nakit karşılığı doğrulanmalı":"Eski işlem kaydı yok"},
+    {name:"Dış nakit hareketleri",ready:verifiedFundingDates&&externalEntries.length>0,detail:externalEntries.length+" kayıt"},
+    {name:"Portföy değer geçmişi",ready:navSeries.length>1,detail:navSeries.length+" kayıt (pozisyon değeri; nakit dahil değil)"},
+    {name:"Bağımsız nakit mutabakatı",ready:false,detail:"Açılış/bitiş nakdi ve alım-satım kapsamı doğrulanmadı"},
+    {name:"TWR için nakit dahil NAV",ready:false,detail:"Tüm nakit hareketi tarihlerinde toplam portföy değeri gerekli"}
   ];
-  const ledgerReady=false; // Never infer readiness merely from locally entered records.
-  const auditItems=[["Başlangıç nakdi","Bağımsız başlangıç bakiyesi eksik"],["İşlem kapsamı","Alış ve satışların eksiksizliği doğrulanmadı"],["Bitiş nakdi","Bağımsız nakit bakiyesi doğrulanmadı"],["TWR değerleme geçmişi","Nakit hareketleriyle eşzamanlı toplam portföy değerleri eksik"]];
-
-  const metricStatus=`<section class="card"><div class="horizon"><h2>Gerçek getiri · Veri kontrolü</h2><span class="small muted">${ledgerReady?"Doğrulandı":"Tam doğrulanmadı"}</span></div>
-    ${ledgerReady?`<p class="small muted">Para yatırma kayıtları var; ancak günlük toplam portföy değerleri ve alış/satış nakit kayıtları olmadan XIRR/TWR hesaplaması yayınlanmaz.</p>`:
-    `<p class="small muted">${hasLegacy?"Önceki alım/satım kayıtları nakit defterinde eksik. ":""}${!flowDates?"Bazı nakit hareketlerinde tarih eksik. ":""}${closedWithoutCost?"Kapanmış işlemlerden bazıları için maliyet veya satış bilgisi eksik. ":""}Gerçek getiri göstermek için tarihli dış nakit hareketleri ve eksiksiz işlem geçmişi gerekiyor.</p>`}
-    <div class="small muted" style="margin:7px 0">${reasons.map(x=>`<div>• ${esc(x)}</div>`).join("")}</div>
-    <div class="small muted" style="margin:7px 0">${auditItems.map(x=>`<div>○ ${esc(x[0])}: ${esc(x[1])}</div>`).join("")}</div>
-    <div class="small muted" style="margin:7px 0">${auditChecks.map(x=>`<div>${x.ok?"✓":"○"} ${esc(x.name)}: ${esc(x.detail)}</div>`).join("")}</div>
+  const metricStatus=`<section class="card"><div class="horizon"><h2>Gerçek getiri · Veri kontrolü</h2><span class="small muted">Doğrulanmadı</span></div>
+    <p class="small muted">XIRR ve TWR henüz hesaplanmıyor. Eski alım/satım kayıtları ile bağımsız nakit bakiyesi doğrulanmadan bir getiri oranı göstermek yanıltıcı olur.</p>
+    <div class="small muted" style="margin:7px 0">${returnRequirements.map(x=>`<div>${x.ready?"✓":"○"} ${esc(x.name)}: ${esc(x.detail)}</div>`).join("")}</div>
     <div class="pfstats"><div><span>Dış nakit hareketi</span><b class="num">${externalEntries.length}</b></div><div><span>Net nakit girişi</span><b class="num">${tl(netFunding,2)}</b></div></div>
-    <p class="small muted">Dış nakit hareketleri: yalnız para yatırma ve çekme. Temettü, komisyon ve işlemler dış sermaye akışı değildir. Görünen açık/gerçekleşmiş K/Z yıllıklandırılmış XIRR/TWR değildir.</p></section>`;
+    <p class="small muted">Pozisyon grafiği nakit içermiyor ve TWR için kullanılamaz. Açık/gerçekleşmiş kâr-zarar, yıllıklandırılmış XIRR/TWR değildir.</p></section>`;
   const groups=groupRows(rows),maxPosition=groups[0],maxWeight=val>0&&maxPosition?100*maxPosition.value/val:0;
   const riskBlock=`<section class="card"><div class="horizon"><h2>Portföy risk radarı</h2></div>
    <div class="pfstats"><div><span>Farklı varlık</span><b class="num">${groups.length}</b></div>
