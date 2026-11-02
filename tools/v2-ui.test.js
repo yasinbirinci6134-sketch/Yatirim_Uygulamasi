@@ -46,7 +46,7 @@ for(const tradeSet of [
 }
 const sourceReturns=fs.readFileSync(path.join(__dirname,"ui-returns.js"),"utf8").trim();
 const inlineStart=html.indexOf("/* Browser and Node shared audit");
-const inlineEnd=html.indexOf("const FP_IMPORT_KEY=",inlineStart);
+const inlineEnd=html.indexOf('"use strict";\\n/* Strict, all-or-nothing conversion',inlineStart);
 assert.ok(inlineStart>0&&inlineEnd>inlineStart);
 assert.equal(html.slice(inlineStart,inlineEnd).trim(),sourceReturns,"WebView and test engine must use identical return calculator");
 assert.ok(html.includes('id="pfReturnImport"'),"evidence import control must be visible");
