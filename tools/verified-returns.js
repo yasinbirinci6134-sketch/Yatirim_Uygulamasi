@@ -25,7 +25,7 @@ function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=nul
   if(first?.date!==events.filter(e=>e.type==="deposit").map(e=>e.date).sort()[0])errors.push("opening NAV must match first deposit date");
   if(ordered.some(p=>!p||!Number.isFinite(p.value)||p.value<0||typeof p.date!=="string"))errors.push("invalid NAV records");
   if(new Set(ordered.map(p=>p?.date)).size!==ordered.length)errors.push("duplicate NAV dates");
-  if(!first||!last||last.date!==terminal.date||Math.abs(last.value-terminal.value)>0.01)errors.push("TWR ending valuation differs from verified terminal NAV");
+  if(!first||!last||last.date!==terminal.date||!Number.isFinite(last.value)||Math.abs(last.value-terminal.value)>0.01)errors.push("TWR ending valuation differs from verified terminal NAV");
   if(first&&!(Number.isFinite(first.value)&&first.value>0))errors.push("TWR opening NAV unverified");
   const navDates=new Set(ordered.map(p=>p?.date));
   for(const e of events)if((e.type==="deposit"||e.type==="withdrawal")&&!navDates.has(e.date))errors.push("external cashflow date lacks contemporaneous NAV");
