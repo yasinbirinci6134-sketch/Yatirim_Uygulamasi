@@ -26,7 +26,7 @@ function fpComputeImportedReturns(data,audit,cashflows,liveHoldings,today){
  }
  if(Math.abs(running-data.terminalCash)>0.01)missing("Ekstre kapanış nakdi tutmuyor");
  if(Math.abs(data.positionsValue+data.terminalCash-data.terminal.value)>0.01)missing("Nakit ve pozisyon toplamı portföy değerine eşit değil");
- if(validDate(today)&&data.terminal.date===today&&Number.isFinite(liveHoldings)&&Math.abs(liveHoldings-data.positionsValue)>0.01)missing("Bugünkü pozisyon değeri uygulamayla uyuşmuyor");
+ if(validDate(today)&&data.terminal.date===today&&(!Number.isFinite(liveHoldings)||liveHoldings<0||Math.abs(liveHoldings-data.positionsValue)>0.01))missing("Bugünkü pozisyon değeri uygulamada doğrulanamıyor veya uyuşmuyor");
  const expected=[...(audit.candidates||[]),...cashflows].map(x=>({type:x.type,date:x.date,amount:x.amount}));
  const used=new Set();
  for(const x of expected){
