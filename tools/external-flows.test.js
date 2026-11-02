@@ -1,0 +1,10 @@
+"use strict";
+const assert=require("node:assert/strict");
+const {externalFlows}=require("./external-flows");
+const events=[{type:"deposit",amount:1000,date:"2025-01-01"},{type:"buy",amount:800,date:"2025-01-02"},{type:"dividend",amount:100,date:"2025-03-01"},{type:"withdrawal",amount:200,date:"2025-06-01"}];
+const t={date:"2026-01-01",value:1200};
+assert.equal(externalFlows(events,t).ready,false);
+const x=externalFlows(events,t,{complete:true});
+assert.equal(x.ready,true);assert.deepEqual(x.flows.map(f=>f.amount),[-1000,200,1200]);
+assert.equal(externalFlows([{type:"deposit",date:"bad",amount:100}],t,{complete:true}).ready,false);
+console.log("external-flows tests passed");
