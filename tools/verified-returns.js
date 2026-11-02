@@ -19,7 +19,7 @@ function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=nul
  if(!errors.length){rate=xirr(flows.flows);if(rate===null)errors.push("XIRR undefined or ambiguous");}
  let twr=null;
  if(navVerified&&errors.length===0&&Array.isArray(valuations)&&valuations.length>=2){
-  const ordered=[...valuations].sort((a,b)=>String(a?.date||"").localeCompare(String(b?.date||""));
+  const ordered=[...valuations].sort((a,b)=>String(a?.date||"").localeCompare(String(b?.date||"")));
   const first=ordered[0],last=ordered[ordered.length-1];
   if(!first||!last||last.date!==terminal.date||Math.abs(last.value-terminal.value)>0.01)errors.push("TWR ending valuation differs from verified terminal NAV");
   if(first&&!(Number.isFinite(first.value)&&first.value>0))errors.push("TWR opening NAV unverified");
