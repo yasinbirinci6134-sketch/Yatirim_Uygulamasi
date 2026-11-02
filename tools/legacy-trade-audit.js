@@ -12,7 +12,7 @@ function auditLegacyTrades(trades=[]){
   if(!validDate(day)||!(Number.isFinite(t.amount)&&t.amount>0)){errors.push("invalid buy date or amount: "+t.id);continue;}
   candidates.push({id:"legacy-buy:"+t.id,type:"buy",date:day,amount:t.amount,source:"legacy",verified:false});
   if(t.status==="closed"){
-   if(!validDate(t.sellDate)||!(Number.isFinite(t.price)&&t.price>0)||!(Number.isFinite(t.sellPrice)&&t.sellPrice>0)){
+   if(!validDate(t.sellDate)||t.sellDate<day||!(Number.isFinite(t.price)&&t.price>0)||!(Number.isFinite(t.sellPrice)&&t.sellPrice>0)){
     errors.push("incomplete closed sale: "+t.id);continue;
    }
    const proceeds=t.amount*t.sellPrice/t.price;
