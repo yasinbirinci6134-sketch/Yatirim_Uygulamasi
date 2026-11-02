@@ -1947,6 +1947,20 @@ function fpStatementDraft(audit,cashflows){
  return {source:{institution:"",reference:""},openingCash:null,terminalCash:null,positionsValue:null,
   terminal:{date:"",value:null},events,valuations:[]};
 }
+/* Independent quotes required for same-day statement checks; purchase-price
+   fallback and stale quotes must never certify a current holdings valuation. */
+function fpTrustedHoldingsValue(rows,today){
+ if(!Array.isArray(rows)||typeof today!=="string"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(today))return NaN;
+ const now=Date.parse(today+"T00:00:00Z");if(!Number.isFinite(now))return NaN;
+ let sum=0;
+ for(const r of rows){
+  if(!r||!Number.isFinite(r.value)||r.value<0||!r.quoteSource||r.quoteSource==="none"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(String(r.curDate||"")))return NaN;
+  const when=Date.parse(r.curDate+"T00:00:00Z"),age=(now-when)/86400000;
+  if(!Number.isFinite(age)||age<0||age>7)return NaN;
+  sum+=r.value;if(!Number.isFinite(sum))return NaN;
+ }
+ return Math.round(sum*100)/100;
+}
 function fpReturnEvidenceSheet(pf){
  const old=fpImportedStatement(pf.id),scrim=document.createElement("div"),sh=document.createElement("div");
  scrim.className="scrim";sh.className="sheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-label","Ekstre verisiyle getiri hesaplama");
@@ -1976,8 +1990,8 @@ function fpReturnEvidenceSheet(pf){
    if(!txt||txt.length>250000)throw Error("Ekstre verisi eksik veya fazla uzun");
    const data=JSON.parse(txt);
    const audit=fpLegacyAudit(pfTrades(pf)),cfs=(S.cashflows||[]).filter(x=>x.pf===pf.id);
-   const holdings=portfolioRows(pf).reduce((v,x)=>v+x.value,0);
    const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10);
+   const holdings=fpTrustedHoldingsValue(portfolioRows(pf),today);
    const checked=fpComputeImportedReturns(data,audit,cfs,holdings,today);
    if(!checked.ledgerReady)throw Error(checked.errors.slice(0,3).join("; ")||"Ekstre verisi geçersiz");
    fpStoreStatement(pf.id,data);close();renderSanal();toast("Ekstre mutabakatı hesaplandı.");
@@ -2063,7 +2077,8 @@ function renderSanal(){
   // Show exact missing prerequisites; never publish synthetic annualized returns.
   const statementData=fpImportedStatement(pf.id);
   const statementToday=new Date(Date.now()+3*3600e3).toISOString().slice(0,10);
-  const statementResult=statementData?fpComputeImportedReturns(statementData,legacyAudit,cashflows,val,statementToday):null;
+  const trustedHoldings=fpTrustedHoldingsValue(rows,statementToday);
+  const statementResult=statementData?fpComputeImportedReturns(statementData,legacyAudit,cashflows,trustedHoldings,statementToday):null;
   const statementAsOf=statementData?.terminal?.date&&statementResult?.ledgerReady?statementData.terminal.date:null;
   const statementIsHistorical=!!(statementAsOf&&statementAsOf<statementToday);
   const returnRequirements=[
