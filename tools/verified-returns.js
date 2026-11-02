@@ -17,10 +17,10 @@ function verifiedReturns({events=[],openingCash=0,terminalCash=null,terminal=nul
  let rate=null;
  if(!errors.length){rate=xirr(flows.flows);if(rate===null)errors.push("XIRR undefined or ambiguous");}
  let twr=null;
- if(navVerified&&ledger.ready&&Array.isArray(valuations)&&valuations.length>=2){
+ if(navVerified&&errors.length===0&&Array.isArray(valuations)&&valuations.length>=2){
   twr=timeWeightedReturn(valuations);
   if(twr===null)errors.push("TWR history invalid");
  }else errors.push("verified dated NAV history missing");
- return {ready:errors.length===0,xirr:errors.some(e=>e!=="verified dated NAV history missing")?null:rate,twr,errors,ledgerReady:ledger.ready};
+ return {ready:errors.length===0,xirr:rate,twr,errors,ledgerReady:ledger.ready};
 }
 module.exports={verifiedReturns};
