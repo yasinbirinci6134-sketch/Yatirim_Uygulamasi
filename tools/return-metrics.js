@@ -5,6 +5,7 @@
 function validDay(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s||''))return false;const d=new Date(s+'T00:00:00Z');return Number.isFinite(d.getTime())&&d.toISOString().slice(0,10)===s;}
 function xirr(flows,{maxRate=1e6,tolerance=1e-9}={}){
  if(!Array.isArray(flows)||flows.length<2)return null;
+ if(flows.some(x=>!x||typeof x!=="object"))return null;
  const f=flows.map(x=>({date:String(x.date||""),amount:x.amount,day:Date.parse(x.date+"T00:00:00Z")}));
  if(f.some(x=>!validDay(x.date)||!Number.isFinite(x.day)||!Number.isFinite(x.amount)))return null;
  if(!f.some(x=>x.amount<0)||!f.some(x=>x.amount>0))return null;
