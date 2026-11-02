@@ -114,4 +114,9 @@ const csvEnd=html.indexOf('const FP_IMPORT_KEY=',csvStart);
 assert.ok(csvStart>0&&csvEnd>csvStart,"CSV import code must be bundled in WebView");
 assert.equal(html.slice(csvStart-14,csvEnd).trim(),csvInline,"bundled CSV engine must match tested source");
 assert.ok(html.includes('id="pfCsvApply"'));
+assert.ok(html.includes('id="pfCsvFile"'));
+assert.ok(html.includes('get("pfCsvFile").onchange=async()=>'));
+assert.ok(html.includes('file.size>250000'));
+assert.ok(html.includes('get("pfCsvText").value=raw'));
+
 console.log("UI scripts and score-history tests passed");
