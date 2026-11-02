@@ -1303,6 +1303,25 @@ const pc = (n, d=2) => (n==null||isNaN(n)) ? "–" : (n>0?"+":"") + "%" + n.toLo
 const cls = n => n>0 ? "up" : n<0 ? "down" : "";
 const fmtDate = s => { if(!s) return "–"; const d=new Date(s); return isNaN(d) ? esc(s) : d.toLocaleDateString("tr-TR",{day:"numeric",month:"long"}); };
 const fmtTime = s => { const d=new Date(s); return isNaN(d) ? "–" : d.toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); };
+/* V2 veri katmani: fiyatin kaynagini ve zamanini tek noktadan belirle.
+   Puan ve fiyat ayri tutulur; gecersiz fiyatlar kullanilmaz. */
+function fpQuote(code,base,scan){
+  const live=S.live?.stocks?.[code], tick=LIVE.shortQuotes?.[code];
+  const candidates=[
+    {src:"scan",v:scan,at:scan?.date},
+    {src:"market",v:base,at:base?.priceDate||base?.updatedAt},
+    {src:"live",v:live,at:live?.at||live?.priceDate},
+    {src:"tick",v:tick,at:tick?.at}
+  ];
+  const ts=x=>{if(typeof x==="number")return x;const t=Date.parse(x||"");return Number.isFinite(t)?t:0;};
+  const valid=c=>c.v&&typeof c.v.price==="number"&&Number.isFinite(c.v.price)&&c.v.price>0;
+  const available=candidates.filter(valid).sort((a,b)=>ts(b.at)-ts(a.at));
+  const winner=available[0];
+  const daily=candidates.filter(c=>typeof c.v?.d1==="number"&&Number.isFinite(c.v.d1))
+    .sort((a,b)=>ts(b.at)-ts(a.at))[0];
+  return {price:winner?.v.price??null,d1:daily?.v.d1??null,
+    source:winner?.src||"none",priceAt:winner?.at||null,dailySource:daily?.src||"none"};
+}
 const asset = code => (S.market?.funds||[]).find(f => f.code===code) || (()=>{ const x=(S.market?.stocks||[]).find(f=>f.code===code); if(x) return {...x, cat:"hisse", isStock:true}; const y=(S.market?.fx||[]).find(f=>f.code===code); return y ? {...y, isFx:true} : null; })();
 function toast(msg,ms){ document.querySelectorAll(".toast").forEach(x=>x.remove()); const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),ms||2600); }
 
@@ -1774,8 +1793,8 @@ function daysSince(d){ const t=new Date(d+"T00:00:00"); return isNaN(t) ? null :
 function portfolioRows(pf){
   pf = pf || curPf();
   return pfTrades(pf).filter(t=>t.status!=="closed").map(t => {
-    const f=asset(t.code), cur = f?.price ?? t.price, units = t.units || t.amount/t.price, value=units*cur;
-    return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:f?.d1, curDate:f?.priceDate, days:daysSince(t.buyDate||t.priceDate)};
+    const f=asset(t.code), q=fpQuote(t.code,f,null), cur = q.price ?? f?.price ?? t.price, units = t.units || t.amount/t.price, value=units*cur;
+    return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:q.d1??f?.d1, curDate:q.priceAt||f?.priceDate, days:daysSince(t.buyDate||t.priceDate)};
   });
 }
 function groupRows(rows){ const m=new Map();
@@ -3251,7 +3270,7 @@ if(window.__standalone){
   /* ---------- Kısa vade (2–4 hafta): Hisse sekmesinde ve Bugün kartında "Uzun vade / Kısa vade" seçimi ---------- */
   const stMarket=()=>{ const hh=S.live?.idx?.XU100?._h; if(hh&&hh.length>60){ const c=hh.map(z=>z[1]); const xp=S.live.idx.XU100.price; if(xp>0) c[c.length-1]=xp; return SHORT.market(c); } return SH.d?.market||null; };
   const stCls=s=>{ const mk=stMarket(); return s<20?" lo":mk&&!mk.up?" mid":s>=80?" hi":" mid"; };
-  const stRow=it=>{ const own=(S.market?.stocks||[]).find(x=>x.code===it.code), inL=!!own, quote=studioOn()?LIVE.shortQuotes?.[it.code]:null, day=typeof quote?.d1==="number"?quote.d1:typeof own?.d1==="number"?own.d1:typeof S.live?.stocks?.[it.code]?.d1==="number"?S.live.stocks[it.code].d1:typeof it.d1==="number"?it.d1:null, price=quote?.price>0?quote.price:it.price;
+  const stRow=it=>{ const own=(S.market?.stocks||[]).find(x=>x.code===it.code), inL=!!own, q=fpQuote(it.code,own,it), day=q.d1, price=q.price??it.price;
     return `<div class="fund lrow st-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div>
       <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${studioOn()?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${num(it.score,0)}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
       ${!studioOn()&&(it.tags||[]).length?`<div class="st-tags">${it.tags.map(esc).join(" · ")}</div>`:""}</div>
