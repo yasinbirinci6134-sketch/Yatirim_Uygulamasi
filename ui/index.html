@@ -2041,6 +2041,7 @@ function fpReturnEvidenceSheet(pf){
    </details>
   <details><summary class="small">Beklenen veri yapısı</summary><pre class="small" style="white-space:pre-wrap;word-break:break-word">${esc(JSON.stringify(example,null,2))}</pre></details>
   <p class="small muted">Taslak, uygulamadaki işlem tarihleri ve tutarlarıyla oluşturulur. Ekstre referansları, açılış/kapanış nakdi ve nakit dahil NAV boş bırakılır; bunları gerçek kurum ekstresinden tamamlamalısın.</p>
+  <p id="pfEvidenceIssues" role="alert" aria-live="polite" class="small muted"></p>
   <div class="row"><button class="btn ghost sm" id="pfEvidenceCancel">Kapat</button><button class="btn ghost sm" id="pfEvidenceDraft">Taslak oluştur</button><button class="btn ghost sm" id="pfEvidenceDelete">Veriyi sil</button><button class="btn sm" id="pfEvidenceSave">Kontrol et ve kaydet</button></div>`;
  document.body.append(scrim,sh);
  const get=id=>sh.querySelector("#"+id),close=()=>{scrim.remove();sh.remove()};
@@ -2094,10 +2095,14 @@ function fpReturnEvidenceSheet(pf){
  };
  get("pfEvidenceDelete").onclick=()=>{if(!old)return close();if(!confirm("Bu portföye ait yerel ekstre verisini silmek istiyor musun?"))return;try{fpStoreStatement(pf.id,null);close();renderSanal()}catch(_){toast("Silinemedi.")}};
  get("pfEvidenceSave").onclick=()=>{
+  get("pfEvidenceIssues").textContent="";
   try{
    const txt=get("pfEvidenceText").value;
-   if(!txt||txt.length>250000)throw Error("Ekstre verisi eksik veya fazla uzun");
-   const parsed=JSON.parse(txt);
+   if(txt.length>250000)throw Error("Ekstre verisi fazla uzun");
+   // Users should not have to author JSON: recorded transactions supply only
+   // unverified draft candidates; missing broker references still block saving.
+   const parsed=txt.trim()?JSON.parse(txt):fpStatementDraft(
+    fpLegacyAudit(pfTrades(pf)),(S.cashflows||[]).filter(x=>x.pf===pf.id));
    if(!parsed||typeof parsed!=="object"||Array.isArray(parsed))throw Error("Ekstre JSON nesnesi gerekli");
    const formText=id=>String(get(id).value||"").trim();
    const formNumber=id=>{
@@ -2125,7 +2130,11 @@ function fpReturnEvidenceSheet(pf){
    const checked=fpComputeImportedReturns(data,audit,cfs,holdings,today);
    if(!checked.ledgerReady)throw Error(checked.errors.slice(0,3).join("; ")||"Ekstre verisi geçersiz");
    fpStoreStatement(pf.id,data);close();renderSanal();toast("Ekstre mutabakatı hesaplandı.");
-  }catch(e){toast(String(e.message||e),4500)}
+  }catch(e){
+   const message=String(e.message||e);
+   get("pfEvidenceIssues").textContent=message;
+   toast(message,4500);
+  }
  };
 }
 /* V2: review legacy records without rewriting or certifying their cash movements. */
