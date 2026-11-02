@@ -17,4 +17,6 @@ const duplicateNAV=verifiedReturns({...args,valuations:[...args.valuations,{date
 assert.equal(duplicateNAV.ready,false);assert.equal(duplicateNAV.twr,null);
 const noEvidence=verifiedReturns({...args,ledgerEvidence:null});
 assert.equal(noEvidence.ready,false);assert.equal(noEvidence.xirr,null);
+assert.equal(verifiedReturns({...args,events:[null]}).ready,false);
+assert.equal(verifiedReturns({...args,valuations:[null,{date:"2026-01-01",value:1100}]}).ready,false);
 console.log("verified returns tests passed");
