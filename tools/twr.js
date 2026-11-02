@@ -9,14 +9,16 @@ function timeWeightedReturn(points){
  let compound=1;
  for(let i=0;i<arr.length;i++){
   const p=arr[i];
+  if(!p||typeof p!=="object")return null;
   if(!validDay(p.date)||!(Number.isFinite(p.value)&&p.value>=0)||!Number.isFinite(p.externalFlow||0))return null;
   if(i&&arr[i-1].date===p.date)return null;
   if(!i)continue;
   const prev=arr[i-1].value;
   if(!(prev>0))return null;
   const gain=(p.value-(p.externalFlow||0))/prev;
-  if(!(gain>=0))return null;
+  if(!(gain>=0)||!Number.isFinite(gain))return null;
   compound*=gain;
+  if(!Number.isFinite(compound))return null;
  }
  return compound-1;
 }
