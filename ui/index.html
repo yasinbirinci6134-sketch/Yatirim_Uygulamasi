@@ -2115,13 +2115,13 @@ function fpReturnEvidenceSheet(pf){
    const data={...parsed,source:{...(parsed.source||{})},terminal:{...(parsed.terminal||{})}};
    // Unedited form fields must not silently override a freshly pasted JSON statement.
    for(const [field,input] of [["institution","pfEvidenceInstitution"],["reference","pfEvidenceReference"]])
-    if(formText(input)!==initialFormValues[input])data.source[field]=formText(input);
-   if(formText("pfEvidenceAsOf")!==initialFormValues.pfEvidenceAsOf)data.terminal.date=formText("pfEvidenceAsOf");
+    if(!txt.trim()||formText(input)!==initialFormValues[input])data.source[field]=formText(input);
+   if(!txt.trim()||formText("pfEvidenceAsOf")!==initialFormValues.pfEvidenceAsOf)data.terminal.date=formText("pfEvidenceAsOf");
    for(const [field,input] of [["openingCash","pfEvidenceOpening"],["terminalCash","pfEvidenceClosing"],["positionsValue","pfEvidenceHoldings"]])
-    if(formText(input)!==initialFormValues[input]){
+    if(!txt.trim()||formText(input)!==initialFormValues[input]){
      const n=formNumber(input);data[field]=n===undefined?null:n;
     }
-   if(formText("pfEvidenceNav")!==initialFormValues.pfEvidenceNav){
+   if(!txt.trim()||formText("pfEvidenceNav")!==initialFormValues.pfEvidenceNav){
     const n=formNumber("pfEvidenceNav");data.terminal.value=n===undefined?null:n;
    }
    const audit=fpLegacyAudit(pfTrades(pf)),cfs=(S.cashflows||[]).filter(x=>x.pf===pf.id);
