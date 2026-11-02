@@ -1828,18 +1828,20 @@ function advise(r, total){
 /* V2: forward-only daily portfolio value snapshots; not historical reconstruction. */
 const FP_PFV_KEY="fp-v2-portfolio-values";
 function fpPortSeries(){try{const a=JSON.parse(localStorage.getItem(FP_PFV_KEY)||"{}");return a&&typeof a==="object"?a:{}}catch(_){return {}}}
-function fpPortSnapshot(id,amount){
- if(!id||!Number.isFinite(amount)||amount<0)return;
+function fpPortSnapshot(id,amount,cost){
+ if(!id||!Number.isFinite(amount)||amount<0||!Number.isFinite(cost)||cost<0)return;
  const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10),all=fpPortSeries(),a=Array.isArray(all[id])?all[id]:[];
- if(a.length&&a[a.length-1].day===today)a[a.length-1].value=amount;else a.push({day:today,value:amount});
+ if(a.length&&a[a.length-1].day===today)Object.assign(a[a.length-1],{value:amount,cost});else a.push({day:today,value:amount,cost});
  all[id]=a.slice(-365);try{localStorage.setItem(FP_PFV_KEY,JSON.stringify(all))}catch(_){}
 }
 function fpPortChart(id){
  const data=(fpPortSeries()[id]||[]).filter(x=>x&&Number.isFinite(x.value));
  if(data.length<2)return `<p class="small muted">Performans grafiği için farklı tarihlerde en az iki gerçek portföy değerinin kaydedilmesi gerekiyor. Geçmiş fiyatlar uydurulmaz.</p>`;
- const w=320,h=110,min=Math.min(...data.map(x=>x.value)),max=Math.max(...data.map(x=>x.value)),span=Math.max(1,max-min);
- const points=data.map((x,i)=>`${10+i*300/Math.max(1,data.length-1)},${100-(x.value-min)/span*88}`).join(" ");
- return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Kaydedilmiş portföy değerleri grafiği" style="width:100%;height:130px;overflow:visible"><polyline fill="none" stroke="var(--accent)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" points="${points}"/></svg>
+ const w=320,h=110;
+ const all=[...data.map(x=>x.value),...data.map(x=>x.cost).filter(Number.isFinite)],lower=Math.min(...all),upper=Math.max(...all),width=Math.max(1,upper-lower);
+ const pts=field=>data.map((x,i)=>`${10+i*300/Math.max(1,data.length-1)},${100-(x[field]-lower)/width*88}`).join(" ");
+ const points=pts("value"),costPoints=data.every(x=>Number.isFinite(x.cost))?pts("cost"):null;
+ return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Kaydedilmiş portföy değerleri grafiği" style="width:100%;height:130px;overflow:visible"><polyline fill="none" stroke="var(--accent)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" points="${points}"/>${costPoints?`<polyline fill="none" stroke="var(--muted)" stroke-width="1.7" stroke-dasharray="4 4" stroke-linecap="round" stroke-linejoin="round" points="${costPoints}"/>`:""}</svg><div class="small muted">Düz çizgi: pozisyon değeri · Kesik çizgi: pozisyon maliyeti. Nakit ve gerçekleşmiş getiriler dahil değildir.</div>
  <div class="row small muted" style="justify-content:space-between"><span>${esc(data[0].day)}</span><span>${esc(data[data.length-1].day)}</span></div>`;
 }
 function renderSanal(){
@@ -1862,7 +1864,7 @@ function renderSanal(){
     ${cashflows.length?cashflows.slice(0,20).map(x=>`<div class="trade"><div><b>${cashNames[x.type]||"Hareket"}</b><div class="small muted">${esc(x.date)}${x.note?" · "+esc(x.note):""}</div></div><div class="right"><b class="num">${tl(x.amount,2)}</b><button class="btn ghost sm" data-cashdel="${esc(x.id)}">Sil</button></div></div>`).join(""):`<p class="small muted">Henüz nakit hareketi kaydedilmedi.</p>`}</section>`;
   const rows=portfolioRows(pf), closed=pfTrades(pf).filter(t=>t.status==="closed");
   const inv=rows.reduce((s,r)=>s+r.amount,0), val=rows.reduce((s,r)=>s+r.value,0), pnl=val-inv;
-  fpPortSnapshot(pf.id,val);
+  fpPortSnapshot(pf.id,val,inv);
   const day=rows.reduce((s,r)=> s + (r.d1!=null && r.curDate && r.curDate>(r.buyDate||r.priceDate) ? r.value*(r.d1/(100+r.d1)) : 0),0);
   const realized=closed.reduce((s,t)=>s+(t.sellPrice/t.price-1)*t.amount,0);
   const totalPnl=pnl+realized, costAll=inv+closed.reduce((s,t)=>s+t.amount,0);
