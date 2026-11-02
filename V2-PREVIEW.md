@@ -43,6 +43,13 @@ Portfoy > Gercek getiri > Ekstre yukle > Taslak olustur:
   son portfoy degeri ve nakit dahil NAV gecmisi kurum ekstresinden tamamlanmalidir.
 - Taslak kendi basina dogrulanmis hesaplama ya da banka ekstresi degildir.
 - JSON cihazdaki localStorage alaninda tutulur; hesap / kisi bilgisi ekleme.
+- JSON'i elle duzenlemek yerine "CSV hareketlerini ice aktar" bolumune yapistirabilirsin.
+  Kabul edilen basliklar: tarih;tür;tutar;referans veya date,type,amount,reference.
+  Tarih YYYY-AA-GG veya GG.AA.YYYY; miktar 1000.50 ya da 1.000,50 olabilir.
+  Turler: Alis, Satis, Para yatirma, Para cekme, Temettu, Komisyon.
+  CSV satirlarinda referans zorunludur; hatali tek satir varsa hicbir hareket aktarilmaz.
+  CSV yalnız hareketleri doldurur; kurum kimligi, acilis/kapanis nakdi, pozisyon
+  degeri ve toplam NAV kayitlari eksik kalir. Icerik kendi kendini dogrulamaz.
 
 ## APK derlemesini dogrulama
 GitHub Actions > Fon Pusulasi 2.0 Test APK > basarili calisma.
