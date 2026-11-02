@@ -8,4 +8,5 @@ assert.ok(loss<0&&loss>-.11);
 assert.equal(xirr([{date:"2025-01-01",amount:-1000}]),null);
 assert.equal(xirr([{date:"2025-01-01",amount:1000},{date:"2026-01-01",amount:1200}]),null);
 assert.equal(xirr([{date:"bad",amount:-1000},{date:"2026-01-01",amount:1100}]),null);
+assert.equal(xirr([{date:"2026-02-30",amount:-100},{date:"2027-01-01",amount:120}]),null);
 console.log("XIRR math tests passed");
