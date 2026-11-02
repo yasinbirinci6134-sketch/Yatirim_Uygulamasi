@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Veri dogrulama testleri
+        run: node tools/data-quality.test.js
       - name: Yeni gunluk degisim verileriyle BIST 100 taramasi
         run: node tools/short.js short.json
       - name: scan dalina yayinla
