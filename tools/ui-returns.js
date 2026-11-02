@@ -8,6 +8,7 @@ function fpComputeImportedReturns(data,audit,cashflows,liveHoldings,today){
  if(!data||typeof data!=="object"||Array.isArray(data))return {xirr:null,twr:null,ledgerReady:false,errors:["Ekstre verisi geçersiz"]};
  if(!data.source||typeof data.source.institution!=="string"||!data.source.institution.trim()||typeof data.source.reference!=="string"||!data.source.reference.trim())missing("Ekstre kurumu ve referansı eksik");
  if(!Number.isFinite(data.openingCash)||data.openingCash<0||!Number.isFinite(data.terminalCash)||data.terminalCash<0)missing("Açılış veya kapanış nakdi geçersiz");
+ if(data.openingCash!==0)missing("XIRR için başlangıç nakdi sıfır olmalı; dönem öncesi sermaye bu kayıtlarla ölçülemez");
  if(!Array.isArray(data.events)||!data.events.length)missing("Ekstre işlem listesi eksik");
  if(!data.terminal||!validDate(data.terminal.date)||!Number.isFinite(data.terminal.value)||data.terminal.value<0)missing("Kapanış portföy değerlemesi eksik");
  if(!Number.isFinite(data.positionsValue)||data.positionsValue<0)missing("Pozisyon değerlemesi eksik");
