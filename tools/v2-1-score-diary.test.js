@@ -13,3 +13,8 @@ assert.match(fn,/class="fp-score-change"/,"expanded score rows use compact layou
 assert.doesNotMatch(fn,/class="trade" data-st=/,"expanded score rows do not use oversized trade cards");
 assert.match(html,/\.fp-score-diary-body \.fp-score-change\{display:grid/,"compact score rows styled");
 console.log("2.1 compact score diary markup passed");
+
+// Shared compact-density guard: four screens, modern theme only.
+assert.match(html,/id="fp21-compact-density"/);
+for(const tab of ["hisse","oneri","doviz","sanal"]) assert.ok(html.includes("#v-"+tab),"compact style must cover "+tab);
+assert.match(html,/html\[data-design="modern"\] :is\(#v-hisse,#v-oneri,#v-doviz,#v-sanal\) section\.card/);
