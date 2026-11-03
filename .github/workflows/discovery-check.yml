@@ -28,3 +28,4 @@ jobs:
           node tools/production-release.test.js
           node tools/v2-1-portfolio-chart.test.js
           node tools/v2-1-realized-returns.test.js
+          node tools/v2-1-score-diary.test.js
