@@ -11,7 +11,7 @@ const document={createElement(tag){
     classList:{classes:new Set(),add(k){this.classes.add(k)},toggle(k,yes){if(yes)this.classes.add(k);else this.classes.delete(k)}},
     appendChild(child){this.children.push(child);child.parentElement=this;return child;},
     addEventListener(event,fn){this[event]=fn;},
-    insertAdjacentElement(position,other){this.inserted={position,other};},
+    insertAdjacentElement(position,other){this.inserted={position,other};const siblings=this.parentElement?.children;if(position==="beforebegin"&&siblings){const i=siblings.indexOf(this);if(i>=0){siblings.splice(i,0,other);other.parentElement=this.parentElement;}}},
     querySelector(q){if(q==="[data-fp2-disc-more]")return this.moreButton;return null},
     querySelectorAll(q){if(q==="[data-fp2-disc-focus]")return this.pills||[];
       if(q===".fgrp")return this.groups||[];
