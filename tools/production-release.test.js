@@ -19,7 +19,8 @@ assert.ok(w.includes("node tools/fund-history.test.js"),"historic fund price tes
 assert.ok(w.includes("tag_name: v2.0.${{ github.run_number }}"),"live release needs unique incremental tag");
 assert.ok(w.includes("v2-production-build.json"),"production UI must require approved release status");
 assert.ok(host.includes("static final String PRODUCTION_STATUS_URL"),"host must read live release approval");
-assert.ok(host.includes("String statusUrl = preview ? PREVIEW_STATUS_URL : PRODUCTION_STATUS_URL;"),"production UI must be gated");
+assert.ok(host.includes("versionName().startsWith(\"2.1.\") ? CANDIDATE21_STATUS_URL : (preview ? PREVIEW_STATUS_URL : PRODUCTION_STATUS_URL)"),"2.1 candidate must be isolated while production UI stays gated");
+assert.ok(host.includes("static final String CANDIDATE21_STATUS_URL"),"2.1 needs a dedicated OTA approval channel");
 assert.ok(host.includes('String api = UI_API.replace("ref=main", "ref=" + pinned);'),"UI must use immutable commit");
 assert.ok(h.includes('const UI_VERSION="2.0";'),"remove preview label from live web UI");
 assert.ok(h.includes("|| /^2\\./.test"),"2.0 must enable new dashboard");
