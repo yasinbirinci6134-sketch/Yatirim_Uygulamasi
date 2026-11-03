@@ -1604,6 +1604,15 @@ html[data-design="modern"] .fp2-headlines>p{font-size:12px;color:var(--muted);ma
  html[data-design="modern"] .fp2-radar{padding:10px 8px}
 }
 
+
+/* 2.1: keep the score diary one compact row until the user opens it. */
+.fp-score-diary>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;list-style:none;min-height:30px;font-size:13px}
+.fp-score-diary>summary::-webkit-details-marker{display:none}
+.fp-score-diary>summary::after{content:"⌄";font-size:16px;color:var(--muted);flex-shrink:0}
+.fp-score-diary[open]>summary::after{content:"⌃"}
+.fp-score-diary>summary .small{font-size:11px;white-space:nowrap}
+.fp-score-diary-body{padding-top:8px}
+.fp-score-diary-body .trade{padding-top:6px;padding-bottom:6px}
 </style>
 
 <div class="wrap">
@@ -3668,14 +3677,14 @@ function fpSignalResults(history,hold=5){
  return {count:eligible,positive,avg:eligible?sum/eligible:null,hitRate:eligible?100*positive/eligible:null,relativeAvg:relativeN?relativeSum/relativeN:null,relativeCount:relativeN,entryDays:entryDays.size};
 }
 function fpScoreDiary(){
- const h=fpHistory();if(!h.length)return `<section class="card"><h2>Skor günlüğü</h2><p class="small muted">Yeni taramalar geldikçe gerçek puan geçmişi birikecek; geçmiş tarihler için tahmin üretilmez.</p></section>`;
+ const h=fpHistory();if(!h.length)return `<section class="card"><details class="fp-score-diary"><summary>Skor günlüğü <span class="small muted">Henüz kayıt yok</span></summary><p class="small muted">Yeni taramalar geldikçe gerçek puan geçmişi birikecek; geçmiş tarihler için tahmin üretilmez.</p></details></section>`;
  const latest=h[h.length-1],prev=h.length>1?h[h.length-2]:null,results=fpSignalResults(h);
  const changes=prev?latest.items.map(x=>{const old=prev.items.find(y=>y.code===x.code);return old?{...x,delta:x.score-old.score}:null}).filter(Boolean).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta)).slice(0,7):[];
- return `<section class="card"><div class="horizon"><h2>Skor günlüğü</h2><span class="small muted">${h.length} tarama · ${esc(latest.asOf||"")}</span></div>
+ return `<section class="card"><details class="fp-score-diary"><summary><strong>Skor günlüğü</strong><span class="small muted">${h.length} tarama · ${esc(latest.asOf||"")}</span></summary><div class="fp-score-diary-body">
  ${changes.length?changes.map(x=>`<div class="trade" data-st="${esc(x.code)}"><b class="code">${esc(x.code)}</b><span class="small muted">Önceki ${x.score-x.delta} → ${x.score}</span><b class="num ${cls(x.delta)}">${x.delta>0?"+":""}${x.delta}</b></div>`).join(""):`<p class="small muted">Değişimleri göstermek için iki farklı günlük tarama kaydı gerekiyor.</p>`}
  ${results.count?`<div class="pfstats"><div><span>5 tarama sonrası yükselen</span><b class="num">% ${num(results.hitRate,1)}</b></div><div><span>Ortalama fiyat değişimi</span><b class="num ${cls(results.avg)}">${pc(results.avg,2)}</b></div><div><span>BIST 100'e göre ort. fark</span><b class="num ${cls(results.relativeAvg)}">${results.relativeAvg==null?"Veri yok":pc(results.relativeAvg,2)}</b></div><div><span>Ölçülen sinyal</span><b class="num">${results.count}</b></div></div>`:`<p class="small muted">${h.length<6?`5 sonraki taramayı değerlendirmek için ${6-h.length} yeni tarihli kayıt gerekiyor.`:`Beş sonraki taramada tarihli fiyatla eşleşen 80+ sinyal bulunamadı; sonuç üretilmedi.`}</p>`}
  ${results.count>0&&(results.count<30||results.entryDays<5)?`<p class="small muted">Ön gözlem: ${results.count} sinyal, ${results.entryDays} farklı başlangıç günü. Aynı gündeki hisseler bağımsız örnek değildir; bu oran yatırım kararı için güvenilir bir başarı tahmini sayılmaz.</p>`:""}
- <p class="small muted">Yalnız bu cihazda kaydedilen taramalardan hesaplanır. 5 tarama aralığı yaklaşık bir işlem haftasıdır, sabit süre değildir. Temettü ve bölünme düzeltmeleri dahil değildir. BIST farkı yalnız aynı tarihlerde endeks fiyatı kayıtlıysa hesaplanır. Gelecek getiri tahmini değildir.</p></section>`;
+ <p class="small muted">Yalnız bu cihazda kaydedilen taramalardan hesaplanır. 5 tarama aralığı yaklaşık bir işlem haftasıdır, sabit süre değildir. Temettü ve bölünme düzeltmeleri dahil değildir. BIST farkı yalnız aynı tarihlerde endeks fiyatı kayıtlıysa hesaplanır. Gelecek getiri tahmini değildir.</p></div></details></section>`;
 }
 /* Kisa vadede eksik gunluk yuzde varsa sunucudaki yeni taramayi bir kez kontrol et.
    Eski localStorage verisiyle acilsa bile 30 dakika engeline takilmasin.
