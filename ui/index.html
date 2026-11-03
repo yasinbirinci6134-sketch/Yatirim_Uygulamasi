@@ -2142,6 +2142,96 @@ function allocBlock(h){
   return `<section class="card"><div class="horizon"><h2>${esc(h.title)}</h2><span class="small muted">${esc(h.horizon||"")}</span></div>
     <div class="alloc" aria-hidden="true">${bars}</div><div>${rows}${restRow}</div></section>`;
 }
+/* Fon Pusulası 2.0: list-first, analysis on demand, native row interactions remain. */
+const FP2_DISC_STATE={oneri:{watch:false,more:false},hisse:{watch:false,more:false}};
+function fp2DiscoverySummary(tab,items,watch,updatedAt){
+  const entries=Array.isArray(items)?items.filter(x=>x&&typeof x.code==="string"):[];
+  const tracked=new Set(Array.isArray(watch)?watch:[]);
+  const valid=entries.filter(x=>Number.isInteger(x.score)&&x.score>=0&&x.score<=100)
+    .slice().sort((a,b)=>b.score-a.score||a.code.localeCompare(b.code,"tr")).slice(0,3);
+  const timestamp=Date.parse(updatedAt||"");
+  const dated=Number.isFinite(timestamp)&&timestamp<=Date.now()+3600000;
+  const stamp=dated?new Date(timestamp).toLocaleDateString("tr-TR",{day:"numeric",month:"short",year:"numeric"}):"Tarih yok";
+  const stale=!dated||Date.now()-timestamp>48*3600000;
+  return {count:entries.length,tracked:entries.filter(x=>tracked.has(x.code)).length,
+    top:valid,stamp,stale,kind:tab==="oneri"?"Fon":"Hisse"};
+}
+function fp2DiscoveryHero(tab,items,watch,updatedAt){
+  const d=fp2DiscoverySummary(tab,items,watch,updatedAt);
+  const header=tab==="oneri"?"Fonları keşfet.":"Hisseleri keşfet.";
+  const desc=tab==="oneri"?"Kategori ve skorları karşılaştır.":"Kod, skor ve fiyatı tek bakışta gör.";
+  const leaders=d.top.map(x=>`<span class="fp2-disc-leader" title="Son analiz puanı"><b>${esc(x.code)}</b><strong>${x.score}</strong></span>`).join("");
+  return `<section class="fp2-disc-hero" aria-label="${d.kind} keşif özeti">
+     <div class="fp2-disc-kicker"><span>FON PUSULASI / KEŞFET</span><span>${tab==="oneri"?"FON RADARI":"HİSSE RADARI"}</span></div>
+     <div class="fp2-disc-main"><div><h2>${header}</h2><p>${desc}</p></div><div class="fp2-disc-stats">
+       <b>${d.count}</b><span>${d.kind.toUpperCase()}</span></div></div>
+     <div class="fp2-disc-foot"><div><span>SON ANALİZE GÖRE ÖNE ÇIKANLAR</span>
+       <div class="fp2-disc-leaders">${leaders||'<span class="fp2-disc-muted">Henüz puan yok</span>'}</div></div>
+       <div class="fp2-disc-asof">${esc(d.stamp)}<small>${d.stale?"Güncel analiz değil":"Son analiz"}</small></div></div>
+     <p class="fp2-disc-caveat">Skor yatırım tavsiyesi veya gerçekleşmiş getiri değildir.</p>
+  </section>`;
+}
+function fp2ArrangeDiscovery(v,tab,items,watch,updatedAt){
+  if(!studioOn()||!v)return;
+  const state=FP2_DISC_STATE[tab];
+  if(!state)return;
+  const search=v.querySelector('[data-lfq="'+tab+'"]');
+  const listCard=search?.closest("section.card");
+  if(!listCard)return;
+  const previous=[...v.children].filter(el=>el!==listCard);
+  const wrapper=document.createElement("div");
+  wrapper.className="fp2-discovery-hub";
+  const hero=document.createElement("div");
+  hero.innerHTML=fp2DiscoveryHero(tab,items,watch,updatedAt);
+  while(hero.firstChild)wrapper.appendChild(hero.firstChild);
+  wrapper.appendChild(listCard);
+  listCard.classList.add("fp2-discovery-list");
+  const toolbar=document.createElement("div");
+  toolbar.className="fp2-discovery-controls";
+  toolbar.innerHTML='<div class="fp2-disc-pills" role="group" aria-label="Takip listesine göre filtre">'+
+    '<button data-fp2-disc-focus="all">Tüm varlıklar</button>'+
+    '<button data-fp2-disc-focus="watch">Takiptekiler</button></div>'+
+    '<button class="fp2-disc-more-btn" data-fp2-disc-more aria-expanded="'+String(state.more)+'">Analizler ↗</button>';
+  listCard.insertAdjacentElement("beforebegin",toolbar);
+  const empty=document.createElement("p");
+  empty.className="fp2-discovery-empty";
+  empty.textContent="Takip listende bu aramayla eşleşen varlık bulunamadı.";
+  empty.hidden=true;
+  listCard.appendChild(empty);
+  const advanced=document.createElement("details");
+  advanced.className="fp2-discovery-more";
+  advanced.open=state.more;
+  advanced.innerHTML='<summary><strong>Analiz ve ayrıntılar</strong><small>Dağılım · keşifler · skor yöntemi</small></summary>';
+  const body=document.createElement("div");
+  body.className="fp2-discovery-more-body";
+  for(const child of previous)body.appendChild(child);
+  advanced.appendChild(body);
+  wrapper.appendChild(advanced);
+  v.appendChild(wrapper);
+  const pills=[...toolbar.querySelectorAll("[data-fp2-disc-focus]")];
+  const rows=[...listCard.querySelectorAll('.fund.lrow[data-k]')];
+  const watchSet=new Set(Array.isArray(watch)?watch:[]);
+  const apply=()=>{
+    let shown=0;
+    for(const row of rows){
+      const code=String(row.dataset.k||"").split(":")[1];
+      const hidden=state.watch&&!watchSet.has(code);
+      row.classList.toggle("fp2-disc-hidden",hidden);
+      if(!hidden)shown++;
+    }
+    for(const group of listCard.querySelectorAll(".fgrp")){
+      const inGroup=[...group.querySelectorAll(".fund.lrow[data-k]")];
+      group.classList.toggle("fp2-disc-hidden",!!inGroup.length&&inGroup.every(r=>r.classList.contains("fp2-disc-hidden")));
+    }
+    empty.hidden=!state.watch||shown>0||rows.length===0;
+    pills.forEach(b=>b.setAttribute("aria-pressed",String((b.dataset.fp2DiscFocus==="watch")===state.watch)));
+  };
+  pills.forEach(b=>b.addEventListener("click",()=>{state.watch=b.dataset.fp2DiscFocus==="watch";apply();}));
+  apply();
+  advanced.addEventListener("toggle",()=>{state.more=advanced.open;toolbar.querySelector("[data-fp2-disc-more]")?.setAttribute("aria-expanded",String(advanced.open));});
+  toolbar.querySelector("[data-fp2-disc-more]")?.addEventListener("click",()=>{advanced.open=!advanced.open;});
+}
+
 function renderOneri(){
   const v=$("v-oneri"), a=S.market?.advice;
   if(!S.market){ v.innerHTML = `<section class="card empty">${S.ready ? "Öneriler ilk veri güncellemesinden sonra burada görünecek." : "Yükleniyor…"}</section>`; return; }
@@ -2151,6 +2241,7 @@ function renderOneri(){
     ${scanBlock(S.market)}
     ${fundsHtml(S.market)}
 `;
+  fp2ArrangeDiscovery(v,"oneri",S.market.funds||[],S.fwatch,S.market.updatedAt);
   bindFunds(v);
 }
 async function ask(){
@@ -2232,6 +2323,7 @@ function renderHisse(){
       ${list.length?studioTableHead()+list.map(stockRow).join(""):`<div class="empty">Hisse verisi bir sonraki güncellemede gelecek.</div>`}
       ${(S.market?.removedStocks||[]).length?`<details class="removed"><summary>Son çıkarılanlar (${S.market.removedStocks.length})</summary>${S.market.removedStocks.slice().reverse().map(z=>`<div class="remrow"><div><span class="code">${esc(z.code)}</span> <span class="small muted">${esc(fmtDate(z.date)||"")}${z.score!=null?" · puan "+num(z.score,0):""}</span></div><p class="small muted" style="margin:2px 0 0">${esc(z.why||"")}</p></div>`).join("")}</details>`:""}
     </section>`;
+  fp2ArrangeDiscovery(v,"hisse",st,S.watch,m.updatedAt);
   v.querySelectorAll("[data-buy]").forEach(b=> b.onclick = () => openBuy(b.dataset.buy));
   bindRowBtns(v);
   v.querySelectorAll("[data-unwatch]").forEach(b=> b.onclick = () => saveWatch(S.watch.filter(c=>c!==b.dataset.unwatch)));
