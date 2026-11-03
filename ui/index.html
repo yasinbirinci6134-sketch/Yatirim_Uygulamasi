@@ -1400,6 +1400,12 @@ html[data-design="modern"] #fp-discovery-tabs button[aria-pressed="true"]{
 </script>
 <script>
 const CAT = {para:"Para piyasası", altin:"Altın", hisse:"Hisse", diger:"Diğer", gumus:"Gümüş", doviz:"Döviz"};
+/* Preview-only visual first-run migration: never applies to production v41.
+   Users can still explicitly choose Classic; the choice survives account preference sync. */
+const FP_PREVIEW_V2_UI=(()=>{try{
+  return !!window.YatirimApp&&typeof window.YatirimApp.appVersionName==="function"
+    &&/-preview$/.test(String(window.YatirimApp.appVersionName()));
+}catch(_){return false}})();
 const S = { fxwatch:[], fwatch:[], pfs:[], pf:null, watch:[], market:null, trades:[], cashflows:[], journal:[], cfg:null, status:null, uid:null, tab:FP_PREVIEW_V2_UI?"gundem":"oneri", db:null, mcp:null, sample:null, busy:false, ready:false };
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -1472,12 +1478,6 @@ document.addEventListener("click", e => { const g=e.target.closest(".g"); const 
 
 /* ---------- Tema ---------- */
 const ACC=[["yesil","Yeşil","#0F6B57"],["mavi","Mavi","#2F5BB7"],["mor","Mor","#6B46B0"],["turuncu","Turuncu","#B5541C"],["gri","Grafit","#3E4A52"]];
-/* Preview-only visual first-run migration: never applies to production v41.
-   Users can still explicitly choose Classic; the choice survives account preference sync. */
-const FP_PREVIEW_V2_UI=(()=>{try{
-  return !!window.YatirimApp&&typeof window.YatirimApp.appVersionName==="function"
-    &&/-preview$/.test(String(window.YatirimApp.appVersionName()));
-}catch(_){return false}})();
 let TH={mode:"auto",acc:"yesil",design:"classic",modernAcc:"mavi"};
 try{ TH={...TH,...JSON.parse(localStorage.getItem("fp-theme")||"{}")}; }catch(e){}
 if(FP_PREVIEW_V2_UI){
