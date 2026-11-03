@@ -94,3 +94,9 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - Ayni piyasa tarihine ait tekrar taramalar tek gun sayilir; ilk kayit korunur.
 - Gerceklesen sonuclar icin gecerli 80+ puan, tarihli fiyat ve 5 ayri tarih gerekir.
 - Fiyat/borsa getirisi bolunme ve temettu duzeltmeli degildir; gecmis tutarlar uydurulmaz.
+
+## Tarama veri kalitesi (onizleme dalina ozel)
+- BIST 100 endeks tarihinin tarama tarihiyle eslesmesi, piyasa gunu tutarliligi ve 7 gunluk guncellik siniri kontrol edilir.
+- Fiyatlarin en az %80'i tarama gunune ait olmalidir; tarihi eski veya gelecekteki tarama yayinlanmaz.
+- Android test arayuzu, indirilen taramayi da ayni kalite kuralindan gecirir; mevcut onayli veriyi bozuk veriyle degistirmez.
+- main uzerindeki canli zamanlayici bu onizleme kodunu otomatik olarak kullanmaz.
