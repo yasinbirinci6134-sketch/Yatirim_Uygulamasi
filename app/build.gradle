@@ -1,9 +1,10 @@
 plugins { id 'com.android.application' }
 def run = (System.getenv('GITHUB_RUN_NUMBER') ?: '1').toInteger()
+def candidate21 = System.getenv('FP_21_CANDIDATE') == 'true'
 android {
   namespace 'com.yasin.yatirimapp'
   compileSdk 34
-  defaultConfig { applicationId 'com.yasin.yatirimapp'; minSdk 26; targetSdk 34; versionCode (200000 + run); versionName "2.0.${run}"; manifestPlaceholders = [appDisplayName: 'Fon Pusulası 2.0'] }
+  defaultConfig { applicationId 'com.yasin.yatirimapp'; minSdk 26; targetSdk 34; versionCode (candidate21 ? 210000 + run : 200000 + run); versionName (candidate21 ? "2.1.${run}" : "2.0.${run}"); manifestPlaceholders = [appDisplayName: candidate21 ? 'Fon Pusulası 2.1' : 'Fon Pusulası 2.0'] }
   // Arayüz tek kaynaktan: ui/index.html (uygulama ayrıca GitHub'dan günceller)
   sourceSets { main { assets.srcDirs = ['../ui'] } }
   signingConfigs { release { storeFile file('release.p12'); storeType 'pkcs12'; storePassword System.getenv('KEYSTORE_PASSWORD'); keyAlias 'yatirim'; keyPassword System.getenv('KEYSTORE_PASSWORD') } }
