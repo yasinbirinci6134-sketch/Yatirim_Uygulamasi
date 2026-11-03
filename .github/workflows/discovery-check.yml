@@ -1,0 +1,24 @@
+name: Discovery integration checks
+on:
+  push:
+    branches:
+      - feature/v2-discovery-live-port
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify discovery and existing UI tests
+        run: |
+          set -euo pipefail
+          node tools/v2-discovery.test.js
+          node tools/v2-ui.test.js
+          node tools/v2-dashboard.test.js
+          node tools/v2-portfolio.test.js
+          node tools/production-release.test.js
