@@ -167,9 +167,9 @@ public class MainActivity extends Activity {
     ui.postDelayed(() -> {
       if (generation != loadGeneration || ready) return;
       if ("file".equals(loadedSource) && fingerprint.equals(curSha)) {
-        SharedPreferences stats = up();
-        stats.edit().putString("bad", fingerprint)
-          .putInt("rollbacks", stats.getInt("rollbacks", 0) + 1)
+        SharedPreferences fallbackStats = up();
+        fallbackStats.edit().putString("bad", fingerprint)
+          .putInt("rollbacks", fallbackStats.getInt("rollbacks", 0) + 1)
           .putLong("lastFailureAt", System.currentTimeMillis())
           .putString("bootOutcome", "rollback").apply();
         if (uiFile().isFile()) {
@@ -180,8 +180,8 @@ public class MainActivity extends Activity {
         }
         load();
       } else {
-        SharedPreferences stats = up();
-        stats.edit().putInt("startupStalls", stats.getInt("startupStalls", 0) + 1)
+        SharedPreferences stallStats = up();
+        stallStats.edit().putInt("startupStalls", stallStats.getInt("startupStalls", 0) + 1)
           .putLong("lastFailureAt", System.currentTimeMillis())
           .putString("bootOutcome", "stalled").apply();
         showStartupRecovery();
