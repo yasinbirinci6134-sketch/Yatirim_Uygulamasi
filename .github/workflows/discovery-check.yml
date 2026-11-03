@@ -58,3 +58,66 @@ jobs:
           name: Fon-Pusulasi-2-1-Test-APK
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 14
+  signed-candidate-v2-1:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/feature/fon-pusulasi-v2-1'
+    needs: [test, android-v2-1]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.9'}
+      - name: Restore original signing key for upgrade-compatible candidate
+        shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          test -n "$KEYSTORE_B64" && test -n "$KEYSTORE_PASSWORD"
+          printf '%s' "$KEYSTORE_B64" | base64 -d > app/release.p12
+          keytool -list -keystore app/release.p12 -storetype PKCS12 -storepass "$KEYSTORE_PASSWORD" -alias yatirim >/dev/null
+      - name: Build signed 2.1 candidate (no publication)
+        env:
+          FP_21_CANDIDATE: 'true'
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: gradle assembleRelease --no-daemon
+      - name: Verify original signing identity and upgrade path
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          apk=app/build/outputs/apk/release/app-release.apk
+          test -s "$apk"
+          unzip -tq "$apk" >/dev/null
+          unzip -p "$apk" assets/index.html | cmp - ui/index.html
+          sdk="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          dir="$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          "$dir/apksigner" verify --print-certs "$apk" > /tmp/candidate-cert.txt
+          "$dir/aapt" dump badging "$apk" > /tmp/candidate-package.txt
+          grep -q "^package: name='com.yasin.yatirimapp'" /tmp/candidate-package.txt
+          grep -q "versionName='2.1." /tmp/candidate-package.txt
+          current="$(head -1 /tmp/candidate-package.txt | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")"
+          test -n "$current" && (( current >= 210000 ))
+          mkdir -p /tmp/installed
+          gh release download v2.0.22 --pattern Fon-Pusulasi-2.apk --dir /tmp/installed
+          prior=/tmp/installed/Fon-Pusulasi-2.apk
+          "$dir/apksigner" verify --print-certs "$prior" > /tmp/installed-cert.txt
+          "$dir/aapt" dump badging "$prior" > /tmp/installed-package.txt
+          old="$(head -1 /tmp/installed-package.txt | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")"
+          old_cert="$(grep 'certificate SHA-256 digest:' /tmp/installed-cert.txt | head -1)"
+          new_cert="$(grep 'certificate SHA-256 digest:' /tmp/candidate-cert.txt | head -1)"
+          test -n "$old_cert" && test "$old_cert" = "$new_cert"
+          test -n "$old" && (( current > old ))
+          cp "$apk" Fon-Pusulasi-2-1-Candidate.apk
+          sha256sum Fon-Pusulasi-2-1-Candidate.apk > Fon-Pusulasi-2-1-Candidate.apk.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Fon-Pusulasi-2-1-Signed-Candidate
+          path: |
+            Fon-Pusulasi-2-1-Candidate.apk
+            Fon-Pusulasi-2-1-Candidate.apk.sha256
+          retention-days: 14
