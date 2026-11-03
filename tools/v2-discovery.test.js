@@ -8,7 +8,7 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const nodes=[];
 const document={createElement(tag){
   const node={tag,children:[],parentElement:null,innerHTML:"",hidden:false,open:false,attributes:{},
-    classList:{classes:new Set(),add(k){this.classes.add(k)},toggle(k,yes){if(yes)this.classes.add(k);else this.classes.delete(k)}},
+    classList:{classes:new Set(),add(k){this.classes.add(k)},contains(k){return this.classes.has(k)},toggle(k,yes){if(yes)this.classes.add(k);else this.classes.delete(k)}},
     appendChild(child){this.children.push(child);child.parentElement=this;return child;},
     addEventListener(event,fn){this[event]=fn;},
     insertAdjacentElement(position,other){this.inserted={position,other};const siblings=this.parentElement?.children;if(position==="beforebegin"&&siblings){const i=siblings.indexOf(this);if(i>=0){siblings.splice(i,0,other);other.parentElement=this.parentElement;}}},
