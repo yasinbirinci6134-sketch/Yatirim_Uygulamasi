@@ -9,4 +9,7 @@ assert.match(fn,/<summary>/,"summary remains visible");
 assert.match(fn,/<\/details>/,"collapsible container closes");
 assert.doesNotMatch(fn,/<details[^>]*\sopen(?:\s|=|>)/,"diary is collapsed by default");
 assert.match(fn,/fpSignalResults\(h\)/,"score calculations retained");
+assert.match(fn,/class="fp-score-change"/,"expanded score rows use compact layout");
+assert.doesNotMatch(fn,/class="trade" data-st=/,"expanded score rows do not use oversized trade cards");
+assert.match(html,/\.fp-score-diary-body \.fp-score-change\{display:grid/,"compact score rows styled");
 console.log("2.1 compact score diary markup passed");
