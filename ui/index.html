@@ -1711,11 +1711,11 @@ function itemNewsBlock(t,x){ const c=x.code, d=S.inews[c], rq=S.nreq[c]||0, load
 function detItem(t,c){ const m=S.market||{}; return (t==="s"?m.stocks:t==="f"?m.funds:m.fx||[])?.find(x=>x.code===c)||(t==="s"?(S.scanItems||[]).find(x=>x.code===c):null); }
 function openDetail(t,c){ if(!detItem(t,c)) return; subNews(c); S.det={t,c,tab:(S.det&&S.det.c===c)?S.det.tab:"veri"}; let el=$("det");
   if(!el){ el=document.createElement("div"); el.id="det"; el.setAttribute("role","dialog"); el.setAttribute("aria-modal","true"); document.body.appendChild(el); document.body.classList.add("noscroll"); try{history.pushState({det:1},"");}catch(e){} }
-  drawDetail(); el.scrollTop=0; }
+  drawDetail(); el.scrollTop=0; if(t==="f")fhEnsure(c); }
 function closeDetail(fromPop){ const el=$("det"); if(el) el.remove(); $("gtip")?.remove(); document.body.classList.remove("noscroll"); S.det=null; if(!fromPop){ try{ if(history.state?.det) history.back(); }catch(e){} } }
 window.addEventListener("popstate",()=>{ if(S.det&&!document.querySelector(".sheet")&&!window.__popSheet) closeDetail(true); });
 function priceChart(x){ const M={}; ((S.hist||{})[x.code]||[]).forEach(p=>{ if(typeof p.p==="number"&&p.p>0) M[p.d]=p.p; }); if(typeof FH!=="undefined") (FH.d[x.code]?.h||[]).forEach(([d,v])=>{ if(v>0) M[d]=v; }); const td=dayKey(Date.now()); (x._h||[]).forEach(([d,v])=>{ if(v>0&&d<=td) M[d]=v; });
-  let h=Object.keys(M).sort().map(d=>({d,p:M[d]})); const PER=[["1A",31],["3A",92],["6A",183],["1Y",366]], cp=S.chartP||"3A";
+  let h=Object.keys(M).sort().map(d=>({d,p:M[d]})); const PER=[["1A",31],["3A",92],["6A",183],["1Y",366]], cp=S.chartP||((S.market?.funds||[]).some(f=>f.code===x.code)?"1Y":"3A");
   const pd=x.priceDate?(String(x.priceDate)>td?td:String(x.priceDate)):null; if(x.price&&pd){ if(h.length&&h[h.length-1].d>=pd) h[h.length-1].p=Number(x.price); else h.push({d:pd,p:Number(x.price)}); }
   let lim=""; if(h.length){ lim=new Date(Date.parse(h[h.length-1].d)-(PER.find(z=>z[0]===cp)||PER[1])[1]*864e5).toISOString().slice(0,10); const f=h.filter(p=>p.d>=lim); if(f.length>=2) h=f; }
   // veri seçilen dönemden kısaysa eksen yine dönemin başından başlar, eksik kısım boş kalır (uydurma yok)
@@ -1728,10 +1728,13 @@ function priceChart(x){ const M={}; ((S.hist||{})[x.code]||[]).forEach(p=>{ if(t
   const dg=n=>n<1?6:n<100?4:2, chg=(v[v.length-1]/v[0]-1)*100;
   return `${pb}<div class="chart" data-h="${esc(JSON.stringify(h.map(p=>[p.d,lr(p.p,6)])))}" data-mn="${mn}" data-rg="${rg}" data-dg="${dg(mx)}" data-col="${col}" data-t0="${t0}"><div class="chead"><span><small>${esc(fmtDate(h[0].d))}</small><b class="num">${num(v[0],dg(v[0]))}</b></span><span class="chg num ${cls(chg)}">${arr(chg)}${pc(chg)}</span><span class="r"><small>${esc(fmtDate(h[h.length-1].d))}</small><b class="num">${num(v[v.length-1],dg(v[v.length-1]))}</b></span></div>
     <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Fiyat grafiği"><polygon points="${X(0)},${H} ${pts} ${W},${H}" fill="${col}" opacity=".14"/><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
-    <div class="cdates small muted"><span>${esc(fmtDate(short?lim:h[0].d)+((short?lim:h[0].d).slice(0,4)!==h[h.length-1].d.slice(0,4)?" "+(short?lim:h[0].d).slice(0,4):""))}</span><span>${esc(fmtDate(h[h.length-1].d))}</span></div>${short?`<p class="note small">Fiyat geçmişi ${esc(fmtDate(h[0].d))} tarihinden başlıyor; öncesi için veri yok.${fhNote(x)}</p>`:""}</div>`; }
+    <div class="cdates small muted"><span>${esc(fmtDate(short?lim:h[0].d)+((short?lim:h[0].d).slice(0,4)!==h[h.length-1].d.slice(0,4)?" "+(short?lim:h[0].d).slice(0,4):""))}</span><span>${esc(fmtDate(h[h.length-1].d))}</span></div>${short?`<p class="note small">Kayıtlı fiyat geçmişi ${esc(fmtDate(h[0].d))} tarihinden başlıyor; öncesi henüz doğrulanmadı.${fhNote(x)}</p>${(S.market?.funds||[]).some(f=>f.code===x.code)?`<button class="btn ghost sm" data-fh-retry="${esc(x.code)}">TEFAS 1 yıllık geçmişi getir</button>`:""}`:""}</div>`; }
 /* Grafiğe dokununca: en yakın günün fiyatı üstte, tarihi altta; parmak kaydırılınca izler */
-function fhNote(x){ if(typeof FH==="undefined"||!(S.market?.funds||[]).some(f=>f.code===x.code)) return ""; const v=FH.d[x.code];
-  if(FH.busy&&!v?.h) return " 1 yıllık geçmiş yükleniyor…"; if((v&&!v.h)||(!v&&FH.err)) return " Geçmiş şu an alınamadı; birazdan yeniden denenecek."; return ""; }
+function fhNote(x){ if(!(S.market?.funds||[]).some(f=>f.code===x.code))return "";
+  if(FH.loading===x.code)return " TEFAS'tan fiyat geçmişi indiriliyor…";
+  if(FH.busy)return " TEFAS indirme sırası bekleniyor…";
+  if(FH.err)return " TEFAS erişim hatası: "+FH.err+".";
+  return " Eksik fiyatlar için TEFAS 12 aylık verisi istenebilir."; }
 function chartTouch(ch){ let H; try{ H=JSON.parse(ch.dataset.h); }catch(_){ return; } if(!H||H.length<2) return;
   const sv=ch.querySelector("svg"), mn=+ch.dataset.mn, rg=+ch.dataset.rg, dg=+ch.dataset.dg, t0=+ch.dataset.t0||Date.parse(H[0][0]), t1=Date.parse(H[H.length-1][0]), T=H.map(p=>Date.parse(p[0]));
   const hd=ch.querySelector(".chead"), hd0=hd?hd.innerHTML:"", cd=ch.querySelector(".cdates"), cd0=cd?cd.innerHTML:"", ov=document.createElement("div"); ov.className="cx"; ov.hidden=true; ov.style.color=ch.dataset.col;
@@ -1789,7 +1792,8 @@ function drawDetail(){ const el=$("det"); if(!el||!S.det) return; const {t,c}=S.
   </div>
   <div class="dbar">${S.db&&S.uid?`<button class="btn" data-dbuy>Portföye ekle</button>`:""}${S.db?`<button class="btn ghost" data-dwatch>${watched?"Takipten çıkar":"Takibe al"}</button>`:""}${window.openAlarm?`<button class="btn ghost" data-dalarm aria-label="Fiyat alarmı" style="flex:0 0 auto">🔔</button>`:""}</div>`;
   el.querySelector("[data-back]").onclick=()=>closeDetail();
-  el.querySelectorAll("[data-cp]").forEach(b=>b.onclick=()=>{ S.chartP=b.dataset.cp; drawDetail(); });
+  el.querySelectorAll("[data-cp]").forEach(b=>b.onclick=()=>{ S.chartP=b.dataset.cp; drawDetail(); if(t==="f"&&S.chartP==="1Y")fhEnsure(c); });
+  el.querySelector("[data-fh-retry]")?.addEventListener("click",()=>{fhEnsure(c); toast("TEFAS fiyat geçmişi isteniyor; bağlantıya göre yüklenebilir.");});
   const chEl=el.querySelector(".chart[data-h]"); if(chEl) chartTouch(chEl);
   el.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{ S.det.tab=b.dataset.dt; $("gtip")?.remove(); drawDetail(); });
   const bb=el.querySelector("[data-dbuy]"); if(bb) bb.onclick=()=>openBuy(c);
@@ -3152,24 +3156,86 @@ function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{
   const t0=Date.now(), poll=()=>{ let r=""; try{ r=YatirimApp.take(id); }catch(e){ return rej(e); }
     if(r){ try{ const o=JSON.parse(r); return o.ok?res(o):rej(new Error(o.error||("HTTP "+o.code))); }catch(e){ return rej(e); } }
     if(Date.now()-t0>45000) return rej(new Error("zaman aşımı")); setTimeout(poll,120); }; setTimeout(poll,60); }); }
-/* Fon fiyat geçmişi (1 yıl, günlük) TEFAS'tan: dakikada ~6 istek sınırı olduğu için fonlar tek tek, 9 sn arayla; telefonda saklanır, haftada bir yenilenir */
-const FH={ d:(()=>{ try{ return JSON.parse(localStorage.getItem("fp-fh")||"{}")||{}; }catch(_){ return {}; } })(), busy:false };
+/* V2: one-year TEFAS fund prices, cached on-device. The shorter FVT/scorelog
+   series must never erase an older real TEFAS observation. No interpolation. */
+const FH={ d:(()=>{ try{ return JSON.parse(localStorage.getItem("fp-fh")||"{}")||{}; }catch(_){return {}} })(),
+  busy:false,loading:null,priority:null,failAt:0,err:null };
 function fhSave(){ try{ localStorage.setItem("fp-fh",JSON.stringify(FH.d)); }catch(_){} }
+function fpFundHistoryRows(rows){
+  const today=new Date(Date.now()+3*3600000).toISOString().slice(0,10),map=new Map();
+  for(const item of Array.isArray(rows)?rows:[]){
+    const date=String(Array.isArray(item)?item[0]:item?.tarih||"").slice(0,10);
+    const raw=Array.isArray(item)?item[1]:item?.fiyat;
+    const price=typeof raw==="string"?Number(raw.trim().replace(",",".")):Number(raw);
+    const ts=Date.parse(date+"T00:00:00Z");
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(ts)||
+        new Date(ts).toISOString().slice(0,10)!==date||date>today||
+        !Number.isFinite(price)||price<=0)continue;
+    map.set(date,price);
+  }
+  return [...map.entries()].sort((a,b)=>a[0].localeCompare(b[0])).slice(-390);
+}
+function fpFundHistoryMerge(previous,incoming){
+  // Duplicate dates prefer the newly verified observation, while older unique days survive.
+  return fpFundHistoryRows([...fpFundHistoryRows(previous),...fpFundHistoryRows(incoming)]);
+}
+function fpFundHistorySpan(rows){
+  const h=fpFundHistoryRows(rows);
+  return h.length<2?0:Math.round((Date.parse(h[h.length-1][0])-Date.parse(h[0][0]))/864e5);
+}
 async function ltefas(code){
-  if(!LIVE.tefasPrimed){ LIVE.tefasPrimed=true; await nget("GET","https://www.tefas.gov.tr/tr/","",{Accept:"text/html"}).catch(()=>{}); }   // çerez
-  const o=await nget("POST","https://www.tefas.gov.tr/api/funds/fonFiyatBilgiGetir",JSON.stringify({fonKodu:code,dil:"TR",periyod:12}),
-    {"Content-Type":"application/json",Accept:"application/json, text/plain, */*",Origin:"https://www.tefas.gov.tr",Referer:"https://www.tefas.gov.tr/tr/"});
-  let j={}; try{ j=JSON.parse(o.body||"{}"); }catch(_){}
-  return (j.resultList||[]).map(p=>[String(p.tarih||"").slice(0,10),Number(p.fiyat)]).filter(z=>z[0]&&z[1]>0).sort((a,b)=>a[0]<b[0]?-1:1); }
-async function fhRefresh(){ if(FH.busy||!LIVE.ok()||!S.market||Date.now()-(FH.failAt||0)<5*60e3) return;
-  const old=v=>!v||Date.now()-v.at>(v.h?.length?7*864e5:30*60e3), need=(S.market.funds||[]).filter(x=>x&&x.code&&old(FH.d[x.code])); if(!need.length) return;
-  FH.busy=true;
-  try{ for(const x of need){ let h=[];
-      // bağlantı/izin hatası: kaydetme, 5 dk sonra yeniden dene (eski uygulama sürümünde adres izinli değildi)
-      try{ h=await ltefas(x.code); }catch(e){ FH.failAt=Date.now(); FH.err=String(e&&e.message||e); LIVE.tefasPrimed=false; break; }
-      if(!h.length) LIVE.tefasPrimed=false; FH.d[x.code]={at:Date.now(),h:h.length?h:(FH.d[x.code]?.h||null)}; fhSave();
-      if(h.length&&S.det&&S.det.c===x.code) drawDetail(); await new Promise(r=>setTimeout(r,9000)); } }
-  finally{ FH.busy=false; } }
+  if(!LIVE.tefasPrimed){
+    LIVE.tefasPrimed=true;
+    await nget("GET","https://www.tefas.gov.tr/tr/","",{Accept:"text/html"}).catch(()=>{});
+  }
+  const o=await nget("POST","https://www.tefas.gov.tr/api/funds/fonFiyatBilgiGetir",
+    JSON.stringify({fonKodu:code,dil:"TR",periyod:12}),
+    {"Content-Type":"application/json",Accept:"application/json, text/plain, */*",
+      Origin:"https://www.tefas.gov.tr",Referer:"https://www.tefas.gov.tr/tr/"});
+  let j;try{j=JSON.parse(o.body||"{}");}catch(_){throw new Error("TEFAS yanıtı JSON değil");}
+  if(j.errorCode||j.errorMessage||!Array.isArray(j.resultList))throw new Error("TEFAS fiyat servisi sonuç vermedi");
+  const rows=fpFundHistoryRows(j.resultList);
+  if(!rows.length)throw new Error("TEFAS boş tarihli fiyat geçmişi verdi");
+  return rows;
+}
+function fhNeeds(v,force){
+  const age=Date.now()-Number(v?.at||0);
+  if(force&&age>2*60e3)return true;
+  if(!v||v.version!==2)return true;
+  if(!Array.isArray(v.h)||!v.h.length)return age>30*60e3;
+  return age>(fpFundHistorySpan(v.h)>=300?7*864e5:12*3600e3);
+}
+async function fhRefresh(priorityCode){
+  const code=String(priorityCode||"").toUpperCase();
+  if(code)FH.priority=code;
+  if(FH.busy||!LIVE.ok()||!S.market||Date.now()-(FH.failAt||0)<5*60e3)return;
+  const need=(S.market.funds||[]).filter(x=>x?.code&&fhNeeds(FH.d[x.code],x.code===code));
+  if(!need.length)return;
+  FH.busy=true;FH.err=null;
+  try{
+    while(need.length){
+      const ix=FH.priority?need.findIndex(x=>x.code===FH.priority):-1;
+      const x=need.splice(ix>=0?ix:0,1)[0]; FH.loading=x.code;
+      if(FH.priority===x.code)FH.priority=null;
+      try{
+        const h=await ltefas(x.code),previous=FH.d[x.code]?.h;
+        FH.d[x.code]={version:2,at:Date.now(),h:fpFundHistoryMerge(previous,h)};
+        fhSave();
+        if(S.det?.t==="f"&&S.det.c===x.code)drawDetail();
+      }catch(e){
+        FH.err=String(e?.message||e);FH.failAt=Date.now();LIVE.tefasPrimed=false;
+        // Leave a previously downloaded longer history untouched on network failures.
+        if(S.det?.t==="f"&&S.det.c===x.code)drawDetail();
+        break;
+      }
+      if(need.length)await new Promise(r=>setTimeout(r,9000));
+    }
+  }finally{FH.busy=false;FH.loading=null;}
+}
+function fhEnsure(code){
+  if(!(S.market?.funds||[]).some(f=>f.code===code))return;
+  fhRefresh(code).catch(e=>{FH.err=String(e?.message||e);});
+}
 /* Kısa vade taraması: her iş günü kapanıştan sonra GitHub'da BIST 100 için üretilir (tools/short.js); telefonda 30 dk'da bir yoklanır */
 "use strict";
 /* Publication + mobile cache gate for BIST daily scans.
