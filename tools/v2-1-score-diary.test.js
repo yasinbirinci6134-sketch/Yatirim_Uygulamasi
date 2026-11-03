@@ -1,0 +1,12 @@
+"use strict";
+const assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path");
+const html=fs.readFileSync(path.join(__dirname,"../ui/index.html"),"utf8");
+const start=html.indexOf("function fpScoreDiary(){"),end=html.indexOf("/* Kisa vadede",start);
+assert.ok(start>=0&&end>start,"score diary function found");
+const fn=html.slice(start,end);
+assert.match(fn,/class="fp-score-diary"/,"score diary has collapsible container");
+assert.match(fn,/<summary>/,"summary remains visible");
+assert.match(fn,/<\/details>/,"collapsible container closes");
+assert.doesNotMatch(fn,/<details[^>]*\sopen(?:\s|=|>)/,"diary is collapsed by default");
+assert.match(fn,/fpSignalResults\(h\)/,"score calculations retained");
+console.log("2.1 compact score diary markup passed");
