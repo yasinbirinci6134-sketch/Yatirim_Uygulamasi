@@ -3,7 +3,7 @@ def run = (System.getenv('GITHUB_RUN_NUMBER') ?: '1').toInteger()
 android {
   namespace 'com.yasin.yatirimapp'
   compileSdk 34
-  defaultConfig { applicationId 'com.yasin.yatirimapp'; minSdk 26; targetSdk 34; versionCode run; versionName "1.${run}" }
+  defaultConfig { applicationId 'com.yasin.yatirimapp'; minSdk 26; targetSdk 34; versionCode run; versionName "1.${run}"; manifestPlaceholders = [appDisplayName: 'Yatırım'] }
   // Arayüz tek kaynaktan: ui/index.html (uygulama ayrıca GitHub'dan günceller)
   sourceSets { main { assets.srcDirs = ['../ui'] } }
   signingConfigs { release { storeFile file('release.p12'); storeType 'pkcs12'; storePassword System.getenv('KEYSTORE_PASSWORD'); keyAlias 'yatirim'; keyPassword System.getenv('KEYSTORE_PASSWORD') } }
@@ -15,6 +15,16 @@ android {
     release {
       minifyEnabled false
       signingConfig signingConfigs.release
+    }
+    // PREVIEW2 is a one-time identity migration away from ephemeral CI debug keys.
+    // All future preview APKs use the SAME private release keystore as main,
+    // but a distinct package; the production app is never overwritten.
+    preview {
+      initWith release
+      applicationIdSuffix '.preview2'
+      versionNameSuffix '-preview'
+      manifestPlaceholders = [appDisplayName: 'Fon Pusulası 2.0']
+      matchingFallbacks = ['release']
     }
   }
   compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }

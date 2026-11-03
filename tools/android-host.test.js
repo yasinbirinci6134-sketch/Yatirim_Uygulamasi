@@ -10,7 +10,7 @@ assert.ok(source.includes("void onActivityResult(int requestCode, int resultCode
 assert.ok(source.includes("callback.onReceiveValue(picked == null ? null : new Uri[]{picked})"),"Selected URI must reach WebView");
 assert.match(source,/s\.setJavaScriptEnabled\(true\)/);
 assert.match(source,/web\.addJavascriptInterface\(new Bridge\(\), "YatirimApp"\)/);
-assert.match(source,/getPackageName\(\)\.endsWith\("\.preview"\)/);
+assert.match(source,/getPackageName\(\)\.startsWith\("com\.yasin\.yatirimapp\.preview"\)/);
 assert.ok(source.includes("PREVIEW_STATUS_URL"),"preview should read the last CI build status");
 assert.ok(source.includes('!"success".equals(status.optString("status"))'),"failed or unfinished builds must never be served remotely");
 assert.ok(source.includes('pinned.matches("[0-9a-f]{40}")'),"preview should use a verified 40-character immutable commit");

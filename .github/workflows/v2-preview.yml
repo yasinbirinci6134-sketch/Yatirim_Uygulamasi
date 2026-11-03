@@ -36,6 +36,7 @@ jobs:
           node tools/statement-ui.test.js
           node tools/statement-csv.test.js
           node tools/android-host.test.js
+          node tools/preview-signing.test.js
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -43,21 +44,64 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - name: Build independently installable preview
-        run: gradle assembleDebug --no-daemon
-      - name: Verify APK archive and create build fingerprints
+      - name: Restore stable APK signing key from existing GitHub Secrets
         shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
           set -euo pipefail
-          apk=app/build/outputs/apk/debug/app-debug.apk
+          if [[ -z "$KEYSTORE_B64" || -z "$KEYSTORE_PASSWORD" ]]; then
+            echo "::error::Existing KEYSTORE_B64 and KEYSTORE_PASSWORD secrets are required; refusing a temporary signing key."
+            exit 1
+          fi
+          printf '%s' "$KEYSTORE_B64" | base64 -d > app/release.p12
+          test -s app/release.p12
+          keytool -list -keystore app/release.p12 -storetype PKCS12 -storepass "$KEYSTORE_PASSWORD" -alias yatirim >/dev/null
+      - name: Build stable-signed preview (independent from production)
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: gradle assemblePreview --no-daemon
+      - name: Verify APK archive and create build fingerprints
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          apk=app/build/outputs/apk/preview/app-preview.apk
           test -s "$apk"
           unzip -tq "$apk" >/dev/null
+          sdk="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          tools_dir="$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          test -x "$tools_dir/apksigner" && test -x "$tools_dir/aapt"
+          "$tools_dir/apksigner" verify --verbose --print-certs "$apk" > /tmp/preview-signature.txt
+          "$tools_dir/aapt" dump badging "$apk" > /tmp/preview-package.txt
+          grep -q "^package: name='com.yasin.yatirimapp.preview2'" /tmp/preview-package.txt
+          grep -q "certificate SHA-256 digest:" /tmp/preview-signature.txt
+          printf 'signed_package=com.yasin.yatirimapp.preview2\n' > /tmp/preview-public-metadata.txt
+          grep 'certificate SHA-256 digest:' /tmp/preview-signature.txt | head -1 >> /tmp/preview-public-metadata.txt
+          # Refuse to replace an existing preview2 release with a different
+          # signing certificate, or with a non-increasing Android versionCode.
+          mkdir -p /tmp/preview-previous
+          if gh release download v2-preview-current --pattern 'Fon-Pusulasi-2-Preview.apk' --dir /tmp/preview-previous --clobber >/dev/null 2>&1; then
+            old=/tmp/preview-previous/Fon-Pusulasi-2-Preview.apk
+            if "$tools_dir/aapt" dump badging "$old" | grep -q "^package: name='com.yasin.yatirimapp.preview2'"; then
+              "$tools_dir/apksigner" verify --print-certs "$old" > /tmp/previous-signature.txt
+              old_cert="$(grep 'certificate SHA-256 digest:' /tmp/previous-signature.txt | head -1)"
+              new_cert="$(grep 'certificate SHA-256 digest:' /tmp/preview-signature.txt | head -1)"
+              test "$old_cert" = "$new_cert" || { echo "::error::Signing certificate changed; existing installations would reject this APK."; exit 1; }
+              old_code="$( "$tools_dir/aapt" dump badging "$old" | head -1 | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p" )"
+              new_code="$(head -1 /tmp/preview-package.txt | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")"
+              test -n "$old_code" && test -n "$new_code" && (( 10#$new_code > 10#$old_code )) || { echo "::error::versionCode must rise for Android in-place updates."; exit 1; }
+            fi
+          fi
           # The bundled WebView UI must be byte-identical to this checkout.
           unzip -p "$apk" assets/index.html | cmp - ui/index.html
           test -s ui/index.html
           cp "$apk" Fon-Pusulasi-2-Preview.apk
           sha256sum Fon-Pusulasi-2-Preview.apk > Fon-Pusulasi-2-Preview.apk.sha256
           printf 'commit=%s\nrun=%s\nbranch=%s\n' "$GITHUB_SHA" "$GITHUB_RUN_NUMBER" "$GITHUB_REF_NAME" > Fon-Pusulasi-2-Preview-build.txt
+          cat /tmp/preview-public-metadata.txt >> Fon-Pusulasi-2-Preview-build.txt
       - uses: actions/upload-artifact@v4
         with:
           name: Fon-Pusulasi-2-Preview-APK

@@ -159,3 +159,11 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - Acilista ag verileri gelmese de yeni kontrol merkezi render edilir; eski bos ekran yerine yeni tasarim gorulur.
 - Veriye dayali kontrol paneli TWR/XIRR gibi dogrulanmis gercek getiriyle karistirilmamalidir.
 - tools/v2-dashboard.test.js node testinde bos, guncel, gecikmis, guvenilmez fiyat senaryolari ve buton yonlendirmeleri denenir.
+
+## 2.0 APK'lerinde art arda guncelleme ve tek seferlik kimlik gecisi
+- Onceki APK'lar GitHub Actions assembleDebug ile runner'in degisen debug key'iyle imzalaniyordu; dolayisiyla ayni .preview paketi uzerine kurulamazdi.
+- Yeni Preview buildType assemblePreview kalici, var olan KEYSTORE_B64 / KEYSTORE_PASSWORD Actions Secrets'i ve PKCS12 imzasini kullanir. Secrets kaynak kodunda veya APK'de tutulmaz; eksikse build fail olur.
+- Eski gecici imzali .preview APK yukseltilemeyecegi icin yeni paket com.yasin.yatirimapp.preview2 olarak BIR KEZ ayri kurulur. Eski .preview ve ana production uygulama oldugu yerde kalir.
+- Ayarlar > Yedek > Yedegi paylas, eski preview uygulamasindan portfoy, islemler, nakit hareketleri, yatirim notlari, takip listeleri ve tercihler icin kullanilabilir. Yeni preview2: Ayarlar > Yedegi geri yukle; orijinal uygulamayi silme gerekmez.
+- Yeni preview2 uzerine gelecek Preview APK'lar ayni imza ve artan versionCode ile dogrudan kurulabilir. CI yayindan once mevcut preview2 APK ile sertifika ozeti ve versionCode karsilastirir.
+- Ilk yeni imzali APK'nin fiziksel Android cihazda ustune kurulum testi yapilmamistir; derleme ve imza dogrulamasi cihaz testinin yerini tutmaz.

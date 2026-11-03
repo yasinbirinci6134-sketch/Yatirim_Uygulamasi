@@ -195,7 +195,7 @@ public class MainActivity extends Activity {
       try {
         JSONObject h = new JSONObject(); String et = up().getString("etag2", null); if (et != null && uiFile().exists()) h.put("If-None-Match", et);
         h.put("Accept", "application/vnd.github.raw");
-        boolean preview = getPackageName().endsWith(".preview");
+        boolean preview = getPackageName().startsWith("com.yasin.yatirimapp.preview");
         // Preview must never consume a commit that has not passed its APK test/build.
         // The build status is written by Actions only after the published APK succeeds.
         String pinned = null;

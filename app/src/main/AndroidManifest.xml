@@ -3,7 +3,7 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-  <application android:label="Yatırım" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher"
+  <application android:label="${appDisplayName}" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher"
       android:theme="@style/AppTheme" android:usesCleartextTraffic="false">
     <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTask"
         android:configChanges="orientation|screenSize|keyboardHidden|uiMode" android:windowSoftInputMode="adjustResize">

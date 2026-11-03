@@ -4097,7 +4097,7 @@ if(window.__standalone){
           <label class="st-r"><span class="st-ic">🔔</span><span class="tx">Fiyat alarmları<small>Kalem detayındaki 🔔 ile kurulur</small></span>${sw("nAl",cfg.alarms!==false)}</label>
           ${al.map(a=>`<div class="st-r" style="cursor:default"><span class="st-ic" style="background:none">↳</span><span class="tx ${a.on===false?"muted":""}"><b>${esc(a.c)}</b> ${a.op===">"?"≥":"≤"} ${fmtP(a.p)}${a.on===false?(a.hitAt?" · gerçekleşti":" · kapalı"):""}</span><button class="linkbtn" data-adel="${a.id}">Sil</button></div>`).join("")}`}</div>
         <div class="st-h">Yedek</div><div class="st-g">
-          <div class="st-r" data-bk><span class="st-ic">📤</span><span class="tx">Yedeği paylaş<small>Portföyün ve takip listen yalnız bu telefonda durur; yedeği kendine gönder</small></span><span class="ch">›</span></div>
+          <div class="st-r" data-bk><span class="st-ic">📤</span><span class="tx">Yedeği paylaş<small>Portföy, nakit hareketleri, notlar, takip listesi ve tema. Uygulamayı kaldırmadan önce yedeği kaydet.</small></span><span class="ch">›</span></div>
           <div class="st-r" data-bo><span class="st-ic">📥</span><span class="tx">Yedeği geri yükle</span><span class="ch">›</span></div>
           <div class="st-r" id="bkBox" hidden style="cursor:default;flex-direction:column;align-items:stretch"><textarea id="impTxt" placeholder="Yedek metnini yapıştır"></textarea><button class="btn" id="impBtn">Geri yükle</button></div></div>
         <div class="st-h">Uygulama</div><div class="st-g">
@@ -4123,13 +4123,22 @@ if(window.__standalone){
         if(v) withNotify(ok=>{ if(ok) save(); else c.checked=false; draw(); }); else save(); }; };
       tg("nDaily","daily"); tg("nExit","exit"); tg("nAl","alarms");
       sh.querySelectorAll("[data-adel]").forEach(b=>b.onclick=()=>{ A.setAlarms(JSON.stringify(getAl().filter(a=>String(a.id)!==b.dataset.adel))); draw(); });
-      q("[data-bk]").onclick=()=>{ const txt=JSON.stringify({yatirim:1,at:new Date().toISOString(),items:[...S.pfs,...S.trades].map(x=>({...x})),watch:{s:S.watch,f:S.fwatch,x:S.fxwatch}}); if(has("share")) A.share(txt,"Yatırım yedeği"); };
+      q("[data-bk]").onclick=()=>{ const txt=JSON.stringify({yatirim:1,at:new Date().toISOString(),
+        items:[...S.pfs,...S.trades,...(S.cashflows||[]),...(S.journal||[])].map(x=>({...x})),
+        watch:{s:S.watch,f:S.fwatch,x:S.fxwatch},theme:{...TH},layout:{...LAY},autoq:[...AUTOQ]}); if(has("share")) A.share(txt,"Yatırım yedeği"); };
       q("[data-bo]").onclick=()=>{ const b=q("#bkBox"); b.hidden=!b.hidden; };
       q("#impBtn").onclick=async()=>{ let o; try{ o=JSON.parse(q("#impTxt").value.trim()); }catch(_){ toast("Metin okunamadı; tamamını yapıştırdığından emin ol."); return; }
         if(!o||o.yatirim!==1||!Array.isArray(o.items)){ toast("Bu metin portföy yedeği değil."); return; }
         let n=0; for(const it of o.items){ if(!it||!it.id) continue; const {id,...d}=it; await tradesCol().doc(id).set(d); if(d.kind==="prefs"){ try{ loadPrefs(d); }catch(_){} } else n++; }
         const W=o.watch||{}, mg=(a,b)=>[...new Set([...(a||[]),...(b||[])])];
         if(W.s?.length) await saveWatch(mg(S.watch,W.s)); if(W.f?.length) await saveFundWatch(mg(S.fwatch,W.f)); if(W.x?.length) await saveFxWatch(mg(S.fxwatch,W.x));
+        if(o.layout&&typeof o.layout==="object"){LAY={...LAY,...o.layout};saveLay();}
+        if(o.theme&&typeof o.theme==="object"){
+          TH={...TH,...o.theme};
+          try{if(FP_PREVIEW_V2_UI)localStorage.setItem("fp-v2-theme-choice",TH.design);}catch(_){}
+          saveTheme();
+        }
+        if(Array.isArray(o.autoq)){AUTOQ=o.autoq.filter(k=>Object.prototype.hasOwnProperty.call(QK,k));saveAutoQ();}
         toast(n+" kayıt geri yüklendi."); close(); };
       q("[data-up]").onclick=()=>apkCheck(true);
       q("[data-sh]").onclick=()=>{ if(has("share")) A.share(`Yatırım uygulaması (Android): https://github.com/${REPO}/releases/latest — sayfadaki Yatirim.apk dosyasını indirip kur.`,"Yatırım uygulaması"); };
