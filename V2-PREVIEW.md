@@ -133,3 +133,9 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - Load kuşak numarasi ile eski watchdog yeni UI'yi geriye dusuremez.
 - Portfoy, nakit hareketleri, tema, yerel veriler ve localStorage kurtarma sirasinda silinmez.
 - Otomatik kaynak/derleme testleri gercek telefonda acilis testinin yerini tutmaz.
+
+## Telefon acilis tanilamasi
+- Android host her acilis denemesinde durum, sure ve basarili/hatali geri donus sayaclarini kaydeder.
+- startupReport() yalniz teknik sayaclar, uygulama surumu, ekran kaynagi ve zamanlari dondurur.
+- Portfoy islemleri, ekstre tutarlari, hesap bilgileri veya URL'ler tanilama raporuna eklenmez.
+- Bu bilgiler cihazda tutulur; kullanici paylasmadikca otomatik gonderilmez.

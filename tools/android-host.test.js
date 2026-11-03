@@ -30,3 +30,12 @@ assert.ok(source.includes('showStartupRecovery()'),"bundled failure must have an
 assert.ok(source.includes('retry.setOnClickListener(v -> load())'),"native retry button must reload");
 assert.ok(source.includes('putString("lastGoodSha", curSha)'),"good version is recorded only after ready()");
 assert.ok(!source.includes('localStorage.clear('),"startup rollback must not clear localStorage");
+
+assert.ok(source.includes('@JavascriptInterface public String startupReport()'),"local startup diagnostics bridge should exist");
+for(const metric of ["bootAttempts","rollbacks","startupStalls","lastBootMs","lastReadyAt","lastFailureAt"]) {
+ assert.ok(source.includes('"'+metric+'"'),"startup metric missing: "+metric);
+}
+const diag=source.slice(source.indexOf('@JavascriptInterface public String startupReport()'),source.indexOf('@JavascriptInterface public int netVersion()',source.indexOf('@JavascriptInterface public String startupReport()')));
+assert.ok(!/password|portfolio|balance|holdings|username|email|token/i.test(diag),"diagnostics may not export private financial/account details");
+assert.ok(source.includes('putString("bootOutcome", "rollback")'),"rollback counts must be recorded on failures");
+assert.ok(source.includes('putString("bootOutcome", "stalled")'),"bundled app hangs must be recorded");

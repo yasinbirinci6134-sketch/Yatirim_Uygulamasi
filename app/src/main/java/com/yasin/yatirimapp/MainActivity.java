@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
   static final java.util.concurrent.ExecutorService NET = java.util.concurrent.Executors.newFixedThreadPool(6);
   static final java.util.concurrent.ConcurrentHashMap<String, String> RES = new java.util.concurrent.ConcurrentHashMap<>();
   final Handler ui = new Handler(Looper.getMainLooper());
-  WebView web; LinearLayout recoveryPane; int loadGeneration; boolean ready, checked; long lastCheck, stoppedAt; String source = "asset", curSha = ""; String pendingOpen;
+  WebView web; LinearLayout recoveryPane; int loadGeneration; long lastLoadStarted; boolean ready, checked; long lastCheck, stoppedAt; String source = "asset", curSha = ""; String pendingOpen;
   static final int STATEMENT_FILE_PICKER_REQUEST = 2045;
   ValueCallback<Uri[]> pendingFileChooser;
 
@@ -156,6 +156,10 @@ public class MainActivity extends Activity {
     ready = false;
     if (recoveryPane != null) recoveryPane.setVisibility(View.GONE);
     final int generation = ++loadGeneration;
+    lastLoadStarted = System.currentTimeMillis();
+    SharedPreferences stats = up();
+    stats.edit().putInt("bootAttempts", stats.getInt("bootAttempts", 0) + 1)
+      .putLong("lastAttemptAt", lastLoadStarted).putString("bootOutcome", "loading").apply();
     String html = pickUi();
     final String loadedSource = source, fingerprint = curSha;
     web.loadDataWithBaseURL(BASE, html, "text/html", "UTF-8", null);
@@ -163,7 +167,11 @@ public class MainActivity extends Activity {
     ui.postDelayed(() -> {
       if (generation != loadGeneration || ready) return;
       if ("file".equals(loadedSource) && fingerprint.equals(curSha)) {
-        up().edit().putString("bad", fingerprint).apply();
+        SharedPreferences stats = up();
+        stats.edit().putString("bad", fingerprint)
+          .putInt("rollbacks", stats.getInt("rollbacks", 0) + 1)
+          .putLong("lastFailureAt", System.currentTimeMillis())
+          .putString("bootOutcome", "rollback").apply();
         if (uiFile().isFile()) {
           try {
             String current = readAll(new java.io.FileInputStream(uiFile()));
@@ -172,6 +180,10 @@ public class MainActivity extends Activity {
         }
         load();
       } else {
+        SharedPreferences stats = up();
+        stats.edit().putInt("startupStalls", stats.getInt("startupStalls", 0) + 1)
+          .putLong("lastFailureAt", System.currentTimeMillis())
+          .putString("bootOutcome", "stalled").apply();
         showStartupRecovery();
       }
     }, "file".equals(loadedSource) ? 12000 : 20000);
@@ -323,10 +335,33 @@ public class MainActivity extends Activity {
       ui.post(() -> {
         ready = true;
         if (recoveryPane != null) recoveryPane.setVisibility(View.GONE);
-        if ("file".equals(source) && !curSha.isEmpty()) up().edit().putString("lastGoodSha", curSha).apply();
+        SharedPreferences.Editor successful = up().edit()
+          .putString("bootOutcome", "ready")
+          .putString("lastBootSource", source)
+          .putLong("lastReadyAt", System.currentTimeMillis())
+          .putLong("lastBootMs", Math.max(0L, System.currentTimeMillis() - lastLoadStarted));
+        if ("file".equals(source) && !curSha.isEmpty()) successful.putString("lastGoodSha", curSha);
+        successful.apply();
         deliverOpen();
         checkUi();
       });
+    }
+    /* Technical counters only: no holdings, balances, logins, transaction details or URLs. */
+    @JavascriptInterface public String startupReport() {
+      SharedPreferences p = up();
+      JSONObject report = new JSONObject();
+      try {
+        report.put("appVersion", versionName());
+        report.put("status", p.getString("bootOutcome", "unknown"));
+        report.put("lastSource", p.getString("lastBootSource", "unknown"));
+        report.put("attempts", p.getInt("bootAttempts", 0));
+        report.put("rollbacks", p.getInt("rollbacks", 0));
+        report.put("stalls", p.getInt("startupStalls", 0));
+        report.put("lastDurationMs", p.getLong("lastBootMs", 0L));
+        report.put("lastReadyAt", p.getLong("lastReadyAt", 0L));
+        report.put("lastFailureAt", p.getLong("lastFailureAt", 0L));
+      } catch (Exception ignored) {}
+      return report.toString();
     }
     @JavascriptInterface public int netVersion() { return 2; }
     @JavascriptInterface public boolean standalone() { return true; }
