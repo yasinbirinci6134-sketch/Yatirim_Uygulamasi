@@ -48,7 +48,7 @@ root.appendChild=function(n){this.children.push(n)};
 const oldCreate=document.createElement.bind(document);
 document.createElement=function(tag){
   const n=oldCreate(tag);
-  if(tag==="div"){n.moreButton={attributes:{},setAttribute(k,v){this.attributes[k]=v}};
+  if(tag==="div"){n.moreButton={attributes:{},setAttribute(k,v){this.attributes[k]=v},addEventListener(k,fn){this[k]=fn}};
     n.pills=["all","watch"].map(choice=>({dataset:{fp2DiscFocus:choice},attributes:{},
       setAttribute(k,v){this.attributes[k]=v},addEventListener(k,fn){this[k]=fn}}));}
   return n;
