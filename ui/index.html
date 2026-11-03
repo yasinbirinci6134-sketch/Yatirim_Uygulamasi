@@ -4245,84 +4245,91 @@ if(window.__standalone){
       const sc=document.querySelectorAll(".scrim"); if(sc.length) sc[sc.length-1].click(); if(document.querySelector(".sheet")){ sh[sh.length-1].remove(); sc[sc.length-1]?.remove(); } },true); }
   // güncelleme sonrası açık sekmeye dön
   try{ const r=JSON.parse(localStorage.getItem("fp-restore")||"null"); if(r){ localStorage.removeItem("fp-restore"); if(Date.now()-r.at<60e3){ if(r.hmode) S.hmode=r.hmode; if(r.gmode) S.gmode=r.gmode; if(r.tab&&r.tab!==S.tab){ S.tab=r.tab; showTab(); } setTimeout(()=>window.scrollTo(0,r.y||0),400); setTimeout(()=>toast("Uygulama güncellendi"),600); } } }catch(_){}
+/* FP2 home: genuine source-based dashboard; unknown quote stays unknown. */
+function fp2DashboardPortfolio(pf,rows,today){
+  const list=Array.isArray(rows)?rows:[], invested=list.reduce((sum,r)=>sum+(Number.isFinite(r?.amount)&&r.amount>=0?r.amount:NaN),0);
+  const value=pf&&list.length&&Number.isFinite(invested)?fpTrustedHoldingsValue(list,today):NaN;
+  return {count:list.length,invested:Number.isFinite(invested)?invested:null,value:Number.isFinite(value)?value:null,
+    difference:Number.isFinite(value)&&Number.isFinite(invested)?value-invested:null};
+}
 function studio2RenderGundem(){
-  const v=$("v-gundem"), m=S.market;
+  const v=$("v-gundem"),m=S.market;
   if(!v)return;
-  if(!m){v.innerHTML='<div class="s2-page"><section class="s2-chatcard">Veriler yükleniyor…</section></div>';return;}
-  const a=m.advice||{}, items=(a.short?.items||[]).filter(z=>Number(z.weight)>0).slice(0,4);
-  const indicators=m.indicators||[], find=k=>indicators.find(z=>z.k===k), news=m.news||[];
-  const records=(S.trades||[]).filter(t=>t.status!=="closed"), sum=records.reduce((acc,t)=>{
-    const f=asset(t.code), price=Number(f?.price)||Number(t.price), units=Number(t.units)||(Number(t.amount)/Number(t.price)), value=price*units;
-    if(Number.isFinite(value)){acc.value+=value;acc.cost+=Number(t.amount)||0;}
-    return acc;
-  },{value:0,cost:0}), gain=sum.value-sum.cost;
-  const money=n=>(Number.isFinite(n)?Math.round(n).toLocaleString("tr-TR"):"—")+" ₺";
-  const sign=n=>Number(n)>0?"+":"";
-  const brief=sentences(a.summary||"").slice(0,3);
-  const tile=(title,indicator,kind,code)=>{
-    if(!indicator?.v)return "";
-    const x=kind==="x"?(m.fx||[]).find(z=>z.code===code):null, rate=typeof x?.d1==="number"?x.d1:null;
-    return `<div class="s2-pulse${code?" s2-click":""}" ${code?`data-s2open="${kind}:${code}"`:""}>
-      <span>${esc(title)}</span><b>${esc(String(indicator.v).replace(/\s*TL$/,""))}</b>
-      <small class="${rate==null?"":rate>=0?"up":"down"}">${rate==null?"Son açıklanan veri":`${sign(rate)}%${Math.abs(rate).toLocaleString("tr-TR",{maximumFractionDigits:2})} · 1 gün`}</small>
-    </div>`;
-  };
-  const stats=[
-    tile("BIST 100",find("BIST 100")),
-    tile("Dolar / TL",find("Dolar/TL"),"x","USD"),
-    tile("Gram altın",find("Gram altın"),"x","GAU"),
-    tile("Politika faizi",find("Politika faizi"))
-  ].filter(Boolean).join("");
-  const all=S._studioNewsAll,shown=news.slice(0,all?99:4);
-  v.innerHTML=`<div class="s2-page">
-    <div class="s2-hello"><div class="s2-kicker">FON PUSULASI <span>·</span> GÜNLÜK ÖZET</div>
-      <h2>Piyasada bugün.</h2>
-      <p>${esc(updLbl())} itibarıyla mevcut verilerin kısa özeti.</p></div>
-    ${records.length?`<section class="s2-balance" data-s2tab="sanal" role="button" tabindex="0">
-      <div class="s2-balance-top"><span>PORTFÖYÜNÜN DEĞERİ</span><span>Portföye git ↗</span></div>
-      <strong>${money(sum.value)}</strong>
-      <div class="s2-balance-foot"><span>Yatırılan <b>${money(sum.cost)}</b></span>
-        <span>Toplam fark <b class="${gain>=0?"up":"down"}">${sign(gain)}${money(gain)}</b></span></div>
-    </section>`:`<section class="s2-balance s2-empty">
-      <div class="s2-balance-top"><span>PORTFÖY</span><span>Henüz kayıt yok</span></div>
-      <strong>Portföyünü ekle.</strong><p>Hisse ve fonlarını kaydet, toplam değeri burada gör.</p>
-      <button class="s2-textaction" data-s2tab="sanal">Portföye git ↗</button>
-    </section>`}
-    <section class="s2-chatcard">
-      <div class="s2-chathead"><div class="s2-mark">✦</div><div><span>FON PUSULASI ANALİZİ</span><h3>Günün kısa özeti</h3></div></div>
-      ${brief.length?`<div class="s2-brief">${brief.map(p=>`<p>${esc(p)}</p>`).join("")}</div>`:`<p class="s2-muted">Bugün için henüz analiz yayımlanmadı.</p>`}
-      ${items.length?`<div class="s2-alloc-title">Kısa vade dağılımı</div>
-      <div class="s2-alloc">${items.map(x=>`<div class="s2-alloc-row">
-        <span><b>${esc(x.code)}</b><small>${esc(asset(x.code)?.name||"Önerilen varlık")}</small></span>
-        <div class="s2-alloch"><i style="width:${Math.min(100,Math.max(0,Number(x.weight)))}%"></i></div><strong>%${esc(x.weight)}</strong>
-      </div>`).join("")}</div>
-      <button class="s2-textaction" data-s2tab="oneri">Fon önerilerini incele ↗</button>`:""}
+  const a=m?.advice||{},news=Array.isArray(m?.news)?m.news:[],ind=Array.isArray(m?.indicators)?m.indicators:[];
+  const last=m?.updatedAt&&Number.isFinite(Date.parse(m.updatedAt))?new Date(m.updatedAt).toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"";
+  const fresh=last&&Date.now()-Date.parse(m.updatedAt)<=48*3600000;
+  const today=new Date(Date.now()+3*3600000).toISOString().slice(0,10);
+  const pf=curPf(),rows=pf?portfolioRows(pf):[],pt=fp2DashboardPortfolio(pf,rows,today);
+  const money=n=>Number.isFinite(n)?n.toLocaleString("tr-TR",{maximumFractionDigits:0})+" ₺":"—";
+  const signed=n=>Number.isFinite(n)?(n>0?"+":"")+money(n):"—";
+  const indicator=(name,display)=>{const found=ind.find(x=>x.k===name),v=found?.v;
+    return `<div class="fp2-ticker"><span>${esc(display)}</span><strong>${v==null||!String(v).trim()?"—":esc(String(v).replace(/\s*TL$/,""))}</strong></div>`;};
+  const tickers=[indicator("BIST 100","BIST 100"),indicator("Dolar/TL","USD / TRY"),indicator("Gram altın","GRAM ALTIN"),indicator("Politika faizi","FAİZ")].join("");
+  const shortFresh=fpShortFresh(),short=shortFresh&&Array.isArray(SH.d?.items)?
+    SH.d.items.filter(x=>x&&Number.isInteger(x.score)&&x.score>=80&&x.score<=100&&Number.isFinite(x.price)&&x.price>0)
+      .slice().sort((x,y)=>y.score-x.score||x.code.localeCompare(y.code)).slice(0,3):[];
+  const longer=[...(m?.stocks||[]).filter(x=>Number.isInteger(x.score)&&x.score>=0&&x.score<=100),
+    ...(m?.funds||[]).filter(x=>Number.isInteger(x.score)&&x.score>=0&&x.score<=100)]
+    .slice().sort((x,y)=>y.score-x.score||x.code.localeCompare(y.code)).slice(0,3);
+  const hist=fpHistory(),latest=hist.at(-1),previous=hist.length>1?hist[hist.length-2]:null;
+  const changes=latest&&previous&&latest.asOf!==previous.asOf?(latest.items||[]).map(x=>{
+    const y=(previous.items||[]).find(z=>z.code===x.code);
+    return y&&Number.isInteger(x.score)&&Number.isInteger(y.score)?{code:x.code,delta:x.score-y.score}:null;
+  }).filter(Boolean).sort((x,y)=>Math.abs(y.delta)-Math.abs(x.delta)).slice(0,4):[];
+  const radarRows=(items)=>items.map((x,i)=>`<div class="fp2-radar-row"><span>${i+1}</span><b>${esc(x.code)}</b><strong>${x.score}</strong></div>`).join("");
+  const brief=sentences(a.summary||"").slice(0,2);
+  v.innerHTML=`<div class="fp2-home">
+    <section class="fp2-command">
+      <div class="fp2-command-top"><span>FON PUSULASI / KONTROL MERKEZİ</span><span>2.0</span></div>
+      <div class="fp2-command-main"><div><small>GÜNLÜK GÖRÜNÜM</small><h2>Piyasa ekranın.<br><em>Tek bakışta.</em></h2>
+        <p>${last?`Son analiz: ${esc(last)}${fresh?"":" · Yeni veri bekleniyor"}`:"Piyasa verileri yükleniyor. Portföyün yine de erişilebilir."}</p></div>
+        <div class="fp2-compass" aria-hidden="true"><span>✦</span><small>N</small></div></div>
+      <div class="fp2-actions"><button data-fp2go="sanal">▤ Portföyüm</button><button data-fp2go="hisse">↗ Hisseler</button><button data-fp2go="oneri">◎ Fonlar</button></div>
     </section>
-    <section class="s2-market"><div class="s2-section"><div><span>PİYASA NABZI</span><h3>Temel göstergeler</h3></div><button data-s2tab="piyasa">Tüm göstergeler ↗</button></div>
-      <div class="s2-pulse-grid">${stats||'<p class="s2-muted">Piyasa verisi bekleniyor.</p>'}</div></section>
-    ${a.watch?.length?`<section class="s2-notes">
-      <div class="s2-section"><div><span>TAKVİM &amp; TAKİP</span><h3>Göz atılacaklar</h3></div></div>
-      ${a.watch.slice(0,4).map((x,i)=>`<div class="s2-note"><span>${String(i+1).padStart(2,"0")}</span><p>${esc(x)}</p></div>`).join("")}
-    </section>`:""}
-    <section class="s2-news"><div class="s2-section"><div><span>HABER AKIŞI</span><h3>Son gelişmeler</h3></div>
-       <span class="s2-count">${news.length} haber</span></div>
-      <div class="s2-newslist">${shown.length?shown.map((n,i)=>`<button class="s2-newsrow" data-s2news="${i}">
-        <span class="s2-newsline ${n.impact==="yuksek"?"s2-urgent":""}"></span>
-        <span class="s2-newsmain"><strong>${esc(n.title)}</strong><small>${esc(fmtDate(n.date)||"")}${n.source?" · "+esc(n.source):""}</small></span>
-        <span class="s2-newsarrow">↗</span></button>`).join(""):'<p class="s2-muted">Henüz haber yok.</p>'}</div>
-      ${news.length>4?`<button class="s2-more" data-s2all>${all?"Daha az göster":"Tüm haberleri göster"}</button>`:""}
+    <div class="fp2-tickerbar" aria-label="Son yayımlanan piyasa göstergeleri">${tickers}</div>
+    <div class="fp2-section-title"><span>01 / PORTFÖY</span><div><h3>Varlıklarına bak.</h3><button data-fp2go="sanal">Tümünü aç ↗</button></div></div>
+    <section class="fp2-portfolio">
+      ${pf?`<div class="fp2-port-top"><b>${esc(pf.name||"Portföy")}</b><span>${new Set(rows.map(x=>x.code)).size} varlık · ${pt.count} açık işlem</span></div>
+        <div class="fp2-port-main"><small>AÇIK POZİSYON DEĞERİ</small><strong>${money(pt.value)}</strong>
+          <p>${pt.value!=null?"Tarih ve fiyat kaynağı kontrol edildi.":"Güncel fiyat doğrulanamadı; değer gösterilmiyor."}</p></div>
+        <div class="fp2-port-numbers"><div><span>Kayıtlı alış maliyeti</span><b>${money(pt.invested)}</b></div>
+          <div><span>Değer − maliyet</span><b class="${pt.difference==null?"":pt.difference>=0?"fp2-positive":"fp2-negative"}">${signed(pt.difference)}</b></div></div>
+        ${rows.slice(0,4).map(x=>`<div class="fp2-held"><span><b>${esc(x.code)}</b><small>${esc(asset(x.code)?.name||"Pozisyon")}</small></span><strong>${pt.value==null?"—":money(x.value)}</strong></div>`).join("")}
+        <p class="fp2-caveat">Yalnız açık pozisyonlar; nakit, komisyon ve gerçekleşmiş kâr dahil değildir. Gerçek portföy getirisi değildir.</p>`:
+        `<div class="fp2-empty"><h4>Portföyünü buraya taşı.</h4><p>Fon ve hisselerini kaydettiğinde açık pozisyon değerlerini görebilirsin.</p><button data-fp2go="sanal">Portföy oluştur ↗</button></div>`}
     </section>
-   </div>`;
-  v.querySelectorAll("[data-s2tab]").forEach(el=>el.addEventListener("click",()=>{
-    S.tab=el.dataset.s2tab;showTab();renderAll();window.scrollTo({top:0,behavior:"instant"});
+    <div class="fp2-section-title"><span>02 / RADAR</span><div><h3>İki ayrı bakış.</h3><button data-fp2go="hisse">Analize git ↗</button></div></div>
+    <div class="fp2-radar-grid">
+      <section class="fp2-radar"><div class="fp2-radar-head"><span>KISA VADE</span><h4>Günlük tarama</h4><small>${shortFresh?esc(SH.d?.asOf||"Tarih yok"):"Güncel tarama yok"}</small></div>
+        ${short.length?radarRows(short):`<p>${shortFresh?"80+ puanlı hisse bulunmadı.":"Doğrulanmış yeni tarama bekleniyor."}</p>`}
+        <button data-fp2go="hisse">Kısa vadeye git ↗</button></section>
+      <section class="fp2-radar"><div class="fp2-radar-head"><span>UZUN VADE</span><h4>Puan sıralaması</h4><small>${m?"Son analiz":"Veri yok"}</small></div>
+        ${longer.length?radarRows(longer):'<p>Hisse ve fon analizleri bekleniyor.</p>'}
+        <button data-fp2go="oneri">Fonlara git ↗</button></section>
+    </div>
+    <div class="fp2-section-title"><span>03 / SKOR GÜNLÜĞÜ</span><div><h3>Ne değişti?</h3><button data-fp2go="hisse">Skorlar ↗</button></div></div>
+    <section class="fp2-history"><div class="fp2-history-meta">${hist.length} farklı tarama günü${latest?.asOf?" · "+esc(latest.asOf):""}</div>
+      ${changes.length?changes.map(x=>`<div class="fp2-history-row"><b>${esc(x.code)}</b><span>Günlük puan farkı</span><strong class="${x.delta>=0?"fp2-positive":"fp2-negative"}">${x.delta>0?"+":""}${x.delta}</strong></div>`).join(""):
+      '<p>En az iki farklı tarihte gerçek tarama kaydedilince puan değişimleri burada görünecek.</p>'}
+      <p class="fp2-caveat">Puan değişimi, fiyat getirisi veya başarı tahmini değildir. Sadece bu cihazdaki kayıtlar kullanılır.</p>
+    </section>
+    <div class="fp2-section-title"><span>04 / ANALİZ</span><div><h3>Pusulanın yorumu.</h3><button data-fp2go="piyasa">Piyasa ↗</button></div></div>
+    <section class="fp2-insight"><div class="fp2-insight-meta">SON YAYIMLANAN GÖRÜŞ · ${esc(last||"Tarih bekleniyor")}</div>
+      ${brief.length?brief.map(x=>`<p>${esc(x)}</p>`).join(""):'<p>Bugün için analiz yayımlanmadı.</p>'}
+      <small>Bu değerlendirme yatırım tavsiyesi veya getiri garantisi değildir.</small></section>
+    <div class="fp2-section-title"><span>05 / HABERLER</span><div><h3>Son gelişmeler.</h3><button data-fp2go="piyasa">Piyasayı aç ↗</button></div></div>
+    <section class="fp2-headlines">${news.length?news.slice(0,3).map((x,i)=>`<button class="fp2-headline" data-fp2news="${i}"><span>${i+1}</span><div>
+      <strong>${esc(x.title||"Başlık yok")}</strong><small>${esc(fmtDate(x.date)||"")}${x.source?" · "+esc(x.source):""}</small></div><b>↗</b></button>`).join(""):
+      '<p>Henüz haber verisi yok.</p>'}</section>
+  </div>`;
+  v.querySelectorAll("[data-fp2go]").forEach(el=>el.addEventListener("click",()=>{
+    const tab=el.dataset.fp2go;
+    if(!["gundem","sanal","hisse","oneri","doviz","piyasa"].includes(tab))return;
+    S.tab=tab;if(["hisse","oneri","doviz"].includes(tab))FP_DISCOVERY_TAB=tab;
+    showTab();renderAll();window.scrollTo(0,0);
   }));
-  v.querySelectorAll("[data-s2open]").forEach(el=>el.addEventListener("click",()=>{
-    const [t,c]=el.dataset.s2open.split(":");if(detItem(t,c))openDetail(t,c);
-  }));
-  v.querySelectorAll("[data-s2news]").forEach(el=>el.addEventListener("click",()=>openNews(news[Number(el.dataset.s2news)])));
-  v.querySelector("[data-s2all]")?.addEventListener("click",()=>{S._studioNewsAll=!S._studioNewsAll;renderGundem();});
-  v.querySelectorAll("[data-s2tab][role=button]").forEach(el=>el.addEventListener("keydown",e=>{
-    if(e.key==="Enter"||e.key===" "){e.preventDefault();el.click();}
+  v.querySelectorAll("[data-fp2news]").forEach(el=>el.addEventListener("click",()=>{
+    const item=news[Number(el.dataset.fp2news)];if(item)openNews(item);
   }));
 }
   // Yalnız Tema 2 için ayrı ana ekran; Tema 1'in tüm render ve davranışları korunur.
