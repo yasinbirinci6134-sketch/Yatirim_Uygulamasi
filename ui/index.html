@@ -4906,6 +4906,20 @@ function studio2RenderGundem(){
   {const style=document.createElement("style");
    style.textContent='html[data-design="modern"] .studio-controls-card{margin-top:8px;padding:12px!important;gap:8px!important}html[data-design="modern"] .studio-controls-title{font:700 12px var(--f-body);letter-spacing:.04em;color:var(--muted);margin-bottom:3px}html[data-design="modern"] .studio-controls-card .lfbar{margin:0}html[data-design="modern"] .studio-controls-card .addrow{margin:0}html[data-design="modern"] #v-hisse .st-row{min-height:0}';
    document.head.appendChild(style);}
+  // 2.1: ortak yoğunluk standardı; yalnız modern tema ve liste/portföy ekranları.
+  {const compact=document.createElement("style");compact.id="fp21-compact-density";
+   compact.textContent=`
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal) section.card{padding:10px 12px;gap:7px;border-radius:12px;margin-block:6px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal) section.card h2{font-size:15px;line-height:1.25;margin-block:0 4px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .lrow{padding-block:6px;min-height:0;gap:6px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fgrp .fgh{padding-block:7px 5px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .studio-controls-card{padding:9px 11px!important;gap:6px!important;margin-top:5px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .studio-controls-title{margin-bottom:0}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .lfbar{gap:5px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .addrow{gap:5px}
+html[data-design="modern"] #v-sanal .pfstats{gap:6px}
+`;
+   document.head.appendChild(compact);}
   // Veri bu katman yüklenmeden gelmiş olabilir: yeni görünümle (puan halkası, Bugün ekranı) hemen yeniden çiz
   try{ if(studioOn()&&S.tab==="gundem") renderGundem(); if(S.market) renderAll(); }catch(e){ console.error(e); }
   renderFresh(); setTimeout(()=>apkCheck(false),4000);
