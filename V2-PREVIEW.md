@@ -149,3 +149,13 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - Sadece .preview paketinde ilk acilista Tema 2 ve Bugun sekmesi varsayilan; v41 ayarlari degismez.
 - Kullanicinin Tema 1 secimi fp-v2-theme-choice anahtarinda kalici ve sunucu tercih yuklemesinden korunur.
 - Uygulama basligi Fon Pusulasi 2.0; dort alt sekmede ayirt edilebilir simgeler var.
+
+## Fon Pusulasi 2.0 - kullanicinin gordugu yeni ana ekran
+- Test APK'si ilk acilista Tema 2 ve Bugun kontrol merkezini gosterir. Eski klasik secim istege bagli kalir ve cihaz tercihleriyle korunur.
+- Yeni koyu yesil ust panel, pusula motifi, Portfoyum/Hisseler/Fonlar hizli erisimi, piyasa gostergeleri seridi, pozisyon ozeti.
+- Iki radar karti: kalite kapisindan gecmis kisa vade tarama skorları ve son analizdeki uzun vade hisse/fon puanlari.
+- Telefonun kaydettigi gercek puan degisimleri, son analiz ve haberler artik Bugun ekranindan gorulebilir.
+- Dogrulanmis guncel fiyat bulunmazsa portfoy karsiligi/kari BOS birakilir; alis fiyatindan sahte getiri uydurulmaz.
+- Acilista ag verileri gelmese de yeni kontrol merkezi render edilir; eski bos ekran yerine yeni tasarim gorulur.
+- Veriye dayali kontrol paneli TWR/XIRR gibi dogrulanmis gercek getiriyle karistirilmamalidir.
+- tools/v2-dashboard.test.js node testinde bos, guncel, gecikmis, guvenilmez fiyat senaryolari ve buton yonlendirmeleri denenir.

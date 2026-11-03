@@ -26,6 +26,7 @@ jobs:
           node tools/portfolio-engine.test.js
           node tools/return-metrics.test.js
           node tools/v2-ui.test.js
+          node tools/v2-dashboard.test.js
           node tools/twr.test.js
           node tools/external-flows.test.js
           node tools/ledger-reconcile.test.js
