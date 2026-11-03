@@ -1994,7 +1994,7 @@ function drawDetail(){ const el=$("det"); if(!el||!S.det) return; const {t,c}=S.
   <div class="dbar">${S.db&&S.uid?`<button class="btn" data-dbuy>Portföye ekle</button>`:""}${S.db?`<button class="btn ghost" data-dwatch>${watched?"Takipten çıkar":"Takibe al"}</button>`:""}${window.openAlarm?`<button class="btn ghost" data-dalarm aria-label="Fiyat alarmı" style="flex:0 0 auto">🔔</button>`:""}</div>`;
   el.querySelector("[data-back]").onclick=()=>closeDetail();
   el.querySelectorAll("[data-cp]").forEach(b=>b.onclick=()=>{ S.chartP=b.dataset.cp; drawDetail(); if(t==="f"&&S.chartP==="1Y")fhEnsure(c); });
-  el.querySelector("[data-fh-retry]")?.addEventListener("click",()=>{fhEnsure(c); toast("TEFAS fiyat geçmişi isteniyor; bağlantıya göre yüklenebilir.");});
+  el.querySelector("[data-fh-retry]")?.addEventListener("click",()=>{fhEnsure(c,true); toast("TEFAS fiyat geçmişi yeniden isteniyor.");});
   const chEl=el.querySelector(".chart[data-h]"); if(chEl) chartTouch(chEl);
   el.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{ S.det.tab=b.dataset.dt; $("gtip")?.remove(); drawDetail(); });
   const bb=el.querySelector("[data-dbuy]"); if(bb) bb.onclick=()=>openBuy(c);
@@ -3525,8 +3525,10 @@ async function fhRefresh(priorityCode){
     }
   }finally{FH.busy=false;FH.loading=null;}
 }
-function fhEnsure(code){
+function fhEnsure(code,manual=false){
   if(!(S.market?.funds||[]).some(f=>f.code===code))return;
+  // An explicit retry must not be silently blocked by an earlier network failure.
+  if(manual)FH.failAt=0;
   fhRefresh(code).catch(e=>{FH.err=String(e?.message||e);});
 }
 /* Kısa vade taraması: her iş günü kapanıştan sonra GitHub'da BIST 100 için üretilir (tools/short.js); telefonda 30 dk'da bir yoklanır */
