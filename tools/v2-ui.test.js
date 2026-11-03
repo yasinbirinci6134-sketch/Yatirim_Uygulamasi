@@ -36,7 +36,7 @@ assert.ok(embeddedStart>0&&embeddedEnd>embeddedStart);
 assert.equal(html.slice(embeddedStart-14,embeddedEnd).trim(),qaSource,"mobile and scan publisher must share quality gates");
 assert.ok(html.includes("if(j&&validateShortScan(j).ok&&"),"unverified fetched scans must not enter mobile cache");
 
-const shortContext=new Function("localStorage","validateShortScan",html.slice(html.indexOf('const SH={'),html.indexOf('async function lpool('))+";return {SH,fpShortFresh,shortFor};");
+const shortContext=new Function("localStorage","validateShortScan",html.slice(html.indexOf('const SH={',html.indexOf('/* Publication + mobile cache gate for BIST daily scans.')),html.indexOf('async function lpool(',html.indexOf('/* Publication + mobile cache gate for BIST daily scans.')))+";return {SH,fpShortFresh,shortFor};");
 const localCache={getItem:key=>key==="fp-short"?JSON.stringify({at:"2020-02-01T18:00:00Z",asOf:"2020-02-01",n:50,items:[]}):null};
 const state=shortContext(localCache,validateShortScan);
 assert.equal(state.fpShortFresh(),false,"stale initial cache must be explicitly invalidated");
