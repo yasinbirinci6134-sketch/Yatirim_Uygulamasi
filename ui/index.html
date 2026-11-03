@@ -2549,6 +2549,72 @@ function pf2Hero(pf,rows,today,pfOpen){
       <span class="pf2-hero-disclaimer">Gerçek toplam getiri değildir</span></div>
   </section>`;
 }
+function pf2ArrangePortfolio(root,pf,rows,today,pfOpen){
+  const oldHero=root.querySelector(".pfhero");
+  if(oldHero)oldHero.outerHTML=pf2Hero(pf,rows,today,pfOpen);
+  const manager=root.querySelector("#pfMgr"),positions=root.querySelector('[data-pf2-section="positions"]');
+  if(!manager||!positions)return;
+  manager.insertAdjacentElement("afterend",positions);
+  const groups=new Map(groupRows(rows).map(x=>[x.code,x]));
+  for(const node of positions.querySelectorAll(".trade.x")){
+    const code=String(node.dataset.k||"").replace(/^g:/,""),g=groups.get(code);
+    if(!g)continue;
+    const a=asset(code),kind=!a?"diger":a.isStock||a.cat==="hisse"?"hisse":
+      a.isFx||["altin","gumus","doviz"].includes(a.cat)?"diger":"fon";
+    node.dataset.pf2Kind=kind;
+    const label=kind==="hisse"?"Hisse":kind==="fon"?"Fon":"Diğer";
+    const score=Number.isInteger(a?.score)&&a.score>=0&&a.score<=100?a.score:null;
+    const trusted=fpTrustedHoldingsValue(g.lots,today),verified=Number.isFinite(trusted);
+    const gain=verified?trusted-g.amount:null,pct=verified&&g.amount>0?gain/g.amount*100:null;
+    const left=node.querySelector(".xh:first-child"),right=node.querySelector(".right.xh");
+    if(left){
+      left.classList.add("pf2-pos-left");
+      left.innerHTML=`<div class="pf2-pos-code"><strong class="code">${esc(code)}</strong>
+        ${score!=null?`<span class="pf2-pos-score" aria-label="Skor ${score}">${score}</span>`:""}
+        <span class="pf2-pos-kind">${label}</span></div>
+        <span class="pf2-pos-name">${esc(a?.name||code)}</span>
+        <span class="pf2-pos-meta">${g.lots.length} alım · ${num(g.units,g.units<100?4:0)} adet</span>`;
+    }
+    if(right){
+      right.classList.add("pf2-pos-right");
+      right.innerHTML=`<strong class="num">${verified?tl(trusted,2):"—"}</strong>
+       <span class="num ${gain==null?"":cls(gain)}">${gain==null?"Fiyat doğrulanmadı":
+       (gain>0?"+":"")+tl(gain,2)+(pct==null?"":" · "+pc(pct))}</span>`;
+    }
+  }
+  const toolbar=document.createElement("div");
+  toolbar.className="pf2-toolbar";
+  toolbar.innerHTML='<div class="pf2-filter" role="group" aria-label="Pozisyon filtresi">'+
+    '<button data-pf2-filter="all">Tümü</button><button data-pf2-filter="hisse">Hisse</button>'+
+    '<button data-pf2-filter="fon">Fon</button></div>'+
+    '<div class="pf2-fast"><button data-pf2-add>+ Alım ekle</button><button data-pf2-cash>Nakit hareketi</button></div>';
+  positions.insertAdjacentElement("beforebegin",toolbar);
+  const extras=document.createElement("details");
+  extras.className="pf2-advanced";
+  extras.innerHTML='<summary><strong>Gelişmiş portföy araçları</strong><small>Ekstre · nakit · risk · grafik · günlük</small></summary>';
+  const body=document.createElement("div");
+  body.className="pf2-advanced-body";
+  for(const section of ["chart","returns","cash","audit","risk","journal","closed"]){
+    const item=root.querySelector('[data-pf2-section="'+section+'"]');
+    if(item)body.appendChild(item);
+  }
+  const plan=root.querySelector("#planBox");
+  if(plan)body.appendChild(plan);
+  extras.appendChild(body);
+  root.appendChild(extras);
+}
+function pf2WirePortfolio(root){
+  const filters=[...root.querySelectorAll("[data-pf2-filter]")];
+  const rows=[...root.querySelectorAll('[data-pf2-section="positions"] .trade.x')];
+  const apply=()=>{
+    for(const b of filters)b.setAttribute("aria-pressed",String(b.dataset.pf2Filter===PF2_PORT_FILTER));
+    for(const row of rows)row.classList.toggle("pf2-filtered",PF2_PORT_FILTER!=="all"&&row.dataset.pf2Kind!==PF2_PORT_FILTER);
+  };
+  for(const b of filters)b.addEventListener("click",()=>{PF2_PORT_FILTER=b.dataset.pf2Filter;apply();});
+  apply();
+  root.querySelector("[data-pf2-add]")?.addEventListener("click",()=>$("goAdd")?.click());
+  root.querySelector("[data-pf2-cash]")?.addEventListener("click",()=>$("pfCashAdd")?.click());
+}
 function renderSanal(){
   const tl2=n=>tl(n,2);
   const v=$("v-sanal");
@@ -2663,6 +2729,7 @@ function renderSanal(){
         <div class="right num ${cls(p)}">${p>=0?"+":""}${tl2(p)}</div>
         <div class="acts"><button class="btn ghost sm" data-del="${esc(t.id)}">Sil</button></div></div>`}).join("")}</section>` : ""}
     <div id="planBox" style="display:flex;flex-direction:column;gap:inherit"></div>`;
+  if(modernPortfolio)pf2ArrangePortfolio(v,pf,rows,snapshotToday,S.pfOpen);
   bindPf(pf);
   $("goAdd").onclick = () => openBuy(null);
   $("pfReturnImport").onclick=()=>fpReturnEvidenceSheet(pf);
@@ -2680,6 +2747,7 @@ function renderSanal(){
   v.querySelectorAll("[data-sell]").forEach(b=> b.onclick = () => sell(b.dataset.sell));
   v.querySelectorAll("[data-edit]").forEach(b=> b.onclick = () => openBuy(null, S.trades.find(t=>t.id===b.dataset.edit)));
   v.querySelectorAll("[data-del]").forEach(b=> b.onclick = () => delTrade(b.dataset.del));
+  if(modernPortfolio)pf2WirePortfolio(v);
   renderPlan();
 }
 function openInvestmentNote(pf){
