@@ -1,0 +1,11 @@
+"use strict";
+const assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path");
+const html=fs.readFileSync(path.join(__dirname,"../ui/index.html"),"utf8");
+const a=html.indexOf("function fpClosedReturns("),b=html.indexOf("function groupRows(",a);
+assert.ok(a>=0&&b>a,"closed return audit helper present");
+const audit=new Function(html.slice(a,b)+";return fpClosedReturns;")();
+assert.deepEqual(audit([{amount:100,price:10,sellPrice:12}]),{realized:20,closedCost:100,missing:0});
+assert.deepEqual(audit([{amount:100,price:10,sellPrice:12},{amount:50,price:5}]),{realized:null,closedCost:100,missing:1});
+assert.deepEqual(audit([]),{realized:0,closedCost:0,missing:0});
+assert.equal(audit([{amount:10,price:0,sellPrice:2}]).realized,null);
+console.log("2.1 realized returns audit passed");
