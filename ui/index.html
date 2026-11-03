@@ -1580,6 +1580,185 @@ html[data-design="modern"] #v-sanal .pf2-advanced-body #planBox{
  html[data-design="modern"] #v-sanal .pf2-hero-stats b{font-size:11px}
 }
 
+/* 2.0 Keşfet — compact list-first radar, no loss of old filtering or details. */
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-hub{
+ display:flex;flex-direction:column;min-width:0;gap:9px;padding:0 0 14px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-hero{
+ color:#F7FEFF;background:linear-gradient(117deg,#172D47,#254960 62%,#173C44);
+ border:1px solid rgba(158,207,232,.26);border-radius:18px;
+ padding:14px 14px 11px;box-shadow:0 13px 25px -24px #152B42
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-kicker{
+ display:flex;justify-content:space-between;gap:8px;align-items:center;
+ font:800 9px/1.35 var(--f-body);letter-spacing:.11em;color:#B5DAE7
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-main{
+ display:flex;align-items:center;justify-content:space-between;gap:14px;
+ padding:16px 0 13px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-main h2{
+ font:800 24px/1.16 var(--f-display);letter-spacing:-.045em;color:#FFFFFF;
+ margin:0 0 5px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-main p{
+ margin:0;color:#C9E0E8;font:500 11px/1.4 var(--f-body)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-stats{
+ display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
+ border-left:1px solid rgba(216,248,255,.2);padding-left:13px;min-width:60px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-stats b{
+ font:800 30px/1 var(--f-display);letter-spacing:-.05em;color:#FFFFFF
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-stats span{
+ font:800 9px var(--f-body);letter-spacing:.08em;color:#C4DFEA;margin-top:5px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-foot{
+ display:flex;align-items:end;justify-content:space-between;gap:7px;
+ border-top:1px solid rgba(216,248,255,.19);padding-top:11px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-foot>div:first-child{
+ min-width:0;flex:1
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-foot>div:first-child>span{
+ font:800 8.5px var(--f-body);letter-spacing:.075em;color:#B5DAE7
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-leaders{
+ display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-top:5px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-leader{
+ display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(200,243,248,.23);
+ background:rgba(234,253,255,.09);border-radius:7px;padding:6px 7px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-leader b{
+ font:800 10px var(--f-body);color:#F7FEFF
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-leader strong{
+ font:800 11px var(--f-body);color:#A2EDCF
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-muted{
+ font-size:10px;color:#C5DFE9
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-asof{
+ display:flex;flex-direction:column;align-items:flex-end;gap:3px;
+ font:800 10px var(--f-body);white-space:nowrap;color:#F2FEFF
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-asof small{
+ font-size:9px;font-weight:600;color:#B9DDE6
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-caveat{
+ border-top:1px solid rgba(216,248,255,.13);padding-top:8px;
+ margin:10px 0 0;color:#C1DBE4;font-size:9.5px;line-height:1.4
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-controls{
+ display:flex;justify-content:space-between;align-items:center;gap:7px;
+ min-width:0
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-pills{
+ display:flex;align-items:center;gap:3px;padding:3px;
+ background:var(--card);border:1px solid var(--line);border-radius:10px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-pills button{
+ background:transparent;border:0;border-radius:7px;color:var(--muted);
+ font:800 10px var(--f-body);padding:8px 9px;cursor:pointer;white-space:nowrap
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-pills button[aria-pressed="true"]{
+ color:var(--accent);background:var(--accent-soft)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-more-btn{
+ flex:none;cursor:pointer;border:1px solid var(--line);border-radius:9px;
+ padding:10px;background:var(--card);color:var(--accent);
+ font:800 10px var(--f-body)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list{
+ padding:10px 11px!important;display:flex;flex-direction:column;gap:5px!important;
+ border:1px solid var(--line);border-radius:14px;background:var(--card)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list>.horizon{
+ margin:0 0 2px;padding:2px 0 7px;border-bottom:1px solid var(--line)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list>.horizon h2{
+ font:800 15px/1.25 var(--f-display);letter-spacing:-.025em
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .lfbar{
+ display:flex;flex-direction:column;gap:6px!important;margin:0 0 4px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .lfbar input{
+ min-height:35px;padding:9px 10px!important;border-radius:9px!important;
+ font-size:12px;background:var(--bg)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .lfbar .chips{
+ display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+ gap:5px!important;padding:1px 0;max-width:100%
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .lfbar .chips button{
+ flex:none;white-space:nowrap;border-radius:8px!important;
+ padding:6px 8px!important;font-size:10px!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .addrow{
+ margin:3px 0 5px!important;padding:0!important;gap:6px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .addrow input{
+ min-height:35px;padding:8px 9px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fgrp{
+ gap:0!important;margin:4px 0 0!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fgrp .fgh{
+ padding:6px 4px!important;margin:4px 0 0!important;
+ border-left:2px solid var(--accent);background:var(--s2-soft);
+ font:800 10px/1.2 var(--f-body);border-radius:2px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fund.lrow{
+ min-height:45px!important;padding:6px 2px!important;
+ column-gap:7px!important;grid-template-columns:minmax(0,1fr) minmax(85px,auto)!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fund.lrow .code{
+ font-size:12.5px!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fund.lrow .name{
+ font-size:10px!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fund.lrow .right .lp{
+ font-size:12px!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fp2-disc-hidden{
+ display:none!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-empty{
+ font:600 11px/1.5 var(--f-body);color:var(--muted);
+ margin:8px 0;padding:10px;border:1px dashed var(--line);border-radius:9px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more{
+ border:1px solid var(--line);border-radius:12px;
+ overflow:hidden;background:var(--card)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more>summary{
+ cursor:pointer;list-style:none;display:flex;align-items:center;
+ justify-content:space-between;gap:8px;padding:13px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more>summary::-webkit-details-marker{display:none}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more>summary strong{
+ font:800 12.5px var(--f-body);color:var(--ink)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more>summary small{
+ font:600 10px var(--f-body);color:var(--muted)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more-body{
+ display:flex;flex-direction:column;gap:8px;
+ padding:0 8px 10px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more-body>.card{
+ margin:0!important;padding:11px!important
+}
+@media(max-width:365px){
+ html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-main h2{font-size:21px}
+ html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-asof{font-size:9px}
+ html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-pills button{padding:8px 7px}
+ html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-more-btn{padding:9px 7px}
+}
+
 </style>
 
 <div class="wrap">
