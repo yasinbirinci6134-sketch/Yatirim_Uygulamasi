@@ -23,5 +23,5 @@ jobs:
           node tools/v2-discovery.test.js
           node tools/v2-ui.test.js
           node tools/v2-dashboard.test.js
-          node tools/v2-portfolio.test.js
+          node tools/portfolio-engine.test.js
           node tools/production-release.test.js
