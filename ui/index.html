@@ -3493,7 +3493,7 @@ async function ltefas(code){
 }
 function fhNeeds(v,force){
   const age=Date.now()-Number(v?.at||0);
-  if(force&&age>2*60e3)return true;
+  if(force)return true;
   if(!v||v.version!==2)return true;
   if(!Array.isArray(v.h)||!v.h.length)return age>30*60e3;
   return age>(fpFundHistorySpan(v.h)>=300?7*864e5:12*3600e3);
