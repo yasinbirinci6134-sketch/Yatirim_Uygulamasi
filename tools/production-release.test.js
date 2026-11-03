@@ -4,10 +4,10 @@ const get=n=>fs.readFileSync(path.join(__dirname,"..",n),"utf8");
 const g=get("app/build.gradle"),w=get(".github/workflows/build.yml"),h=get("ui/index.html"),
  host=get("app/src/main/java/com/yasin/yatirimapp/MainActivity.java"),m=get("app/src/main/AndroidManifest.xml");
 assert.ok(g.includes("applicationId 'com.yasin.yatirimapp'"),"2.0 must replace the old Android package");
-assert.ok(g.includes("versionCode (200000 + run)"),"new versionCode must supersede legacy builds");
-assert.ok(g.includes('versionName "2.0.${run}"'),"Android needs version 2.0");
+assert.ok(g.includes("210000 + run : 200000 + run"),"2.1 candidate must upgrade without changing 2.0 production code");
+assert.ok(g.includes('"2.1.${run}" : "2.0.${run}"'),"candidate 2.1 and production 2.0 version names required");
 assert.ok(g.includes("signingConfig signingConfigs.release"),"live APK must use original release key");
-assert.ok(g.includes("appDisplayName: 'Fon Pusulası 2.0'"),"new launcher product name required");
+assert.ok(g.includes("'Fon Pusulası 2.1' : 'Fon Pusulası 2.0'"),"candidate and production launcher names required");
 assert.ok(m.includes('android:label="${appDisplayName}"'),"manifest must honor product label");
 assert.ok(w.includes("secrets.KEYSTORE_B64")&&w.includes("secrets.KEYSTORE_PASSWORD"),"use stable secret key");
 assert.ok(w.includes("gradle assembleRelease --no-daemon"),"build production release");
