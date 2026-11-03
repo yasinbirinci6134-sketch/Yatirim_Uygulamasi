@@ -29,6 +29,19 @@ jobs:
           node tools/v2-1-portfolio-chart.test.js
           node tools/v2-1-realized-returns.test.js
           node tools/v2-1-score-diary.test.js
+          node tools/data-quality.test.js
+          node tools/quote-selection.test.js
+          node tools/return-metrics.test.js
+          node tools/fund-history.test.js
+          node tools/twr.test.js
+          node tools/external-flows.test.js
+          node tools/ledger-reconcile.test.js
+          node tools/legacy-trade-audit.test.js
+          node tools/verified-returns.test.js
+          node tools/ui-returns.test.js
+          node tools/statement-ui.test.js
+          node tools/statement-csv.test.js
+          node tools/android-host.test.js
   android-v2-1:
     if: github.head_ref == 'feature/fon-pusulasi-v2-1' || github.ref == 'refs/heads/feature/fon-pusulasi-v2-1'
     needs: test
