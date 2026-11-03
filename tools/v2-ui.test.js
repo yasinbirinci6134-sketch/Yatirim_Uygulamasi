@@ -165,4 +165,31 @@ assert.ok(html.includes('get("pfCsvFile").onchange=async()=>'));
 assert.ok(html.includes('file.size>250000'));
 assert.ok(html.includes('get("pfCsvText").value=raw'));
 
+
+/* Theme 1 and Theme 2 must render scores beside the ticker without an extra score column. */
+const renderRowStart=html.indexOf("function listRow("),renderRowEnd=html.indexOf("/* Kaleme özel haberler:",renderRowStart);
+assert.ok(renderRowStart>0&&renderRowEnd>renderRowStart);
+const mockState={watch:[],fwatch:[],fxwatch:[]},mkListRow=new Function(
+ "S","staleB","studioOn","sCls","num","esc","pickBadge","cls","pc","arr","SIG","exitTxt","FUTX",
+ html.slice(renderRowStart,renderRowEnd)+";return listRow;"
+);
+const args=[mockState,()=>"",()=>false,n=>n>=80?" hi":"",x=>String(x),x=>String(x),()=>"",()=>"",x=>String(x),()=>"","",()=>"",""];
+args[10]={};args[12]=new Set();
+const classicRow=mkListRow(...args)("s",{code:"AIS",score:94,price:16.5,name:"Ornek hisse",d1:2.5});
+assert.ok(classicRow.includes('studio-inline-score hi'),"classic must render its inline score");
+assert.ok(classicRow.includes('aria-label="Skor 94"'),"score stays accessible without repeated visual label");
+const modernArgs=[...args];modernArgs[2]=()=>true;
+const modernRow=mkListRow(...modernArgs)("f",{code:"ABC",score:86,price:42,name:"Ornek fon"});
+assert.ok(modernRow.includes('studio-inline-score hi'),"modern inline score must be preserved");
+const noScore=mkListRow(...args)("x",{code:"USD",score:null,price:43,name:"Dolar"});
+assert.ok(!noScore.includes('studio-inline-score'),"unknown score must not display a fabricated numeric score");
+const cssStart=html.indexOf("/* V2 Theme 1: compact rows");
+const cssEnd=html.indexOf("</style>",cssStart);
+assert.ok(cssStart>0&&cssEnd>cssStart,"classic compact rules must be in the stylesheet");
+const classicCss=html.slice(cssStart,cssEnd);
+assert.ok(classicCss.includes('html:not([data-design="modern"]) #v-sanal .trade.x:not(.open) > :not(.xh)'),"collapsed portfolios should keep the action area hidden");
+assert.ok(classicCss.includes('html:not([data-design="modern"]) #v-sanal .trade.x.open > :not(.xh)'),"expanded positions must retain detail and action rows");
+assert.ok(classicCss.includes('grid-template-columns:minmax(0,1fr) minmax(94px,auto)'),"theme 1 must have only two compact asset columns");
+assert.ok(classicCss.includes(".studio-inline-score"),"classic must style inline scores");
+
 console.log("UI scripts and score-history tests passed");

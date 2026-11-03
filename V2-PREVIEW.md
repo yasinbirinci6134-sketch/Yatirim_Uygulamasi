@@ -118,3 +118,9 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - Ardindan GitHub'daki 40 haneli commit SHA'ya sabitlenen ui/index.html indirilir; hareketli feature dalinin sonu okunmaz.
 - Durum dosyasi ulasilamaz veya yeni derleme basarisizsa mevcut onayli cache/paket arayuzu kullanilir.
 - Ana surumun uzaktan guncelleme davranisi degistirilmez.
+
+## Tema 1 kompakt arayuz (onizleme)
+- Hisse, fon ve altin/doviz listeleri iki ana sutuna indirildi; skor kodun yaninda.
+- Bilinmeyen skor sayi olarak uydurulmaz; erisilebilir aciklama korunur.
+- Portfoyde kapali pozisyonlar daha ince; acildiginda islemler, detaylar ve butonlar gorunur.
+- Tema 2'nin yogun liste davranisi degistirilmez; eski portfoy ve alim-satim kayitlarina dokunulmaz.

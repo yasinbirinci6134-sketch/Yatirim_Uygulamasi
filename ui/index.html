@@ -1161,6 +1161,101 @@ html[data-design="modern"] #v-hisse .st-view .card{
   }
 }
 
+/* V2 Theme 1: compact rows without dropping data or expandable actions.
+   Scoped to classic only; Theme 2's established dense rules stay untouched. */
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal,#v-piyasa) > .card{
+  padding:11px 12px;gap:8px;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(94px,auto);
+  gap:1px 9px;align-items:center;min-width:0;min-height:48px;
+  margin:0;padding:6px 2px;border:0;border-bottom:1px solid var(--line);
+  border-radius:0;background:transparent;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow > .sbadge{
+  display:none!important;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow > .lmid{
+  grid-column:1;min-width:0;gap:2px;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow > .right{
+  grid-column:2;min-width:0;align-self:center;text-align:right;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .lt{
+  align-items:baseline;gap:3px 5px;line-height:1.25;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .code{
+  font-size:13px;font-weight:750;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .studio-inline-score{
+  display:inline-block;margin-left:1px;padding:0;background:transparent;border:0;
+  font:750 12px/1.25 var(--f-body);color:var(--muted);white-space:nowrap;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .studio-inline-score.hi{color:var(--up)}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .studio-inline-score.lo{color:var(--down)}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .name{
+  font-size:11px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .lbar{
+  display:none;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .right .lp{
+  font-size:14px;font-weight:650;white-space:nowrap;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .right .small{
+  font-size:11px;line-height:1.3;
+}
+html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .exitw{
+  grid-column:1/-1;white-space:normal;
+}
+/* Keep subsection labels distinguishable from major headings. */
+html:not([data-design="modern"]) #v-oneri .fgrp{gap:0;margin:2px 0 0}
+html:not([data-design="modern"]) #v-oneri .fgrp .fgh,
+html:not([data-design="modern"]) #v-doviz .studio-asset-category{
+  background:var(--accent-soft);color:var(--accent);
+  border:0;border-left:3px solid var(--accent);border-radius:4px;
+  margin:6px 0 2px;padding:5px 8px;
+  font:700 10.5px/1.3 var(--f-body);letter-spacing:.075em;
+}
+html:not([data-design="modern"]) #v-sanal .trade.x{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(104px,auto);
+  gap:2px 8px;align-items:center;min-height:49px;
+  margin:0;padding:7px 2px;border:0;border-bottom:1px solid var(--line);
+  border-radius:0;background:transparent;
+}
+html:not([data-design="modern"]) #v-sanal .trade.x > .xh:first-child{
+  grid-column:1;grid-row:1;min-width:0;
+}
+html:not([data-design="modern"]) #v-sanal .trade.x > .right.xh{
+  grid-column:2;grid-row:1;min-width:0;
+}
+html:not([data-design="modern"]) #v-sanal .trade.x:not(.open) > :not(.xh){
+  display:none!important;
+}
+html:not([data-design="modern"]) #v-sanal .trade.x.open{
+  background:var(--accent-soft);padding:9px 10px;border-radius:9px;
+  margin:3px 0;gap:6px 8px;
+}
+html:not([data-design="modern"]) #v-sanal .trade.x.open > :not(.xh){
+  grid-column:1/-1;
+}
+html:not([data-design="modern"]) #v-sanal .trade.x .code{font-size:13.5px}
+html:not([data-design="modern"]) #v-sanal .trade.x .small{font-size:11px;line-height:1.35}
+html:not([data-design="modern"]) #v-sanal .trade:not(.x){
+  padding:7px 2px;margin:0;
+}
+html:not([data-design="modern"]) #v-sanal .pfhero{gap:8px!important;padding:12px}
+html:not([data-design="modern"]) #v-sanal .pfhero .pfstats{gap:5px}
+html:not([data-design="modern"]) #v-sanal .pfhero .pfstats > div{padding:6px 7px}
+@media(max-width:365px){
+ html:not([data-design="modern"]) :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow{
+  grid-template-columns:minmax(0,1fr) minmax(86px,auto);gap:1px 6px;
+ }
+ html:not([data-design="modern"]) #v-sanal .trade.x{
+  grid-template-columns:minmax(0,1fr) minmax(92px,auto);
+ }
+}
+
 </style>
 
 <div class="wrap">
@@ -1422,7 +1517,7 @@ function listRow(t,x){
   const stale=t==="s"?staleB([x.fundAt,x.finAt].filter(Boolean).sort().pop(),7,"Bilanço ve hedef fiyat bilgisi 7 günden eski"):t==="f"?staleB(x.priceDate,5,"Fiyat 5 günden eski"):staleB(x.priceDate,4,"Fiyat 4 günden eski");
   return `<div class="fund lrow x" data-k="${esc(k)}">
     <div class="sbadge xh${sCls(x.score,t)}">${x.score!=null?num(x.score,0):"–"}</div>
-    <div class="lmid xh"><div class="lt"><span class="code">${esc(x.code)}</span>${studioOn()?`<span class="studio-inline-score${sCls(x.score,t)}" aria-label="Skor ${x.score!=null?num(x.score,0):"yok"}">${x.score!=null?num(x.score,0):"–"}</span>`:""}${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${mine?'<span class="mine">EKLEDİĞİN</span>':""}${stale}</div>
+    <div class="lmid xh"><div class="lt"><span class="code">${esc(x.code)}</span>${x.score!=null?`<span class="studio-inline-score${sCls(x.score,t)}" aria-label="Skor ${num(x.score,0)}">${num(x.score,0)}</span>`:""}${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${mine?'<span class="mine">EKLEDİĞİN</span>':""}${stale}</div>
       <div class="name">${esc(x.name||"")}</div>
       ${m1!=null?`<div class="lbar"><span>1 ay</span><i><b class="${m1>=0?"p":"n"}" style="width:${Math.max(4,w)}%"></b></i><em class="num ${cls(m1)}">${pc(m1,1)}</em></div>`:""}</div>
     <div class="right xh"><div class="num lp">${t==="x"&&FUTX.has(x.code)?'<span class="small muted" title="Yaklaşık fiyat: vadeli işlem fiyatından hesaplanır">≈ </span>':""}${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="small num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div>
@@ -3971,7 +4066,7 @@ if(window.__standalone){
   const stCls=s=>{ const mk=stMarket(); return s<20?" lo":mk&&!mk.up?" mid":s>=80?" hi":" mid"; };
   const stRow=it=>{ const own=(S.market?.stocks||[]).find(x=>x.code===it.code), inL=!!own, q=fpQuote(it.code,own,it), day=q.d1, price=q.price??it.price;
     return `<div class="fund lrow st-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div>
-      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${studioOn()?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${num(it.score,0)}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
+      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${it.score!=null?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${num(it.score,0)}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
       ${!studioOn()&&(it.tags||[]).length?`<div class="st-tags">${it.tags.map(esc).join(" · ")}</div>`:""}</div>
       <div class="right"><div class="num lp">${price>0?Number(price).toLocaleString("tr-TR",{maximumFractionDigits:price<10?4:2}):"–"}</div>${day!=null?`<div class="small num ${cls(day)}">${pc(day,2)}</div>`:""}</div></div>`; };
   const mkText=mk=>!mk?"":mk.up?`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} üstünde. Kısa vadeli alım için ortam uygun; yine de küçük tutarla gir.`
