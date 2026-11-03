@@ -191,6 +191,8 @@ public class MainActivity extends Activity {
   }
 
   void checkUi() {
+    // 2.1 release candidates use the tested bundled UI until 2.1 remote updates are approved.
+    if (versionName().startsWith("2.1.")) return;
     if (checked) return; checked = true; lastCheck = System.currentTimeMillis();
     NET.execute(() -> {
       try {
