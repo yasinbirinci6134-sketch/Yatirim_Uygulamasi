@@ -3019,7 +3019,14 @@ function openCashflow(pf){
 }
 function bindPf(pf){
   document.querySelectorAll("[data-pfsel]").forEach(b=>b.onclick=()=>{ S.pf=b.dataset.pfsel; try{localStorage.setItem("fp-pf",S.pf)}catch(_){}; renderSanal(); });
-  const pk=$("pfPick"); if(pk) pk.onclick=()=>{ S.pfOpen=!S.pfOpen; $("pfMgr").classList.toggle("closed",!S.pfOpen); pk.setAttribute("aria-expanded",S.pfOpen); };
+  const pk=$("pfPick"); if(pk) pk.onclick=()=>{
+    S.pfOpen=!S.pfOpen;
+    const manager=$("pfMgr"),summary=pk.closest(".pfhero"),positions=$("v-sanal")?.querySelector(".pf-positions");
+    manager.classList.toggle("closed",!S.pfOpen);
+    // The chooser appears below the overview only while it is open.
+    if(S.pfOpen)summary?.after(manager); else positions?.after(manager);
+    pk.setAttribute("aria-expanded",S.pfOpen);
+  };
   $("pfSel").onchange = e => { S.pf=e.target.value; try{localStorage.setItem("fp-pf",S.pf)}catch(_){}; renderSanal(); };
   let mode="new";
   $("pfNew").onclick = () => { mode="new"; $("pfForm").hidden=false; $("pfName").value=""; $("pfName").focus(); };
@@ -3408,7 +3415,12 @@ function applyLayout(tab){
     const summary=v.querySelector(":scope > .pfhero");
     const positions=v.querySelector(":scope > .pf-positions");
     if(summary) v.prepend(summary);
-    if(summary&&positions){ positions.hidden=false; summary.after(positions); }
+    if(summary&&positions){
+      positions.hidden=false;
+      summary.after(positions);
+      const manager=v.querySelector(":scope > #pfMgr");
+      if(manager&&!manager.classList.contains("closed")) summary.after(manager);
+    }
   }
 }
 function applyTabs(){
