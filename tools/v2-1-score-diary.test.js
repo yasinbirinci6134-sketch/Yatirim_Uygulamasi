@@ -21,3 +21,22 @@ assert.match(html,/html\[data-design="modern"\] :is\(#v-hisse,#v-oneri,#v-doviz,
 
 assert.match(html,/html\.apk\[data-design="modern"\] nav\.tabs button\{padding:4px 0 3px/);
 assert.match(html,/html\.apk \.sheet\.st \.st-top\{min-height:48px/);
+
+
+// Device screenshot regression: avoid a separate oversized stock header and diary card.
+const densityStart=html.indexOf('compact.textContent='),densityEnd=html.indexOf('document.head.appendChild(compact)',densityStart);
+assert.ok(densityStart>0&&densityEnd>densityStart,"screenshot-density override exists");
+const density=html.slice(densityStart,densityEnd);
+for(const selector of [
+  "#fp-discovery-tabs button",
+  "#v-hisse > section.card:has(.studio-hm-tabs)",
+  "#v-hisse .st-view > section.card:has(> .fp-score-diary)",
+  "#v-hisse .st-view .fund.lrow.st-row",
+  "#v-hisse .st-view .st-row .lmid .name",
+  "#v-hisse .st-view .st-row .right .lp",
+]) assert.ok(density.includes(selector),"compact screenshot selector preserved: "+selector);
+assert.match(density,/\.fund\.lrow\.st-row\{\s*min-height:44px!important/, "stock rows retain compact touch-sized minimum");
+assert.match(density,/\.studio-hm-tabs button\{\s*min-height:36px;min-width:44px/, "horizon selector keeps usable tap target");
+assert.match(density,/\.st-row \.lmid \.name\{\s*font-size:11px;line-height:1\.2;white-space:nowrap/, "company name remains visible in a single clipped line");
+assert.match(html,/const stRow=it=>[\s\S]*?studio-inline-score[\s\S]*?<div class="name">[\s\S]*?<div class="right">/, "score, company and quotation retained");
+console.log("2.1 screenshot-driven short-stock density guards passed");
