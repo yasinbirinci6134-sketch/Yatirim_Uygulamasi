@@ -1,8 +1,8 @@
 {
-  "status": "success",
-  "source_commit": "78e78d89c8ba8c4c8cfcec690caf2064c21674fc",
-  "run_id": "41578770037",
-  "run_number": 174,
-  "run_url": "https://github.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/actions/runs/41578770037",
-  "checked_at": "2026-11-03T04:34:00.361731+00:00"
+  "status": "failure",
+  "source_commit": "b27ef82d494a39f559a1ee869a44b3a08030161b",
+  "run_id": "41579107023",
+  "run_number": 175,
+  "run_url": "https://github.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/actions/runs/41579107023",
+  "checked_at": "2026-11-03T04:36:29.673205+00:00"
 }
