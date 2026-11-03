@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
   static final String OLD_APP = "https://claude.ai/artifact/KGLuNpASfKJZT1QXGir68H";
   static final String PREVIEW_BRANCH = "feature/fon-pusulasi-v2-phase1";
   static final String PREVIEW_STATUS_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/" + PREVIEW_BRANCH + "/.github/status/v2-preview-build.json";
+  static final String CANDIDATE21_STATUS_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/feature/fon-pusulasi-v2-1/.github/status/v2-1-build.json";
   static final String PRODUCTION_STATUS_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/main/.github/status/v2-production-build.json";
   static final String UI_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/main/ui/index.html";
   // GitHub API: önbelleği kısa (raw ~5 dk bekletir); ETag ile 304 dönen istekler kota yemez
@@ -191,8 +192,6 @@ public class MainActivity extends Activity {
   }
 
   void checkUi() {
-    // 2.1 release candidates use the tested bundled UI until 2.1 remote updates are approved.
-    if (versionName().startsWith("2.1.")) return;
     if (checked) return; checked = true; lastCheck = System.currentTimeMillis();
     NET.execute(() -> {
       try {
@@ -201,7 +200,7 @@ public class MainActivity extends Activity {
         boolean preview = getPackageName().startsWith("com.yasin.yatirimapp.preview");
         // Live and test installations accept only CI-verified immutable UI commits.
         // A missing or failed build retains the bundled/last-known-good HTML.
-        String statusUrl = preview ? PREVIEW_STATUS_URL : PRODUCTION_STATUS_URL;
+        String statusUrl = versionName().startsWith("2.1.") ? CANDIDATE21_STATUS_URL : (preview ? PREVIEW_STATUS_URL : PRODUCTION_STATUS_URL);
         JSONObject statusResponse = Net.req("GET", statusUrl + "?t=" + (System.currentTimeMillis() / 60000), null, "{}");
         if (!statusResponse.optBoolean("ok") || statusResponse.optInt("code") != 200) return;
         JSONObject status = new JSONObject(statusResponse.optString("body", "{}"));
