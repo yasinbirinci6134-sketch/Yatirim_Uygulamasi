@@ -18,3 +18,6 @@ console.log("2.1 compact score diary markup passed");
 assert.match(html,/id="fp21-compact-density"/);
 for(const tab of ["hisse","oneri","doviz","sanal"]) assert.ok(html.includes("#v-"+tab),"compact style must cover "+tab);
 assert.match(html,/html\[data-design="modern"\] :is\(#v-hisse,#v-oneri,#v-doviz,#v-sanal\) section\.card/);
+
+assert.match(html,/html\.apk\[data-design="modern"\] nav\.tabs button\{padding:4px 0 3px/);
+assert.match(html,/html\.apk \.sheet\.st \.st-top\{min-height:48px/);
