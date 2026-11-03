@@ -196,11 +196,11 @@ assert.ok(html.includes('data-boot-report'),"settings must expose startup diagno
 assert.ok(html.includes('data-boot-share'),"diagnostic report can be shared only by user action");
 assert.ok(html.includes('window.YatirimApp.startupReport()'),"settings must use the native diagnostic bridge");
 assert.ok(html.includes("portföy ve hesap bilgileri eklenmez"),"diagnostic privacy scope must be explicit");
-const previewUpgrade=html.slice(html.indexOf("const FP_PREVIEW_V2_UI="),html.indexOf("function activeAccent()"));
+const previewUpgrade=html.slice(html.indexOf("const FP_V2_UI="),html.indexOf("function activeAccent()"));
 assert.ok(previewUpgrade.includes('/-preview$/.test'),"new visual default must be preview-scoped");
 assert.ok(previewUpgrade.includes('TH.design=picked==="classic"||picked==="modern"?picked:"modern"'),"preview 2.0 must be the default until changed explicitly");
-assert.ok(html.includes('tab:FP_PREVIEW_V2_UI?"gundem":"oneri"'),"preview must open the new Today screen by default");
-assert.ok(html.includes('if(FP_PREVIEW_V2_UI)localStorage.setItem("fp-v2-theme-choice",TH.design)'),"manual switch back to classic must persist");
+assert.ok(html.includes('tab:FP_V2_UI?"gundem":"oneri"'),"preview must open the new Today screen by default");
+assert.ok(html.includes('if(FP_V2_UI)localStorage.setItem("fp-v2-theme-choice",TH.design)'),"manual switch back to classic must persist");
 assert.ok(html.includes('if(picked==="classic"||picked==="modern")TH.design=picked;'),"account preference sync must not overwrite explicit device choice");
 assert.ok(html.includes('class="fp2-version"'),"product identity should visibly show 2.0");
 for(const dest of ["gundem","discover","sanal","piyasa"])assert.ok(html.includes(JSON.stringify(dest)+":"),"four destinations must have SVG icons");
