@@ -135,7 +135,7 @@ jobs:
             Fon-Pusulasi-2-1-Candidate.apk.sha256
           retention-days: 14
   approve-ota-v2-1:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/feature/fon-pusulasi-v2-1'
+    if: github.repository == 'yasinbirinci6134-sketch/Yatirim_Uygulamasi' && (github.ref == 'refs/heads/feature/fon-pusulasi-v2-1' || (github.event_name == 'pull_request' && github.head_ref == 'feature/fon-pusulasi-v2-1' && github.event.pull_request.head.repo.full_name == github.repository))
     needs: [test, android-v2-1, signed-candidate-v2-1]
     runs-on: ubuntu-latest
     permissions:
@@ -148,7 +148,7 @@ jobs:
       - name: Approve only the exact fully tested commit
         shell: bash
         env:
-          VERIFIED_SHA: ${{ github.sha }}
+          VERIFIED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           git fetch origin feature/fon-pusulasi-v2-1
