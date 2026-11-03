@@ -1731,9 +1731,11 @@ function priceChart(x){ const M={}; ((S.hist||{})[x.code]||[]).forEach(p=>{ if(t
     <div class="cdates small muted"><span>${esc(fmtDate(short?lim:h[0].d)+((short?lim:h[0].d).slice(0,4)!==h[h.length-1].d.slice(0,4)?" "+(short?lim:h[0].d).slice(0,4):""))}</span><span>${esc(fmtDate(h[h.length-1].d))}</span></div>${short?`<p class="note small">Kayıtlı fiyat geçmişi ${esc(fmtDate(h[0].d))} tarihinden başlıyor; öncesi henüz doğrulanmadı.${fhNote(x)}</p>${(S.market?.funds||[]).some(f=>f.code===x.code)?`<button class="btn ghost sm" data-fh-retry="${esc(x.code)}">TEFAS 1 yıllık geçmişi getir</button>`:""}`:""}</div>`; }
 /* Grafiğe dokununca: en yakın günün fiyatı üstte, tarihi altta; parmak kaydırılınca izler */
 function fhNote(x){ if(!(S.market?.funds||[]).some(f=>f.code===x.code))return "";
+  if(FH.archiveBusy)return " Doğrulanmış 1 yıllık arşiv indiriliyor…";
   if(FH.loading===x.code)return " TEFAS'tan fiyat geçmişi indiriliyor…";
   if(FH.busy)return " TEFAS indirme sırası bekleniyor…";
-  if(FH.err)return " TEFAS erişim hatası: "+FH.err+".";
+  if(FH.err)return " Fiyat geçmişi alınamadı: "+FH.err+".";
+  if(FH.archiveErr)return " Ortak geçmiş arşivi şu anda alınamadı: "+FH.archiveErr+".";
   return " Eksik fiyatlar için TEFAS 12 aylık verisi istenebilir."; }
 function chartTouch(ch){ let H; try{ H=JSON.parse(ch.dataset.h); }catch(_){ return; } if(!H||H.length<2) return;
   const sv=ch.querySelector("svg"), mn=+ch.dataset.mn, rg=+ch.dataset.rg, dg=+ch.dataset.dg, t0=+ch.dataset.t0||Date.parse(H[0][0]), t1=Date.parse(H[H.length-1][0]), T=H.map(p=>Date.parse(p[0]));
@@ -1793,7 +1795,7 @@ function drawDetail(){ const el=$("det"); if(!el||!S.det) return; const {t,c}=S.
   <div class="dbar">${S.db&&S.uid?`<button class="btn" data-dbuy>Portföye ekle</button>`:""}${S.db?`<button class="btn ghost" data-dwatch>${watched?"Takipten çıkar":"Takibe al"}</button>`:""}${window.openAlarm?`<button class="btn ghost" data-dalarm aria-label="Fiyat alarmı" style="flex:0 0 auto">🔔</button>`:""}</div>`;
   el.querySelector("[data-back]").onclick=()=>closeDetail();
   el.querySelectorAll("[data-cp]").forEach(b=>b.onclick=()=>{ S.chartP=b.dataset.cp; drawDetail(); if(t==="f"&&S.chartP==="1Y")fhEnsure(c); });
-  el.querySelector("[data-fh-retry]")?.addEventListener("click",()=>{fhEnsure(c); toast("TEFAS fiyat geçmişi isteniyor; bağlantıya göre yüklenebilir.");});
+  el.querySelector("[data-fh-retry]")?.addEventListener("click",()=>{fhEnsure(c,true); toast("Doğrulanmış 1 yıllık fon geçmişi yeniden isteniyor.");});
   const chEl=el.querySelector(".chart[data-h]"); if(chEl) chartTouch(chEl);
   el.querySelectorAll("[data-dt]").forEach(b=>b.onclick=()=>{ S.det.tab=b.dataset.dt; $("gtip")?.remove(); drawDetail(); });
   const bb=el.querySelector("[data-dbuy]"); if(bb) bb.onclick=()=>openBuy(c);
@@ -3159,7 +3161,7 @@ function nget(method,url,body,hdr){ return new Promise((res,rej)=>{ let id; try{
 /* V2: one-year TEFAS fund prices, cached on-device. The shorter FVT/scorelog
    series must never erase an older real TEFAS observation. No interpolation. */
 const FH={ d:(()=>{ try{ return JSON.parse(localStorage.getItem("fp-fh")||"{}")||{}; }catch(_){return {}} })(),
-  busy:false,loading:null,priority:null,failAt:0,err:null };
+  busy:false,loading:null,priority:null,failAt:0,err:null,archiveAt:0,archiveFailAt:0,archivePromise:null,archiveBusy:false,archiveErr:null };
 function fhSave(){ try{ localStorage.setItem("fp-fh",JSON.stringify(FH.d)); }catch(_){} }
 function fpFundHistoryRows(rows){
   const today=new Date(Date.now()+3*3600000).toISOString().slice(0,10),map=new Map();
@@ -3205,9 +3207,59 @@ function fhNeeds(v,force){
   if(!Array.isArray(v.h)||!v.h.length)return age>30*60e3;
   return age>(fpFundHistorySpan(v.h)>=300?7*864e5:12*3600e3);
 }
+
+/* Public one-year history is collected from TEFAS with browser TLS in GitHub
+   Actions. Phones fetch a single checked JSON file, avoiding TEFAS bot protection.
+   Missing/failing archive never erases locally verified observations. */
+function fpFundArchiveEntries(doc,codes){
+  if(!doc||doc.schema!==1||doc.source!=="TEFAS"||
+     !doc.funds||typeof doc.funds!=="object"||Array.isArray(doc.funds))return {};
+  const accepted={};
+  for(const code of codes){
+    const entry=doc.funds[code],h=fpFundHistoryRows(entry?.h);
+    if(!entry||entry.source!=="TEFAS"||h.length<5)continue;
+    if(entry.complete1y&&fpFundHistorySpan(h)<300)continue;
+    accepted[code]=h;
+  }
+  return accepted;
+}
+async function fhArchiveRefresh(force=false){
+  if(FH.archivePromise)return FH.archivePromise;
+  if(!LIVE.ok()||!S.market)return;
+  const now=Date.now();
+  if(!force&&now-FH.archiveAt<6*3600000)return;
+  if(now-FH.archiveFailAt<5*60000)return;
+  FH.archiveBusy=true;FH.archiveErr=null;
+  FH.archivePromise=(async()=>{
+    try{
+      const url="https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/data/fund-history.json?t="+Math.floor(Date.now()/3600000);
+      const response=await nget("GET",url);
+      if(!response.ok||Number(response.code)!==200)throw new Error("GitHub geçmiş veri kaynağına erişilemiyor");
+      let j;try{j=JSON.parse(response.body||"");}catch(_){throw new Error("Geçmiş veri dosyası okunamadı")}
+      const codes=(S.market?.funds||[]).map(x=>x?.code).filter(Boolean);
+      const entries=fpFundArchiveEntries(j,codes);
+      if(!Object.keys(entries).length)throw new Error("Arşivde eşleşen gerçek fon fiyatı yok");
+      let changed=false;
+      for(const code of Object.keys(entries)){
+        const current=FH.d[code]?.h||[],h=fpFundHistoryMerge(current,entries[code]);
+        if(JSON.stringify(h)!==JSON.stringify(fpFundHistoryRows(current))||FH.d[code]?.version!==2){
+          FH.d[code]={...(FH.d[code]||{}),version:2,at:Date.now(),h,archiveSource:"TEFAS"};
+          changed=true;
+        }
+      }
+      FH.archiveAt=Date.now();
+      if(changed){fhSave();if(S.det?.t==="f")drawDetail();}
+    }catch(e){
+      FH.archiveErr=String(e?.message||e);FH.archiveFailAt=Date.now();
+    }finally{FH.archiveBusy=false;FH.archivePromise=null;}
+  })();
+  return FH.archivePromise;
+}
+
 async function fhRefresh(priorityCode){
   const code=String(priorityCode||"").toUpperCase();
   if(code)FH.priority=code;
+  if(!FH.archiveAt&&!FH.archiveFailAt)await fhArchiveRefresh();
   if(FH.busy||!LIVE.ok()||!S.market||Date.now()-(FH.failAt||0)<5*60e3)return;
   const need=(S.market.funds||[]).filter(x=>x?.code&&fhNeeds(FH.d[x.code],x.code===code));
   if(!need.length)return;
@@ -3232,9 +3284,9 @@ async function fhRefresh(priorityCode){
     }
   }finally{FH.busy=false;FH.loading=null;}
 }
-function fhEnsure(code){
+function fhEnsure(code,force=false){
   if(!(S.market?.funds||[]).some(f=>f.code===code))return;
-  fhRefresh(code).catch(e=>{FH.err=String(e?.message||e);});
+  fhArchiveRefresh(force).then(()=>fhRefresh(code)).catch(e=>{FH.err=String(e?.message||e);});
 }
 /* Kısa vade taraması: her iş günü kapanıştan sonra GitHub'da BIST 100 için üretilir (tools/short.js); telefonda 30 dk'da bir yoklanır */
 "use strict";

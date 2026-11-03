@@ -1,0 +1,52 @@
+name: Fon Pusulası 2.0 - TEFAS doğrulanmış fon geçmişi
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/fund-history-sync.py'
+      - '.github/workflows/fund-history.yml'
+  schedule:
+    - cron: '20 9 * * 1-5'
+permissions:
+  contents: write
+concurrency:
+  group: fon-pusulasi-fund-history
+  cancel-in-progress: false
+jobs:
+  history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test history validation before fetching
+        run: python3 tools/fund-history-sync.py --self-test
+      - name: Install pinned TEFAS client with Chrome TLS transport
+        run: python3 -m pip install --disable-pip-version-check tefasmak==1.0.1
+      - name: Load existing market codes and prior saved real prices
+        run: |
+          set -euo pipefail
+          git fetch origin data
+          git show origin/data:market.json > /tmp/market.json
+          git show origin/data:fund-history.json > /tmp/fund-history-old.json || printf '{"funds":{}}\n' > /tmp/fund-history-old.json
+      - name: Fetch 12 months of TEFAS prices
+        run: python3 tools/fund-history-sync.py /tmp/market.json /tmp/fund-history-old.json /tmp/fund-history-new.json
+      - name: Publish validated prices to shared data branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin data
+          git checkout -B data origin/data
+          cp /tmp/fund-history-new.json fund-history.json
+          git add fund-history.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: verified 12-month TEFAS history [skip ci]'
+            git push origin HEAD:data
+          fi

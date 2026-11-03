@@ -34,6 +34,8 @@ jobs:
           node tools/v2-ui.test.js
           node tools/v2-dashboard.test.js
           node tools/fund-history.test.js
+          node tools/fund-history-archive.test.js
+          python3 tools/fund-history-sync.py --self-test
           node tools/twr.test.js
           node tools/external-flows.test.js
           node tools/ledger-reconcile.test.js
