@@ -2973,13 +2973,14 @@ function fpScoreDelta(code){const h=fpHistory().filter(x=>x.items?.some(z=>z.cod
 }
 /* Recorded-signal evaluation: 5 distinct future scans; never future-leaking. */
 function fpSignalResults(history,hold=5){
- const empty=()=>({count:0,positive:0,avg:null,hitRate:null,relativeAvg:null,relativeCount:0});
+ const empty=()=>({count:0,positive:0,avg:null,hitRate:null,relativeAvg:null,relativeCount:0,entryDays:0});
  if(!Number.isInteger(hold)||hold<1||hold>90||!Array.isArray(history))return empty();
  const dateOf=x=>{const s=String(x?.asOf||x?.at||"").slice(0,10),t=Date.parse(s+"T00:00:00Z");return /^\d{4}-\d{2}-\d{2}$/.test(s)&&Number.isFinite(t)&&new Date(t).toISOString().slice(0,10)===s?s:null;};
  const sorted=history.filter(x=>x?.at&&Array.isArray(x.items)&&Number.isFinite(Date.parse(x.at))).slice().sort((x,y)=>String(x.at).localeCompare(String(y.at)));
  const a=[],seenDays=new Set();
  for(const x of sorted){const day=dateOf(x);if(!day||seenDays.has(day))continue;seenDays.add(day);a.push({...x,asOf:day});}
  let eligible=0,positive=0,sum=0,relativeSum=0,relativeN=0;
+ const entryDays=new Set();
  for(let i=0;i+hold<a.length;i++){
    const before=a[i],after=a[i+hold],future=new Map(after.items.filter(x=>x&&typeof x.code==="string"&&Number.isFinite(x.price)&&x.price>0&&(!x.date||x.date===after.asOf)).map(x=>[x.code,x]));
    const seenCodes=new Set();
@@ -2989,19 +2990,20 @@ function fpSignalResults(history,hold=5){
      const y=future.get(x.code);if(!y)continue;
      const change=(y.price/x.price-1)*100;
      if(!Number.isFinite(change))continue;
-     eligible++;if(change>0)positive++;sum+=change;
+     eligible++;entryDays.add(before.asOf);if(change>0)positive++;sum+=change;
      if(Number.isFinite(before.xu)&&before.xu>0&&Number.isFinite(after.xu)&&after.xu>0){relativeSum+=change-(after.xu/before.xu-1)*100;relativeN++;}
    }
  }
- return {count:eligible,positive,avg:eligible?sum/eligible:null,hitRate:eligible?100*positive/eligible:null,relativeAvg:relativeN?relativeSum/relativeN:null,relativeCount:relativeN};
+ return {count:eligible,positive,avg:eligible?sum/eligible:null,hitRate:eligible?100*positive/eligible:null,relativeAvg:relativeN?relativeSum/relativeN:null,relativeCount:relativeN,entryDays:entryDays.size};
 }
 function fpScoreDiary(){
  const h=fpHistory();if(!h.length)return `<section class="card"><h2>Skor günlüğü</h2><p class="small muted">Yeni taramalar geldikçe gerçek puan geçmişi birikecek; geçmiş tarihler için tahmin üretilmez.</p></section>`;
  const latest=h[h.length-1],prev=h.length>1?h[h.length-2]:null,results=fpSignalResults(h);
- const changes=prev?latest.items.map(x=>{const old=prev.items.find(y=>y.code===x.code);return old?{...x,delta:x.score-old.score}:null}).filter(Boolean).sort((a,b)=>b.delta-a.delta).slice(0,7):[];
+ const changes=prev?latest.items.map(x=>{const old=prev.items.find(y=>y.code===x.code);return old?{...x,delta:x.score-old.score}:null}).filter(Boolean).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta)).slice(0,7):[];
  return `<section class="card"><div class="horizon"><h2>Skor günlüğü</h2><span class="small muted">${h.length} tarama · ${esc(latest.asOf||"")}</span></div>
  ${changes.length?changes.map(x=>`<div class="trade" data-st="${esc(x.code)}"><b class="code">${esc(x.code)}</b><span class="small muted">Önceki ${x.score-x.delta} → ${x.score}</span><b class="num ${cls(x.delta)}">${x.delta>0?"+":""}${x.delta}</b></div>`).join(""):`<p class="small muted">Değişimleri göstermek için iki farklı günlük tarama kaydı gerekiyor.</p>`}
  ${results.count?`<div class="pfstats"><div><span>5 tarama sonrası yükselen</span><b class="num">% ${num(results.hitRate,1)}</b></div><div><span>Ortalama fiyat değişimi</span><b class="num ${cls(results.avg)}">${pc(results.avg,2)}</b></div><div><span>BIST 100'e göre ort. fark</span><b class="num ${cls(results.relativeAvg)}">${results.relativeAvg==null?"Veri yok":pc(results.relativeAvg,2)}</b></div><div><span>Ölçülen sinyal</span><b class="num">${results.count}</b></div></div>`:`<p class="small muted">${h.length<6?`5 sonraki taramayı değerlendirmek için ${6-h.length} yeni tarihli kayıt gerekiyor.`:`Beş sonraki taramada tarihli fiyatla eşleşen 80+ sinyal bulunamadı; sonuç üretilmedi.`}</p>`}
+ ${results.count>0&&(results.count<30||results.entryDays<5)?`<p class="small muted">Ön gözlem: ${results.count} sinyal, ${results.entryDays} farklı başlangıç günü. Aynı gündeki hisseler bağımsız örnek değildir; bu oran yatırım kararı için güvenilir bir başarı tahmini sayılmaz.</p>`:""}
  <p class="small muted">Yalnız bu cihazda kaydedilen taramalardan hesaplanır. 5 tarama aralığı yaklaşık bir işlem haftasıdır, sabit süre değildir. Temettü ve bölünme düzeltmeleri dahil değildir. BIST farkı yalnız aynı tarihlerde endeks fiyatı kayıtlıysa hesaplanır. Gelecek getiri tahmini değildir.</p></section>`;
 }
 /* Kisa vadede eksik gunluk yuzde varsa sunucudaki yeni taramayi bir kez kontrol et.

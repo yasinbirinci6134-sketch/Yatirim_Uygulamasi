@@ -10,7 +10,13 @@ assert.ok(start>0&&end>start);
 const score=new Function(html.slice(start,end)+";return fpSignalResults;")();
 const snaps=Array.from({length:6},(_,i)=>({at:"2026-11-"+String(i+1).padStart(2,"0"),xu:100+i*2,items:[{code:"ABC",score:90,price:100+i*4},{code:"DEF",score:40,price:50+i}]}));
 const out=score(snaps,5);
-assert.equal(out.count,1);assert.equal(out.positive,1);assert.ok(Math.abs(out.avg-20)<1e-7);
+assert.equal(out.count,1);assert.equal(out.entryDays,1,"single-date signals must not be presented as independent trials");
+const secondDay={...snaps[5],at:"2026-11-07",asOf:"2026-11-07"};
+assert.equal(score([...snaps,secondDay],5).entryDays,2,"sample readiness counts distinct entry days");
+assert.equal(score(snaps,0).entryDays,0,"invalid window should have no entry days");
+assert.ok(html.includes("Ön gözlem:"),"insufficient sample size must be labelled");
+assert.ok(html.includes("Math.abs(b.delta)-Math.abs(a.delta)"),"largest score rises and drops must both be visible");
+assert.equal(out.positive,1);assert.ok(Math.abs(out.avg-20)<1e-7);
 assert.ok(Math.abs(out.relativeAvg-10)<1e-7);
 assert.equal(score(snaps.slice(0,5),5).count,0);
 const repeated=[{...snaps[0],at:"2026-11-01T00:00:00Z",asOf:"2026-11-01"},

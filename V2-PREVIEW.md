@@ -106,3 +106,9 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - Boyle bir durumda kayitli tarih ve veri guncel degil uyari karti gosterilir.
 - Bozuk eski zaman damgasi, yeni gecerli taramanin cihazda kabul edilmesini engelleyemez.
 - Puan gecmisi kayitlari silinmez; veri kaynagi bulunamiyorsa gelecek getiri uydurulmaz.
+
+## Skor analizi yorumlama
+- Sinyal sayisinin yaninda kac farkli baslangic gununde sinyal olustugu da sayilir.
+- En az 30 eslesmis sinyal ve 5 farkli giris gunu yoksa kullaniciya "On gozlem" uyari metni verilir.
+- Bu esikler istatistiksel dogruluk garantisi degildir; ayni gun sinyalleri iliskilidir.
+- Skor gunlugunde hem en buyuk artislari hem en buyuk dususleri gostermek icin mutlak fark siralamasi kullanilir.
