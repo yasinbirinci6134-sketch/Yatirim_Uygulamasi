@@ -139,3 +139,8 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - startupReport() yalniz teknik sayaclar, uygulama surumu, ekran kaynagi ve zamanlari dondurur.
 - Portfoy islemleri, ekstre tutarlari, hesap bilgileri veya URL'ler tanilama raporuna eklenmez.
 - Bu bilgiler cihazda tutulur; kullanici paylasmadikca otomatik gonderilmez.
+
+## Ayarlardaki tanilama raporu
+- Ayarlar > Acilis tanilama > Tanilama raporu dugmesinden sadece teknik acilis bilgileri okunabilir.
+- Paylas secenegi kullanici dokunmadan calismaz; veri otomatik olarak baska yere gonderilmez.
+- Tema 1 ve Tema 2 ayarlari ayni raporu gosterir.

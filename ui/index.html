@@ -1747,6 +1747,7 @@ function openSettings(){
     <div class="seg" role="radiogroup" aria-label="Tema">${[["auto","Otomatik"],["light","Açık"],["dark","Koyu"]].map(([k,l])=>`<button data-th="${k}" class="${TH.mode===k?"on":""}" role="radio" aria-checked="${TH.mode===k}">${l}</button>`).join("")}</div>
     <p class="note" style="margin:6px 0 4px">Renk</p>
     <div class="swatches">${ACC.map(([k,l,c])=>`<button data-ac="${k}" class="${activeAccent()===k?"on":""}" aria-label="${l}" title="${l}" style="background:${c}"></button>`).join("")}</div>
+    ${window.YatirimApp&&typeof window.YatirimApp.startupReport==="function"?`<h3 style="margin:10px 0 4px">Açılış tanılama</h3><p class="note" style="margin:0">Yalnız teknik açılış bilgilerini gösterir; portföy ve hesap bilgileri eklenmez.</p><div class="row" style="justify-content:flex-start"><button class="btn ghost sm" data-boot-report style="margin-left:0">Tanılama raporu</button><button class="btn ghost sm" data-boot-share hidden style="margin-left:0">Paylaş</button></div><pre data-boot-out hidden style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;background:var(--bg);color:var(--ink);padding:9px;border-radius:7px;border:1px solid var(--line);margin:0"></pre>`:""}
     <div class="row"><button class="btn" data-c>Kapat</button></div>`;
   document.body.append(scrim,sh);
   const close=()=>{scrim.remove();sh.remove();};
@@ -1756,6 +1757,21 @@ function openSettings(){
   sh.querySelectorAll("[data-th]").forEach(b=>b.onclick=()=>{ TH.mode=b.dataset.th; saveTheme(); sh.querySelectorAll("[data-th]").forEach(x=>{x.classList.toggle("on",x===b); x.setAttribute("aria-checked",x===b);}); });
   sh.querySelectorAll("[data-ac]").forEach(b=>b.onclick=()=>{ if(TH.design==="modern") TH.modernAcc=b.dataset.ac; else TH.acc=b.dataset.ac; saveTheme(); sh.querySelectorAll("[data-ac]").forEach(x=>x.classList.toggle("on",x===b)); });
   sh.querySelector("[data-ly]").onclick=()=>{ close(); openLayout(); };
+  const bootReport=sh.querySelector("[data-boot-report]");
+  if(bootReport)bootReport.onclick=()=>{
+    const out=sh.querySelector("[data-boot-out]"),share=sh.querySelector("[data-boot-share]");
+    try{
+      const r=JSON.parse(window.YatirimApp.startupReport());
+      const stamp=ms=>Number(ms)>0?new Date(Number(ms)).toLocaleString("tr-TR"):"Yok";
+      const report=["Fon Pusulası - Açılış tanılama","Sürüm: "+String(r.appVersion||"–"),
+        "Son durum: "+String(r.status||"–"),"Son arayüz: "+String(r.lastSource||"–"),
+        "Başlatma denemesi: "+Number(r.attempts||0),"Geri dönüş: "+Number(r.rollbacks||0),
+        "Açılış takılması: "+Number(r.stalls||0),"Son başarılı süre: "+Number(r.lastDurationMs||0)+" ms",
+        "Son başarı: "+stamp(r.lastReadyAt),"Son hata: "+stamp(r.lastFailureAt)].join("\n");
+      out.textContent=report;out.hidden=false;share.hidden=false;
+      share.onclick=()=>{try{window.YatirimApp.share(report,"Fon Pusulası açılış tanılama");}catch(_){}};
+    }catch(_){out.textContent="Tanılama raporu okunamadı.";out.hidden=false;share.hidden=true;}
+  };
 
 }
 function donut(mix){ const C={para:"var(--para)",altin:"var(--gold)",hisse:"var(--stock)",gumus:"#8a8f98",doviz:"#6b5aa6",diger:"var(--muted)"};

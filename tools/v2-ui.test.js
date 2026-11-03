@@ -192,4 +192,8 @@ assert.ok(classicCss.includes('html:not([data-design="modern"]) #v-sanal .trade.
 assert.ok(classicCss.includes('grid-template-columns:minmax(0,1fr) minmax(94px,auto)'),"theme 1 must have only two compact asset columns");
 assert.ok(classicCss.includes(".studio-inline-score"),"classic must style inline scores");
 
+assert.ok(html.includes('data-boot-report'),"settings must expose startup diagnostics");
+assert.ok(html.includes('data-boot-share'),"diagnostic report can be shared only by user action");
+assert.ok(html.includes('window.YatirimApp.startupReport()'),"settings must use the native diagnostic bridge");
+assert.ok(html.includes("portföy ve hesap bilgileri eklenmez"),"diagnostic privacy scope must be explicit");
 console.log("UI scripts and score-history tests passed");
