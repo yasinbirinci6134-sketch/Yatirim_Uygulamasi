@@ -18,7 +18,7 @@ assert.ok(workflow.includes("gradle assemblePreview --no-daemon"),"workflow must
 assert.ok(!workflow.includes("gradle assembleDebug --no-daemon"),"do not publish new CI debug signatures");
 assert.ok(workflow.includes("apksigner")&&workflow.includes("certificate SHA-256 digest:"),"check actual APK signing identity");
 assert.ok(workflow.includes('10#$new_code > 10#$old_code'),"compare APK versionCodes before overwriting existing preview2 release");
-assert.ok(workflow.includes("test \\"$old_cert\\" = \\"$new_cert\\""),"refuse cert regression");
+assert.ok(workflow.includes('test "$old_cert" = "$new_cert"'),"refuse cert regression");
 assert.ok(html.includes("...(S.cashflows||[])")&&html.includes("...(S.journal||[])"),
  "cross-signature migration backup must include cashflows and investment journal");
 assert.ok(html.includes('watch:{s:S.watch,f:S.fwatch,x:S.fxwatch},theme:{...TH},layout:{...LAY},autoq:[...AUTOQ]'),
