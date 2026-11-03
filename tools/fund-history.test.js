@@ -14,6 +14,9 @@ assert.deepEqual(f.fpFundHistoryMerge(older,[]),older,"empty downloads must pres
 assert.deepEqual(f.fpFundHistoryRows([["2026-02-30",3],["2026-09-18",19],["bad",12],["2026-09-20",-3],["2031-02-02",20]]),
  [["2026-09-18",19]],"invalid and future fund prices cannot be plotted");
 assert.ok(html.includes('data-fh-retry'),"users need a history download retry");
+assert.ok(html.includes("if(force)return true;"),"manual refresh must bypass fresh-cache throttling");
+assert.ok(html.includes("if(manual)FH.failAt=0;"),"manual refresh must bypass prior network-error cooldown");
+assert.ok(html.includes('fhEnsure(c,true); toast("TEFAS fiyat geçmişi yeniden isteniyor.");'),"retry button must force refresh");
 assert.ok(html.includes('if(t==="f")fhEnsure(c);'),"opening a fund must request its history");
 assert.ok(html.includes('version:2,at:Date.now(),h:fpFundHistoryMerge(previous,h)'),"history must be preserved on refresh");
 console.log("TEFAS one-year fund price history integrity tests passed");
