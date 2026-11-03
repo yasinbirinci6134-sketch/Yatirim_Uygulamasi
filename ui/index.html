@@ -2420,10 +2420,14 @@ const FP_PFV_KEY="fp-v2-portfolio-values";
 function fpPortSeries(){try{const a=JSON.parse(localStorage.getItem(FP_PFV_KEY)||"{}");return a&&typeof a==="object"?a:{}}catch(_){return {}}}
 function fpPortSnapshot(id,amount,cost){
  if(!id||!Number.isFinite(amount)||amount<0||!Number.isFinite(cost)||cost<0)return;
- const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10),all=fpPortSeries(),a=fpPortChartRows(all[id]);
- const next={day:today,value:amount,cost,priced:true},idx=a.findIndex(x=>x.day===today);
- if(idx>=0)a[idx]=next;else a.push(next);
- all[id]=fpPortChartRows(a);try{localStorage.setItem(FP_PFV_KEY,JSON.stringify(all))}catch(_){}
+ const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10),all=fpPortSeries(),raw=Array.isArray(all[id])?all[id]:[];
+ const legacy=raw.filter(x=>x&&x.priced!==true);
+ const verified=fpPortChartRows(raw);
+ const next={day:today,value:amount,cost,priced:true},idx=verified.findIndex(x=>x.day===today);
+ if(idx>=0)verified[idx]=next;else verified.push(next);
+ // Preserve unverified legacy records for audit, but never plot them as verified prices.
+ all[id]=[...legacy,...fpPortChartRows(verified)].slice(-365);
+ try{localStorage.setItem(FP_PFV_KEY,JSON.stringify(all))}catch(_){}
 }
 function fpPortChartRows(rows){
  const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10),days=new Map();
