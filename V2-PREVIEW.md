@@ -144,3 +144,8 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - Ayarlar > Acilis tanilama > Tanilama raporu dugmesinden sadece teknik acilis bilgileri okunabilir.
 - Paylas secenegi kullanici dokunmadan calismaz; veri otomatik olarak baska yere gonderilmez.
 - Tema 1 ve Tema 2 ayarlari ayni raporu gosterir.
+
+## UI 2.0 onizleme baslangici
+- Sadece .preview paketinde ilk acilista Tema 2 ve Bugun sekmesi varsayilan; v41 ayarlari degismez.
+- Kullanicinin Tema 1 secimi fp-v2-theme-choice anahtarinda kalici ve sunucu tercih yuklemesinden korunur.
+- Uygulama basligi Fon Pusulasi 2.0; dort alt sekmede ayirt edilebilir simgeler var.

@@ -1256,11 +1256,37 @@ html:not([data-design="modern"]) #v-sanal .pfhero .pfstats > div{padding:6px 7px
  }
 }
 
+/* FP2 navigation and product identity: preview becomes a clearly distinct app. */
+html[data-design="modern"] .brand h1::before{display:none!important}
+.fp2-version{display:inline-block;margin-left:7px;vertical-align:middle;
+ font:800 10px/1.2 var(--f-body);letter-spacing:0;padding:3px 6px;
+ border:1px solid var(--line);border-radius:6px;color:var(--accent)}
+html[data-design="modern"] .brand h1{font:800 22px/1.2 var(--f-display);letter-spacing:-.045em}
+html[data-design="modern"] .brand h1 span{color:var(--accent)}
+html[data-design="modern"] nav.tabs button[data-fp-v2]{
+ display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;
+ color:var(--muted);font:700 10px/1.2 var(--f-body);padding:8px 3px 6px;
+ border-radius:12px;min-width:0;transition:background .12s,color .12s
+}
+html[data-design="modern"] nav.tabs button[data-fp-v2] svg{display:block;flex:none;width:20px;height:20px}
+html[data-design="modern"] nav.tabs button[data-fp-v2][aria-selected="true"]{
+ background:var(--accent-soft);color:var(--accent);
+ box-shadow:inset 0 2px 0 var(--accent)
+}
+html[data-design="modern"] #fp-discovery-tabs{justify-content:flex-start!important;overflow-x:auto;scrollbar-width:none}
+html[data-design="modern"] #fp-discovery-tabs button{
+ flex:none;border:1px solid var(--line);border-radius:10px;padding:6px 12px;
+ background:var(--card);font:700 11px var(--f-body);color:var(--muted)
+}
+html[data-design="modern"] #fp-discovery-tabs button[aria-pressed="true"]{
+ background:var(--accent-soft);color:var(--accent);border-color:var(--accent)
+}
+
 </style>
 
 <div class="wrap">
   <header>
-    <div class="brand" style="display:flex;justify-content:space-between;align-items:center"><h1>Yatırım <span>Tavsiyesi</span></h1><button class="linkbtn" id="setBtn" aria-label="Ayarlar" style="font-size:20px">⚙︎</button></div>
+    <div class="brand" style="display:flex;justify-content:space-between;align-items:center"><h1>Fon <span>Pusulası</span><small class="fp2-version" aria-label="Sürüm 2.0">2.0</small></h1><button class="linkbtn" id="setBtn" aria-label="Ayarlar" style="font-size:20px">⚙︎</button></div>
     <div class="fresh" id="fresh"><span class="dot" id="dot"></span><span id="freshText">Veriler yükleniyor…</span>
       <button class="linkbtn" id="refreshBtn" hidden>Şimdi güncelle</button></div>
     <nav class="tabs" role="tablist">
@@ -1273,8 +1299,8 @@ html:not([data-design="modern"]) #v-sanal .pfhero .pfstats > div{padding:6px 7px
     </nav>
   </header>
 
-  <main id="v-gundem" class="wrap" style="padding:0" hidden></main>
-  <main id="v-oneri" class="wrap" style="padding:0"></main>
+  <main id="v-gundem" class="wrap" style="padding:0"></main>
+  <main id="v-oneri" class="wrap" style="padding:0" hidden></main>
   <main id="v-hisse" class="wrap" style="padding:0" hidden></main>
   <main id="v-sanal" class="wrap" style="padding:0" hidden></main>
   <main id="v-doviz" class="wrap" style="padding:0" hidden></main>
@@ -1374,7 +1400,7 @@ html:not([data-design="modern"]) #v-sanal .pfhero .pfstats > div{padding:6px 7px
 </script>
 <script>
 const CAT = {para:"Para piyasası", altin:"Altın", hisse:"Hisse", diger:"Diğer", gumus:"Gümüş", doviz:"Döviz"};
-const S = { fxwatch:[], fwatch:[], pfs:[], pf:null, watch:[], market:null, trades:[], cashflows:[], journal:[], cfg:null, status:null, uid:null, tab:"oneri", db:null, mcp:null, sample:null, busy:false, ready:false };
+const S = { fxwatch:[], fwatch:[], pfs:[], pf:null, watch:[], market:null, trades:[], cashflows:[], journal:[], cfg:null, status:null, uid:null, tab:FP_PREVIEW_V2_UI?"gundem":"oneri", db:null, mcp:null, sample:null, busy:false, ready:false };
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const tl = (n, d=0) => (n==null||isNaN(n)) ? "–" : n.toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d}) + " TL";
@@ -1446,10 +1472,25 @@ document.addEventListener("click", e => { const g=e.target.closest(".g"); const 
 
 /* ---------- Tema ---------- */
 const ACC=[["yesil","Yeşil","#0F6B57"],["mavi","Mavi","#2F5BB7"],["mor","Mor","#6B46B0"],["turuncu","Turuncu","#B5541C"],["gri","Grafit","#3E4A52"]];
-let TH={mode:"auto",acc:"yesil",design:"classic",modernAcc:"mavi"}; try{ TH={...TH,...JSON.parse(localStorage.getItem("fp-theme")||"{}")}; }catch(e){}
+/* Preview-only visual first-run migration: never applies to production v41.
+   Users can still explicitly choose Classic; the choice survives account preference sync. */
+const FP_PREVIEW_V2_UI=(()=>{try{
+  return !!window.YatirimApp&&typeof window.YatirimApp.appVersionName==="function"
+    &&/-preview$/.test(String(window.YatirimApp.appVersionName()));
+}catch(_){return false}})();
+let TH={mode:"auto",acc:"yesil",design:"classic",modernAcc:"mavi"};
+try{ TH={...TH,...JSON.parse(localStorage.getItem("fp-theme")||"{}")}; }catch(e){}
+if(FP_PREVIEW_V2_UI){
+  try{
+    const picked=localStorage.getItem("fp-v2-theme-choice");
+    TH.design=picked==="classic"||picked==="modern"?picked:"modern";
+    if(!picked)localStorage.setItem("fp-v2-theme-choice",TH.design);
+    localStorage.setItem("fp-theme",JSON.stringify(TH));
+  }catch(_){TH.design="modern";}
+}
 function activeAccent(){ return TH.design==="modern"?(TH.modernAcc||"mavi"):(TH.acc||"yesil"); }
 function applyTheme(){ const r=document.documentElement; if(TH.mode==="auto") r.removeAttribute("data-theme"); else r.setAttribute("data-theme",TH.mode); const ac=activeAccent(); if(ac!=="yesil") r.setAttribute("data-accent",ac); else r.removeAttribute("data-accent"); if(TH.design==="modern") r.setAttribute("data-design","modern"); else r.removeAttribute("data-design"); }
-function saveTheme(){ try{localStorage.setItem("fp-theme",JSON.stringify(TH));}catch(e){} applyTheme(); notifyBars(); try{savePrefs();}catch(e){} 
+function saveTheme(){ try{if(FP_PREVIEW_V2_UI)localStorage.setItem("fp-v2-theme-choice",TH.design);localStorage.setItem("fp-theme",JSON.stringify(TH));}catch(e){} applyTheme(); notifyBars(); try{savePrefs();}catch(e){} 
   // Tema 2 tablo başlıkları DOM içinde üretildiği için değişimde o sayfayı yeniden çiz.
   try{ if(S&&S.market&&typeof renderAll==="function") renderAll(); }catch(e){ console.error("Tema yenilenemedi",e); }
 }
@@ -2868,7 +2909,15 @@ LAY.tabs=[...LAY.tabs.filter(t=>TABS[t]),...Object.keys(TABS).filter(t=>!LAY.tab
 const saveLay=()=>{ try{localStorage.setItem("fp-layout",JSON.stringify(LAY))}catch(_){} savePrefs(); };
 function savePrefs(){ if(!S.db||!S.uid||!S.prefsLoaded) return; try{ tradesCol().doc("prefs").set({kind:"prefs", layout:LAY, theme:TH, autoq:AUTOQ, at:new Date().toISOString()}); }catch(e){} }
 function loadPrefs(d){ if(!d) return; if(d.layout) { LAY={tabs:Object.keys(TABS),hiddenTabs:[],cards:{},...d.layout}; try{localStorage.setItem("fp-layout",JSON.stringify(LAY))}catch(_){} }
-  if(d.theme){ TH={...TH,...d.theme}; try{localStorage.setItem("fp-theme",JSON.stringify(TH))}catch(_){} applyTheme(); notifyBars(); }
+  if(d.theme){
+    TH={...TH,...d.theme};
+    if(FP_PREVIEW_V2_UI){try{
+      const picked=localStorage.getItem("fp-v2-theme-choice");
+      if(picked==="classic"||picked==="modern")TH.design=picked;
+    }catch(_){}}
+    try{localStorage.setItem("fp-theme",JSON.stringify(TH))}catch(_){}
+    applyTheme();notifyBars();
+  }
   if(Array.isArray(d.autoq)){ AUTOQ=d.autoq; try{localStorage.setItem("fp-autoq",JSON.stringify(AUTOQ))}catch(_){} }
   try{ applyTabs(); showTab(); Object.keys(TABS).forEach(applyLayout); }catch(e){} }
 const CARDS={};
@@ -2903,6 +2952,12 @@ function fpNavV2(){
  const nav=document.querySelector("nav.tabs");if(!nav)return;
  const modern=studioOn();
  const choices=[["gundem","Bugün"],["discover","Keşfet"],["sanal","Portföy"],["piyasa","Piyasa"]];
+ const fp2Icons={
+  "gundem":"<rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1.5\"/>",
+  "discover":"<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m15.8 8.2-2.5 5.1-5.1 2.5 2.5-5.1z\"/>",
+  "sanal":"<path d=\"M3 8h18v12H3z\"/><path d=\"M16 13h5\"/><path d=\"M3 8V6a2 2 0 0 1 2-2h13\"/>",
+  "piyasa":"<path d=\"M3 17l6-6 4 3 8-9\"/><path d=\"M15 5h6v6\"/><path d=\"M3 21h18\"/>"
+ };
  const old=LAY.tabs.map(t=>$("t-"+t)).filter(Boolean);
  if(!modern){
   nav.querySelectorAll("[data-fp-v2]").forEach(e=>e.remove());
@@ -2918,7 +2973,9 @@ function fpNavV2(){
     S.tab=id==="discover"?FP_DISCOVERY_TAB:id;
     showTab();renderAll();window.scrollTo(0,0);
   };nav.appendChild(b);}
-  b.textContent=label;b.setAttribute("aria-selected",String(id==="discover"?["oneri","hisse","doviz"].includes(S.tab):S.tab===id));
+  b.innerHTML='<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+fp2Icons[id]+'</svg><span>'+label+'</span>';
+  b.setAttribute("aria-label",label);
+  b.setAttribute("aria-selected",String(id==="discover"?["oneri","hisse","doviz"].includes(S.tab):S.tab===id));
  }
  nav.style.gridTemplateColumns="repeat(4,minmax(0,1fr))";
  let chips=document.querySelector("#fp-discovery-tabs");
