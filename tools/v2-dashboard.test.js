@@ -62,8 +62,8 @@ assert.equal(navigationCount,2,"quick action should invoke navigation and render
 const stale=fp2DashboardPortfolio(holder.pf,[{code:"AAA",amount:100,value:117,quoteSource:"live",curDate:"2026-01-01"}],today);
 assert.equal(stale.value,null,"stale quotes cannot produce fabricated gains");
 assert.equal(fp2DashboardPortfolio(null,[],today).value,null,"no portfolio must not show a fabricated total");
-assert.ok(html.indexOf("const FP_PREVIEW_V2_UI=")<html.indexOf("const S ="),"preview mode must be initialized before app state");
+assert.ok(html.indexOf("const FP_V2_UI=")<html.indexOf("const S ="),"preview mode must be initialized before app state");
 assert.ok(html.includes('TH.design=picked==="classic"||picked==="modern"?picked:"modern"'),"2.0 must be initial preview theme");
-assert.ok(html.includes('tab:FP_PREVIEW_V2_UI?"gundem":"oneri"'),"preview should open dashboard, not old fund page");
+assert.ok(html.includes('tab:FP_V2_UI?"gundem":"oneri"'),"preview should open dashboard, not old fund page");
 assert.ok(html.includes('if(studioOn()&&S.tab==="gundem") renderGundem();'),"offline startup should render dashboard immediately");
 console.log("V2 command center, portfolio truthfulness, navigation and preview defaults passed");
