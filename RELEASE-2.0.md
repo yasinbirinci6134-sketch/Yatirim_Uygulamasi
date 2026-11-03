@@ -17,3 +17,10 @@ Gerçek cihazda uygulamanın üstüne kurulum ve TEFAS bir yıllık kaynak eriş
 - Ekstre, gerçekleşmiş getiri doğrulaması, nakit, risk, günlük, kapanmış işlemler ve analiz hesapları Gelişmiş bölümünde tutulur. Mevcut Firestore kayıtlarına dokunulmaz.
 - Tam fiyat verisi yoksa toplam ve ilgili pozisyonların değer/kâr metrikleri gizlenir; satın alma fiyatından getiri üretilmez.
 - Test: tools/v2-portfolio.test.js
+
+## 2.0 Keşfet ekranı
+- Fonlar/Hisseler: yeni koyu mavi radar başlığı; son puan sıralaması, veri tarihi ve güncellik bilgisi.
+- Arama, puan/gün/yıl/A-Z sıralama, liste satırları ve varlık detayları ilk sırada; daha kompakt yerleşim.
+- Takiptekiler/Tüm varlıklar anlık filtresi. Filtre, kayıt veya takip listesini değiştirmez.
+- Öneri/keşifler/uzun analiz ve metodoloji bölümleri açılabilen ayrıntılara taşındı; eski eylemler korunur.
+- Test: tools/v2-discovery.test.js.
