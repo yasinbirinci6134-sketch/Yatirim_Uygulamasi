@@ -2515,11 +2515,46 @@ function fpAuditReport(name,audit,cashflows){
  lines.push("- Alış/satış kapsamı doğrulanmalı. Bu rapor XIRR/TWR doğrulaması değildir.");
  return lines.join("\n");
 }
+/* Modern portfolio summary: never present fallback quotes as verified value. */
+let PF2_PORT_FILTER="all";
+function pf2Overview(rows,today){
+  const lots=Array.isArray(rows)?rows:[];
+  const invested=lots.reduce((sum,r)=>sum+(Number.isFinite(r?.amount)&&r.amount>=0?r.amount:NaN),0);
+  const value=lots.length&&Number.isFinite(invested)?fpTrustedHoldingsValue(lots,today):NaN;
+  const codes=[...new Set(lots.map(r=>r.code).filter(Boolean))];
+  const kinds={hisse:0,fon:0,diger:0};
+  for(const code of codes){
+    const a=asset(code),kind=a?.isStock||a?.cat==="hisse"?"hisse":a?.isFx||["altin","gumus","doviz"].includes(a?.cat)?"diger":"fon";
+    kinds[kind]++;
+  }
+  return {count:codes.length,lots:lots.length,kinds,invested:Number.isFinite(invested)?invested:null,
+    value:Number.isFinite(value)?value:null,
+    change:Number.isFinite(value)&&Number.isFinite(invested)?value-invested:null};
+}
+function pf2Hero(pf,rows,today,pfOpen){
+  const d=pf2Overview(rows,today),fmt=n=>Number.isFinite(n)?tl(n,2):"—";
+  const status=d.value==null?"Güncel değer doğrulanamadı; tahmin gösterilmiyor":"Doğrulanmış fiyatlar · nakit hariç";
+  const color=d.change==null?"":d.change>=0?"pf2-plus":"pf2-minus";
+  const change=d.change==null?"—":(d.change>0?"+":"")+fmt(d.change);
+  return `<section class="pf2-hero" aria-label="Portföy özeti">
+    <div class="pf2-hero-top"><span>PORTFÖY / KONTROL MERKEZİ</span><span>${d.count} VARLIK</span></div>
+    <button id="pfPick" class="pf2-choose" aria-expanded="${!!pfOpen}">${esc(pf.name||"Portföy")} <span aria-hidden="true">⌄</span></button>
+    <div class="pf2-hero-main"><small>AÇIK POZİSYONLARIN DEĞERİ</small><strong class="num">${fmt(d.value)}</strong>
+      <div class="pf2-status"><i aria-hidden="true"></i>${esc(status)}</div></div>
+    <div class="pf2-hero-stats"><div><span>Alış maliyeti</span><b class="num">${fmt(d.invested)}</b></div>
+      <div><span>Değer − maliyet</span><b class="num ${color}">${change}</b></div>
+      <div><span>İşlem kaydı</span><b class="num">${d.lots}</b></div></div>
+    <div class="pf2-hero-footer"><span>Hisse ${d.kinds.hisse}</span><span>Fon ${d.kinds.fon}</span>
+      ${d.kinds.diger?`<span>Diğer ${d.kinds.diger}</span>`:""}
+      <span class="pf2-hero-disclaimer">Gerçek toplam getiri değildir</span></div>
+  </section>`;
+}
 function renderSanal(){
   const tl2=n=>tl(n,2);
   const v=$("v-sanal");
   if(!S.db||!S.uid){ v.innerHTML=`<section class="card empty">${S.ready?"Portföy için claude.ai'de oturum açık olmalı.":"Yükleniyor…"}</section>`; return; }
   const pf=curPf();
+  const modernPortfolio=studioOn();
   const head = `<section class="card pfmgr${pf&&!S.pfOpen?" closed":""}" id="pfMgr">${S.pfs.length?`<h3>Portföylerim</h3><div class="pfchips" role="radiogroup" aria-label="Portföy">${S.pfs.map(p=>`<button role="radio" aria-checked="${p.id===pf?.id}" data-pfsel="${esc(p.id)}">${esc(p.name)}</button>`).join("")}</div>`:""}
       <select id="pfSel" hidden aria-hidden="true">${S.pfs.map(p=>`<option value="${esc(p.id)}" ${p.id===pf?.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select>
       <div class="pfacts"><button class="btn ghost sm" id="pfNew">+ Yeni</button>${pf?`<button class="btn ghost sm" id="pfRen">✎ Adlandır</button><button class="btn ghost sm pfdel" id="pfDel">🗑 Sil</button>`:""}</div>
