@@ -4487,7 +4487,7 @@ function studio2RenderGundem(){
    style.textContent='html[data-design="modern"] .studio-controls-card{margin-top:8px;padding:12px!important;gap:8px!important}html[data-design="modern"] .studio-controls-title{font:700 12px var(--f-body);letter-spacing:.04em;color:var(--muted);margin-bottom:3px}html[data-design="modern"] .studio-controls-card .lfbar{margin:0}html[data-design="modern"] .studio-controls-card .addrow{margin:0}html[data-design="modern"] #v-hisse .st-row{min-height:0}';
    document.head.appendChild(style);}
   // Veri bu katman yüklenmeden gelmiş olabilir: yeni görünümle (puan halkası, Bugün ekranı) hemen yeniden çiz
-  try{ if(S.market) renderAll(); }catch(e){ console.error(e); }
+  try{ if(studioOn()&&S.tab==="gundem") renderGundem(); if(S.market) renderAll(); }catch(e){ console.error(e); }
   renderFresh(); setTimeout(()=>apkCheck(false),4000);
   if(window.__bkRestored) setTimeout(()=>toast("Portföy ve ayarlar telefondaki yedekten geri yüklendi.",4000),900);
   try{ A.ready&&A.ready(); }catch(_){}
