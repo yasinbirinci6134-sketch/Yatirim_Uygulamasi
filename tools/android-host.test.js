@@ -11,4 +11,10 @@ assert.ok(source.includes("callback.onReceiveValue(picked == null ? null : new U
 assert.match(source,/s\.setJavaScriptEnabled\(true\)/);
 assert.match(source,/web\.addJavascriptInterface\(new Bridge\(\), "YatirimApp"\)/);
 assert.match(source,/getPackageName\(\)\.endsWith\("\.preview"\)/);
+assert.ok(source.includes("PREVIEW_STATUS_URL"),"preview should read the last CI build status");
+assert.ok(source.includes('!"success".equals(status.optString("status"))'),"failed or unfinished builds must never be served remotely");
+assert.ok(source.includes('pinned.matches("[0-9a-f]{40}")'),"preview should use a verified 40-character immutable commit");
+assert.ok(source.includes('UI_API.replace("ref=main", "ref=" + pinned)'),"preview content API must pin the approved commit");
+assert.ok(source.includes('UI_URL.replace("/main/", "/" + pinned + "/")'),"raw fallback must also pin the approved commit");
+assert.ok(!source.includes('UI_API.replace("ref=main", "ref=" + PREVIEW_BRANCH)'),"preview cannot fetch untested branch tips");
 console.log("Android WebView host wiring tests passed");

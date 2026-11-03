@@ -15,7 +15,7 @@ Alternatif: GitHub Releases > v2-preview-current > Fon-Pusulasi-2-Preview.apk.
 Releases etiketinin sabit oldugunu ve yeni basarili derlemelerde guncellendigini unut.
 Paket adi com.yasin.yatirimapp.preview oldugu icin ana uygulamayla yan yana kurulur.
 Debug sertifikasiyla imzali test uygulamasidir, magazaya uygun release surumu degildir.
-Test uygulamasi GitHub'dan feature/fon-pusulasi-v2-phase1 dalindaki arayuzu alir.
+Test uygulamasi GitHub'daki preview derleme durumunu okur; yalniz basarili APK ile iliskilendirilen kaynak commit'in degismez arayuzunu alir. Basarisiz/yeni commit dogrudan onizlemenin arayuzunu degistirmez.
 
 ## Bu deneme surumundeki yeni islevler
 - Hisse fiyat kaynaklarinin seciminde ortak fpQuote fonksiyonu
@@ -112,3 +112,9 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - En az 30 eslesmis sinyal ve 5 farkli giris gunu yoksa kullaniciya "On gozlem" uyari metni verilir.
 - Bu esikler istatistiksel dogruluk garantisi degildir; ayni gun sinyalleri iliskilidir.
 - Skor gunlugunde hem en buyuk artislari hem en buyuk dususleri gostermek icin mutlak fark siralamasi kullanilir.
+
+## Onizleme guvenli uzaktan guncelleme
+- Yalniz test paketinde once .github/status/v2-preview-build.json icindeki status=success ve source_commit kontrol edilir.
+- Ardindan GitHub'daki 40 haneli commit SHA'ya sabitlenen ui/index.html indirilir; hareketli feature dalinin sonu okunmaz.
+- Durum dosyasi ulasilamaz veya yeni derleme basarisizsa mevcut onayli cache/paket arayuzu kullanilir.
+- Ana surumun uzaktan guncelleme davranisi degistirilmez.
