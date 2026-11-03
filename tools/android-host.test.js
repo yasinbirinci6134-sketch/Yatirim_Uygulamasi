@@ -1,0 +1,41 @@
+"use strict";
+const assert=require("node:assert/strict");
+const fs=require("node:fs"),path=require("node:path");
+const source=fs.readFileSync(path.join(__dirname,"../app/src/main/java/com/yasin/yatirimapp/MainActivity.java"),"utf8");
+assert.match(source,/import android\.webkit\.WebChromeClient;/);
+assert.ok(source.includes("web.setWebChromeClient(new WebChromeClient() {"),"WebView needs native ChromeClient");
+assert.ok(source.includes("onShowFileChooser(WebView view, ValueCallback<Uri[]> callback, FileChooserParams params)"),"File chooser missing");
+assert.ok(source.includes("Intent.ACTION_OPEN_DOCUMENT"),"Native document picker missing");
+assert.ok(source.includes("void onActivityResult(int requestCode, int resultCode, Intent data)"),"File picker callback missing");
+assert.ok(source.includes("callback.onReceiveValue(picked == null ? null : new Uri[]{picked})"),"Selected URI must reach WebView");
+assert.match(source,/s\.setJavaScriptEnabled\(true\)/);
+assert.match(source,/web\.addJavascriptInterface\(new Bridge\(\), "YatirimApp"\)/);
+assert.match(source,/getPackageName\(\)\.startsWith\("com\.yasin\.yatirimapp\.preview"\)/);
+assert.ok(source.includes("PREVIEW_STATUS_URL"),"preview should read the last CI build status");
+assert.ok(source.includes('!"success".equals(status.optString("status"))'),"failed or unfinished builds must never be served remotely");
+assert.ok(source.includes('pinned.matches("[0-9a-f]{40}")'),"preview should use a verified 40-character immutable commit");
+assert.ok(source.includes('UI_API.replace("ref=main", "ref=" + pinned)'),"preview content API must pin the approved commit");
+assert.ok(source.includes('UI_URL.replace("/main/", "/" + pinned + "/")'),"raw fallback must also pin the approved commit");
+assert.ok(!source.includes('UI_API.replace("ref=main", "ref=" + PREVIEW_BRANCH)'),"preview cannot fetch untested branch tips");
+console.log("Android WebView host wiring tests passed");
+
+assert.ok(source.includes('File lastGoodFile() { return new File(getFilesDir(), "ui_last_good.html"); }'),"must keep proven working UI separate from candidate");
+assert.ok(source.includes('Files.copy(active.toPath(), lastGoodFile().toPath(), StandardCopyOption.REPLACE_EXISTING)'),"only confirmed active candidate can be backed up");
+assert.ok(source.includes('Files.move(newFile().toPath(), active.toPath(), StandardCopyOption.REPLACE_EXISTING)'),"staged update should be moved into place");
+assert.ok(source.includes('known.equals(sha(html))'),"rollback backup needs verified fingerprint");
+assert.ok(source.includes('p.getString("lastGoodSha", "")'),"an unbooted candidate cannot become last-good");
+assert.ok(source.includes('validUi(candidate)'),"stage download must pass structure checks");
+assert.ok(source.includes('if (generation != loadGeneration || ready) return;'),"stale watchdogs must not roll back a successful new boot");
+assert.ok(source.includes('showStartupRecovery()'),"bundled failure must have an actionable recovery UI");
+assert.ok(source.includes('retry.setOnClickListener(v -> load())'),"native retry button must reload");
+assert.ok(source.includes('putString("lastGoodSha", curSha)'),"good version is recorded only after ready()");
+assert.ok(!source.includes('localStorage.clear('),"startup rollback must not clear localStorage");
+
+assert.ok(source.includes('@JavascriptInterface public String startupReport()'),"local startup diagnostics bridge should exist");
+for(const metric of ["bootAttempts","rollbacks","startupStalls","lastBootMs","lastReadyAt","lastFailureAt"]) {
+ assert.ok(source.includes('"'+metric+'"'),"startup metric missing: "+metric);
+}
+const diag=source.slice(source.indexOf('@JavascriptInterface public String startupReport()'),source.indexOf('@JavascriptInterface public int netVersion()',source.indexOf('@JavascriptInterface public String startupReport()')));
+assert.ok(!/password|portfolio|balance|holdings|username|email|token/i.test(diag),"diagnostics may not export private financial/account details");
+assert.ok(source.includes('putString("bootOutcome", "rollback")'),"rollback counts must be recorded on failures");
+assert.ok(source.includes('putString("bootOutcome", "stalled")'),"bundled app hangs must be recorded");

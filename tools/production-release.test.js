@@ -1,0 +1,28 @@
+"use strict";
+const assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path");
+const get=n=>fs.readFileSync(path.join(__dirname,"..",n),"utf8");
+const g=get("app/build.gradle"),w=get(".github/workflows/build.yml"),h=get("ui/index.html"),
+ host=get("app/src/main/java/com/yasin/yatirimapp/MainActivity.java"),m=get("app/src/main/AndroidManifest.xml");
+assert.ok(g.includes("applicationId 'com.yasin.yatirimapp'"),"2.0 must replace the old Android package");
+assert.ok(g.includes("versionCode (200000 + run)"),"new versionCode must supersede legacy builds");
+assert.ok(g.includes('versionName "2.0.${run}"'),"Android needs version 2.0");
+assert.ok(g.includes("signingConfig signingConfigs.release"),"live APK must use original release key");
+assert.ok(g.includes("appDisplayName: 'Fon Pusulası 2.0'"),"new launcher product name required");
+assert.ok(m.includes('android:label="${appDisplayName}"'),"manifest must honor product label");
+assert.ok(w.includes("secrets.KEYSTORE_B64")&&w.includes("secrets.KEYSTORE_PASSWORD"),"use stable secret key");
+assert.ok(w.includes("gradle assembleRelease --no-daemon"),"build production release");
+assert.ok(w.includes("gh release download v1.12"),"original app APK must be checked");
+assert.ok(w.includes('test "$new_cert" = "$old_cert"'),"reject changes in signing certificate");
+assert.ok(w.includes("current > old"),"reject version downgrades");
+assert.ok(w.includes("node tools/v2-dashboard.test.js"),"dashboard regression test required");
+assert.ok(w.includes("node tools/fund-history.test.js"),"historic fund price test required");
+assert.ok(w.includes("tag_name: v2.0.${{ github.run_number }}"),"live release needs unique incremental tag");
+assert.ok(w.includes("v2-production-build.json"),"production UI must require approved release status");
+assert.ok(host.includes("static final String PRODUCTION_STATUS_URL"),"host must read live release approval");
+assert.ok(host.includes("String statusUrl = preview ? PREVIEW_STATUS_URL : PRODUCTION_STATUS_URL;"),"production UI must be gated");
+assert.ok(host.includes('String api = UI_API.replace("ref=main", "ref=" + pinned);'),"UI must use immutable commit");
+assert.ok(h.includes('const UI_VERSION="2.0";'),"remove preview label from live web UI");
+assert.ok(h.includes("|| /^2\\./.test"),"2.0 must enable new dashboard");
+assert.ok(h.includes('tab:FP_V2_UI?"gundem":"oneri"'),"2.0 should open redesigned Today");
+assert.ok(h.includes('Fon-Pusulasi-2.apk'),"APK update/share must point to live release");
+console.log("Live 2.0 APK package, signing, upgrade and release tests passed");

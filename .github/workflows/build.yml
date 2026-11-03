@@ -1,30 +1,150 @@
-name: APK derle
+name: Fon Pusulası 2.0 - Canlı Android APK
 on:
   push:
     branches: [main]
-    paths: ['app/**', 'build.gradle', 'settings.gradle', 'gradle.properties', '.github/workflows/build.yml']
+    paths:
+      - 'app/**'
+      - 'ui/**'
+      - 'tools/**'
+      - '.github/workflows/build.yml'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: fon-pusulasi-2-production
+  cancel-in-progress: true
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Production regression suite
+        run: |
+          set -euo pipefail
+          node tools/data-quality.test.js
+          node tools/quote-selection.test.js
+          node tools/portfolio-engine.test.js
+          node tools/return-metrics.test.js
+          node tools/v2-ui.test.js
+          node tools/v2-dashboard.test.js
+          node tools/fund-history.test.js
+          node tools/twr.test.js
+          node tools/external-flows.test.js
+          node tools/ledger-reconcile.test.js
+          node tools/legacy-trade-audit.test.js
+          node tools/verified-returns.test.js
+          node tools/ui-returns.test.js
+          node tools/statement-ui.test.js
+          node tools/statement-csv.test.js
+          node tools/android-host.test.js
+          node tools/production-release.test.js
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: '17' }
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: '8.9' }
-      - name: İmza anahtarı (repoda tutulmaz; secret'tan oluşturulur)
+      - name: Recover permanent original APK signing key
+        shell: bash
+        env:
+          KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
-          echo "$KEYSTORE_B64" | base64 -d > app/release.p12
-          test -s app/release.p12 || { echo "KEYSTORE_B64 secret eksik"; exit 1; }
-        env: { KEYSTORE_B64: '${{ secrets.KEYSTORE_B64 }}' }
-      - run: gradle assembleRelease --no-daemon
-        env: { KEYSTORE_PASSWORD: '${{ secrets.KEYSTORE_PASSWORD }}' }
-      - run: cp app/build/outputs/apk/release/app-release.apk Yatirim.apk
-      - uses: softprops/action-gh-release@v2
+          set -euo pipefail
+          test -n "$KEYSTORE_B64" && test -n "$KEYSTORE_PASSWORD"
+          printf '%s' "$KEYSTORE_B64" | base64 -d > app/release.p12
+          keytool -list -keystore app/release.p12 -storetype PKCS12 -storepass "$KEYSTORE_PASSWORD" -alias yatirim >/dev/null
+      - name: Build live production APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        run: gradle assembleRelease --no-daemon
+      - name: Verify original Android package and signing identity
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          apk=app/build/outputs/apk/release/app-release.apk
+          test -s "$apk"
+          unzip -tq "$apk" >/dev/null
+          unzip -p "$apk" assets/index.html | cmp - ui/index.html
+          sdk="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          dir="$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          test -x "$dir/apksigner" && test -x "$dir/aapt"
+          "$dir/apksigner" verify --verbose --print-certs "$apk" > /tmp/fp2-new-cert.txt
+          "$dir/aapt" dump badging "$apk" > /tmp/fp2-new-package.txt
+          grep -q "^package: name='com.yasin.yatirimapp'" /tmp/fp2-new-package.txt
+          current="$(head -1 /tmp/fp2-new-package.txt | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")"
+          test -n "$current" && (( current >= 200000 ))
+          mkdir -p /tmp/fp2-prior
+          gh release download v1.12 --pattern Yatirim.apk --dir /tmp/fp2-prior --clobber
+          prior=/tmp/fp2-prior/Yatirim.apk
+          test -s "$prior"
+          "$dir/apksigner" verify --verbose --print-certs "$prior" > /tmp/fp2-prior-cert.txt
+          "$dir/aapt" dump badging "$prior" > /tmp/fp2-prior-package.txt
+          grep -q "^package: name='com.yasin.yatirimapp'" /tmp/fp2-prior-package.txt
+          old="$(head -1 /tmp/fp2-prior-package.txt | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")"
+          old_cert="$(grep 'certificate SHA-256 digest:' /tmp/fp2-prior-cert.txt | head -1)"
+          new_cert="$(grep 'certificate SHA-256 digest:' /tmp/fp2-new-cert.txt | head -1)"
+          test -n "$old_cert" && test "$new_cert" = "$old_cert" || { echo "::error::APK signing identity does not match old installed app"; exit 1; }
+          test -n "$old" && (( current > old )) || { echo "::error::New versionCode does not supersede the installed release"; exit 1; }
+          cp "$apk" Fon-Pusulasi-2.apk
+          sha256sum Fon-Pusulasi-2.apk > Fon-Pusulasi-2.apk.sha256
+          printf 'commit=%s\nrun=%s\nversionCode=%s\npackage=com.yasin.yatirimapp\n' "$GITHUB_SHA" "$GITHUB_RUN_NUMBER" "$current" > Fon-Pusulasi-2-build.txt
+      - uses: actions/upload-artifact@v4
         with:
-          tag_name: v1.${{ github.run_number }}
-          name: Yatırım ${{ github.run_number }}
-          files: Yatirim.apk
+          name: Fon-Pusulasi-2-Canli-APK
+          path: |
+            Fon-Pusulasi-2.apk
+            Fon-Pusulasi-2.apk.sha256
+            Fon-Pusulasi-2-build.txt
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish live 2.0 release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v2.0.${{ github.run_number }}
+          name: Fon Pusulası 2.0.${{ github.run_number }}
+          body: |
+            Fon Pusulası 2.0 canlı Android uygulaması.
+            Eski com.yasin.yatirimapp uygulamasının üzerine kurulabilir; kaldırmadan güncelleyin.
+            Tasarım ve portföy kontrol merkezi yenilendi. Fon geçmişi doğrulanmış kaynaklardan alınır.
+            Eksik dönemler için tahmini veya geriye dönük uydurma fiyat gösterilmez.
+          prerelease: false
+          make_latest: true
+          files: |
+            Fon-Pusulasi-2.apk
+            Fon-Pusulasi-2.apk.sha256
+            Fon-Pusulasi-2-build.txt
+      - name: Save last successfully published live UI commit
+        if: always()
+        continue-on-error: true
+        shell: bash
+        env:
+          PROD_JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          mkdir -p .github/status
+          python3 - <<'PY'
+          import datetime,json,os
+          r={
+            'status':os.environ['PROD_JOB_STATUS'],
+            'source_commit':os.environ['GITHUB_SHA'],
+            'run_id':os.environ['GITHUB_RUN_ID'],
+            'run_number':int(os.environ['GITHUB_RUN_NUMBER']),
+            'run_url':f"${os.environ['GITHUB_SERVER_URL']}/${os.environ['GITHUB_REPOSITORY']}/actions/runs/${os.environ['GITHUB_RUN_ID']}",
+            'checked_at':datetime.datetime.now(datetime.timezone.utc).isoformat()
+          }
+          with open('.github/status/v2-production-build.json','w',encoding='utf-8') as f:json.dump(r,f,indent=2);f.write('\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/status/v2-production-build.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(v2): verified live APK status [skip ci]'
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi

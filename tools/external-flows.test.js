@@ -1,0 +1,17 @@
+"use strict";
+const assert=require("node:assert/strict");
+const {externalFlows}=require("./external-flows");
+const events=[{type:"deposit",amount:1000,date:"2025-01-01"},{type:"buy",amount:800,date:"2025-01-02"},{type:"dividend",amount:100,date:"2025-03-01"},{type:"withdrawal",amount:200,date:"2025-06-01"}];
+const t={date:"2026-01-01",value:1200};
+assert.equal(externalFlows(events,t).ready,false);
+const x=externalFlows(events,t,{complete:true});
+assert.equal(x.ready,true);assert.deepEqual(x.flows.map(f=>f.amount),[-1000,200,1200]);
+assert.equal(externalFlows([{type:"deposit",date:"bad",amount:100}],t,{complete:true}).ready,false);
+assert.equal(externalFlows([{type:"deposit",amount:1000,date:"2026-02-30"}],t,{complete:true}).ready,false);
+assert.equal(externalFlows([{type:"deposit",amount:1000,date:"2027-01-01"}],t,{complete:true}).ready,false);
+assert.equal(externalFlows([{type:"deposit",amount:1000,date:"2026-01-01"}],t,{complete:true}).ready,false);
+assert.equal(externalFlows([{type:"withdrawal",amount:100,date:"2025-01-01"},{type:"deposit",amount:1000,date:"2025-01-02"}],t,{complete:true}).ready,false);
+const profits=externalFlows([{type:"deposit",amount:1000,date:"2025-01-01"},{type:"withdrawal",amount:1500,date:"2025-06-01"}],t,{complete:true});
+assert.equal(profits.ready,true,"profit withdrawals are valid");
+assert.equal(externalFlows([{type:"deposit",amount:100,date:"2025-01-01"},{type:"withdrawal",amount:50,date:"2026-01-01"}],t,{complete:true}).ready,false);
+console.log("external-flows tests passed");

@@ -12,23 +12,35 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.Window;
+import android.view.Gravity;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Button;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.ValueCallback;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /* Bağımsız uygulama: arayüz GitHub'dan güncellenebilir (yeniden kurulum gerekmez), bozuk sürümde paketteki arayüze döner.
    Veriler: GitHub (yapay zekânın günlük analizi), Yahoo (hisse/döviz, 15 dk gecikmeli), fvt.com.tr (fon). */
 public class MainActivity extends Activity {
   static final String BASE = "https://yatirim.app/";
   static final String OLD_APP = "https://claude.ai/artifact/KGLuNpASfKJZT1QXGir68H";
+  static final String PREVIEW_BRANCH = "feature/fon-pusulasi-v2-phase1";
+  static final String PREVIEW_STATUS_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/" + PREVIEW_BRANCH + "/.github/status/v2-preview-build.json";
+  static final String PRODUCTION_STATUS_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/main/.github/status/v2-production-build.json";
   static final String UI_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/main/ui/index.html";
   // GitHub API: önbelleği kısa (raw ~5 dk bekletir); ETag ile 304 dönen istekler kota yemez
   static final String UI_API = "https://api.github.com/repos/yasinbirinci6134-sketch/Yatirim_Uygulamasi/contents/ui/index.html?ref=main";
@@ -36,11 +48,14 @@ public class MainActivity extends Activity {
   static final java.util.concurrent.ExecutorService NET = java.util.concurrent.Executors.newFixedThreadPool(6);
   static final java.util.concurrent.ConcurrentHashMap<String, String> RES = new java.util.concurrent.ConcurrentHashMap<>();
   final Handler ui = new Handler(Looper.getMainLooper());
-  WebView web; boolean ready, checked; long lastCheck, stoppedAt; String source = "asset", curSha = ""; String pendingOpen;
+  WebView web; LinearLayout recoveryPane; int loadGeneration; long lastLoadStarted; boolean ready, checked; long lastCheck, stoppedAt; String source = "asset", curSha = ""; String pendingOpen;
+  static final int STATEMENT_FILE_PICKER_REQUEST = 2045;
+  ValueCallback<Uri[]> pendingFileChooser;
 
   SharedPreferences up() { return getSharedPreferences("ui", MODE_PRIVATE); }
   File uiFile() { return new File(getFilesDir(), "ui.html"); }
   File newFile() { return new File(getFilesDir(), "ui_new.html"); }
+  File lastGoodFile() { return new File(getFilesDir(), "ui_last_good.html"); }
 
   static String sha(String s) {
     try { MessageDigest d = MessageDigest.getInstance("SHA-1"); StringBuilder b = new StringBuilder();
@@ -54,29 +69,125 @@ public class MainActivity extends Activity {
   int versionCode() { try { android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0); return Build.VERSION.SDK_INT >= 28 ? (int) pi.getLongVersionCode() : pi.versionCode; } catch (Exception e) { return 0; } }
   String versionName() { try { return getPackageManager().getPackageInfo(getPackageName(), 0).versionName; } catch (Exception e) { return ""; } }
 
-  /* Hangi arayüz yüklenecek: indirilmiş güncel sürüm (bozuk işaretlenmediyse) ya da paketteki */
+  /* Every candidate is staged. Only UI that called JS ready() may be backed up. */
+  static boolean validUi(String html) {
+    return html != null && html.contains(MARK) && html.contains("</html>");
+  }
+  boolean restoreLastGood(SharedPreferences prefs) {
+    File backup = lastGoodFile();
+    if (!backup.isFile()) return false;
+    try {
+      String html = readAll(new java.io.FileInputStream(backup));
+      String known = prefs.getString("lastGoodSha", "");
+      if (known.isEmpty() || !known.equals(sha(html)) || !validUi(html)
+          || known.equals(prefs.getString("bad", ""))) {
+        backup.delete();
+        return false;
+      }
+      Files.copy(backup.toPath(), uiFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+      return true;
+    } catch (Exception e) { return false; }
+  }
+
   String pickUi() {
     SharedPreferences p = up();
     try {
-      // APK güncellendiyse paketteki arayüz daha yeni olabilir: indirilmişi bırak
-      if (p.getInt("apk", 0) != versionCode()) { uiFile().delete(); newFile().delete(); p.edit().putInt("apk", versionCode()).apply(); }
-      if (newFile().exists()) { File f = uiFile(); f.delete(); newFile().renameTo(f); }
-      if (uiFile().exists()) {
-        String h = readAll(new java.io.FileInputStream(uiFile())), s = sha(h);
-        if (!s.equals(p.getString("bad", "")) && h.contains(MARK)) { source = "file"; curSha = s; return h; }
-        uiFile().delete();
+      // A new APK bundles its own already-tested HTML; discard older downloaded versions only.
+      if (p.getInt("apk", 0) != versionCode()) {
+        uiFile().delete(); newFile().delete(); lastGoodFile().delete();
+        p.edit().putInt("apk", versionCode()).remove("lastGoodSha").remove("etag2").apply();
       }
-    } catch (Exception e) {}
-    try { String h = readAll(getAssets().open("index.html")); source = "asset"; curSha = sha(h); return h; }
-    catch (Exception e) { return "<p>Uygulama yüklenemedi: " + e.getMessage() + "</p>"; }
+      if (newFile().isFile()) {
+        String candidate = readAll(new java.io.FileInputStream(newFile()));
+        if (!validUi(candidate) || sha(candidate).equals(p.getString("bad", ""))) {
+          newFile().delete();
+        } else {
+          File active = uiFile();
+          if (active.isFile()) {
+            String oldHtml = readAll(new java.io.FileInputStream(active));
+            if (validUi(oldHtml) && sha(oldHtml).equals(p.getString("lastGoodSha", ""))) {
+              Files.copy(active.toPath(), lastGoodFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+          }
+          Files.move(newFile().toPath(), active.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+      }
+      File active = uiFile();
+      if (active.isFile()) {
+        String html = readAll(new java.io.FileInputStream(active));
+        String fingerprint = sha(html);
+        if (validUi(html) && !fingerprint.equals(p.getString("bad", ""))) {
+          source = "file"; curSha = fingerprint; return html;
+        }
+        active.delete();
+      }
+      if (restoreLastGood(p)) {
+        String html = readAll(new java.io.FileInputStream(uiFile()));
+        source = "file"; curSha = sha(html); return html;
+      }
+    } catch (Exception e) {
+      // An I/O exception must never turn a partially moved candidate into permanent data loss.
+      try {
+        if (uiFile().isFile()) {
+          String html = readAll(new java.io.FileInputStream(uiFile()));
+          if (validUi(html) && !sha(html).equals(p.getString("bad", ""))) {
+            source = "file"; curSha = sha(html); return html;
+          }
+        }
+        if (restoreLastGood(p)) {
+          String html = readAll(new java.io.FileInputStream(uiFile()));
+          source = "file"; curSha = sha(html); return html;
+        }
+      } catch (Exception ignored) {}
+    }
+    try {
+      String html = readAll(getAssets().open("index.html"));
+      source = "asset"; curSha = sha(html); return html;
+    } catch (Exception e) {
+      source = "asset"; curSha = "";
+      return "<p>Uygulama açılamadı. Lütfen yeniden deneyin.</p>";
+    }
+  }
+
+  void showStartupRecovery() {
+    if (recoveryPane != null) recoveryPane.setVisibility(View.VISIBLE);
   }
 
   void load() {
     ready = false;
-    web.loadDataWithBaseURL(BASE, pickUi(), "text/html", "UTF-8", null);
-    final String src = source, s = curSha;
-    // Güvenlik: indirilen arayüz 12 sn içinde açılmazsa bozuk say, paketteki arayüze dön
-    ui.postDelayed(() -> { if (!ready && "file".equals(src) && s.equals(curSha)) { up().edit().putString("bad", s).apply(); uiFile().delete(); load(); } }, 12000);
+    if (recoveryPane != null) recoveryPane.setVisibility(View.GONE);
+    final int generation = ++loadGeneration;
+    lastLoadStarted = System.currentTimeMillis();
+    SharedPreferences stats = up();
+    stats.edit().putInt("bootAttempts", stats.getInt("bootAttempts", 0) + 1)
+      .putLong("lastAttemptAt", lastLoadStarted).putString("bootOutcome", "loading").apply();
+    String html = pickUi();
+    final String loadedSource = source, fingerprint = curSha;
+    web.loadDataWithBaseURL(BASE, html, "text/html", "UTF-8", null);
+    // A failed downloaded UI rolls back after 12 seconds; even a bundled failure offers retry.
+    ui.postDelayed(() -> {
+      if (generation != loadGeneration || ready) return;
+      if ("file".equals(loadedSource) && fingerprint.equals(curSha)) {
+        SharedPreferences fallbackStats = up();
+        fallbackStats.edit().putString("bad", fingerprint)
+          .putInt("rollbacks", fallbackStats.getInt("rollbacks", 0) + 1)
+          .putLong("lastFailureAt", System.currentTimeMillis())
+          .putString("bootOutcome", "rollback").apply();
+        if (uiFile().isFile()) {
+          try {
+            String current = readAll(new java.io.FileInputStream(uiFile()));
+            if (fingerprint.equals(sha(current))) uiFile().delete();
+          } catch (Exception ignored) {}
+        }
+        load();
+      } else {
+        SharedPreferences stallStats = up();
+        stallStats.edit().putInt("startupStalls", stallStats.getInt("startupStalls", 0) + 1)
+          .putLong("lastFailureAt", System.currentTimeMillis())
+          .putString("bootOutcome", "stalled").apply();
+        showStartupRecovery();
+      }
+    }, "file".equals(loadedSource) ? 12000 : 20000);
   }
 
   void checkUi() {
@@ -85,9 +196,20 @@ public class MainActivity extends Activity {
       try {
         JSONObject h = new JSONObject(); String et = up().getString("etag2", null); if (et != null && uiFile().exists()) h.put("If-None-Match", et);
         h.put("Accept", "application/vnd.github.raw");
-        JSONObject r = Net.req("GET", UI_API, null, h.toString());
+        boolean preview = getPackageName().startsWith("com.yasin.yatirimapp.preview");
+        // Live and test installations accept only CI-verified immutable UI commits.
+        // A missing or failed build retains the bundled/last-known-good HTML.
+        String statusUrl = preview ? PREVIEW_STATUS_URL : PRODUCTION_STATUS_URL;
+        JSONObject statusResponse = Net.req("GET", statusUrl + "?t=" + (System.currentTimeMillis() / 60000), null, "{}");
+        if (!statusResponse.optBoolean("ok") || statusResponse.optInt("code") != 200) return;
+        JSONObject status = new JSONObject(statusResponse.optString("body", "{}"));
+        String pinned = status.optString("source_commit", "");
+        if (!"success".equals(status.optString("status")) || !pinned.matches("[0-9a-f]{40}")) return;
+        String api = UI_API.replace("ref=main", "ref=" + pinned);
+        String raw = UI_URL.replace("/main/", "/" + pinned + "/");
+        JSONObject r = Net.req("GET", api, null, h.toString());
         if (r.optInt("code") == 304) return;
-        if (!r.optBoolean("ok") || r.optInt("code") != 200) { r = Net.req("GET", UI_URL + "?t=" + (System.currentTimeMillis() / 60000), null, "{}"); if (!r.optBoolean("ok") || r.optInt("code") != 200) return; r.remove("etag"); }
+        if (!r.optBoolean("ok") || r.optInt("code") != 200) { r = Net.req("GET", raw + "?t=" + (System.currentTimeMillis() / 60000), null, "{}"); if (!r.optBoolean("ok") || r.optInt("code") != 200) return; r.remove("etag"); }
         String body = r.optString("body"), s = sha(body);
         if (!body.contains(MARK) || !body.contains("</html>") || s.equals(curSha) || s.equals(up().getString("bad", ""))) return;
         try (FileOutputStream o = new FileOutputStream(newFile())) { o.write(body.getBytes("UTF-8")); }
@@ -108,6 +230,26 @@ public class MainActivity extends Activity {
     web.setOverScrollMode(View.OVER_SCROLL_NEVER);
     WebSettings s = web.getSettings();
     s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); s.setDatabaseEnabled(true);
+    // Required for JavaScript confirm()/alert()/prompt() on Android WebView.
+    // Without a WebChromeClient confirm() silently returns false.
+    web.setWebChromeClient(new WebChromeClient() {
+      @Override public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> callback, FileChooserParams params) {
+        if (pendingFileChooser != null) pendingFileChooser.onReceiveValue(null);
+        pendingFileChooser = callback;
+        Intent pick = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        pick.addCategory(Intent.CATEGORY_OPENABLE);
+        pick.setType("*/*");
+        pick.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"text/csv", "text/plain", "application/csv", "application/vnd.ms-excel", "application/octet-stream"});
+        try {
+          startActivityForResult(pick, STATEMENT_FILE_PICKER_REQUEST);
+          return true;
+        } catch (Exception e) {
+          pendingFileChooser = null;
+          callback.onReceiveValue(null);
+          return true;
+        }
+      }
+    });
     Net.UA = s.getUserAgentString().replace("; wv", "").replace("Version/4.0 ", "");
     web.addJavascriptInterface(new Bridge(), "YatirimApp");
     web.setWebViewClient(new WebViewClient() {
@@ -116,10 +258,40 @@ public class MainActivity extends Activity {
         open(u.toString()); return true;
       }
     });
-    setContentView(web);
+    FrameLayout container = new FrameLayout(this);
+    container.addView(web, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+    recoveryPane = new LinearLayout(this);
+    recoveryPane.setOrientation(LinearLayout.VERTICAL);
+    recoveryPane.setPadding(36, 30, 36, 30);
+    recoveryPane.setBackgroundColor(Color.parseColor("#203138"));
+    TextView recoveryText = new TextView(this);
+    recoveryText.setText("Fon Pusulası açılamadı. Portföy ve ayarlar silinmedi. İnterneti kontrol edip tekrar deneyebilirsin.");
+    recoveryText.setTextColor(Color.WHITE);
+    recoveryText.setTextSize(15);
+    recoveryPane.addView(recoveryText);
+    Button retry = new Button(this);
+    retry.setText("Yeniden dene");
+    retry.setOnClickListener(v -> load());
+    recoveryPane.addView(retry);
+    recoveryPane.setVisibility(View.GONE);
+    FrameLayout.LayoutParams recoveryParams = new FrameLayout.LayoutParams(
+      FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+    recoveryParams.setMargins(24, 24, 24, 24);
+    container.addView(recoveryPane, recoveryParams);
+    setContentView(container);
     pendingOpen = getIntent() == null ? null : getIntent().getStringExtra("open");
     load();
     NotifyJob.schedule(this);
+  }
+
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode != STATEMENT_FILE_PICKER_REQUEST) return;
+    ValueCallback<Uri[]> callback = pendingFileChooser;
+    pendingFileChooser = null;
+    if (callback == null) return;
+    Uri picked = resultCode == RESULT_OK && data != null ? data.getData() : null;
+    callback.onReceiveValue(picked == null ? null : new Uri[]{picked});
   }
 
   @Override protected void onNewIntent(Intent i) {
@@ -158,7 +330,38 @@ public class MainActivity extends Activity {
   }
 
   class Bridge {
-    @JavascriptInterface public void ready() { ui.post(() -> { ready = true; deliverOpen(); checkUi(); }); }
+    @JavascriptInterface public void ready() {
+      ui.post(() -> {
+        ready = true;
+        if (recoveryPane != null) recoveryPane.setVisibility(View.GONE);
+        SharedPreferences.Editor successful = up().edit()
+          .putString("bootOutcome", "ready")
+          .putString("lastBootSource", source)
+          .putLong("lastReadyAt", System.currentTimeMillis())
+          .putLong("lastBootMs", Math.max(0L, System.currentTimeMillis() - lastLoadStarted));
+        if ("file".equals(source) && !curSha.isEmpty()) successful.putString("lastGoodSha", curSha);
+        successful.apply();
+        deliverOpen();
+        checkUi();
+      });
+    }
+    /* Technical counters only: no holdings, balances, logins, transaction details or URLs. */
+    @JavascriptInterface public String startupReport() {
+      SharedPreferences p = up();
+      JSONObject report = new JSONObject();
+      try {
+        report.put("appVersion", versionName());
+        report.put("status", p.getString("bootOutcome", "unknown"));
+        report.put("lastSource", p.getString("lastBootSource", "unknown"));
+        report.put("attempts", p.getInt("bootAttempts", 0));
+        report.put("rollbacks", p.getInt("rollbacks", 0));
+        report.put("stalls", p.getInt("startupStalls", 0));
+        report.put("lastDurationMs", p.getLong("lastBootMs", 0L));
+        report.put("lastReadyAt", p.getLong("lastReadyAt", 0L));
+        report.put("lastFailureAt", p.getLong("lastFailureAt", 0L));
+      } catch (Exception ignored) {}
+      return report.toString();
+    }
     @JavascriptInterface public int netVersion() { return 2; }
     @JavascriptInterface public boolean standalone() { return true; }
     @JavascriptInterface public int appVersion() { return versionCode(); }

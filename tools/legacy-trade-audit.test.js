@@ -1,0 +1,12 @@
+"use strict";
+const assert=require("node:assert/strict");
+const {auditLegacyTrades}=require("./legacy-trade-audit");
+const x=auditLegacyTrades([{id:"a",buyDate:"2026-01-02",amount:100,price:10,status:"closed",sellDate:"2026-02-03",sellPrice:12}]);
+assert.equal(x.ready,false);
+assert.deepEqual(x.candidates.map(y=>y.amount),[100,120]);
+assert.ok(x.candidates.every(y=>y.verified===false));
+assert.equal(auditLegacyTrades([{id:"a",buyDate:"2026-02-30",amount:100}]).candidates.length,0);
+assert.ok(auditLegacyTrades([{id:"a",buyDate:"2026-01-01",amount:100},{id:"a",buyDate:"2026-01-02",amount:100}]).errors.some(y=>y.includes("duplicate")));
+assert.equal(auditLegacyTrades([{id:"a",buyDate:"2026-01-01",amount:100,price:10,status:"closed"}]).candidates.length,1);
+assert.equal(auditLegacyTrades([{id:"x",buyDate:"2026-02-01",amount:100,price:10,status:"closed",sellDate:"2026-01-31",sellPrice:12}]).candidates.length,1,"sale preceding purchase must be rejected");
+console.log("legacy audit tests passed");
