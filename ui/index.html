@@ -2937,15 +2937,7 @@ function renderSanal(){
       <div class="pfstats"><div><span>Yatırılan</span><b class="num">${tl2(inv)}</b></div><div><span>Açık K/Z</span><b class="num ${cls(pnl)}">${pnl>=0?"+":""}${tl2(pnl)}</b></div>
         <div><span>Gerçekleşen</span><b class="num ${realized===null?"":cls(realized)}">${realized===null?"—":`${realized>=0?"+":""}${tl2(realized)}`}</b></div></div>
     </section>
-    ${closedAudit.missing?`<p class="small muted">Gerçekleşmiş getiri hesaplanamadı: ${closedAudit.missing} kapanmış işlemde geçerli alış, satış fiyatı veya tutar eksik. Toplam K/Z gösterilmiyor.</p>`:""}
-    ${head}
-    <section class="card"><div class="horizon"><h2>Portföy değer geçmişi</h2><span class="small muted">Gerçek kayıtlar</span></div>${fpPortChart(pf.id)}</section>
-    ${cashCard}
-    ${legacyAuditCard}
-    ${journalCard}
-    ${metricStatus}
-    ${riskBlock}
-    <section class="card"><div class="horizon"><h2>Pozisyonlar</h2><button class="btn sm" id="goAdd">+ Ekle</button></div>
+    <section class="card pf-positions"><div class="horizon"><h2>Pozisyonlar</h2><button class="btn sm" id="goAdd">+ Ekle</button></div>
       ${rows.length ? groupRows(rows).map(g=>{ const [k,lab,why]=advise(g,val), one=g.lots.length===1, r0=g.lots[0];
         const lotLine=(r,nd)=>`<div class="small muted num">${nd?"":fmtDate(r.buyDate||r.priceDate)+" · "}${tl2(r.amount)} · ${num(r.units,r.units<100?4:0)} adet · alış ${num(r.price,6)} → ${num(r.cur,6)} · ${r.curDate?esc(r.curDate):"Tarih bilinmiyor"}${r.days?` · günlük ort. ${pc(r.pnlPct/r.days,2)}`:""}</div>`;
         const acts=r=>`<div class="acts"><button class="btn ghost sm" data-del="${esc(r.id)}">Sil</button><button class="btn ghost sm" data-edit="${esc(r.id)}" style="margin-left:0">Düzenle</button><button class="btn ghost sm" data-sell="${esc(r.id)}" style="margin-left:0">Sat</button></div>`;
@@ -2960,6 +2952,14 @@ function renderSanal(){
         </div>`}).join("")
       : `<div class="empty">Bu portföy boş. "+ Ekle" ile gerçek alımlarını (tarih ve adet/fiyatla) ya da deneme alımlarını gir.</div>`}
     </section>
+    ${closedAudit.missing?`<p class="small muted">Gerçekleşmiş getiri hesaplanamadı: ${closedAudit.missing} kapanmış işlemde geçerli alış, satış fiyatı veya tutar eksik. Toplam K/Z gösterilmiyor.</p>`:""}
+    ${head}
+    <section class="card"><div class="horizon"><h2>Portföy değer geçmişi</h2><span class="small muted">Gerçek kayıtlar</span></div>${fpPortChart(pf.id)}</section>
+    ${cashCard}
+    ${legacyAuditCard}
+    ${journalCard}
+    ${metricStatus}
+    ${riskBlock}
     ${closed.length ? `<section class="card"><div class="horizon"><h2>Kapanan işlemler</h2><span class="num small ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</span></div>
       ${closed.map(t=>{const p=(t.sellPrice/t.price-1)*t.amount; return `<div class="trade"><div><span class="code">${esc(t.code)}</span> <span class="small muted">${tl2(t.amount)} · ${fmtDate(t.buyDate||t.priceDate)} → ${fmtDate(t.sellDate)}</span></div>
         <div class="right num ${cls(p)}">${p>=0?"+":""}${tl2(p)}</div>
@@ -3402,6 +3402,14 @@ function applyLayout(tab){
   const c=LAY.cards[tab]||{}, ord=c.order||[], hid=c.hidden||[], first={hisse:["Hisseler"],oneri:["Fonlar","Para piyasası","Altın","Hisse","Diğer","Gümüş","Döviz"],doviz:["Döviz"]}[tab]||[];
   const rank=k=>{ const fi=first.indexOf(k); if(fi>=0) return fi-100; const i=ord.indexOf(k); return i>=0?i:1000+keys.indexOf(k); };
   els.sort((a,b)=>rank(a.dataset.lk)-rank(b.dataset.lk)).forEach(e=>{ e.hidden=hid.includes(e.dataset.lk); v.appendChild(e); });
+  // Portfolio: summary -> holdings -> optional audit tools, regardless of old saved card order.
+  // Reorder existing DOM nodes only: positions, controls and transaction listeners stay intact.
+  if(tab==="sanal"){
+    const summary=v.querySelector(":scope > .pfhero");
+    const positions=v.querySelector(":scope > .pf-positions");
+    if(summary) v.prepend(summary);
+    if(summary&&positions){ positions.hidden=false; summary.after(positions); }
+  }
 }
 function applyTabs(){
   const nav=document.querySelector("nav.tabs"); if(!nav) return;
