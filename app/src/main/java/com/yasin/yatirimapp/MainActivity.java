@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
   static final String OLD_APP = "https://claude.ai/artifact/KGLuNpASfKJZT1QXGir68H";
   static final String PREVIEW_BRANCH = "feature/fon-pusulasi-v2-phase1";
   static final String PREVIEW_STATUS_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/" + PREVIEW_BRANCH + "/.github/status/v2-preview-build.json";
+  static final String PRODUCTION_STATUS_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/main/.github/status/v2-production-build.json";
   static final String UI_URL = "https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/main/ui/index.html";
   // GitHub API: önbelleği kısa (raw ~5 dk bekletir); ETag ile 304 dönen istekler kota yemez
   static final String UI_API = "https://api.github.com/repos/yasinbirinci6134-sketch/Yatirim_Uygulamasi/contents/ui/index.html?ref=main";
@@ -196,18 +197,16 @@ public class MainActivity extends Activity {
         JSONObject h = new JSONObject(); String et = up().getString("etag2", null); if (et != null && uiFile().exists()) h.put("If-None-Match", et);
         h.put("Accept", "application/vnd.github.raw");
         boolean preview = getPackageName().startsWith("com.yasin.yatirimapp.preview");
-        // Preview must never consume a commit that has not passed its APK test/build.
-        // The build status is written by Actions only after the published APK succeeds.
-        String pinned = null;
-        if (preview) {
-          JSONObject statusResponse = Net.req("GET", PREVIEW_STATUS_URL + "?t=" + (System.currentTimeMillis() / 60000), null, "{}");
-          if (!statusResponse.optBoolean("ok") || statusResponse.optInt("code") != 200) return;
-          JSONObject status = new JSONObject(statusResponse.optString("body", "{}"));
-          pinned = status.optString("source_commit", "");
-          if (!"success".equals(status.optString("status")) || !pinned.matches("[0-9a-f]{40}")) return;
-        }
-        String api = preview ? UI_API.replace("ref=main", "ref=" + pinned) : UI_API;
-        String raw = preview ? UI_URL.replace("/main/", "/" + pinned + "/") : UI_URL;
+        // Live and test installations accept only CI-verified immutable UI commits.
+        // A missing or failed build retains the bundled/last-known-good HTML.
+        String statusUrl = preview ? PREVIEW_STATUS_URL : PRODUCTION_STATUS_URL;
+        JSONObject statusResponse = Net.req("GET", statusUrl + "?t=" + (System.currentTimeMillis() / 60000), null, "{}");
+        if (!statusResponse.optBoolean("ok") || statusResponse.optInt("code") != 200) return;
+        JSONObject status = new JSONObject(statusResponse.optString("body", "{}"));
+        String pinned = status.optString("source_commit", "");
+        if (!"success".equals(status.optString("status")) || !pinned.matches("[0-9a-f]{40}")) return;
+        String api = UI_API.replace("ref=main", "ref=" + pinned);
+        String raw = UI_URL.replace("/main/", "/" + pinned + "/");
         JSONObject r = Net.req("GET", api, null, h.toString());
         if (r.optInt("code") == 304) return;
         if (!r.optBoolean("ok") || r.optInt("code") != 200) { r = Net.req("GET", raw + "?t=" + (System.currentTimeMillis() / 60000), null, "{}"); if (!r.optBoolean("ok") || r.optInt("code") != 200) return; r.remove("etag"); }
