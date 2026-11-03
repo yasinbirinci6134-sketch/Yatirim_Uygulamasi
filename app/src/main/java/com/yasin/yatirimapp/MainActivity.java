@@ -12,6 +12,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.view.Window;
+import android.view.Gravity;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Button;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -25,6 +30,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /* Bağımsız uygulama: arayüz GitHub'dan güncellenebilir (yeniden kurulum gerekmez), bozuk sürümde paketteki arayüze döner.
    Veriler: GitHub (yapay zekânın günlük analizi), Yahoo (hisse/döviz, 15 dk gecikmeli), fvt.com.tr (fon). */
@@ -40,13 +47,14 @@ public class MainActivity extends Activity {
   static final java.util.concurrent.ExecutorService NET = java.util.concurrent.Executors.newFixedThreadPool(6);
   static final java.util.concurrent.ConcurrentHashMap<String, String> RES = new java.util.concurrent.ConcurrentHashMap<>();
   final Handler ui = new Handler(Looper.getMainLooper());
-  WebView web; boolean ready, checked; long lastCheck, stoppedAt; String source = "asset", curSha = ""; String pendingOpen;
+  WebView web; LinearLayout recoveryPane; int loadGeneration; boolean ready, checked; long lastCheck, stoppedAt; String source = "asset", curSha = ""; String pendingOpen;
   static final int STATEMENT_FILE_PICKER_REQUEST = 2045;
   ValueCallback<Uri[]> pendingFileChooser;
 
   SharedPreferences up() { return getSharedPreferences("ui", MODE_PRIVATE); }
   File uiFile() { return new File(getFilesDir(), "ui.html"); }
   File newFile() { return new File(getFilesDir(), "ui_new.html"); }
+  File lastGoodFile() { return new File(getFilesDir(), "ui_last_good.html"); }
 
   static String sha(String s) {
     try { MessageDigest d = MessageDigest.getInstance("SHA-1"); StringBuilder b = new StringBuilder();
@@ -60,29 +68,113 @@ public class MainActivity extends Activity {
   int versionCode() { try { android.content.pm.PackageInfo pi = getPackageManager().getPackageInfo(getPackageName(), 0); return Build.VERSION.SDK_INT >= 28 ? (int) pi.getLongVersionCode() : pi.versionCode; } catch (Exception e) { return 0; } }
   String versionName() { try { return getPackageManager().getPackageInfo(getPackageName(), 0).versionName; } catch (Exception e) { return ""; } }
 
-  /* Hangi arayüz yüklenecek: indirilmiş güncel sürüm (bozuk işaretlenmediyse) ya da paketteki */
+  /* Every candidate is staged. Only UI that called JS ready() may be backed up. */
+  static boolean validUi(String html) {
+    return html != null && html.contains(MARK) && html.contains("</html>");
+  }
+  boolean restoreLastGood(SharedPreferences prefs) {
+    File backup = lastGoodFile();
+    if (!backup.isFile()) return false;
+    try {
+      String html = readAll(new java.io.FileInputStream(backup));
+      String known = prefs.getString("lastGoodSha", "");
+      if (known.isEmpty() || !known.equals(sha(html)) || !validUi(html)
+          || known.equals(prefs.getString("bad", ""))) {
+        backup.delete();
+        return false;
+      }
+      Files.copy(backup.toPath(), uiFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+      return true;
+    } catch (Exception e) { return false; }
+  }
+
   String pickUi() {
     SharedPreferences p = up();
     try {
-      // APK güncellendiyse paketteki arayüz daha yeni olabilir: indirilmişi bırak
-      if (p.getInt("apk", 0) != versionCode()) { uiFile().delete(); newFile().delete(); p.edit().putInt("apk", versionCode()).apply(); }
-      if (newFile().exists()) { File f = uiFile(); f.delete(); newFile().renameTo(f); }
-      if (uiFile().exists()) {
-        String h = readAll(new java.io.FileInputStream(uiFile())), s = sha(h);
-        if (!s.equals(p.getString("bad", "")) && h.contains(MARK)) { source = "file"; curSha = s; return h; }
-        uiFile().delete();
+      // A new APK bundles its own already-tested HTML; discard older downloaded versions only.
+      if (p.getInt("apk", 0) != versionCode()) {
+        uiFile().delete(); newFile().delete(); lastGoodFile().delete();
+        p.edit().putInt("apk", versionCode()).remove("lastGoodSha").remove("etag2").apply();
       }
-    } catch (Exception e) {}
-    try { String h = readAll(getAssets().open("index.html")); source = "asset"; curSha = sha(h); return h; }
-    catch (Exception e) { return "<p>Uygulama yüklenemedi: " + e.getMessage() + "</p>"; }
+      if (newFile().isFile()) {
+        String candidate = readAll(new java.io.FileInputStream(newFile()));
+        if (!validUi(candidate) || sha(candidate).equals(p.getString("bad", ""))) {
+          newFile().delete();
+        } else {
+          File active = uiFile();
+          if (active.isFile()) {
+            String oldHtml = readAll(new java.io.FileInputStream(active));
+            if (validUi(oldHtml) && sha(oldHtml).equals(p.getString("lastGoodSha", ""))) {
+              Files.copy(active.toPath(), lastGoodFile().toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+          }
+          Files.move(newFile().toPath(), active.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+      }
+      File active = uiFile();
+      if (active.isFile()) {
+        String html = readAll(new java.io.FileInputStream(active));
+        String fingerprint = sha(html);
+        if (validUi(html) && !fingerprint.equals(p.getString("bad", ""))) {
+          source = "file"; curSha = fingerprint; return html;
+        }
+        active.delete();
+      }
+      if (restoreLastGood(p)) {
+        String html = readAll(new java.io.FileInputStream(uiFile()));
+        source = "file"; curSha = sha(html); return html;
+      }
+    } catch (Exception e) {
+      // An I/O exception must never turn a partially moved candidate into permanent data loss.
+      try {
+        if (uiFile().isFile()) {
+          String html = readAll(new java.io.FileInputStream(uiFile()));
+          if (validUi(html) && !sha(html).equals(p.getString("bad", ""))) {
+            source = "file"; curSha = sha(html); return html;
+          }
+        }
+        if (restoreLastGood(p)) {
+          String html = readAll(new java.io.FileInputStream(uiFile()));
+          source = "file"; curSha = sha(html); return html;
+        }
+      } catch (Exception ignored) {}
+    }
+    try {
+      String html = readAll(getAssets().open("index.html"));
+      source = "asset"; curSha = sha(html); return html;
+    } catch (Exception e) {
+      source = "asset"; curSha = "";
+      return "<p>Uygulama açılamadı. Lütfen yeniden deneyin.</p>";
+    }
+  }
+
+  void showStartupRecovery() {
+    if (recoveryPane != null) recoveryPane.setVisibility(View.VISIBLE);
   }
 
   void load() {
     ready = false;
-    web.loadDataWithBaseURL(BASE, pickUi(), "text/html", "UTF-8", null);
-    final String src = source, s = curSha;
-    // Güvenlik: indirilen arayüz 12 sn içinde açılmazsa bozuk say, paketteki arayüze dön
-    ui.postDelayed(() -> { if (!ready && "file".equals(src) && s.equals(curSha)) { up().edit().putString("bad", s).apply(); uiFile().delete(); load(); } }, 12000);
+    if (recoveryPane != null) recoveryPane.setVisibility(View.GONE);
+    final int generation = ++loadGeneration;
+    String html = pickUi();
+    final String loadedSource = source, fingerprint = curSha;
+    web.loadDataWithBaseURL(BASE, html, "text/html", "UTF-8", null);
+    // A failed downloaded UI rolls back after 12 seconds; even a bundled failure offers retry.
+    ui.postDelayed(() -> {
+      if (generation != loadGeneration || ready) return;
+      if ("file".equals(loadedSource) && fingerprint.equals(curSha)) {
+        up().edit().putString("bad", fingerprint).apply();
+        if (uiFile().isFile()) {
+          try {
+            String current = readAll(new java.io.FileInputStream(uiFile()));
+            if (fingerprint.equals(sha(current))) uiFile().delete();
+          } catch (Exception ignored) {}
+        }
+        load();
+      } else {
+        showStartupRecovery();
+      }
+    }, "file".equals(loadedSource) ? 12000 : 20000);
   }
 
   void checkUi() {
@@ -155,7 +247,27 @@ public class MainActivity extends Activity {
         open(u.toString()); return true;
       }
     });
-    setContentView(web);
+    FrameLayout container = new FrameLayout(this);
+    container.addView(web, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+    recoveryPane = new LinearLayout(this);
+    recoveryPane.setOrientation(LinearLayout.VERTICAL);
+    recoveryPane.setPadding(36, 30, 36, 30);
+    recoveryPane.setBackgroundColor(Color.parseColor("#203138"));
+    TextView recoveryText = new TextView(this);
+    recoveryText.setText("Fon Pusulası açılamadı. Portföy ve ayarlar silinmedi. İnterneti kontrol edip tekrar deneyebilirsin.");
+    recoveryText.setTextColor(Color.WHITE);
+    recoveryText.setTextSize(15);
+    recoveryPane.addView(recoveryText);
+    Button retry = new Button(this);
+    retry.setText("Yeniden dene");
+    retry.setOnClickListener(v -> load());
+    recoveryPane.addView(retry);
+    recoveryPane.setVisibility(View.GONE);
+    FrameLayout.LayoutParams recoveryParams = new FrameLayout.LayoutParams(
+      FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+    recoveryParams.setMargins(24, 24, 24, 24);
+    container.addView(recoveryPane, recoveryParams);
+    setContentView(container);
     pendingOpen = getIntent() == null ? null : getIntent().getStringExtra("open");
     load();
     NotifyJob.schedule(this);
@@ -207,7 +319,15 @@ public class MainActivity extends Activity {
   }
 
   class Bridge {
-    @JavascriptInterface public void ready() { ui.post(() -> { ready = true; deliverOpen(); checkUi(); }); }
+    @JavascriptInterface public void ready() {
+      ui.post(() -> {
+        ready = true;
+        if (recoveryPane != null) recoveryPane.setVisibility(View.GONE);
+        if ("file".equals(source) && !curSha.isEmpty()) up().edit().putString("lastGoodSha", curSha).apply();
+        deliverOpen();
+        checkUi();
+      });
+    }
     @JavascriptInterface public int netVersion() { return 2; }
     @JavascriptInterface public boolean standalone() { return true; }
     @JavascriptInterface public int appVersion() { return versionCode(); }

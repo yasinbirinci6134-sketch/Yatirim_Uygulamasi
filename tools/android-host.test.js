@@ -18,3 +18,15 @@ assert.ok(source.includes('UI_API.replace("ref=main", "ref=" + pinned)'),"previe
 assert.ok(source.includes('UI_URL.replace("/main/", "/" + pinned + "/")'),"raw fallback must also pin the approved commit");
 assert.ok(!source.includes('UI_API.replace("ref=main", "ref=" + PREVIEW_BRANCH)'),"preview cannot fetch untested branch tips");
 console.log("Android WebView host wiring tests passed");
+
+assert.ok(source.includes('File lastGoodFile() { return new File(getFilesDir(), "ui_last_good.html"); }'),"must keep proven working UI separate from candidate");
+assert.ok(source.includes('Files.copy(active.toPath(), lastGoodFile().toPath(), StandardCopyOption.REPLACE_EXISTING)'),"only confirmed active candidate can be backed up");
+assert.ok(source.includes('Files.move(newFile().toPath(), active.toPath(), StandardCopyOption.REPLACE_EXISTING)'),"staged update should be moved into place");
+assert.ok(source.includes('known.equals(sha(html))'),"rollback backup needs verified fingerprint");
+assert.ok(source.includes('p.getString("lastGoodSha", "")'),"an unbooted candidate cannot become last-good");
+assert.ok(source.includes('validUi(candidate)'),"stage download must pass structure checks");
+assert.ok(source.includes('if (generation != loadGeneration || ready) return;'),"stale watchdogs must not roll back a successful new boot");
+assert.ok(source.includes('showStartupRecovery()'),"bundled failure must have an actionable recovery UI");
+assert.ok(source.includes('retry.setOnClickListener(v -> load())'),"native retry button must reload");
+assert.ok(source.includes('putString("lastGoodSha", curSha)'),"good version is recorded only after ready()");
+assert.ok(!source.includes('localStorage.clear('),"startup rollback must not clear localStorage");

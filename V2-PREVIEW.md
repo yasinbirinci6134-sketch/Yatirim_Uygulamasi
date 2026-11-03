@@ -124,3 +124,12 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - Bilinmeyen skor sayi olarak uydurulmaz; erisilebilir aciklama korunur.
 - Portfoyde kapali pozisyonlar daha ince; acildiginda islemler, detaylar ve butonlar gorunur.
 - Tema 2'nin yogun liste davranisi degistirilmez; eski portfoy ve alim-satim kayitlarina dokunulmaz.
+
+## Android acilis ve kurtarma
+- Indirilen yeni UI ancak basarili JS ready() sinyali sonrasi "son calisan" olarak kaydedilir.
+- Yeni UI'ye gecis oncesi, dogrulanmis eski UI ui_last_good.html olarak saklanir.
+- Yeni UI 12 saniyede acilamazsa dosya bozuk sayilir; son calisan UI, yoksa APK ici UI yuklenir.
+- APK icindeki UI de 20 saniyede acilamazsa yerel "Yeniden dene" paneli gosterilir.
+- Load kuşak numarasi ile eski watchdog yeni UI'yi geriye dusuremez.
+- Portfoy, nakit hareketleri, tema, yerel veriler ve localStorage kurtarma sirasinda silinmez.
+- Otomatik kaynak/derleme testleri gercek telefonda acilis testinin yerini tutmaz.
