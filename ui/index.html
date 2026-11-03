@@ -2406,8 +2406,18 @@ function fpPortSnapshot(id,amount,cost){
  if(a.length&&a[a.length-1].day===today)Object.assign(a[a.length-1],{value:amount,cost,priced:true});else a.push({day:today,value:amount,cost,priced:true});
  all[id]=a.slice(-365);try{localStorage.setItem(FP_PFV_KEY,JSON.stringify(all))}catch(_){}
 }
+function fpPortChartRows(rows){
+ const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10),days=new Map();
+ for(const x of Array.isArray(rows)?rows:[]){
+  if(!x||x.priced!==true||typeof x.day!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(x.day)||x.day>today)continue;
+  const t=Date.parse(x.day+"T00:00:00Z");
+  if(!Number.isFinite(t)||new Date(t).toISOString().slice(0,10)!==x.day||!Number.isFinite(x.value)||x.value<0)continue;
+  days.set(x.day,{day:x.day,value:x.value,cost:Number.isFinite(x.cost)&&x.cost>=0?x.cost:null,priced:true});
+ }
+ return [...days.values()].sort((a,b)=>a.day.localeCompare(b.day)).slice(-365);
+}
 function fpPortChart(id){
- const data=(fpPortSeries()[id]||[]).filter(x=>x&&x.priced===true&&Number.isFinite(x.value)&&typeof x.day==="string");
+ const data=fpPortChartRows(fpPortSeries()[id]);
  if(data.length<2)return `<p class="small muted">Pozisyon grafiği için farklı tarihlerde doğrulanabilir fiyat kaynaklarından en az iki günlük kayıt gerekiyor. Önceki belirsiz fiyat kayıtları gösterilmez.</p>`;
  const w=320,h=110;
  const all=[...data.map(x=>x.value),...data.map(x=>x.cost).filter(Number.isFinite)],lower=Math.min(...all),upper=Math.max(...all),width=Math.max(1,upper-lower);
