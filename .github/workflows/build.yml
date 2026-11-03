@@ -1,7 +1,7 @@
 name: Fon Pusulası 2.0 - Canlı Android APK
 on:
   push:
-    branches: [main]
+    branches: [main, release/fon-pusulasi-v2-live]
     paths:
       - 'app/**'
       - 'ui/**'
@@ -32,6 +32,7 @@ jobs:
           node tools/portfolio-engine.test.js
           node tools/return-metrics.test.js
           node tools/v2-ui.test.js
+          node tools/v2-discovery.test.js
           node tools/v2-dashboard.test.js
           node tools/fund-history.test.js
           node tools/twr.test.js
