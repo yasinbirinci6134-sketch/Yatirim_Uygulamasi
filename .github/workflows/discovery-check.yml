@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feature/v2-discovery-live-port
+      - feature/fon-pusulasi-v2-1
   pull_request:
     branches:
       - release/fon-pusulasi-v2-live
@@ -25,3 +26,4 @@ jobs:
           node tools/v2-dashboard.test.js
           node tools/portfolio-engine.test.js
           node tools/production-release.test.js
+          node tools/v2-1-portfolio-chart.test.js
