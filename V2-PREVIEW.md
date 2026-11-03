@@ -100,3 +100,9 @@ Bu testler preview APK GitHub Actions derlemesinden once calistirilir.
 - Fiyatlarin en az %80'i tarama gunune ait olmalidir; tarihi eski veya gelecekteki tarama yayinlanmaz.
 - Android test arayuzu, indirilen taramayi da ayni kalite kuralindan gecirir; mevcut onayli veriyi bozuk veriyle degistirmez.
 - main uzerindeki canli zamanlayici bu onizleme kodunu otomatik olarak kullanmaz.
+
+## Cihazdaki eski tarama davranisi
+- Onbellekte eski ya da hatali tarama kalmissa, guclu/zayif adaylarin guncel oneriler gibi sunulmasi engellenir.
+- Boyle bir durumda kayitli tarih ve veri guncel degil uyari karti gosterilir.
+- Bozuk eski zaman damgasi, yeni gecerli taramanin cihazda kabul edilmesini engelleyemez.
+- Puan gecmisi kayitlari silinmez; veri kaynagi bulunamiyorsa gelecek getiri uydurulmaz.

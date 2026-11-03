@@ -2936,11 +2936,20 @@ function validateShortScan(scan, now=new Date()){
 }
 if(typeof module!=="undefined"&&module.exports)module.exports={validateShortScan};
 
-const SH={ d:(()=>{ try{ return JSON.parse(localStorage.getItem("fp-short")||"null"); }catch(_){ return null; } })(), at:0, busy:false, cache:null, missingCheckAt:0 };
+const SH={ d:(()=>{ try{ return JSON.parse(localStorage.getItem("fp-short")||"null"); }catch(_){ return null; } })(), at:0, busy:false, cache:null, missingCheckAt:0, validation:null };
+/* Cached scans may remain visible as old data, but must never provide actionable live scores. */
+function fpShortFresh(){
+ if(!SH.d)return false;
+ const today=new Date(Date.now()+3*3600000).toISOString().slice(0,10),record=SH.validation;
+ if(record&&record.scan===SH.d&&record.today===today)return record.ok;
+ const ok=validateShortScan(SH.d).ok;
+ SH.validation={scan:SH.d,today,ok};
+ return ok;
+}
 async function shortRefresh(force){ if(SH.busy||!LIVE.ok()) return; if(!force&&Date.now()-SH.at<30*60e3) return; SH.busy=true; SH.at=Date.now();
   try{ const o=await nget("GET","https://raw.githubusercontent.com/yasinbirinci6134-sketch/Yatirim_Uygulamasi/scan/short.json?t="+(force?Date.now():Math.floor(Date.now()/600000)));
     let j=null; try{ j=JSON.parse(o.body||"null"); }catch(_){}
-    if(j&&validateShortScan(j).ok&&(!SH.d||String(j.at)>=String(SH.d.at))){ const ch=!SH.d||j.at!==SH.d.at; SH.d=j; fpSaveScanHistory(j); SH.cache=null; try{ localStorage.setItem("fp-short",JSON.stringify(j)); }catch(_){} if(ch) renderAll(); } }
+    if(j&&validateShortScan(j).ok&&(!fpShortFresh()||String(j.at)>=String(SH.d.at))){ const ch=!SH.d||j.at!==SH.d.at; SH.d=j; fpSaveScanHistory(j); SH.cache=null; try{ localStorage.setItem("fp-short",JSON.stringify(j)); }catch(_){} if(ch) renderAll(); } }
   catch(_){} finally{ SH.busy=false; } }
 /* V2: only prospective score history. Never invent past rankings. */
 const FP_HIST_KEY="fp-v2-short-history";
@@ -2992,7 +3001,7 @@ function fpScoreDiary(){
  const changes=prev?latest.items.map(x=>{const old=prev.items.find(y=>y.code===x.code);return old?{...x,delta:x.score-old.score}:null}).filter(Boolean).sort((a,b)=>b.delta-a.delta).slice(0,7):[];
  return `<section class="card"><div class="horizon"><h2>Skor günlüğü</h2><span class="small muted">${h.length} tarama · ${esc(latest.asOf||"")}</span></div>
  ${changes.length?changes.map(x=>`<div class="trade" data-st="${esc(x.code)}"><b class="code">${esc(x.code)}</b><span class="small muted">Önceki ${x.score-x.delta} → ${x.score}</span><b class="num ${cls(x.delta)}">${x.delta>0?"+":""}${x.delta}</b></div>`).join(""):`<p class="small muted">Değişimleri göstermek için iki farklı günlük tarama kaydı gerekiyor.</p>`}
- ${results.count?`<div class="pfstats"><div><span>5 tarama sonrası yükselen</span><b class="num">% ${num(results.hitRate,1)}</b></div><div><span>Ortalama fiyat değişimi</span><b class="num ${cls(results.avg)}">${pc(results.avg,2)}</b></div><div><span>BIST 100'e göre ort. fark</span><b class="num ${cls(results.relativeAvg)}">${results.relativeAvg==null?"Veri yok":pc(results.relativeAvg,2)}</b></div><div><span>Ölçülen sinyal</span><b class="num">${results.count}</b></div></div>`:`<p class="small muted">5 sonraki tarama kaydı oluştuğunda geçmiş 80+ puanların gerçekleşmiş fiyat değişimi ölçülecek.</p>`}
+ ${results.count?`<div class="pfstats"><div><span>5 tarama sonrası yükselen</span><b class="num">% ${num(results.hitRate,1)}</b></div><div><span>Ortalama fiyat değişimi</span><b class="num ${cls(results.avg)}">${pc(results.avg,2)}</b></div><div><span>BIST 100'e göre ort. fark</span><b class="num ${cls(results.relativeAvg)}">${results.relativeAvg==null?"Veri yok":pc(results.relativeAvg,2)}</b></div><div><span>Ölçülen sinyal</span><b class="num">${results.count}</b></div></div>`:`<p class="small muted">${h.length<6?`5 sonraki taramayı değerlendirmek için ${6-h.length} yeni tarihli kayıt gerekiyor.`:`Beş sonraki taramada tarihli fiyatla eşleşen 80+ sinyal bulunamadı; sonuç üretilmedi.`}</p>`}
  <p class="small muted">Yalnız bu cihazda kaydedilen taramalardan hesaplanır. 5 tarama aralığı yaklaşık bir işlem haftasıdır, sabit süre değildir. Temettü ve bölünme düzeltmeleri dahil değildir. BIST farkı yalnız aynı tarihlerde endeks fiyatı kayıtlıysa hesaplanır. Gelecek getiri tahmini değildir.</p></section>`;
 }
 /* Kisa vadede eksik gunluk yuzde varsa sunucudaki yeni taramayi bir kez kontrol et.
@@ -3001,13 +3010,13 @@ function fpScoreDiary(){
 function shortEnsureDaily(){
   if(!studioOn()||S.tab!=="hisse"||S.hmode!=="kisa"||!LIVE.ok()||SH.busy)return;
   const top=SH.d?.items?.filter(x=>x.score>=80).slice(0,15)||[];
-  if(top.length&&top.every(x=>typeof x.d1==="number"))return;
+  if(fpShortFresh()&&top.length&&top.every(x=>typeof x.d1==="number"))return;
   if(Date.now()-(SH.missingCheckAt||0)<120000)return;
   SH.missingCheckAt=Date.now();
   shortRefresh(true).catch(()=>{});
 }
 /* Bir hissenin kısa vade puanı: taramada varsa oradan; yoksa (ör. kendi eklediğin hisse) telefondaki 1 yıllık fiyatlarla aynı formül, BIST 100'e göre sıralanır */
-function shortFor(code,x){ const d=SH.d; if(!d||!code) return null; if(!SH.cache) SH.cache={}; if(code in SH.cache) return SH.cache[code];
+function shortFor(code,x){ const d=SH.d; if(!d||!code||!fpShortFresh()) return null; if(!SH.cache) SH.cache={}; if(code in SH.cache) return SH.cache[code];
   const it=d.items.find(i=>i.code===code); let r=null;
   if(it) r={score:it.score,tags:it.tags||[],f:it.f,price:it.price,name:it.name,date:it.date};
   else { const hh=(x?._h||S.live?.stocks?.[code]?._h||[]).map(z=>z[1]).filter(v=>v>0); if(x?.price>0&&hh.length) hh[hh.length-1]=x.price; const f=SHORT.feat(hh);
@@ -3113,7 +3122,7 @@ async function liveTick(){ if(LIVE.busy||LIVE.ticking||!S.live||!S.market||!LIVE
   const ae=document.activeElement; if(ae&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)) return; if(document.querySelector(".sheet")) return;
   const fxs=c=>LFX[c]||(/^[A-Z]{3}$/.test(c)?[c+"TRY=X"]:null);
   LIVE.ticking=true;
-  try{ const syms=[]; const shortActive=st&&studioOn()&&S.tab==="hisse"&&S.hmode==="kisa"&&Array.isArray(SH.d?.items)&&now-(LIVE.shortQuoteLast||0)>=60000;
+  try{ const syms=[]; const shortActive=st&&studioOn()&&S.tab==="hisse"&&S.hmode==="kisa"&&fpShortFresh()&&Array.isArray(SH.d?.items)&&now-(LIVE.shortQuoteLast||0)>=60000;
     const shortCodes=shortActive?[...new Set([...SH.d.items.filter(x=>x.score>=80).slice(0,15),...SH.d.items.filter(x=>x.score<20).sort((a,b)=>a.score-b.score).slice(0,10),...(S.market.stocks||[])].map(x=>x.code).filter(Boolean))]:[];
     if(st){ (S.market.stocks||[]).forEach(x=>syms.push(x.code+".IS")); shortCodes.forEach(c=>syms.push(c+".IS")); syms.push("XU100.IS"); }
     if(fo) (S.market.fx||[]).forEach(x=>{ const d=fxs(x.code); if(d){ syms.push(d[0]); if(d[1]) syms.push(d[1]); } });
@@ -3956,7 +3965,7 @@ if(window.__standalone){
   document.addEventListener("visibilitychange",()=>{ if(!document.hidden){ window.__pullRemote?.(); apkCheck(false); } });
   setInterval(()=>{ if(!document.hidden&&S.ready&&S.market&&LIVE.ok()) liveRefresh(null,false); },60e3);   // açıkken: borsa açıksa 5 dk'da bir
   /* ---------- Kısa vade (2–4 hafta): Hisse sekmesinde ve Bugün kartında "Uzun vade / Kısa vade" seçimi ---------- */
-  const stMarket=()=>{ const hh=S.live?.idx?.XU100?._h; if(hh&&hh.length>60){ const c=hh.map(z=>z[1]); const xp=S.live.idx.XU100.price; if(xp>0) c[c.length-1]=xp; return SHORT.market(c); } return SH.d?.market||null; };
+  const stMarket=()=>{ const hh=S.live?.idx?.XU100?._h; if(hh&&hh.length>60){ const c=hh.map(z=>z[1]); const xp=S.live.idx.XU100.price; if(xp>0) c[c.length-1]=xp; return SHORT.market(c); } return fpShortFresh()?SH.d.market:null; };
   const stCls=s=>{ const mk=stMarket(); return s<20?" lo":mk&&!mk.up?" mid":s>=80?" hi":" mid"; };
   const stRow=it=>{ const own=(S.market?.stocks||[]).find(x=>x.code===it.code), inL=!!own, q=fpQuote(it.code,own,it), day=q.d1, price=q.price??it.price;
     return `<div class="fund lrow st-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div>
@@ -3966,6 +3975,7 @@ if(window.__standalone){
   const mkText=mk=>!mk?"":mk.up?`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} üstünde. Kısa vadeli alım için ortam uygun; yine de küçük tutarla gir.`
     :`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} altında. Geçmişte böyle dönemlerde kısa vadeli alımlar kazandırmadı; şimdilik izlemek, piyasa toparlanınca girmek daha iyi.`;
   function shortView(){ const d=SH.d, mk=stMarket();
+    if(d&&!fpShortFresh())return `${studioOn()?fpScoreDiary():""}<section class="card"><h2>Kısa vade taraması güncel değil</h2><p class="small muted">Son kaydedilen tarama: ${esc(String(d.asOf||"bilinmiyor"))}. Veri tarihi veya kaynak tutarlılığı doğrulanamadığından güçlü/zayıf aday listesi gösterilmiyor. İnternet bağlantısı geldiğinde yeni tarama kontrol edilecek.</p></section>`;
     if(!d) return `<section class="card empty">Kısa vade listesi yükleniyor… (internet gerekir)</section>`;
     const strong=d.items.filter(i=>i.score>=80).slice(0,15), weak=d.items.filter(i=>i.score<20).sort((a,b)=>a.score-b.score).slice(0,10);
     const mine=(S.market?.stocks||[]).map(x=>{ const s=shortFor(x.code,x); return s?{code:x.code,name:x.name,price:x.price,score:s.score,tags:s.tags,f:s.f,d1:x.d1}:null; }).filter(Boolean).sort((a,b)=>b.score-a.score);

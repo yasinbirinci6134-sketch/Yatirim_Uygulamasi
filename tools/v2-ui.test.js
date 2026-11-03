@@ -35,6 +35,20 @@ const embeddedEnd=html.indexOf('const SH={',embeddedStart);
 assert.ok(embeddedStart>0&&embeddedEnd>embeddedStart);
 assert.equal(html.slice(embeddedStart-14,embeddedEnd).trim(),qaSource,"mobile and scan publisher must share quality gates");
 assert.ok(html.includes("if(j&&validateShortScan(j).ok&&"),"unverified fetched scans must not enter mobile cache");
+
+const shortContext=new Function("localStorage","validateShortScan",html.slice(html.indexOf('const SH={'),html.indexOf('async function lpool('))+";return {SH,fpShortFresh,shortFor};");
+const localCache={getItem:key=>key==="fp-short"?JSON.stringify({at:"2020-02-01T18:00:00Z",asOf:"2020-02-01",n:50,items:[]}):null};
+const state=shortContext(localCache,validateShortScan);
+assert.equal(state.fpShortFresh(),false,"stale initial cache must be explicitly invalidated");
+assert.equal(state.shortFor("A000"),null,"stale cached data cannot emit an actionable score");
+const localDay=new Date(Date.now()+3*3600000).toISOString().slice(0,10);
+state.SH.d={at:new Date().toISOString(),asOf:localDay,n:50,xu:{price:100,date:localDay},
+ items:itemsForHistory.map(x=>({...x,date:localDay}))};
+assert.equal(state.fpShortFresh(),true,"new valid feed should replace stale cached status");
+assert.equal(state.shortFor("A000").score,81,"fresh score should remain available");
+assert.ok(html.includes("Kısa vade taraması güncel değil"),"mobile UI must warn about stale scans");
+assert.ok(html.includes("!fpShortFresh()||String(j.at)>="),"bad cached timestamps must not block valid new feeds");
+assert.ok(html.includes("&&fpShortFresh()&&Array.isArray(SH.d?.items)"),"stale scans must not trigger strong/weak prefetch");
 const auditStart=html.indexOf("function fpLegacyAudit("),auditEnd=html.indexOf("function renderSanal()",auditStart);
 assert.ok(auditStart>0&&auditEnd>auditStart);
 const audit=new Function(html.slice(auditStart,auditEnd)+";return fpLegacyAudit;")();
