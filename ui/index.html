@@ -1580,6 +1580,185 @@ html[data-design="modern"] #v-sanal .pf2-advanced-body #planBox{
  html[data-design="modern"] #v-sanal .pf2-hero-stats b{font-size:11px}
 }
 
+/* 2.0 Keşfet — compact list-first radar, no loss of old filtering or details. */
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-hub{
+ display:flex;flex-direction:column;min-width:0;gap:9px;padding:0 0 14px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-hero{
+ color:#F7FEFF;background:linear-gradient(117deg,#172D47,#254960 62%,#173C44);
+ border:1px solid rgba(158,207,232,.26);border-radius:18px;
+ padding:14px 14px 11px;box-shadow:0 13px 25px -24px #152B42
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-kicker{
+ display:flex;justify-content:space-between;gap:8px;align-items:center;
+ font:800 9px/1.35 var(--f-body);letter-spacing:.11em;color:#B5DAE7
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-main{
+ display:flex;align-items:center;justify-content:space-between;gap:14px;
+ padding:16px 0 13px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-main h2{
+ font:800 24px/1.16 var(--f-display);letter-spacing:-.045em;color:#FFFFFF;
+ margin:0 0 5px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-main p{
+ margin:0;color:#C9E0E8;font:500 11px/1.4 var(--f-body)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-stats{
+ display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
+ border-left:1px solid rgba(216,248,255,.2);padding-left:13px;min-width:60px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-stats b{
+ font:800 30px/1 var(--f-display);letter-spacing:-.05em;color:#FFFFFF
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-stats span{
+ font:800 9px var(--f-body);letter-spacing:.08em;color:#C4DFEA;margin-top:5px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-foot{
+ display:flex;align-items:end;justify-content:space-between;gap:7px;
+ border-top:1px solid rgba(216,248,255,.19);padding-top:11px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-foot>div:first-child{
+ min-width:0;flex:1
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-foot>div:first-child>span{
+ font:800 8.5px var(--f-body);letter-spacing:.075em;color:#B5DAE7
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-leaders{
+ display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-top:5px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-leader{
+ display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(200,243,248,.23);
+ background:rgba(234,253,255,.09);border-radius:7px;padding:6px 7px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-leader b{
+ font:800 10px var(--f-body);color:#F7FEFF
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-leader strong{
+ font:800 11px var(--f-body);color:#A2EDCF
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-muted{
+ font-size:10px;color:#C5DFE9
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-asof{
+ display:flex;flex-direction:column;align-items:flex-end;gap:3px;
+ font:800 10px var(--f-body);white-space:nowrap;color:#F2FEFF
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-asof small{
+ font-size:9px;font-weight:600;color:#B9DDE6
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-caveat{
+ border-top:1px solid rgba(216,248,255,.13);padding-top:8px;
+ margin:10px 0 0;color:#C1DBE4;font-size:9.5px;line-height:1.4
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-controls{
+ display:flex;justify-content:space-between;align-items:center;gap:7px;
+ min-width:0
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-pills{
+ display:flex;align-items:center;gap:3px;padding:3px;
+ background:var(--card);border:1px solid var(--line);border-radius:10px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-pills button{
+ background:transparent;border:0;border-radius:7px;color:var(--muted);
+ font:800 10px var(--f-body);padding:8px 9px;cursor:pointer;white-space:nowrap
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-pills button[aria-pressed="true"]{
+ color:var(--accent);background:var(--accent-soft)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-more-btn{
+ flex:none;cursor:pointer;border:1px solid var(--line);border-radius:9px;
+ padding:10px;background:var(--card);color:var(--accent);
+ font:800 10px var(--f-body)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list{
+ padding:10px 11px!important;display:flex;flex-direction:column;gap:5px!important;
+ border:1px solid var(--line);border-radius:14px;background:var(--card)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list>.horizon{
+ margin:0 0 2px;padding:2px 0 7px;border-bottom:1px solid var(--line)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list>.horizon h2{
+ font:800 15px/1.25 var(--f-display);letter-spacing:-.025em
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .lfbar{
+ display:flex;flex-direction:column;gap:6px!important;margin:0 0 4px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .lfbar input{
+ min-height:35px;padding:9px 10px!important;border-radius:9px!important;
+ font-size:12px;background:var(--bg)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .lfbar .chips{
+ display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;
+ gap:5px!important;padding:1px 0;max-width:100%
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .lfbar .chips button{
+ flex:none;white-space:nowrap;border-radius:8px!important;
+ padding:6px 8px!important;font-size:10px!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .addrow{
+ margin:3px 0 5px!important;padding:0!important;gap:6px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .addrow input{
+ min-height:35px;padding:8px 9px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fgrp{
+ gap:0!important;margin:4px 0 0!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fgrp .fgh{
+ padding:6px 4px!important;margin:4px 0 0!important;
+ border-left:2px solid var(--accent);background:var(--s2-soft);
+ font:800 10px/1.2 var(--f-body);border-radius:2px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fund.lrow{
+ min-height:45px!important;padding:6px 2px!important;
+ column-gap:7px!important;grid-template-columns:minmax(0,1fr) minmax(85px,auto)!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fund.lrow .code{
+ font-size:12.5px!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fund.lrow .name{
+ font-size:10px!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fund.lrow .right .lp{
+ font-size:12px!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-list .fp2-disc-hidden{
+ display:none!important
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-empty{
+ font:600 11px/1.5 var(--f-body);color:var(--muted);
+ margin:8px 0;padding:10px;border:1px dashed var(--line);border-radius:9px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more{
+ border:1px solid var(--line);border-radius:12px;
+ overflow:hidden;background:var(--card)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more>summary{
+ cursor:pointer;list-style:none;display:flex;align-items:center;
+ justify-content:space-between;gap:8px;padding:13px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more>summary::-webkit-details-marker{display:none}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more>summary strong{
+ font:800 12.5px var(--f-body);color:var(--ink)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more>summary small{
+ font:600 10px var(--f-body);color:var(--muted)
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more-body{
+ display:flex;flex-direction:column;gap:8px;
+ padding:0 8px 10px
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-discovery-more-body>.card{
+ margin:0!important;padding:11px!important
+}
+@media(max-width:365px){
+ html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-main h2{font-size:21px}
+ html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-asof{font-size:9px}
+ html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-pills button{padding:8px 7px}
+ html[data-design="modern"] :is(#v-hisse,#v-oneri) .fp2-disc-more-btn{padding:9px 7px}
+}
+
 </style>
 
 <div class="wrap">
@@ -2142,6 +2321,96 @@ function allocBlock(h){
   return `<section class="card"><div class="horizon"><h2>${esc(h.title)}</h2><span class="small muted">${esc(h.horizon||"")}</span></div>
     <div class="alloc" aria-hidden="true">${bars}</div><div>${rows}${restRow}</div></section>`;
 }
+/* Fon Pusulası 2.0: list-first, analysis on demand, native row interactions remain. */
+const FP2_DISC_STATE={oneri:{watch:false,more:false},hisse:{watch:false,more:false}};
+function fp2DiscoverySummary(tab,items,watch,updatedAt){
+  const entries=Array.isArray(items)?items.filter(x=>x&&typeof x.code==="string"):[];
+  const tracked=new Set(Array.isArray(watch)?watch:[]);
+  const valid=entries.filter(x=>Number.isInteger(x.score)&&x.score>=0&&x.score<=100)
+    .slice().sort((a,b)=>b.score-a.score||a.code.localeCompare(b.code,"tr")).slice(0,3);
+  const timestamp=Date.parse(updatedAt||"");
+  const dated=Number.isFinite(timestamp)&&timestamp<=Date.now()+3600000;
+  const stamp=dated?new Date(timestamp).toLocaleDateString("tr-TR",{day:"numeric",month:"short",year:"numeric"}):"Tarih yok";
+  const stale=!dated||Date.now()-timestamp>48*3600000;
+  return {count:entries.length,tracked:entries.filter(x=>tracked.has(x.code)).length,
+    top:valid,stamp,stale,kind:tab==="oneri"?"Fon":"Hisse"};
+}
+function fp2DiscoveryHero(tab,items,watch,updatedAt){
+  const d=fp2DiscoverySummary(tab,items,watch,updatedAt);
+  const header=tab==="oneri"?"Fonları keşfet.":"Hisseleri keşfet.";
+  const desc=tab==="oneri"?"Kategori ve skorları karşılaştır.":"Kod, skor ve fiyatı tek bakışta gör.";
+  const leaders=d.top.map(x=>`<span class="fp2-disc-leader" title="Son analiz puanı"><b>${esc(x.code)}</b><strong>${x.score}</strong></span>`).join("");
+  return `<section class="fp2-disc-hero" aria-label="${d.kind} keşif özeti">
+     <div class="fp2-disc-kicker"><span>FON PUSULASI / KEŞFET</span><span>${tab==="oneri"?"FON RADARI":"HİSSE RADARI"}</span></div>
+     <div class="fp2-disc-main"><div><h2>${header}</h2><p>${desc}</p></div><div class="fp2-disc-stats">
+       <b>${d.count}</b><span>${d.kind.toUpperCase()}</span></div></div>
+     <div class="fp2-disc-foot"><div><span>SON ANALİZE GÖRE ÖNE ÇIKANLAR</span>
+       <div class="fp2-disc-leaders">${leaders||'<span class="fp2-disc-muted">Henüz puan yok</span>'}</div></div>
+       <div class="fp2-disc-asof">${esc(d.stamp)}<small>${d.stale?"Güncel analiz değil":"Son analiz"}</small></div></div>
+     <p class="fp2-disc-caveat">Skor yatırım tavsiyesi veya gerçekleşmiş getiri değildir.</p>
+  </section>`;
+}
+function fp2ArrangeDiscovery(v,tab,items,watch,updatedAt){
+  if(!studioOn()||!v)return;
+  const state=FP2_DISC_STATE[tab];
+  if(!state)return;
+  const search=v.querySelector('[data-lfq="'+tab+'"]');
+  const listCard=search?.closest("section.card");
+  if(!listCard)return;
+  const previous=[...v.children].filter(el=>el!==listCard);
+  const wrapper=document.createElement("div");
+  wrapper.className="fp2-discovery-hub";
+  const hero=document.createElement("div");
+  hero.innerHTML=fp2DiscoveryHero(tab,items,watch,updatedAt);
+  while(hero.firstChild)wrapper.appendChild(hero.firstChild);
+  wrapper.appendChild(listCard);
+  listCard.classList.add("fp2-discovery-list");
+  const toolbar=document.createElement("div");
+  toolbar.className="fp2-discovery-controls";
+  toolbar.innerHTML='<div class="fp2-disc-pills" role="group" aria-label="Takip listesine göre filtre">'+
+    '<button data-fp2-disc-focus="all">Tüm varlıklar</button>'+
+    '<button data-fp2-disc-focus="watch">Takiptekiler</button></div>'+
+    '<button class="fp2-disc-more-btn" data-fp2-disc-more aria-expanded="'+String(state.more)+'">Analizler ↗</button>';
+  listCard.insertAdjacentElement("beforebegin",toolbar);
+  const empty=document.createElement("p");
+  empty.className="fp2-discovery-empty";
+  empty.textContent="Takip listende bu aramayla eşleşen varlık bulunamadı.";
+  empty.hidden=true;
+  listCard.appendChild(empty);
+  const advanced=document.createElement("details");
+  advanced.className="fp2-discovery-more";
+  advanced.open=state.more;
+  advanced.innerHTML='<summary><strong>Analiz ve ayrıntılar</strong><small>Dağılım · keşifler · skor yöntemi</small></summary>';
+  const body=document.createElement("div");
+  body.className="fp2-discovery-more-body";
+  for(const child of previous)body.appendChild(child);
+  advanced.appendChild(body);
+  wrapper.appendChild(advanced);
+  v.appendChild(wrapper);
+  const pills=[...toolbar.querySelectorAll("[data-fp2-disc-focus]")];
+  const rows=[...listCard.querySelectorAll('.fund.lrow[data-k]')];
+  const watchSet=new Set(Array.isArray(watch)?watch:[]);
+  const apply=()=>{
+    let shown=0;
+    for(const row of rows){
+      const code=String(row.dataset.k||"").split(":")[1];
+      const hidden=state.watch&&!watchSet.has(code);
+      row.classList.toggle("fp2-disc-hidden",hidden);
+      if(!hidden)shown++;
+    }
+    for(const group of listCard.querySelectorAll(".fgrp")){
+      const inGroup=[...group.querySelectorAll(".fund.lrow[data-k]")];
+      group.classList.toggle("fp2-disc-hidden",!!inGroup.length&&inGroup.every(r=>r.classList.contains("fp2-disc-hidden")));
+    }
+    empty.hidden=!state.watch||shown>0||rows.length===0;
+    pills.forEach(b=>b.setAttribute("aria-pressed",String((b.dataset.fp2DiscFocus==="watch")===state.watch)));
+  };
+  pills.forEach(b=>b.addEventListener("click",()=>{state.watch=b.dataset.fp2DiscFocus==="watch";apply();}));
+  apply();
+  advanced.addEventListener("toggle",()=>{state.more=advanced.open;toolbar.querySelector("[data-fp2-disc-more]")?.setAttribute("aria-expanded",String(advanced.open));});
+  toolbar.querySelector("[data-fp2-disc-more]")?.addEventListener("click",()=>{advanced.open=!advanced.open;});
+}
+
 function renderOneri(){
   const v=$("v-oneri"), a=S.market?.advice;
   if(!S.market){ v.innerHTML = `<section class="card empty">${S.ready ? "Öneriler ilk veri güncellemesinden sonra burada görünecek." : "Yükleniyor…"}</section>`; return; }
@@ -2151,6 +2420,7 @@ function renderOneri(){
     ${scanBlock(S.market)}
     ${fundsHtml(S.market)}
 `;
+  fp2ArrangeDiscovery(v,"oneri",S.market.funds||[],S.fwatch,S.market.updatedAt);
   bindFunds(v);
 }
 async function ask(){
@@ -2232,6 +2502,7 @@ function renderHisse(){
       ${list.length?studioTableHead()+list.map(stockRow).join(""):`<div class="empty">Hisse verisi bir sonraki güncellemede gelecek.</div>`}
       ${(S.market?.removedStocks||[]).length?`<details class="removed"><summary>Son çıkarılanlar (${S.market.removedStocks.length})</summary>${S.market.removedStocks.slice().reverse().map(z=>`<div class="remrow"><div><span class="code">${esc(z.code)}</span> <span class="small muted">${esc(fmtDate(z.date)||"")}${z.score!=null?" · puan "+num(z.score,0):""}</span></div><p class="small muted" style="margin:2px 0 0">${esc(z.why||"")}</p></div>`).join("")}</details>`:""}
     </section>`;
+  fp2ArrangeDiscovery(v,"hisse",st,S.watch,m.updatedAt);
   v.querySelectorAll("[data-buy]").forEach(b=> b.onclick = () => openBuy(b.dataset.buy));
   bindRowBtns(v);
   v.querySelectorAll("[data-unwatch]").forEach(b=> b.onclick = () => saveWatch(S.watch.filter(c=>c!==b.dataset.unwatch)));

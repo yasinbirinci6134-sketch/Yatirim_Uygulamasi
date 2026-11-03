@@ -34,6 +34,7 @@ jobs:
           node tools/v2-ui.test.js
           node tools/v2-dashboard.test.js
           node tools/v2-portfolio.test.js
+          node tools/v2-discovery.test.js
           node tools/fund-history.test.js
           node tools/fund-history-archive.test.js
           python3 tools/fund-history-sync.py --self-test
