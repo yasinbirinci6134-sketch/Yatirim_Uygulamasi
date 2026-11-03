@@ -29,3 +29,32 @@ jobs:
           node tools/v2-1-portfolio-chart.test.js
           node tools/v2-1-realized-returns.test.js
           node tools/v2-1-score-diary.test.js
+  android-v2-1:
+    if: github.head_ref == 'feature/fon-pusulasi-v2-1' || github.ref == 'refs/heads/feature/fon-pusulasi-v2-1'
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.9'}
+      - name: Compile isolated 2.1 Android APK
+        run: gradle assembleDebug --no-daemon
+      - name: Verify APK and bundled UI
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk=app/build/outputs/apk/debug/app-debug.apk
+          test -s "$apk"
+          unzip -tq "$apk" >/dev/null
+          unzip -p "$apk" assets/index.html | cmp - ui/index.html
+          sdk="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          dir="$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          "$dir/aapt" dump badging "$apk" | grep -q "^package: name='com.yasin.yatirimapp.preview'"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Fon-Pusulasi-2-1-Test-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14
