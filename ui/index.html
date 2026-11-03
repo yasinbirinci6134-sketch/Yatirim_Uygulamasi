@@ -2369,6 +2369,15 @@ function portfolioRows(pf){
     return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:q.d1??f?.d1, curDate:q.priceAt||f?.priceDate, quoteSource:q.source, days:daysSince(t.buyDate||t.priceDate)};
   });
 }
+function fpClosedReturns(closed){
+ let realized=0,closedCost=0,missing=0;
+ for(const t of Array.isArray(closed)?closed:[]){
+  const amount=Number(t.amount),buy=Number(t.price),sell=Number(t.sellPrice);
+  if(!Number.isFinite(amount)||amount<=0||!Number.isFinite(buy)||buy<=0||!Number.isFinite(sell)||sell<=0){missing++;continue;}
+  realized+=(sell/buy-1)*amount;closedCost+=amount;
+ }
+ return {realized:missing?null:realized,closedCost,missing};
+}
 function groupRows(rows){ const m=new Map();
   rows.forEach(r=>{ const g=m.get(r.code)||{code:r.code,lots:[],amount:0,value:0,units:0}; g.lots.push(r); g.amount+=r.amount; g.value+=r.value; g.units+=r.units; m.set(r.code,g); });
   return [...m.values()].map(g=>{ g.lots.sort((a,b)=>String(a.buyDate||a.priceDate).localeCompare(String(b.buyDate||b.priceDate)));
@@ -2844,8 +2853,8 @@ function renderSanal(){
   const snapshotVal=fpTrustedHoldingsValue(rows,snapshotToday);
   if(Number.isFinite(snapshotVal))fpPortSnapshot(pf.id,snapshotVal,inv);
   const day=rows.reduce((s,r)=> s + (r.d1!=null && r.curDate && r.curDate>(r.buyDate||r.priceDate) ? r.value*(r.d1/(100+r.d1)) : 0),0);
-  const realized=closed.reduce((s,t)=>s+(t.sellPrice/t.price-1)*t.amount,0);
-  const totalPnl=pnl+realized, costAll=inv+closed.reduce((s,t)=>s+t.amount,0);
+  const closedAudit=fpClosedReturns(closed),realized=closedAudit.realized;
+  const totalPnl=realized===null?null:pnl+realized, costAll=inv+closedAudit.closedCost;
   const allPfTrades=pfTrades(pf),hasLegacy=allPfTrades.length>0;
   const legacyAudit=fpLegacyAudit(allPfTrades);
   const legacyAuditCard=`<section class="card"><div class="horizon"><h2>Eski işlem denetimi</h2><button class="btn ghost sm" id="pfAuditShare">Rapor paylaş</button></div>
@@ -2896,13 +2905,14 @@ function renderSanal(){
   v.innerHTML = `
     <section class="card pfhero">
       <div class="pfh"><div class="pfl"><button class="pfpick" id="pfPick" aria-expanded="${!!S.pfOpen}">${esc(pf.name)} <span>${S.pfs.length>1?"▾ değiştir":"▾"}</span></button><b class="num pfv">${tl2(val)}</b>
-          <div class="num ${cls(totalPnl)} pfp">${totalPnl>=0?"▲ +":"▼ "}${tl2(totalPnl)} ${costAll?`<span>(${pc(totalPnl/costAll*100)})</span>`:""}</div>
+          <div class="num ${totalPnl===null?"":cls(totalPnl)} pfp">${totalPnl===null?"—":`${totalPnl>=0?"▲ +":"▼ "}${tl2(totalPnl)} ${costAll?`<span>(${pc(totalPnl/costAll*100)})</span>`:""}`}</div>
           <div class="small muted">toplam kâr/zarar · <span style="white-space:nowrap">son gün</span> <span class="num ${cls(day)}" style="white-space:nowrap">${day>=0?"+":""}${tl2(day)}</span></div></div>
         ${mix.length?donut(mix):""}</div>
       ${mix.length?`<div class="legend">${mix.map(m=>`<span><i class="bar-${m.c}"></i>${CAT[m.c]} <b class="num">%${num(m.w,0)}</b></span>`).join("")}</div>`:""}
       <div class="pfstats"><div><span>Yatırılan</span><b class="num">${tl2(inv)}</b></div><div><span>Açık K/Z</span><b class="num ${cls(pnl)}">${pnl>=0?"+":""}${tl2(pnl)}</b></div>
-        <div><span>Gerçekleşen</span><b class="num ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</b></div></div>
+        <div><span>Gerçekleşen</span><b class="num ${realized===null?"":cls(realized)}">${realized===null?"—":`${realized>=0?"+":""}${tl2(realized)}`}</b></div></div>
     </section>
+    ${closedAudit.missing?`<p class="small muted">Gerçekleşmiş getiri hesaplanamadı: ${closedAudit.missing} kapanmış işlemde geçerli alış, satış fiyatı veya tutar eksik. Toplam K/Z gösterilmiyor.</p>`:""}
     ${head}
     <section class="card"><div class="horizon"><h2>Portföy değer geçmişi</h2><span class="small muted">Gerçek kayıtlar</span></div>${fpPortChart(pf.id)}</section>
     ${cashCard}
