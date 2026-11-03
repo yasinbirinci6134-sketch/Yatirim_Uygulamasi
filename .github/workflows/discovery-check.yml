@@ -134,3 +134,36 @@ jobs:
             Fon-Pusulasi-2-1-Candidate.apk
             Fon-Pusulasi-2-1-Candidate.apk.sha256
           retention-days: 14
+  approve-ota-v2-1:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/feature/fon-pusulasi-v2-1'
+    needs: [test, android-v2-1, signed-candidate-v2-1]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/fon-pusulasi-v2-1
+          persist-credentials: true
+      - name: Approve only the exact fully tested commit
+        shell: bash
+        env:
+          VERIFIED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin feature/fon-pusulasi-v2-1
+          test "$(git rev-parse origin/feature/fon-pusulasi-v2-1)" = "$VERIFIED_SHA" || { echo "A newer commit exists; do not approve stale UI"; exit 0; }
+          mkdir -p .github/status
+          python3 - <<'PY'
+          import datetime,json,os
+          with open('.github/status/v2-1-build.json','w',encoding='utf-8') as f:
+            json.dump({'status':'success','source_commit':os.environ['VERIFIED_SHA'],'checked_at':datetime.datetime.now(datetime.timezone.utc).isoformat()},f,indent=2)
+            f.write('\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/status/v2-1-build.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(v2.1): approve tested OTA UI [skip ci]'
+            git push origin HEAD:feature/fon-pusulasi-v2-1
+          fi
