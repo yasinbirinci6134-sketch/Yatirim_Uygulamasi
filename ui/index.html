@@ -2954,6 +2954,10 @@ function renderSanal(){
     </section>
     ${closedAudit.missing?`<p class="small muted">Gerçekleşmiş getiri hesaplanamadı: ${closedAudit.missing} kapanmış işlemde geçerli alış, satış fiyatı veya tutar eksik. Toplam K/Z gösterilmiyor.</p>`:""}
     ${head}
+    ${closed.length ? `<section class="card"><div class="horizon"><h2>Kapanan işlemler</h2><span class="num small ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</span></div>
+      ${closed.map(t=>{const p=(t.sellPrice/t.price-1)*t.amount; return `<div class="trade"><div><span class="code">${esc(t.code)}</span> <span class="small muted">${tl2(t.amount)} · ${fmtDate(t.buyDate||t.priceDate)} → ${fmtDate(t.sellDate)}</span></div>
+        <div class="right num ${cls(p)}">${p>=0?"+":""}${tl2(p)}</div>
+        <div class="acts"><button class="btn ghost sm" data-del="${esc(t.id)}">Sil</button></div></div>`}).join("")}</section>` : ""}
     <details class="pf-extras" id="pfExtras"${S.pfExtrasOpen?" open":""}>
       <summary><span class="pf-extras-label"><b>Diğer araçlar</b><small>Değer geçmişi, nakit, notlar, getiri ve risk</small></span><span class="pf-extras-arrow" aria-hidden="true">⌄</span></summary>
       <div class="pf-extras-body">
@@ -2963,13 +2967,9 @@ function renderSanal(){
     ${journalCard}
     ${metricStatus}
     ${riskBlock}
+        <div id="planBox" style="display:flex;flex-direction:column;gap:7px"></div>
       </div>
-    </details>
-    ${closed.length ? `<section class="card"><div class="horizon"><h2>Kapanan işlemler</h2><span class="num small ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</span></div>
-      ${closed.map(t=>{const p=(t.sellPrice/t.price-1)*t.amount; return `<div class="trade"><div><span class="code">${esc(t.code)}</span> <span class="small muted">${tl2(t.amount)} · ${fmtDate(t.buyDate||t.priceDate)} → ${fmtDate(t.sellDate)}</span></div>
-        <div class="right num ${cls(p)}">${p>=0?"+":""}${tl2(p)}</div>
-        <div class="acts"><button class="btn ghost sm" data-del="${esc(t.id)}">Sil</button></div></div>`}).join("")}</section>` : ""}
-    <div id="planBox" style="display:flex;flex-direction:column;gap:inherit"></div>`;
+    </details>`;
   bindPf(pf);
   v.querySelector("#pfExtras")?.addEventListener("toggle", e=>{ S.pfExtrasOpen=e.currentTarget.open; });
   $("goAdd").onclick = () => openBuy(null);
