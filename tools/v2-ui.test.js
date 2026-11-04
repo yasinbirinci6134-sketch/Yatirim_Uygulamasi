@@ -170,11 +170,11 @@ assert.ok(html.includes('get("pfCsvText").value=raw'));
 const renderRowStart=html.indexOf("function listRow("),renderRowEnd=html.indexOf("/* Kaleme özel haberler:",renderRowStart);
 assert.ok(renderRowStart>0&&renderRowEnd>renderRowStart);
 const mockState={watch:[],fwatch:[],fxwatch:[]},mkListRow=new Function(
- "S","staleB","studioOn","sCls","num","esc","pickBadge","cls","pc","arr","SIG","exitTxt","FUTX",
+ "S","staleB","studioOn","sCls","num","esc","pickBadge","cls","pc","arr","SIG","exitTxt","FUTX","fpPriceStampHtml","fpMarketPriceStamp",
  html.slice(renderRowStart,renderRowEnd)+";return listRow;"
 );
 const args=[mockState,()=>"",()=>false,n=>n>=80?" hi":"",x=>String(x),x=>String(x),()=>"",()=>"",x=>String(x),()=>"","",()=>"",""];
-args[10]={};args[12]=new Set();
+args[10]={};args[12]=new Set();args[13]=()=>"";args[14]=()=>null; // unrelated timestamp decorators are tested separately
 const classicRow=mkListRow(...args)("s",{code:"AIS",score:94,price:16.5,name:"Ornek hisse",d1:2.5});
 assert.ok(classicRow.includes('studio-inline-score hi'),"classic must render its inline score");
 assert.ok(classicRow.includes('aria-label="Skor 94"'),"score stays accessible without repeated visual label");
