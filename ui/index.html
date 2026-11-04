@@ -1807,7 +1807,7 @@ function fpPriceStamp(raw,now=Date.now()){
     if(!Number.isFinite(ms)||new Date(ms).toISOString().slice(0,10)!==t)return null;
     const today=new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Istanbul",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(now));
     if(t>today)return null;
-    return {label:"Fiyat günü: "+t.slice(8,10)+"."+t.slice(5,7),
+    return {label:t.slice(8,10)+"."+t.slice(5,7),
       full:"Fiyat tarihi: "+t.slice(8,10)+"."+t.slice(5,7)+"."+t.slice(0,4)+" · Kaynak saat belirtmedi",precision:"date"};
   }
   if(typeof t==="string"&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(t)&&!/(?:Z|[+-]\d{2}:\d{2})$/i.test(t))
@@ -1819,7 +1819,7 @@ function fpPriceStamp(raw,now=Date.now()){
   const date=new Date(ms),day=d=>new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Istanbul",year:"numeric",month:"2-digit",day:"2-digit"}).format(d);
   const d=day(date),today=day(new Date(now));
   const time=new Intl.DateTimeFormat("tr-TR",{timeZone:"Europe/Istanbul",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(date);
-  return {label:d===today?"Fiyat: "+time:"Fiyat: "+d.slice(8,10)+"."+d.slice(5,7)+" "+time,
+  return {label:d===today?time:d.slice(8,10)+"."+d.slice(5,7)+" "+time,
     full:"Kaynak fiyat zamanı: "+d+" "+time+" (Türkiye saati)",precision:"time"};
 }
 function fpPriceStampHtml(raw){
