@@ -37,10 +37,10 @@ const stampFns=new Function("S","LIVE","esc",fmtSrc+";return {fpPriceStamp,fpPri
   env,{shortQuotes:env.ticks},x=>String(x));
 const now=Date.parse("2026-11-04T04:35:00Z");
 assert.deepEqual(stampFns.fpPriceStamp("2026-11-04",now).precision,"date");
-assert.match(stampFns.fpPriceStamp("2026-11-04",now).label,/Fiyat günü: 04\.11/);
-assert.equal(stampFns.fpPriceStamp("2026-11-04T04:27:41Z",now).label,"Fiyat: 07:27:41");
+assert.match(stampFns.fpPriceStamp("2026-11-04",now).label,/^04\.11$/);
+assert.equal(stampFns.fpPriceStamp("2026-11-04T04:27:41Z",now).label,"07:27:41");
 assert.equal(stampFns.fpPriceStamp(Date.parse("2026-11-04T04:27:41Z"),now).precision,"time");
-assert.equal(stampFns.fpPriceStamp("2026-11-03T12:00:00Z",now).label,"Fiyat: 03.11 15:00:00");
+assert.equal(stampFns.fpPriceStamp("2026-11-03T12:00:00Z",now).label,"03.11 15:00:00");
 assert.equal(stampFns.fpPriceStamp("2026-11-04T04:27:41",now).precision,"date",
   "no clock without a trustworthy timezone");
 assert.equal(stampFns.fpPriceStamp("2026-02-30",now),null,"invalid calendar date rejected");
