@@ -48,3 +48,30 @@ const binder=html.slice(binderStart,binderEnd);
 assert.match(binder,/if\(S\.pfOpen\)summary\?\.after\(manager\)/,"opening portfolio picker moves chooser into view");
 assert.match(binder,/else positions\?\.after\(manager\)/,"closing chooser restores holdings-first view");
 console.log("2.1 portfolio overview -> positions ordering passed");
+
+
+// Optional portfolio tools: collapsed by default, with readable descriptions.
+// All buttons and calculations remain in the DOM after collapsing the extras.
+const extrasBegin=render.indexOf('<details class="pf-extras" id="pfExtras"');
+const closedTrades=render.indexOf('<h2>Kapanan işlemler</h2>');
+const extrasEnd=render.indexOf('</details>',extrasBegin);
+const plan=render.indexOf('id="planBox"',extrasBegin);
+assert.ok(positions>=0&&closedTrades>positions&&extrasBegin>closedTrades&&extrasEnd>extrasBegin,
+  "holdings and closed trades come before advanced features");
+assert.ok(plan>extrasBegin&&plan<extrasEnd,"optional action plan lives inside extras");
+assert.match(render,/id="pfExtras"\$\{S\.pfExtrasOpen\?" open":""\}/,
+  "advanced features remember expanded state during rerender and start closed");
+assert.match(render,/addEventListener\("toggle", e=>\{ S\.pfExtrasOpen=e\.currentTarget\.open; \}\)/,
+  "expansion state tracks native details toggle");
+for(const id of ["pfCashAdd","pfReturnImport","pfAuditShare","pfNoteAdd","planBox"]){
+  assert.ok(render.includes(id),"existing advanced control preserved: "+id);
+}
+for(const label of ["Diğer araçlar","Elindeki varlıkların zaman içindeki değeri",
+  "Para yatırma, çekme, temettü ve komisyon","Eski işlemlerde eksik",
+  "Alım veya satış yaparken nedenini","Ekstren varsa yatırım getirini",
+  "Tek bir varlığa fazla para"]){
+  assert.ok(render.includes(label),"plain-language description preserved: "+label);
+}
+assert.match(layout,/if\(extras\) extras\.hidden=false/,
+  "saved card visibility preferences do not hide optional tools entry");
+console.log("2.1 optional portfolio tools and descriptions passed");
