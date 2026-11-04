@@ -2866,11 +2866,13 @@ function renderSanal(){
   const cashTotals=cashflows.reduce((a,x)=>{if(x.type==="deposit")a.deposit+=x.amount;else if(x.type==="withdrawal")a.withdrawal+=x.amount;else if(x.type==="dividend")a.dividend+=x.amount;else if(x.type==="fee")a.fee+=x.amount;return a;},{deposit:0,withdrawal:0,dividend:0,fee:0});
   const cashNames={deposit:"Para yatırma",withdrawal:"Para çekme",dividend:"Temettü",fee:"Komisyon"};
   const cashCard=`<section class="card"><div class="horizon"><h2>Nakit ve gelir hareketleri</h2><button class="btn sm" id="pfCashAdd">+ Hareket</button></div>
+    <p class="small muted">Para yatırma, çekme, temettü ve komisyon kayıtların.</p>
     <p class="small muted">Bu kayıtlar ayrı tutulur; eski işlemler için alış/satış nakit kayıtları bulunmadığından toplam portföy değerine otomatik eklenmez.</p>
     <div class="pfstats"><div><span>Yatırılan nakit</span><b class="num">${tl(cashTotals.deposit,2)}</b></div><div><span>Çekilen nakit</span><b class="num">${tl(cashTotals.withdrawal,2)}</b></div><div><span>Temettü</span><b class="num">${tl(cashTotals.dividend,2)}</b></div><div><span>Komisyon</span><b class="num">${tl(cashTotals.fee,2)}</b></div></div>
     ${cashflows.length?cashflows.slice(0,20).map(x=>`<div class="trade"><div><b>${cashNames[x.type]||"Hareket"}</b><div class="small muted">${esc(x.date)}${x.note?" · "+esc(x.note):""}</div></div><div class="right"><b class="num">${tl(x.amount,2)}</b><button class="btn ghost sm" data-cashdel="${esc(x.id)}">Sil</button></div></div>`).join(""):`<p class="small muted">Henüz nakit hareketi kaydedilmedi.</p>`}</section>`;
   const notes=(S.journal||[]).filter(x=>x.pf===pf.id).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
   const journalCard=`<section class="card"><div class="horizon"><h2>Yatırım günlüğü</h2><button class="btn sm" id="pfNoteAdd">+ Not</button></div>
+   <p class="small muted">Alım veya satış yaparken nedenini not al; sonra kararını değerlendirebilirsin.</p>
    ${notes.length?notes.slice(0,12).map(x=>`<div class="trade"><div style="min-width:0"><b>${esc(x.title||"Yatırım notu")}</b><div class="small muted">${esc(x.date)} · ${esc(x.body||"")}</div></div><button class="btn ghost sm" data-notedel="${esc(x.id)}">Sil</button></div>`).join(""):`<p class="small muted">Bir yatırım kararı verirken nedenini kaydet; sonra dönüp sonucunu değerlendir.</p>`}</section>`;
   const rows=portfolioRows(pf), closed=pfTrades(pf).filter(t=>t.status==="closed");
   const inv=rows.reduce((s,r)=>s+r.amount,0), val=rows.reduce((s,r)=>s+r.value,0), pnl=val-inv;
@@ -2883,6 +2885,7 @@ function renderSanal(){
   const allPfTrades=pfTrades(pf),hasLegacy=allPfTrades.length>0;
   const legacyAudit=fpLegacyAudit(allPfTrades);
   const legacyAuditCard=`<section class="card"><div class="horizon"><h2>Eski işlem denetimi</h2><button class="btn ghost sm" id="pfAuditShare">Rapor paylaş</button></div>
+    <p class="small muted">Eski işlemlerde eksik veya tutarsız bilgi var mı kontrol eder; kayıtları değiştirmez.</p>
     <div class="pfstats"><div><span>İşlem kaydı</span><b class="num">${allPfTrades.length}</b></div><div><span>Olası nakit kaydı</span><b class="num">${legacyAudit.candidates.length}</b></div><div><span>Eksik/hatalı kayıt</span><b class="num">${legacyAudit.issues.length}</b></div></div>
     ${legacyAudit.issues.length?`<div class="small muted">${legacyAudit.issues.slice(0,8).map(x=>`<div>• ${esc(x)}</div>`).join("")}${legacyAudit.issues.length>8?"<div>• Diğer sorunlar da mevcut.</div>":""}</div>`:""}
     <p class="small muted">Alış/satış tarihleri ve tutarlarından yalnızca kontrol amaçlı adaylar çıkarıldı. Banka hareketleri doğrulanmadığı için otomatik nakit bakiyesi, XIRR veya TWR hesabına eklenmez.</p></section>`;
@@ -2913,6 +2916,7 @@ function renderSanal(){
     {name:"TWR için nakit dahil NAV",ready:statementResult?.twr!=null,detail:statementResult?.twr!=null?"Ekstre değerlemeleri karşılaştırıldı":"Dış nakit günlerinde toplam portföy değeri gerekli"}
   ];
   const metricStatus=`<section class="card"><div class="horizon"><h2>Gerçek getiri · Veri kontrolü</h2><button class="btn ghost sm" id="pfReturnImport">Ekstre yükle</button></div>
+    <p class="small muted">Ekstren varsa yatırım getirini doğrular; eksik bilgilerle tahmini sonuç üretmez.</p>
     ${statementResult?.xirr!=null?`<div class="pfstats"><div><span>XIRR (yıllık)</span><b class="num">${pc(statementResult.xirr*100)}</b></div><div><span>TWR (toplam)</span><b class="num">${statementResult.twr!=null?pc(statementResult.twr*100):"—"}</b></div></div><p class="small muted">Ekstre kapanışı: ${esc(statementAsOf||"bilinmiyor")}. ${statementIsHistorical?"Bu geçmiş tarihli getiri hesabıdır; güncel portföy getirisi değildir. ":""}Ekstre kaynağının gerçekliği uygulama tarafından teyit edilemez.</p>`:
       `<p class="small muted">XIRR/TWR için eksiksiz ekstre ve nakit dahil portföy değerlemeleri gerekli. Gerçek dışı getiri sonucu gösterilmez.</p>`}
     ${statementResult?.errors?.length?`<div class="small muted">${statementResult.errors.slice(0,5).map(e=>`<div>• ${esc(e)}</div>`).join("")}</div>`:""}
@@ -2921,6 +2925,7 @@ function renderSanal(){
     <p class="small muted">Pozisyon grafiği nakit içermiyor ve TWR için kullanılamaz. Açık/gerçekleşmiş kâr-zarar, yıllıklandırılmış XIRR/TWR değildir.</p></section>`;
   const groups=groupRows(rows),maxPosition=groups[0],maxWeight=val>0&&maxPosition?100*maxPosition.value/val:0;
   const riskBlock=`<section class="card"><div class="horizon"><h2>Portföy risk radarı</h2></div>
+   <p class="small muted">Tek bir varlığa fazla para ayırıp ayırmadığını gösterir.</p>
    <div class="pfstats"><div><span>Farklı varlık</span><b class="num">${groups.length}</b></div>
    <div><span>En büyük pozisyon</span><b class="num">${maxPosition?esc(maxPosition.code):"–"}</b></div>
    <div><span>En büyük ağırlık</span><b class="num ${maxWeight>35?"down":""}">${num(maxWeight,1)}%</b></div></div>
