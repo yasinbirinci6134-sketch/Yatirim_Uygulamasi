@@ -2387,7 +2387,13 @@ function histBlock(code){ const h=(S.hist||{})[code]; if(!h||h.length<2) return 
 
 /* ---------- Hisse ---------- */
 const SIG = {al:"Alınabilir", izle:"İzle", uzak:"Uzak dur"};
-const pickBadge = x => x?.pick ? `<span class="pick">${x.pickAt && (Date.now()-new Date(x.pickAt).getTime() < (studioOn()?2:7)*864e5) ? "YENİ KEŞİF" : "KEŞİF"}</span>` : "";
+// An old pick is still an ordinary stock, but no longer a "new discovery".
+const fpRecentPick=(x,now=Date.now())=>{
+  if(!x?.pick||!x.pickAt)return false;
+  const at=typeof x.pickAt==="number"?(x.pickAt<1e11?x.pickAt*1000:x.pickAt):Date.parse(x.pickAt);
+  return Number.isFinite(at)&&at<=now&&now-at<2*864e5;
+};
+const pickBadge=x=>fpRecentPick(x)?'<span class="pick">YENİ KEŞİF</span>':"";
 function riskBars(r){ r=Math.max(0,Math.min(5,Number(r)||0)); return `<span class="risk g" data-g="Risk" title="Risk ${r}/5">${[1,2,3,4,5].map(i=>`<i class="${i<=r?"on":""}"></i>`).join("")} risk ${r}/5</span>`; }
 function stockRow(x){ return listRow("s",x); }
 function renderHisse(){
@@ -2398,7 +2404,7 @@ function renderHisse(){
   const waiting=S.watch.filter(c=>!st.some(x=>x.code===c));
   v.innerHTML = `
     ${a?.summary?`<section class="card"><h3>Borsa görüşü · ${esc(updLbl())}</h3><p class="summary clamp${xo("hsum")}" data-k="hsum">${esc(clean(a.summary))}</p></section>`:""}
-    ${(()=>{ const pk=[...st.filter(x=>x.pick)].sort((a,b)=>String(b.pickAt).localeCompare(String(a.pickAt)));
+    ${(()=>{ const pk=[...st.filter(fpRecentPick)].sort((a,b)=>String(b.pickAt).localeCompare(String(a.pickAt)));
       return pk.length?`<section class="card"><div class="horizon"><h2>Keşifler</h2><span class="small muted">Listeye yeni eklenen hisseler</span></div>
         ${pk.map(x=>x.isFund?`<div class="fund"><div><span class="code">${esc(x.code)}</span> <span class="score${sCls(x.score,"f")}">${num(x.score,0)}</span> ${pickBadge(x)}<div class="name">${esc(x.name)} · fon</div></div><div class="right"><div class="num">${num(x.price,6)}</div><div class="small num ${cls(x.y1)}">1 yıl ${pc(x.y1,0)}</div></div></div>`:stockRow(x)).join("")}</section>`:""; })()}
     ${allocBlock(a?.short)}
