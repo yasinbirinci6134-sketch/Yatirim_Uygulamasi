@@ -4,10 +4,10 @@ const get=n=>fs.readFileSync(path.join(__dirname,"..",n),"utf8");
 const g=get("app/build.gradle"),w=get(".github/workflows/build.yml"),h=get("ui/index.html"),
  host=get("app/src/main/java/com/yasin/yatirimapp/MainActivity.java"),m=get("app/src/main/AndroidManifest.xml");
 assert.ok(g.includes("applicationId 'com.yasin.yatirimapp'"),"2.0 must replace the old Android package");
-assert.ok(g.includes("versionCode (200000 + run)"),"new versionCode must supersede legacy builds");
-assert.ok(g.includes('versionName "2.0.${run}"'),"Android needs version 2.0");
+assert.ok(g.includes("210000 + run : 200000 + run"),"2.1 candidate must upgrade without changing 2.0 production code");
+assert.ok(g.includes('"2.1.${run}" : "2.0.${run}"'),"candidate 2.1 and production 2.0 version names required");
 assert.ok(g.includes("signingConfig signingConfigs.release"),"live APK must use original release key");
-assert.ok(g.includes("appDisplayName: 'Fon Pusulası 2.0'"),"new launcher product name required");
+assert.ok(g.includes("'Fon Pusulası 2.1' : 'Fon Pusulası 2.0'"),"candidate and production launcher names required");
 assert.ok(m.includes('android:label="${appDisplayName}"'),"manifest must honor product label");
 assert.ok(w.includes("secrets.KEYSTORE_B64")&&w.includes("secrets.KEYSTORE_PASSWORD"),"use stable secret key");
 assert.ok(w.includes("gradle assembleRelease --no-daemon"),"build production release");
@@ -19,7 +19,8 @@ assert.ok(w.includes("node tools/fund-history.test.js"),"historic fund price tes
 assert.ok(w.includes("tag_name: v2.0.${{ github.run_number }}"),"live release needs unique incremental tag");
 assert.ok(w.includes("v2-production-build.json"),"production UI must require approved release status");
 assert.ok(host.includes("static final String PRODUCTION_STATUS_URL"),"host must read live release approval");
-assert.ok(host.includes("String statusUrl = preview ? PREVIEW_STATUS_URL : PRODUCTION_STATUS_URL;"),"production UI must be gated");
+assert.ok(host.includes("versionName().startsWith(\"2.1.\") ? CANDIDATE21_STATUS_URL : (preview ? PREVIEW_STATUS_URL : PRODUCTION_STATUS_URL)"),"2.1 candidate must be isolated while production UI stays gated");
+assert.ok(host.includes("static final String CANDIDATE21_STATUS_URL"),"2.1 needs a dedicated OTA approval channel");
 assert.ok(host.includes('String api = UI_API.replace("ref=main", "ref=" + pinned);'),"UI must use immutable commit");
 assert.ok(h.includes('const UI_VERSION="2.0";'),"remove preview label from live web UI");
 assert.ok(h.includes("|| /^2\\./.test"),"2.0 must enable new dashboard");

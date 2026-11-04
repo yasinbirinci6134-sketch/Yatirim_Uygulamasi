@@ -1604,6 +1604,27 @@ html[data-design="modern"] .fp2-headlines>p{font-size:12px;color:var(--muted);ma
  html[data-design="modern"] .fp2-radar{padding:10px 8px}
 }
 
+
+/* 2.1: keep the score diary one compact row until the user opens it. */
+.fp-score-diary>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;list-style:none;min-height:30px;font-size:13px}
+.fp-score-diary>summary::-webkit-details-marker{display:none}
+.fp-score-diary>summary::after{content:"⌄";font-size:16px;color:var(--muted);flex-shrink:0}
+.fp-score-diary[open]>summary::after{content:"⌃"}
+.fp-score-diary>summary .small{font-size:11px;white-space:nowrap}
+.fp-score-diary-body{padding-top:8px}
+.fp-score-diary-body .trade{padding-top:6px;padding-bottom:6px}
+/* Compact score history on phones: one line per stock, no nested oversized trade cards. */
+.fp-score-diary-body{padding-top:5px}
+.fp-score-diary-body .fp-score-change{display:grid;grid-template-columns:minmax(0,1fr) auto 44px;align-items:center;gap:8px;padding:7px 2px;border-top:1px solid var(--line);min-height:24px;font-size:12px;line-height:1.25}
+.fp-score-diary-body .fp-score-change:first-child{border-top:0}
+.fp-score-change .code{font-size:12px;min-width:0}
+.fp-score-change .fp-score-range{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.fp-score-change .num{text-align:right;font-size:12px;font-variant-numeric:tabular-nums}
+.fp-score-diary>summary{min-height:26px}
+html[data-design="modern"] .fp-score-diary{font-size:12px}
+html[data-design="modern"] .fp-score-diary-body .fp-score-change{padding-block:6px}
+html[data-design="modern"] section.card:has(>.fp-score-diary){padding:9px 12px;margin-block:6px;border-radius:12px}
+
 </style>
 
 <div class="wrap">
@@ -1771,10 +1792,56 @@ function fpQuote(code,base,scan){
   const daily=candidates.filter(c=>typeof c.v?.d1==="number"&&Number.isFinite(c.v.d1)&&ts(c.at)<=Date.now()+3600000&&(!winner||!ts(winner.at)||!ts(c.at)||Math.abs(ts(c.at)-ts(winner.at))<=36*3600000))
     .sort((a,b)=>ts(b.at)-ts(a.at))[0];
   return {price:winner?.v.price??null,d1:daily?.v.d1??null,
-    source:winner?.src||"none",priceAt:winner?.at?new Date(ts(winner.at)).toISOString().slice(0,10):null,dailySource:daily?.src||"none"};
+    source:winner?.src||"none",priceAt:winner?.at?new Date(ts(winner.at)).toISOString().slice(0,10):null,priceStamp:winner?.at||null,dailySource:daily?.src||"none"};
 }
 const asset = code => (S.market?.funds||[]).find(f => f.code===code) || (()=>{ const x=(S.market?.stocks||[]).find(f=>f.code===code); if(x) return {...x, cat:"hisse", isStock:true}; const y=(S.market?.fx||[]).find(f=>f.code===code); return y ? {...y, isFx:true} : null; })();
 function toast(msg,ms){ document.querySelectorAll(".toast").forEach(x=>x.remove()); const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),ms||2600); }
+
+/* Source price timestamp, distinct from application refresh time.
+   Only show a clock when the price source supplies a timezone-aware timestamp. */
+function fpPriceStamp(raw,now=Date.now()){
+  if(raw==null||raw==="")return null;
+  const t=typeof raw==="string"?raw.trim():raw;
+  if(typeof t==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(t)){
+    const ms=Date.parse(t+"T00:00:00Z");
+    if(!Number.isFinite(ms)||new Date(ms).toISOString().slice(0,10)!==t)return null;
+    const today=new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Istanbul",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(now));
+    if(t>today)return null;
+    return {label:t.slice(8,10)+"."+t.slice(5,7),
+      full:"Fiyat tarihi: "+t.slice(8,10)+"."+t.slice(5,7)+"."+t.slice(0,4)+" · Kaynak saat belirtmedi",precision:"date"};
+  }
+  if(typeof t==="string"&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(t)&&!/(?:Z|[+-]\d{2}:\d{2})$/i.test(t))
+    return fpPriceStamp(t.slice(0,10),now);
+  if(typeof t!=="number"&&!(typeof t==="string"&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})$/i.test(t)))
+    return null;
+  const ms=typeof t==="number"?(t<1e11?t*1000:t):Date.parse(t);
+  if(!Number.isFinite(ms)||ms<946684800000||ms>now+60000)return null;
+  const date=new Date(ms),day=d=>new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Istanbul",year:"numeric",month:"2-digit",day:"2-digit"}).format(d);
+  const d=day(date),today=day(new Date(now));
+  const time=new Intl.DateTimeFormat("tr-TR",{timeZone:"Europe/Istanbul",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(date);
+  return {label:d===today?time:d.slice(8,10)+"."+d.slice(5,7)+" "+time,
+    full:"Kaynak fiyat zamanı: "+d+" "+time+" (Türkiye saati)",precision:"time"};
+}
+function fpPriceStampHtml(raw){
+  const stamp=fpPriceStamp(raw);
+  return stamp?'<span class="fp-quote-stamp" title="'+esc(stamp.full)+'">'+esc(stamp.label)+'</span>':"";
+}
+function fpMarketPriceStamp(t,x){
+  // A fresh tick's timestamp belongs to the displayed price only if both prices match.
+  const code=x?.code,price=Number(x?.price);
+  const live=t==="s"?S.live?.stocks?.[code]:t==="f"?S.live?.funds?.[code]:S.live?.fx?.[code];
+  const tick=t==="s"?LIVE.shortQuotes?.[code]:null;
+  const match=v=>v&&Number.isFinite(Number(v.price??v.p))&&Number.isFinite(price)&&
+    Math.abs(Number(v.price??v.p)-price)<=Math.max(.000001,Math.abs(price)*.000001);
+  const timed=[match(live)?live?.at||live?.priceDate:null,match(tick)?tick?.at||tick?.t:null]
+    .filter(x=>fpPriceStamp(x)?.precision==="time");
+  if(timed.length){
+    const ms=x=>typeof x==="number"?(x<1e11?x*1000:x):Date.parse(x);
+    timed.sort((a,b)=>ms(b)-ms(a));
+    return timed[0];
+  }
+  return x?.priceDate||null;
+}
 
 /* ---------- Açılır satırlar ---------- */
 S.ok = new Set();
@@ -1881,7 +1948,7 @@ function listRow(t,x){
   return `<div class="fund lrow x" data-k="${esc(k)}">
     <div class="sbadge xh${sCls(x.score,t)}">${x.score!=null?num(x.score,0):"–"}</div>
     <div class="lmid xh"><div class="lt"><span class="code">${esc(x.code)}</span>${x.score!=null?`<span class="studio-inline-score${sCls(x.score,t)}" aria-label="Skor ${num(x.score,0)}">${num(x.score,0)}</span>`:""}${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${mine?'<span class="mine">EKLEDİĞİN</span>':""}${stale}</div>
-      <div class="name">${esc(x.name||"")}</div>
+      <div class="name">${esc(x.name||"")}</div>${fpPriceStampHtml(fpMarketPriceStamp(t,x))}
       ${m1!=null?`<div class="lbar"><span>1 ay</span><i><b class="${m1>=0?"p":"n"}" style="width:${Math.max(4,w)}%"></b></i><em class="num ${cls(m1)}">${pc(m1,1)}</em></div>`:""}</div>
     <div class="right xh"><div class="num lp">${t==="x"&&FUTX.has(x.code)?'<span class="small muted" title="Yaklaşık fiyat: vadeli işlem fiyatından hesaplanır">≈ </span>':""}${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="small num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div>
     ${x.exitAt?`<p class="exitw xh" style="grid-column:1/-1">⚠ ${esc(exitTxt(x))}</p>`:""}
@@ -2320,7 +2387,13 @@ function histBlock(code){ const h=(S.hist||{})[code]; if(!h||h.length<2) return 
 
 /* ---------- Hisse ---------- */
 const SIG = {al:"Alınabilir", izle:"İzle", uzak:"Uzak dur"};
-const pickBadge = x => x?.pick ? `<span class="pick">${x.pickAt && (Date.now()-new Date(x.pickAt).getTime() < (studioOn()?2:7)*864e5) ? "YENİ KEŞİF" : "KEŞİF"}</span>` : "";
+// An old pick is still an ordinary stock, but no longer a "new discovery".
+const fpRecentPick=(x,now=Date.now())=>{
+  if(!x?.pick||!x.pickAt)return false;
+  const at=typeof x.pickAt==="number"?(x.pickAt<1e11?x.pickAt*1000:x.pickAt):Date.parse(x.pickAt);
+  return Number.isFinite(at)&&at<=now&&now-at<2*864e5;
+};
+const pickBadge=x=>fpRecentPick(x)?'<span class="pick">YENİ KEŞİF</span>':"";
 function riskBars(r){ r=Math.max(0,Math.min(5,Number(r)||0)); return `<span class="risk g" data-g="Risk" title="Risk ${r}/5">${[1,2,3,4,5].map(i=>`<i class="${i<=r?"on":""}"></i>`).join("")} risk ${r}/5</span>`; }
 function stockRow(x){ return listRow("s",x); }
 function renderHisse(){
@@ -2331,7 +2404,7 @@ function renderHisse(){
   const waiting=S.watch.filter(c=>!st.some(x=>x.code===c));
   v.innerHTML = `
     ${a?.summary?`<section class="card"><h3>Borsa görüşü · ${esc(updLbl())}</h3><p class="summary clamp${xo("hsum")}" data-k="hsum">${esc(clean(a.summary))}</p></section>`:""}
-    ${(()=>{ const pk=[...st.filter(x=>x.pick)].sort((a,b)=>String(b.pickAt).localeCompare(String(a.pickAt)));
+    ${(()=>{ const pk=[...st.filter(fpRecentPick)].sort((a,b)=>String(b.pickAt).localeCompare(String(a.pickAt)));
       return pk.length?`<section class="card"><div class="horizon"><h2>Keşifler</h2><span class="small muted">Listeye yeni eklenen hisseler</span></div>
         ${pk.map(x=>x.isFund?`<div class="fund"><div><span class="code">${esc(x.code)}</span> <span class="score${sCls(x.score,"f")}">${num(x.score,0)}</span> ${pickBadge(x)}<div class="name">${esc(x.name)} · fon</div></div><div class="right"><div class="num">${num(x.price,6)}</div><div class="small num ${cls(x.y1)}">1 yıl ${pc(x.y1,0)}</div></div></div>`:stockRow(x)).join("")}</section>`:""; })()}
     ${allocBlock(a?.short)}
@@ -2366,8 +2439,17 @@ function portfolioRows(pf){
   pf = pf || curPf();
   return pfTrades(pf).filter(t=>t.status!=="closed").map(t => {
     const f=asset(t.code), q=fpQuote(t.code,f,null), cur = q.price ?? f?.price ?? t.price, units = Number.isFinite(t.units)&&t.units>0?t.units:(t.price>0?t.amount/t.price:0), value=units*cur;
-    return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:q.d1??f?.d1, curDate:q.priceAt||f?.priceDate, quoteSource:q.source, days:daysSince(t.buyDate||t.priceDate)};
+    return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:q.d1??f?.d1, curDate:q.priceAt||f?.priceDate, quoteStamp:q.source==="none"?null:q.priceStamp, quoteSource:q.source, days:daysSince(t.buyDate||t.priceDate)};
   });
+}
+function fpClosedReturns(closed){
+ let realized=0,closedCost=0,missing=0;
+ for(const t of Array.isArray(closed)?closed:[]){
+  const amount=Number(t.amount),buy=Number(t.price),sell=Number(t.sellPrice);
+  if(!Number.isFinite(amount)||amount<=0||!Number.isFinite(buy)||buy<=0||!Number.isFinite(sell)||sell<=0){missing++;continue;}
+  realized+=(sell/buy-1)*amount;closedCost+=amount;
+ }
+ return {realized:missing?null:realized,closedCost,missing};
 }
 function groupRows(rows){ const m=new Map();
   rows.forEach(r=>{ const g=m.get(r.code)||{code:r.code,lots:[],amount:0,value:0,units:0}; g.lots.push(r); g.amount+=r.amount; g.value+=r.value; g.units+=r.units; m.set(r.code,g); });
@@ -2402,12 +2484,27 @@ const FP_PFV_KEY="fp-v2-portfolio-values";
 function fpPortSeries(){try{const a=JSON.parse(localStorage.getItem(FP_PFV_KEY)||"{}");return a&&typeof a==="object"?a:{}}catch(_){return {}}}
 function fpPortSnapshot(id,amount,cost){
  if(!id||!Number.isFinite(amount)||amount<0||!Number.isFinite(cost)||cost<0)return;
- const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10),all=fpPortSeries(),a=Array.isArray(all[id])?all[id]:[];
- if(a.length&&a[a.length-1].day===today)Object.assign(a[a.length-1],{value:amount,cost,priced:true});else a.push({day:today,value:amount,cost,priced:true});
- all[id]=a.slice(-365);try{localStorage.setItem(FP_PFV_KEY,JSON.stringify(all))}catch(_){}
+ const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10),all=fpPortSeries(),raw=Array.isArray(all[id])?all[id]:[];
+ const legacy=raw.filter(x=>x&&x.priced!==true);
+ const verified=fpPortChartRows(raw);
+ const next={day:today,value:amount,cost,priced:true},idx=verified.findIndex(x=>x.day===today);
+ if(idx>=0)verified[idx]=next;else verified.push(next);
+ // Preserve unverified legacy records for audit, but never plot them as verified prices.
+ all[id]=[...legacy,...fpPortChartRows(verified)].slice(-365);
+ try{localStorage.setItem(FP_PFV_KEY,JSON.stringify(all))}catch(_){}
+}
+function fpPortChartRows(rows){
+ const today=new Date(Date.now()+3*3600e3).toISOString().slice(0,10),days=new Map();
+ for(const x of Array.isArray(rows)?rows:[]){
+  if(!x||x.priced!==true||typeof x.day!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(x.day)||x.day>today)continue;
+  const t=Date.parse(x.day+"T00:00:00Z");
+  if(!Number.isFinite(t)||new Date(t).toISOString().slice(0,10)!==x.day||!Number.isFinite(x.value)||x.value<0)continue;
+  days.set(x.day,{day:x.day,value:x.value,cost:Number.isFinite(x.cost)&&x.cost>=0?x.cost:null,priced:true});
+ }
+ return [...days.values()].sort((a,b)=>a.day.localeCompare(b.day)).slice(-365);
 }
 function fpPortChart(id){
- const data=(fpPortSeries()[id]||[]).filter(x=>x&&x.priced===true&&Number.isFinite(x.value)&&typeof x.day==="string");
+ const data=fpPortChartRows(fpPortSeries()[id]);
  if(data.length<2)return `<p class="small muted">Pozisyon grafiği için farklı tarihlerde doğrulanabilir fiyat kaynaklarından en az iki günlük kayıt gerekiyor. Önceki belirsiz fiyat kayıtları gösterilmez.</p>`;
  const w=320,h=110;
  const all=[...data.map(x=>x.value),...data.map(x=>x.cost).filter(Number.isFinite)],lower=Math.min(...all),upper=Math.max(...all),width=Math.max(1,upper-lower);
@@ -2821,11 +2918,13 @@ function renderSanal(){
   const cashTotals=cashflows.reduce((a,x)=>{if(x.type==="deposit")a.deposit+=x.amount;else if(x.type==="withdrawal")a.withdrawal+=x.amount;else if(x.type==="dividend")a.dividend+=x.amount;else if(x.type==="fee")a.fee+=x.amount;return a;},{deposit:0,withdrawal:0,dividend:0,fee:0});
   const cashNames={deposit:"Para yatırma",withdrawal:"Para çekme",dividend:"Temettü",fee:"Komisyon"};
   const cashCard=`<section class="card"><div class="horizon"><h2>Nakit ve gelir hareketleri</h2><button class="btn sm" id="pfCashAdd">+ Hareket</button></div>
+    <p class="small muted">Para yatırma, çekme, temettü ve komisyon kayıtların.</p>
     <p class="small muted">Bu kayıtlar ayrı tutulur; eski işlemler için alış/satış nakit kayıtları bulunmadığından toplam portföy değerine otomatik eklenmez.</p>
     <div class="pfstats"><div><span>Yatırılan nakit</span><b class="num">${tl(cashTotals.deposit,2)}</b></div><div><span>Çekilen nakit</span><b class="num">${tl(cashTotals.withdrawal,2)}</b></div><div><span>Temettü</span><b class="num">${tl(cashTotals.dividend,2)}</b></div><div><span>Komisyon</span><b class="num">${tl(cashTotals.fee,2)}</b></div></div>
     ${cashflows.length?cashflows.slice(0,20).map(x=>`<div class="trade"><div><b>${cashNames[x.type]||"Hareket"}</b><div class="small muted">${esc(x.date)}${x.note?" · "+esc(x.note):""}</div></div><div class="right"><b class="num">${tl(x.amount,2)}</b><button class="btn ghost sm" data-cashdel="${esc(x.id)}">Sil</button></div></div>`).join(""):`<p class="small muted">Henüz nakit hareketi kaydedilmedi.</p>`}</section>`;
   const notes=(S.journal||[]).filter(x=>x.pf===pf.id).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
   const journalCard=`<section class="card"><div class="horizon"><h2>Yatırım günlüğü</h2><button class="btn sm" id="pfNoteAdd">+ Not</button></div>
+   <p class="small muted">Alım veya satış yaparken nedenini not al; sonra kararını değerlendirebilirsin.</p>
    ${notes.length?notes.slice(0,12).map(x=>`<div class="trade"><div style="min-width:0"><b>${esc(x.title||"Yatırım notu")}</b><div class="small muted">${esc(x.date)} · ${esc(x.body||"")}</div></div><button class="btn ghost sm" data-notedel="${esc(x.id)}">Sil</button></div>`).join(""):`<p class="small muted">Bir yatırım kararı verirken nedenini kaydet; sonra dönüp sonucunu değerlendir.</p>`}</section>`;
   const rows=portfolioRows(pf), closed=pfTrades(pf).filter(t=>t.status==="closed");
   const inv=rows.reduce((s,r)=>s+r.amount,0), val=rows.reduce((s,r)=>s+r.value,0), pnl=val-inv;
@@ -2833,11 +2932,12 @@ function renderSanal(){
   const snapshotVal=fpTrustedHoldingsValue(rows,snapshotToday);
   if(Number.isFinite(snapshotVal))fpPortSnapshot(pf.id,snapshotVal,inv);
   const day=rows.reduce((s,r)=> s + (r.d1!=null && r.curDate && r.curDate>(r.buyDate||r.priceDate) ? r.value*(r.d1/(100+r.d1)) : 0),0);
-  const realized=closed.reduce((s,t)=>s+(t.sellPrice/t.price-1)*t.amount,0);
-  const totalPnl=pnl+realized, costAll=inv+closed.reduce((s,t)=>s+t.amount,0);
+  const closedAudit=fpClosedReturns(closed),realized=closedAudit.realized;
+  const totalPnl=realized===null?null:pnl+realized, costAll=inv+closedAudit.closedCost;
   const allPfTrades=pfTrades(pf),hasLegacy=allPfTrades.length>0;
   const legacyAudit=fpLegacyAudit(allPfTrades);
   const legacyAuditCard=`<section class="card"><div class="horizon"><h2>Eski işlem denetimi</h2><button class="btn ghost sm" id="pfAuditShare">Rapor paylaş</button></div>
+    <p class="small muted">Eski işlemlerde eksik veya tutarsız bilgi var mı kontrol eder; kayıtları değiştirmez.</p>
     <div class="pfstats"><div><span>İşlem kaydı</span><b class="num">${allPfTrades.length}</b></div><div><span>Olası nakit kaydı</span><b class="num">${legacyAudit.candidates.length}</b></div><div><span>Eksik/hatalı kayıt</span><b class="num">${legacyAudit.issues.length}</b></div></div>
     ${legacyAudit.issues.length?`<div class="small muted">${legacyAudit.issues.slice(0,8).map(x=>`<div>• ${esc(x)}</div>`).join("")}${legacyAudit.issues.length>8?"<div>• Diğer sorunlar da mevcut.</div>":""}</div>`:""}
     <p class="small muted">Alış/satış tarihleri ve tutarlarından yalnızca kontrol amaçlı adaylar çıkarıldı. Banka hareketleri doğrulanmadığı için otomatik nakit bakiyesi, XIRR veya TWR hesabına eklenmez.</p></section>`;
@@ -2868,6 +2968,7 @@ function renderSanal(){
     {name:"TWR için nakit dahil NAV",ready:statementResult?.twr!=null,detail:statementResult?.twr!=null?"Ekstre değerlemeleri karşılaştırıldı":"Dış nakit günlerinde toplam portföy değeri gerekli"}
   ];
   const metricStatus=`<section class="card"><div class="horizon"><h2>Gerçek getiri · Veri kontrolü</h2><button class="btn ghost sm" id="pfReturnImport">Ekstre yükle</button></div>
+    <p class="small muted">Ekstren varsa yatırım getirini doğrular; eksik bilgilerle tahmini sonuç üretmez.</p>
     ${statementResult?.xirr!=null?`<div class="pfstats"><div><span>XIRR (yıllık)</span><b class="num">${pc(statementResult.xirr*100)}</b></div><div><span>TWR (toplam)</span><b class="num">${statementResult.twr!=null?pc(statementResult.twr*100):"—"}</b></div></div><p class="small muted">Ekstre kapanışı: ${esc(statementAsOf||"bilinmiyor")}. ${statementIsHistorical?"Bu geçmiş tarihli getiri hesabıdır; güncel portföy getirisi değildir. ":""}Ekstre kaynağının gerçekliği uygulama tarafından teyit edilemez.</p>`:
       `<p class="small muted">XIRR/TWR için eksiksiz ekstre ve nakit dahil portföy değerlemeleri gerekli. Gerçek dışı getiri sonucu gösterilmez.</p>`}
     ${statementResult?.errors?.length?`<div class="small muted">${statementResult.errors.slice(0,5).map(e=>`<div>• ${esc(e)}</div>`).join("")}</div>`:""}
@@ -2876,6 +2977,7 @@ function renderSanal(){
     <p class="small muted">Pozisyon grafiği nakit içermiyor ve TWR için kullanılamaz. Açık/gerçekleşmiş kâr-zarar, yıllıklandırılmış XIRR/TWR değildir.</p></section>`;
   const groups=groupRows(rows),maxPosition=groups[0],maxWeight=val>0&&maxPosition?100*maxPosition.value/val:0;
   const riskBlock=`<section class="card"><div class="horizon"><h2>Portföy risk radarı</h2></div>
+   <p class="small muted">Tek bir varlığa fazla para ayırıp ayırmadığını gösterir.</p>
    <div class="pfstats"><div><span>Farklı varlık</span><b class="num">${groups.length}</b></div>
    <div><span>En büyük pozisyon</span><b class="num">${maxPosition?esc(maxPosition.code):"–"}</b></div>
    <div><span>En büyük ağırlık</span><b class="num ${maxWeight>35?"down":""}">${num(maxWeight,1)}%</b></div></div>
@@ -2885,27 +2987,20 @@ function renderSanal(){
   v.innerHTML = `
     <section class="card pfhero">
       <div class="pfh"><div class="pfl"><button class="pfpick" id="pfPick" aria-expanded="${!!S.pfOpen}">${esc(pf.name)} <span>${S.pfs.length>1?"▾ değiştir":"▾"}</span></button><b class="num pfv">${tl2(val)}</b>
-          <div class="num ${cls(totalPnl)} pfp">${totalPnl>=0?"▲ +":"▼ "}${tl2(totalPnl)} ${costAll?`<span>(${pc(totalPnl/costAll*100)})</span>`:""}</div>
+          <div class="num ${totalPnl===null?"":cls(totalPnl)} pfp">${totalPnl===null?"—":`${totalPnl>=0?"▲ +":"▼ "}${tl2(totalPnl)} ${costAll?`<span>(${pc(totalPnl/costAll*100)})</span>`:""}`}</div>
           <div class="small muted">toplam kâr/zarar · <span style="white-space:nowrap">son gün</span> <span class="num ${cls(day)}" style="white-space:nowrap">${day>=0?"+":""}${tl2(day)}</span></div></div>
         ${mix.length?donut(mix):""}</div>
       ${mix.length?`<div class="legend">${mix.map(m=>`<span><i class="bar-${m.c}"></i>${CAT[m.c]} <b class="num">%${num(m.w,0)}</b></span>`).join("")}</div>`:""}
       <div class="pfstats"><div><span>Yatırılan</span><b class="num">${tl2(inv)}</b></div><div><span>Açık K/Z</span><b class="num ${cls(pnl)}">${pnl>=0?"+":""}${tl2(pnl)}</b></div>
-        <div><span>Gerçekleşen</span><b class="num ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</b></div></div>
+        <div><span>Gerçekleşen</span><b class="num ${realized===null?"":cls(realized)}">${realized===null?"—":`${realized>=0?"+":""}${tl2(realized)}`}</b></div></div>
     </section>
-    ${head}
-    <section class="card"><div class="horizon"><h2>Portföy değer geçmişi</h2><span class="small muted">Gerçek kayıtlar</span></div>${fpPortChart(pf.id)}</section>
-    ${cashCard}
-    ${legacyAuditCard}
-    ${journalCard}
-    ${metricStatus}
-    ${riskBlock}
-    <section class="card"><div class="horizon"><h2>Pozisyonlar</h2><button class="btn sm" id="goAdd">+ Ekle</button></div>
+    <section class="card pf-positions"><div class="horizon"><h2>Pozisyonlar</h2><button class="btn sm" id="goAdd">+ Ekle</button></div>
       ${rows.length ? groupRows(rows).map(g=>{ const [k,lab,why]=advise(g,val), one=g.lots.length===1, r0=g.lots[0];
         const lotLine=(r,nd)=>`<div class="small muted num">${nd?"":fmtDate(r.buyDate||r.priceDate)+" · "}${tl2(r.amount)} · ${num(r.units,r.units<100?4:0)} adet · alış ${num(r.price,6)} → ${num(r.cur,6)} · ${r.curDate?esc(r.curDate):"Tarih bilinmiyor"}${r.days?` · günlük ort. ${pc(r.pnlPct/r.days,2)}`:""}</div>`;
         const acts=r=>`<div class="acts"><button class="btn ghost sm" data-del="${esc(r.id)}">Sil</button><button class="btn ghost sm" data-edit="${esc(r.id)}" style="margin-left:0">Düzenle</button><button class="btn ghost sm" data-sell="${esc(r.id)}" style="margin-left:0">Sat</button></div>`;
         return `<div class="trade x${xo("g:"+g.code)}" data-k="g:${esc(g.code)}">
         <div class="xh"><span class="code">${esc(g.code)}</span> <span class="adv adv-${k}">${esc(lab)}</span>
-          <div class="small muted">${one?(g.days!=null?`${g.days} gün · `:""):`${g.lots.length} alım · `}${tl2(g.amount)}</div></div>
+          <div class="small muted">${one?(g.days!=null?`${g.days} gün · `:""):`${g.lots.length} alım · `}${tl2(g.amount)}</div>${fpPriceStampHtml(g.lots[0].quoteStamp)}</div>
         <div class="right xh"><div class="num">${tl2(g.value)}</div><div class="num small ${cls(g.pnl)}">${g.pnl>=0?"+":""}${tl2(g.pnl)} (${pc(g.pnlPct)})</div></div>
         <p class="why" style="grid-column:1/-1;margin:2px 0 0">${esc(why)}</p>
         ${one ? `<div style="grid-column:1/-1">${lotLine(r0)}</div>${acts(r0)}`
@@ -2914,12 +3009,26 @@ function renderSanal(){
         </div>`}).join("")
       : `<div class="empty">Bu portföy boş. "+ Ekle" ile gerçek alımlarını (tarih ve adet/fiyatla) ya da deneme alımlarını gir.</div>`}
     </section>
+    ${closedAudit.missing?`<p class="small muted">Gerçekleşmiş getiri hesaplanamadı: ${closedAudit.missing} kapanmış işlemde geçerli alış, satış fiyatı veya tutar eksik. Toplam K/Z gösterilmiyor.</p>`:""}
+    ${head}
     ${closed.length ? `<section class="card"><div class="horizon"><h2>Kapanan işlemler</h2><span class="num small ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</span></div>
       ${closed.map(t=>{const p=(t.sellPrice/t.price-1)*t.amount; return `<div class="trade"><div><span class="code">${esc(t.code)}</span> <span class="small muted">${tl2(t.amount)} · ${fmtDate(t.buyDate||t.priceDate)} → ${fmtDate(t.sellDate)}</span></div>
         <div class="right num ${cls(p)}">${p>=0?"+":""}${tl2(p)}</div>
         <div class="acts"><button class="btn ghost sm" data-del="${esc(t.id)}">Sil</button></div></div>`}).join("")}</section>` : ""}
-    <div id="planBox" style="display:flex;flex-direction:column;gap:inherit"></div>`;
+    <details class="pf-extras" id="pfExtras"${S.pfExtrasOpen?" open":""}>
+      <summary><span class="pf-extras-label"><b>Diğer araçlar</b><small>Değer geçmişi, nakit, notlar, getiri ve risk</small></span><span class="pf-extras-arrow" aria-hidden="true">⌄</span></summary>
+      <div class="pf-extras-body">
+        <section class="card"><div class="horizon"><h2>Portföy değer geçmişi</h2><span class="small muted">Gerçek kayıtlar</span></div><p class="small muted">Elindeki varlıkların zaman içindeki değeri; nakit bakiyesi dahil değil.</p>${fpPortChart(pf.id)}</section>
+    ${cashCard}
+    ${legacyAuditCard}
+    ${journalCard}
+    ${metricStatus}
+    ${riskBlock}
+        <div id="planBox" style="display:flex;flex-direction:column;gap:7px"></div>
+      </div>
+    </details>`;
   bindPf(pf);
+  v.querySelector("#pfExtras")?.addEventListener("toggle", e=>{ S.pfExtrasOpen=e.currentTarget.open; });
   $("goAdd").onclick = () => openBuy(null);
   $("pfReturnImport").onclick=()=>fpReturnEvidenceSheet(pf);
   $("pfAuditShare").onclick=()=>{
@@ -2973,7 +3082,14 @@ function openCashflow(pf){
 }
 function bindPf(pf){
   document.querySelectorAll("[data-pfsel]").forEach(b=>b.onclick=()=>{ S.pf=b.dataset.pfsel; try{localStorage.setItem("fp-pf",S.pf)}catch(_){}; renderSanal(); });
-  const pk=$("pfPick"); if(pk) pk.onclick=()=>{ S.pfOpen=!S.pfOpen; $("pfMgr").classList.toggle("closed",!S.pfOpen); pk.setAttribute("aria-expanded",S.pfOpen); };
+  const pk=$("pfPick"); if(pk) pk.onclick=()=>{
+    S.pfOpen=!S.pfOpen;
+    const manager=$("pfMgr"),summary=pk.closest(".pfhero"),positions=$("v-sanal")?.querySelector(".pf-positions");
+    manager.classList.toggle("closed",!S.pfOpen);
+    // The chooser appears below the overview only while it is open.
+    if(S.pfOpen)summary?.after(manager); else positions?.after(manager);
+    pk.setAttribute("aria-expanded",S.pfOpen);
+  };
   $("pfSel").onchange = e => { S.pf=e.target.value; try{localStorage.setItem("fp-pf",S.pf)}catch(_){}; renderSanal(); };
   let mode="new";
   $("pfNew").onclick = () => { mode="new"; $("pfForm").hidden=false; $("pfName").value=""; $("pfName").focus(); };
@@ -3356,6 +3472,21 @@ function applyLayout(tab){
   const c=LAY.cards[tab]||{}, ord=c.order||[], hid=c.hidden||[], first={hisse:["Hisseler"],oneri:["Fonlar","Para piyasası","Altın","Hisse","Diğer","Gümüş","Döviz"],doviz:["Döviz"]}[tab]||[];
   const rank=k=>{ const fi=first.indexOf(k); if(fi>=0) return fi-100; const i=ord.indexOf(k); return i>=0?i:1000+keys.indexOf(k); };
   els.sort((a,b)=>rank(a.dataset.lk)-rank(b.dataset.lk)).forEach(e=>{ e.hidden=hid.includes(e.dataset.lk); v.appendChild(e); });
+  // Portfolio: summary -> holdings -> optional audit tools, regardless of old saved card order.
+  // Reorder existing DOM nodes only: positions, controls and transaction listeners stay intact.
+  if(tab==="sanal"){
+    const summary=v.querySelector(":scope > .pfhero");
+    const positions=v.querySelector(":scope > .pf-positions");
+    const extras=v.querySelector(":scope > #pfExtras");
+    if(extras) extras.hidden=false;
+    if(summary) v.prepend(summary);
+    if(summary&&positions){
+      positions.hidden=false;
+      summary.after(positions);
+      const manager=v.querySelector(":scope > #pfMgr");
+      if(manager&&!manager.classList.contains("closed")) summary.after(manager);
+    }
+  }
 }
 function applyTabs(){
   const nav=document.querySelector("nav.tabs"); if(!nav) return;
@@ -3647,14 +3778,14 @@ function fpSignalResults(history,hold=5){
  return {count:eligible,positive,avg:eligible?sum/eligible:null,hitRate:eligible?100*positive/eligible:null,relativeAvg:relativeN?relativeSum/relativeN:null,relativeCount:relativeN,entryDays:entryDays.size};
 }
 function fpScoreDiary(){
- const h=fpHistory();if(!h.length)return `<section class="card"><h2>Skor günlüğü</h2><p class="small muted">Yeni taramalar geldikçe gerçek puan geçmişi birikecek; geçmiş tarihler için tahmin üretilmez.</p></section>`;
+ const h=fpHistory();if(!h.length)return `<section class="card"><details class="fp-score-diary"><summary>Skor günlüğü <span class="small muted">Henüz kayıt yok</span></summary><p class="small muted">Yeni taramalar geldikçe gerçek puan geçmişi birikecek; geçmiş tarihler için tahmin üretilmez.</p></details></section>`;
  const latest=h[h.length-1],prev=h.length>1?h[h.length-2]:null,results=fpSignalResults(h);
  const changes=prev?latest.items.map(x=>{const old=prev.items.find(y=>y.code===x.code);return old?{...x,delta:x.score-old.score}:null}).filter(Boolean).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta)).slice(0,7):[];
- return `<section class="card"><div class="horizon"><h2>Skor günlüğü</h2><span class="small muted">${h.length} tarama · ${esc(latest.asOf||"")}</span></div>
- ${changes.length?changes.map(x=>`<div class="trade" data-st="${esc(x.code)}"><b class="code">${esc(x.code)}</b><span class="small muted">Önceki ${x.score-x.delta} → ${x.score}</span><b class="num ${cls(x.delta)}">${x.delta>0?"+":""}${x.delta}</b></div>`).join(""):`<p class="small muted">Değişimleri göstermek için iki farklı günlük tarama kaydı gerekiyor.</p>`}
+ return `<section class="card"><details class="fp-score-diary"><summary><strong>Skor günlüğü</strong><span class="small muted">${h.length} tarama · ${esc(latest.asOf||"")}</span></summary><div class="fp-score-diary-body">
+ ${changes.length?changes.map(x=>`<div class="fp-score-change" data-st="${esc(x.code)}"><b class="code">${esc(x.code)}</b><span class="fp-score-range">${x.score-x.delta} → ${x.score}</span><b class="num ${cls(x.delta)}">${x.delta>0?"+":""}${x.delta}</b></div>`).join(""):`<p class="small muted">Değişimleri göstermek için iki farklı günlük tarama kaydı gerekiyor.</p>`}
  ${results.count?`<div class="pfstats"><div><span>5 tarama sonrası yükselen</span><b class="num">% ${num(results.hitRate,1)}</b></div><div><span>Ortalama fiyat değişimi</span><b class="num ${cls(results.avg)}">${pc(results.avg,2)}</b></div><div><span>BIST 100'e göre ort. fark</span><b class="num ${cls(results.relativeAvg)}">${results.relativeAvg==null?"Veri yok":pc(results.relativeAvg,2)}</b></div><div><span>Ölçülen sinyal</span><b class="num">${results.count}</b></div></div>`:`<p class="small muted">${h.length<6?`5 sonraki taramayı değerlendirmek için ${6-h.length} yeni tarihli kayıt gerekiyor.`:`Beş sonraki taramada tarihli fiyatla eşleşen 80+ sinyal bulunamadı; sonuç üretilmedi.`}</p>`}
  ${results.count>0&&(results.count<30||results.entryDays<5)?`<p class="small muted">Ön gözlem: ${results.count} sinyal, ${results.entryDays} farklı başlangıç günü. Aynı gündeki hisseler bağımsız örnek değildir; bu oran yatırım kararı için güvenilir bir başarı tahmini sayılmaz.</p>`:""}
- <p class="small muted">Yalnız bu cihazda kaydedilen taramalardan hesaplanır. 5 tarama aralığı yaklaşık bir işlem haftasıdır, sabit süre değildir. Temettü ve bölünme düzeltmeleri dahil değildir. BIST farkı yalnız aynı tarihlerde endeks fiyatı kayıtlıysa hesaplanır. Gelecek getiri tahmini değildir.</p></section>`;
+ <p class="small muted">Yalnız bu cihazda kaydedilen taramalardan hesaplanır. 5 tarama aralığı yaklaşık bir işlem haftasıdır, sabit süre değildir. Temettü ve bölünme düzeltmeleri dahil değildir. BIST farkı yalnız aynı tarihlerde endeks fiyatı kayıtlıysa hesaplanır. Gelecek getiri tahmini değildir.</p></div></details></section>`;
 }
 /* Kisa vadede eksik gunluk yuzde varsa sunucudaki yeni taramayi bir kez kontrol et.
    Eski localStorage verisiyle acilsa bile 30 dakika engeline takilmasin.
@@ -4634,7 +4765,7 @@ if(window.__standalone){
   const stCls=s=>{ const mk=stMarket(); return s<20?" lo":mk&&!mk.up?" mid":s>=80?" hi":" mid"; };
   const stRow=it=>{ const own=(S.market?.stocks||[]).find(x=>x.code===it.code), inL=!!own, q=fpQuote(it.code,own,it), day=q.d1, price=q.price??it.price;
     return `<div class="fund lrow st-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div>
-      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${it.score!=null?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${num(it.score,0)}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
+      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${it.score!=null?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${num(it.score,0)}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>${fpPriceStampHtml(q.price!=null?q.priceStamp:it.date)}
       ${!studioOn()&&(it.tags||[]).length?`<div class="st-tags">${it.tags.map(esc).join(" · ")}</div>`:""}</div>
       <div class="right"><div class="num lp">${price>0?Number(price).toLocaleString("tr-TR",{maximumFractionDigits:price<10?4:2}):"–"}</div>${day!=null?`<div class="small num ${cls(day)}">${pc(day,2)}</div>`:""}</div></div>`; };
   const mkText=mk=>!mk?"":mk.up?`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} üstünde. Kısa vadeli alım için ortam uygun; yine de küçük tutarla gir.`
@@ -4860,6 +4991,141 @@ function studio2RenderGundem(){
   {const style=document.createElement("style");
    style.textContent='html[data-design="modern"] .studio-controls-card{margin-top:8px;padding:12px!important;gap:8px!important}html[data-design="modern"] .studio-controls-title{font:700 12px var(--f-body);letter-spacing:.04em;color:var(--muted);margin-bottom:3px}html[data-design="modern"] .studio-controls-card .lfbar{margin:0}html[data-design="modern"] .studio-controls-card .addrow{margin:0}html[data-design="modern"] #v-hisse .st-row{min-height:0}';
    document.head.appendChild(style);}
+  // 2.1: ortak yoğunluk standardı; yalnız modern tema ve liste/portföy ekranları.
+  {const compact=document.createElement("style");compact.id="fp21-compact-density";
+   compact.textContent=`
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal) section.card{padding:10px 12px;gap:7px;border-radius:12px;margin-block:6px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal) section.card h2{font-size:15px;line-height:1.25;margin-block:0 4px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .lrow{padding-block:6px;min-height:0;gap:6px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fgrp .fgh{padding-block:7px 5px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .studio-controls-card{padding:9px 11px!important;gap:6px!important;margin-top:5px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .studio-controls-title{margin-bottom:0}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .lfbar{gap:5px}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .addrow{gap:5px}
+html[data-design="modern"] #v-sanal .pfstats{gap:6px}
+html.apk[data-design="modern"] header{padding-block:7px 5px;margin-bottom:5px}
+html.apk[data-design="modern"] header .brand{margin-bottom:3px}
+html.apk[data-design="modern"] header .brand h1{line-height:1.15}
+html.apk[data-design="modern"] header .fresh{margin-block:3px}
+html.apk[data-design="modern"] nav.tabs{padding:3px 3px calc(4px + env(safe-area-inset-bottom,0px))}
+html.apk[data-design="modern"] nav.tabs button{padding:4px 0 3px;gap:1px;font-size:10px}
+html.apk[data-design="modern"] nav.tabs button svg{width:19px;height:19px}
+html.apk .sheet.st .st-top{min-height:48px;padding:8px 14px}
+html.apk .sheet.st .st-top h2{font-size:18px}
+/* Genuine source stamp, shown in a low-priority compact line. */
+html :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal) .fp-quote-stamp{
+  display:block;margin-top:1px;font:500 10px/1.15 var(--f-body);
+  color:var(--muted);opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .lmid{gap:1px}
+html[data-design="modern"] #v-hisse .st-view .st-row .fp-quote-stamp{font-size:10px;line-height:1.1}
+html[data-design="modern"] #v-sanal .trade.x .fp-quote-stamp{margin-top:1px}
+html.apk #v-sanal .pf-extras,html #v-sanal .pf-extras{
+  display:block;border:1px solid var(--line);border-radius:11px;background:var(--card);overflow:hidden
+}
+html #v-sanal .pf-extras > summary{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  list-style:none;cursor:pointer;padding:10px 12px;min-height:46px
+}
+html #v-sanal .pf-extras > summary::-webkit-details-marker{display:none}
+html #v-sanal .pf-extras-label{display:flex;flex-direction:column;gap:3px;min-width:0}
+html #v-sanal .pf-extras-label b{font-size:14px;line-height:1.2}
+html #v-sanal .pf-extras-label small{color:var(--muted);font-size:11px;line-height:1.25}
+html #v-sanal .pf-extras-arrow{color:var(--muted);font-size:21px;transition:transform .15s;flex-shrink:0}
+html #v-sanal .pf-extras[open] .pf-extras-arrow{transform:rotate(180deg)}
+html #v-sanal .pf-extras-body{display:flex;flex-direction:column;gap:7px;padding:0 9px 9px}
+html #v-sanal .pf-extras-body > .card{margin:0!important}
+
+/* Tema 2 2.1: screenshot-informed compact discovery layout (Hisseler / Kisa).
+   Preserve stock name, score, quote, change, controls, and 44px touch targets. */
+html.apk[data-design="modern"] .wrap{gap:7px!important}
+html.apk[data-design="modern"] header{padding-top:5px;padding-bottom:5px;gap:3px;box-shadow:none}
+html.apk[data-design="modern"] header .brand{margin-bottom:0}
+html.apk[data-design="modern"] header .brand h1{font-size:23px;line-height:1.15}
+html.apk[data-design="modern"] #fp-discovery-tabs{
+  margin:3px 0 1px!important;gap:4px!important;justify-content:flex-start!important
+}
+html.apk[data-design="modern"] #fp-discovery-tabs button{
+  min-height:36px;padding:6px 9px;border-radius:8px;font-size:11px
+}
+html.apk[data-design="modern"] #v-hisse > section.card:has(.studio-hm-tabs){
+  margin:0!important;padding:5px 9px!important;gap:0!important;
+  min-height:44px;border-radius:9px;box-shadow:none
+}
+html.apk[data-design="modern"] #v-hisse > section.card:has(.studio-hm-tabs) .horizon{
+  min-height:40px;padding:0!important;border:0!important;gap:6px
+}
+html.apk[data-design="modern"] #v-hisse > section.card:has(.studio-hm-tabs) h2{
+  font-size:15px!important;white-space:nowrap
+}
+html.apk[data-design="modern"] #v-hisse .studio-hm-tabs{
+  margin-left:auto;flex-shrink:0;padding:1px;border-radius:8px
+}
+html.apk[data-design="modern"] #v-hisse .studio-hm-tabs button{
+  min-height:36px;min-width:44px;padding:6px 8px
+}
+html.apk[data-design="modern"] #v-hisse .st-view{gap:5px}
+html.apk[data-design="modern"] #v-hisse .st-view > section.card{
+  margin:0!important;padding:9px 10px!important;gap:5px!important;border-radius:10px
+}
+html.apk[data-design="modern"] #v-hisse .st-view > section.card:has(> .fp-score-diary){
+  border:0;background:transparent;box-shadow:none;padding:0 4px!important
+}
+html.apk[data-design="modern"] #v-hisse .st-view .fp-score-diary > summary{
+  min-height:36px;gap:6px;font-size:12px
+}
+html.apk[data-design="modern"] #v-hisse .st-view .fp-score-diary > summary .small{
+  font-size:10px
+}
+html.apk[data-design="modern"] #v-hisse .st-view .horizon{
+  padding:0 0 6px!important;gap:6px
+}
+html.apk[data-design="modern"] #v-hisse .st-view .horizon h2{
+  font-size:15px!important
+}
+html.apk[data-design="modern"] #v-hisse .st-view .horizon .small{
+  font-size:10px;text-align:right
+}
+html.apk[data-design="modern"] #v-hisse .st-view .fund.lrow.st-row{
+  min-height:44px!important;padding:6px 1px!important;
+  grid-template-columns:minmax(0,1fr) minmax(82px,auto)!important;
+  align-items:center;column-gap:7px!important;row-gap:0!important
+}
+html.apk[data-design="modern"] #v-hisse .st-view .st-row .lmid{
+  gap:1px;align-self:center
+}
+html.apk[data-design="modern"] #v-hisse .st-view .st-row .lmid .lt{
+  gap:4px;line-height:1.15
+}
+html.apk[data-design="modern"] #v-hisse .st-view .st-row .lmid .code{
+  font-size:14px;line-height:1.15
+}
+html.apk[data-design="modern"] #v-hisse .st-view .st-row .lmid .name{
+  font-size:11px;line-height:1.2;white-space:nowrap;display:block;
+  overflow:hidden;text-overflow:ellipsis
+}
+html.apk[data-design="modern"] #v-hisse .st-view .st-row .studio-inline-score{
+  font-size:11px
+}
+html.apk[data-design="modern"] #v-hisse .st-view .st-row .right{
+  align-self:center;padding-top:0;line-height:1.15
+}
+html.apk[data-design="modern"] #v-hisse .st-view .st-row .right .lp{
+  font-size:14px;line-height:1.2
+}
+html.apk[data-design="modern"] #v-hisse .st-view .st-row .right .small{
+  font-size:10px;line-height:1.2
+}
+html.apk[data-design="modern"] nav.tabs button[data-fp-v2]{
+  min-height:48px;padding:3px 0;gap:2px
+}
+@media(max-width:365px){
+  html.apk[data-design="modern"] #v-hisse .st-view .horizon .small{font-size:9px}
+  html.apk[data-design="modern"] #v-hisse .st-view .fund.lrow.st-row{column-gap:4px!important}
+}
+
+`;
+   document.head.appendChild(compact);}
   // Veri bu katman yüklenmeden gelmiş olabilir: yeni görünümle (puan halkası, Bugün ekranı) hemen yeniden çiz
   try{ if(studioOn()&&S.tab==="gundem") renderGundem(); if(S.market) renderAll(); }catch(e){ console.error(e); }
   renderFresh(); setTimeout(()=>apkCheck(false),4000);

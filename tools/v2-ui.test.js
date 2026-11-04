@@ -170,11 +170,11 @@ assert.ok(html.includes('get("pfCsvText").value=raw'));
 const renderRowStart=html.indexOf("function listRow("),renderRowEnd=html.indexOf("/* Kaleme özel haberler:",renderRowStart);
 assert.ok(renderRowStart>0&&renderRowEnd>renderRowStart);
 const mockState={watch:[],fwatch:[],fxwatch:[]},mkListRow=new Function(
- "S","staleB","studioOn","sCls","num","esc","pickBadge","cls","pc","arr","SIG","exitTxt","FUTX",
+ "S","staleB","studioOn","sCls","num","esc","pickBadge","cls","pc","arr","SIG","exitTxt","FUTX","fpPriceStampHtml","fpMarketPriceStamp",
  html.slice(renderRowStart,renderRowEnd)+";return listRow;"
 );
 const args=[mockState,()=>"",()=>false,n=>n>=80?" hi":"",x=>String(x),x=>String(x),()=>"",()=>"",x=>String(x),()=>"","",()=>"",""];
-args[10]={};args[12]=new Set();
+args[10]={};args[12]=new Set();args[13]=()=>"";args[14]=()=>null; // unrelated timestamp decorators are tested separately
 const classicRow=mkListRow(...args)("s",{code:"AIS",score:94,price:16.5,name:"Ornek hisse",d1:2.5});
 assert.ok(classicRow.includes('studio-inline-score hi'),"classic must render its inline score");
 assert.ok(classicRow.includes('aria-label="Skor 94"'),"score stays accessible without repeated visual label");
@@ -205,3 +205,23 @@ assert.ok(html.includes('if(picked==="classic"||picked==="modern")TH.design=pick
 assert.ok(html.includes('class="fp2-version"'),"product identity should visibly show 2.0");
 for(const dest of ["gundem","discover","sanal","piyasa"])assert.ok(html.includes(JSON.stringify(dest)+":"),"four destinations must have SVG icons");
 console.log("UI scripts and score-history tests passed");
+
+
+// Keşif expires after 48 hours in the section AND in every stock-row badge.
+const discoveryStart=html.indexOf("const fpRecentPick="),
+      discoveryEnd=html.indexOf("function riskBars(",discoveryStart);
+assert.ok(discoveryStart>0&&discoveryEnd>discoveryStart,"discovery age helper exists");
+const discovery=new Function(html.slice(discoveryStart,discoveryEnd)+";return {fpRecentPick,pickBadge};")();
+const asOf=Date.parse("2026-11-04T09:00:00Z");
+assert.equal(discovery.fpRecentPick({pick:true,pickAt:"2026-11-03T09:00:00Z"},asOf),true);
+assert.equal(discovery.fpRecentPick({pick:true,pickAt:"2026-11-02T09:00:01Z"},asOf),true);
+assert.equal(discovery.fpRecentPick({pick:true,pickAt:"2026-11-02T09:00:00Z"},asOf),false,"48h-old picks expire");
+assert.equal(discovery.fpRecentPick({pick:true,pickAt:"2026-10-01T09:00:00Z"},asOf),false,"old picks expire");
+assert.equal(discovery.fpRecentPick({pick:true,pickAt:"2026-11-05T09:00:00Z"},asOf),false,"future picks are invalid");
+assert.equal(discovery.fpRecentPick({pick:true},asOf),false,"missing timestamp cannot stay a discovery forever");
+assert.equal(discovery.fpRecentPick({pick:false,pickAt:"2026-11-04T08:00:00Z"},asOf),false);
+assert.match(html,/st\.filter\(fpRecentPick\)/,"discovery section filters expired picks");
+assert.doesNotMatch(html,/st\.filter\(x=>x\.pick\)/,"no unbounded old discovery list");
+assert.match(html,/const pickBadge=x=>fpRecentPick\(x\)/,"badges use the same expiry rule");
+assert.equal(discovery.pickBadge({pick:true,pickAt:"2024-01-01"}),"","expired picks have no badge");
+console.log("discovery two-day list and badge expiry passed");

@@ -1,0 +1,53 @@
+name: Fon Pusulasi 2.1 - Android build validation
+on:
+  push:
+    branches: [feature/fon-pusulasi-v2-1]
+    paths:
+      - 'app/**'
+      - 'ui/**'
+      - 'tools/**'
+      - '.github/workflows/v2-1-android-check.yml'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: 2.1 targeted regression tests
+        run: |
+          set -euo pipefail
+          node tools/v2-1-portfolio-chart.test.js
+          node tools/v2-1-realized-returns.test.js
+          node tools/v2-1-score-diary.test.js
+          node tools/v2-ui.test.js
+          node tools/portfolio-engine.test.js
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '8.9'}
+      - name: Build isolated debug APK (not a production release)
+        run: gradle assembleDebug --no-daemon
+      - name: Verify Android APK and bundled UI
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk=app/build/outputs/apk/debug/app-debug.apk
+          test -s "$apk"
+          unzip -tq "$apk" >/dev/null
+          unzip -p "$apk" assets/index.html | cmp - ui/index.html
+          sdk="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          dir="$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          "$dir/aapt" dump badging "$apk" | grep -q "^package: name='com.yasin.yatirimapp.preview'"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Fon-Pusulasi-2-1-Android-Validation
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14
