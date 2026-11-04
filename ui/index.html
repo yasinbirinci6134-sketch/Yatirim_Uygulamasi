@@ -1792,10 +1792,56 @@ function fpQuote(code,base,scan){
   const daily=candidates.filter(c=>typeof c.v?.d1==="number"&&Number.isFinite(c.v.d1)&&ts(c.at)<=Date.now()+3600000&&(!winner||!ts(winner.at)||!ts(c.at)||Math.abs(ts(c.at)-ts(winner.at))<=36*3600000))
     .sort((a,b)=>ts(b.at)-ts(a.at))[0];
   return {price:winner?.v.price??null,d1:daily?.v.d1??null,
-    source:winner?.src||"none",priceAt:winner?.at?new Date(ts(winner.at)).toISOString().slice(0,10):null,dailySource:daily?.src||"none"};
+    source:winner?.src||"none",priceAt:winner?.at?new Date(ts(winner.at)).toISOString().slice(0,10):null,priceStamp:winner?.at||null,dailySource:daily?.src||"none"};
 }
 const asset = code => (S.market?.funds||[]).find(f => f.code===code) || (()=>{ const x=(S.market?.stocks||[]).find(f=>f.code===code); if(x) return {...x, cat:"hisse", isStock:true}; const y=(S.market?.fx||[]).find(f=>f.code===code); return y ? {...y, isFx:true} : null; })();
 function toast(msg,ms){ document.querySelectorAll(".toast").forEach(x=>x.remove()); const t=document.createElement("div"); t.className="toast"; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),ms||2600); }
+
+/* Source price timestamp, distinct from application refresh time.
+   Only show a clock when the price source supplies a timezone-aware timestamp. */
+function fpPriceStamp(raw,now=Date.now()){
+  if(raw==null||raw==="")return null;
+  const t=typeof raw==="string"?raw.trim():raw;
+  if(typeof t==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(t)){
+    const ms=Date.parse(t+"T00:00:00Z");
+    if(!Number.isFinite(ms)||new Date(ms).toISOString().slice(0,10)!==t)return null;
+    const today=new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Istanbul",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(now));
+    if(t>today)return null;
+    return {label:"Fiyat günü: "+t.slice(8,10)+"."+t.slice(5,7),
+      full:"Fiyat tarihi: "+t.slice(8,10)+"."+t.slice(5,7)+"."+t.slice(0,4)+" · Kaynak saat belirtmedi",precision:"date"};
+  }
+  if(typeof t==="string"&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(t)&&!/(?:Z|[+-]\d{2}:\d{2})$/i.test(t))
+    return fpPriceStamp(t.slice(0,10),now);
+  if(typeof t!=="number"&&!(typeof t==="string"&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})$/i.test(t)))
+    return null;
+  const ms=typeof t==="number"?(t<1e11?t*1000:t):Date.parse(t);
+  if(!Number.isFinite(ms)||ms<946684800000||ms>now+60000)return null;
+  const date=new Date(ms),day=d=>new Intl.DateTimeFormat("sv-SE",{timeZone:"Europe/Istanbul",year:"numeric",month:"2-digit",day:"2-digit"}).format(d);
+  const d=day(date),today=day(new Date(now));
+  const time=new Intl.DateTimeFormat("tr-TR",{timeZone:"Europe/Istanbul",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false}).format(date);
+  return {label:d===today?"Fiyat: "+time:"Fiyat: "+d.slice(8,10)+"."+d.slice(5,7)+" "+time,
+    full:"Kaynak fiyat zamanı: "+d+" "+time+" (Türkiye saati)",precision:"time"};
+}
+function fpPriceStampHtml(raw){
+  const stamp=fpPriceStamp(raw);
+  return stamp?'<span class="fp-quote-stamp" title="'+esc(stamp.full)+'">'+esc(stamp.label)+'</span>':"";
+}
+function fpMarketPriceStamp(t,x){
+  // A fresh tick's timestamp belongs to the displayed price only if both prices match.
+  const code=x?.code,price=Number(x?.price);
+  const live=t==="s"?S.live?.stocks?.[code]:t==="f"?S.live?.funds?.[code]:S.live?.fx?.[code];
+  const tick=t==="s"?LIVE.shortQuotes?.[code]:null;
+  const match=v=>v&&Number.isFinite(Number(v.price??v.p))&&Number.isFinite(price)&&
+    Math.abs(Number(v.price??v.p)-price)<=Math.max(.000001,Math.abs(price)*.000001);
+  const timed=[match(live)?live?.at||live?.priceDate:null,match(tick)?tick?.at||tick?.t:null]
+    .filter(x=>fpPriceStamp(x)?.precision==="time");
+  if(timed.length){
+    const ms=x=>typeof x==="number"?(x<1e11?x*1000:x):Date.parse(x);
+    timed.sort((a,b)=>ms(b)-ms(a));
+    return timed[0];
+  }
+  return x?.priceDate||null;
+}
 
 /* ---------- Açılır satırlar ---------- */
 S.ok = new Set();
@@ -1902,7 +1948,7 @@ function listRow(t,x){
   return `<div class="fund lrow x" data-k="${esc(k)}">
     <div class="sbadge xh${sCls(x.score,t)}">${x.score!=null?num(x.score,0):"–"}</div>
     <div class="lmid xh"><div class="lt"><span class="code">${esc(x.code)}</span>${x.score!=null?`<span class="studio-inline-score${sCls(x.score,t)}" aria-label="Skor ${num(x.score,0)}">${num(x.score,0)}</span>`:""}${x.signal?`<span class="sig sig-${esc(x.signal)}">${esc(SIG[x.signal]||x.signal)}</span>`:""}${x.exitAt?'<span class="exitb">ÇIKACAK</span>':""}${pickBadge(x)}${mine?'<span class="mine">EKLEDİĞİN</span>':""}${stale}</div>
-      <div class="name">${esc(x.name||"")}</div>
+      <div class="name">${esc(x.name||"")}</div>${fpPriceStampHtml(fpMarketPriceStamp(t,x))}
       ${m1!=null?`<div class="lbar"><span>1 ay</span><i><b class="${m1>=0?"p":"n"}" style="width:${Math.max(4,w)}%"></b></i><em class="num ${cls(m1)}">${pc(m1,1)}</em></div>`:""}</div>
     <div class="right xh"><div class="num lp">${t==="x"&&FUTX.has(x.code)?'<span class="small muted" title="Yaklaşık fiyat: vadeli işlem fiyatından hesaplanır">≈ </span>':""}${Number(x.price).toLocaleString("tr-TR",{maximumFractionDigits:dg})}</div><div class="small num ${cls(x.d1)}">${arr(x.d1)}${pc(x.d1)}</div></div>
     ${x.exitAt?`<p class="exitw xh" style="grid-column:1/-1">⚠ ${esc(exitTxt(x))}</p>`:""}
@@ -2387,7 +2433,7 @@ function portfolioRows(pf){
   pf = pf || curPf();
   return pfTrades(pf).filter(t=>t.status!=="closed").map(t => {
     const f=asset(t.code), q=fpQuote(t.code,f,null), cur = q.price ?? f?.price ?? t.price, units = Number.isFinite(t.units)&&t.units>0?t.units:(t.price>0?t.amount/t.price:0), value=units*cur;
-    return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:q.d1??f?.d1, curDate:q.priceAt||f?.priceDate, quoteSource:q.source, days:daysSince(t.buyDate||t.priceDate)};
+    return {...t, units, cur, value, pnl:value-t.amount, pnlPct:(cur/t.price-1)*100, d1:q.d1??f?.d1, curDate:q.priceAt||f?.priceDate, quoteStamp:q.source==="none"?null:q.priceStamp, quoteSource:q.source, days:daysSince(t.buyDate||t.priceDate)};
   });
 }
 function fpClosedReturns(closed){
@@ -2948,7 +2994,7 @@ function renderSanal(){
         const acts=r=>`<div class="acts"><button class="btn ghost sm" data-del="${esc(r.id)}">Sil</button><button class="btn ghost sm" data-edit="${esc(r.id)}" style="margin-left:0">Düzenle</button><button class="btn ghost sm" data-sell="${esc(r.id)}" style="margin-left:0">Sat</button></div>`;
         return `<div class="trade x${xo("g:"+g.code)}" data-k="g:${esc(g.code)}">
         <div class="xh"><span class="code">${esc(g.code)}</span> <span class="adv adv-${k}">${esc(lab)}</span>
-          <div class="small muted">${one?(g.days!=null?`${g.days} gün · `:""):`${g.lots.length} alım · `}${tl2(g.amount)}</div></div>
+          <div class="small muted">${one?(g.days!=null?`${g.days} gün · `:""):`${g.lots.length} alım · `}${tl2(g.amount)}</div>${fpPriceStampHtml(g.lots[0].quoteStamp)}</div>
         <div class="right xh"><div class="num">${tl2(g.value)}</div><div class="num small ${cls(g.pnl)}">${g.pnl>=0?"+":""}${tl2(g.pnl)} (${pc(g.pnlPct)})</div></div>
         <p class="why" style="grid-column:1/-1;margin:2px 0 0">${esc(why)}</p>
         ${one ? `<div style="grid-column:1/-1">${lotLine(r0)}</div>${acts(r0)}`
@@ -4713,7 +4759,7 @@ if(window.__standalone){
   const stCls=s=>{ const mk=stMarket(); return s<20?" lo":mk&&!mk.up?" mid":s>=80?" hi":" mid"; };
   const stRow=it=>{ const own=(S.market?.stocks||[]).find(x=>x.code===it.code), inL=!!own, q=fpQuote(it.code,own,it), day=q.d1, price=q.price??it.price;
     return `<div class="fund lrow st-row" data-st="${esc(it.code)}"><div style="--p:${it.score}" class="sbadge${stCls(it.score)}">${it.score}</div>
-      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${it.score!=null?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${num(it.score,0)}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>
+      <div class="lmid"><div class="lt"><span class="code">${esc(it.code)}</span>${it.score!=null?`<span class="studio-inline-score${stCls(it.score)}" aria-label="Kısa vade skoru ${num(it.score,0)}">${it.score}</span>`:""}${inL?'<span class="mine">LİSTEDE</span>':""}</div><div class="name">${esc(it.name||"")}</div>${fpPriceStampHtml(q.price!=null?q.priceStamp:it.date)}
       ${!studioOn()&&(it.tags||[]).length?`<div class="st-tags">${it.tags.map(esc).join(" · ")}</div>`:""}</div>
       <div class="right"><div class="num lp">${price>0?Number(price).toLocaleString("tr-TR",{maximumFractionDigits:price<10?4:2}):"–"}</div>${day!=null?`<div class="small num ${cls(day)}">${pc(day,2)}</div>`:""}</div></div>`; };
   const mkText=mk=>!mk?"":mk.up?`BIST 100 son 50 günün ortalamasının %${num(Math.abs(mk.dist*100),1)} üstünde. Kısa vadeli alım için ortam uygun; yine de küçük tutarla gir.`
@@ -4960,6 +5006,14 @@ html.apk[data-design="modern"] nav.tabs button{padding:4px 0 3px;gap:1px;font-si
 html.apk[data-design="modern"] nav.tabs button svg{width:19px;height:19px}
 html.apk .sheet.st .st-top{min-height:48px;padding:8px 14px}
 html.apk .sheet.st .st-top h2{font-size:18px}
+/* Genuine source stamp, shown in a low-priority compact line. */
+html :is(#v-hisse,#v-oneri,#v-doviz,#v-sanal) .fp-quote-stamp{
+  display:block;margin-top:1px;font:500 10px/1.15 var(--f-body);
+  color:var(--muted);opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+html[data-design="modern"] :is(#v-hisse,#v-oneri,#v-doviz) .fund.lrow .lmid{gap:1px}
+html[data-design="modern"] #v-hisse .st-view .st-row .fp-quote-stamp{font-size:10px;line-height:1.1}
+html[data-design="modern"] #v-sanal .trade.x .fp-quote-stamp{margin-top:1px}
 html.apk #v-sanal .pf-extras,html #v-sanal .pf-extras{
   display:block;border:1px solid var(--line);border-radius:11px;background:var(--card);overflow:hidden
 }
