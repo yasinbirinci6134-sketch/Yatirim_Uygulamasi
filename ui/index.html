@@ -2954,18 +2954,24 @@ function renderSanal(){
     </section>
     ${closedAudit.missing?`<p class="small muted">Gerçekleşmiş getiri hesaplanamadı: ${closedAudit.missing} kapanmış işlemde geçerli alış, satış fiyatı veya tutar eksik. Toplam K/Z gösterilmiyor.</p>`:""}
     ${head}
-    <section class="card"><div class="horizon"><h2>Portföy değer geçmişi</h2><span class="small muted">Gerçek kayıtlar</span></div>${fpPortChart(pf.id)}</section>
+    <details class="pf-extras" id="pfExtras"${S.pfExtrasOpen?" open":""}>
+      <summary><span class="pf-extras-label"><b>Diğer araçlar</b><small>Değer geçmişi, nakit, notlar, getiri ve risk</small></span><span class="pf-extras-arrow" aria-hidden="true">⌄</span></summary>
+      <div class="pf-extras-body">
+        <section class="card"><div class="horizon"><h2>Portföy değer geçmişi</h2><span class="small muted">Gerçek kayıtlar</span></div><p class="small muted">Elindeki varlıkların zaman içindeki değeri; nakit bakiyesi dahil değil.</p>${fpPortChart(pf.id)}</section>
     ${cashCard}
     ${legacyAuditCard}
     ${journalCard}
     ${metricStatus}
     ${riskBlock}
+      </div>
+    </details>
     ${closed.length ? `<section class="card"><div class="horizon"><h2>Kapanan işlemler</h2><span class="num small ${cls(realized)}">${realized>=0?"+":""}${tl2(realized)}</span></div>
       ${closed.map(t=>{const p=(t.sellPrice/t.price-1)*t.amount; return `<div class="trade"><div><span class="code">${esc(t.code)}</span> <span class="small muted">${tl2(t.amount)} · ${fmtDate(t.buyDate||t.priceDate)} → ${fmtDate(t.sellDate)}</span></div>
         <div class="right num ${cls(p)}">${p>=0?"+":""}${tl2(p)}</div>
         <div class="acts"><button class="btn ghost sm" data-del="${esc(t.id)}">Sil</button></div></div>`}).join("")}</section>` : ""}
     <div id="planBox" style="display:flex;flex-direction:column;gap:inherit"></div>`;
   bindPf(pf);
+  v.querySelector("#pfExtras")?.addEventListener("toggle", e=>{ S.pfExtrasOpen=e.currentTarget.open; });
   $("goAdd").onclick = () => openBuy(null);
   $("pfReturnImport").onclick=()=>fpReturnEvidenceSheet(pf);
   $("pfAuditShare").onclick=()=>{
@@ -3414,6 +3420,8 @@ function applyLayout(tab){
   if(tab==="sanal"){
     const summary=v.querySelector(":scope > .pfhero");
     const positions=v.querySelector(":scope > .pf-positions");
+    const extras=v.querySelector(":scope > #pfExtras");
+    if(extras) extras.hidden=false;
     if(summary) v.prepend(summary);
     if(summary&&positions){
       positions.hidden=false;
@@ -4947,6 +4955,21 @@ html.apk[data-design="modern"] nav.tabs button{padding:4px 0 3px;gap:1px;font-si
 html.apk[data-design="modern"] nav.tabs button svg{width:19px;height:19px}
 html.apk .sheet.st .st-top{min-height:48px;padding:8px 14px}
 html.apk .sheet.st .st-top h2{font-size:18px}
+html.apk #v-sanal .pf-extras,html #v-sanal .pf-extras{
+  display:block;border:1px solid var(--line);border-radius:11px;background:var(--card);overflow:hidden
+}
+html #v-sanal .pf-extras > summary{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  list-style:none;cursor:pointer;padding:10px 12px;min-height:46px
+}
+html #v-sanal .pf-extras > summary::-webkit-details-marker{display:none}
+html #v-sanal .pf-extras-label{display:flex;flex-direction:column;gap:3px;min-width:0}
+html #v-sanal .pf-extras-label b{font-size:14px;line-height:1.2}
+html #v-sanal .pf-extras-label small{color:var(--muted);font-size:11px;line-height:1.25}
+html #v-sanal .pf-extras-arrow{color:var(--muted);font-size:21px;transition:transform .15s;flex-shrink:0}
+html #v-sanal .pf-extras[open] .pf-extras-arrow{transform:rotate(180deg)}
+html #v-sanal .pf-extras-body{display:flex;flex-direction:column;gap:7px;padding:0 9px 9px}
+html #v-sanal .pf-extras-body > .card{margin:0!important}
 
 /* Tema 2 2.1: screenshot-informed compact discovery layout (Hisseler / Kisa).
    Preserve stock name, score, quote, change, controls, and 44px touch targets. */
