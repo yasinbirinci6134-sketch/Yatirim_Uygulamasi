@@ -1,1 +1,1520 @@
-{"advice": {"fx": {"long": {"horizon": "1 yıl ve üstü", "items": [{"code": "GAU", "weight": 60, "why": "Uzun vadede TL değer kaybına ve küresel risklere karşı koruma; düşüşlerde parça parça eklenebilir."}, {"code": "USD", "weight": 25, "why": "Anket 12 ayda ~59 TL bekliyor; kur riskine karşı denge."}, {"code": "EUR", "weight": 15, "why": "Para birimi çeşitlendirmesi."}], "title": "Uzun vade döviz/altın"}, "short": {"horizon": "1–3 ay", "items": [{"code": "GAU", "weight": 55, "why": "Kriz ve kur riskine karşı ana sigorta; döviz ve altın içinde en güçlü seçenek."}, {"code": "USD", "weight": 35, "why": "Düşük oynaklıklı kur koruması; TL faizinin gerisinde kaldığı için sınırlı."}, {"code": "EUR", "weight": 10, "why": "Dolara karşı küçük çeşitlendirme."}], "title": "Kısa vade döviz/altın"}, "summary": "Altın ve gümüş bugün geriledi, dolar 50 liraya dayandı. Dolar ve euro tutmak para piyasası fonunun gerisinde kalıyor; altını küçük bir sigorta payı olarak koru, toplu alım yapma. Gümüşten uzak dur."}, "long": {"horizon": "1 yıl ve üstü", "items": [{"code": "AIS", "weight": 50, "why": "Faiz indirimleri yavaş ilerledikçe düşük kesintili para fonu enflasyonun üstünde kalır."}, {"code": "ALE", "weight": 20, "why": "Acil durum parası için güvenli ve kolay bozdurulan fon."}, {"code": "AFO", "weight": 10, "why": "Uzun vadede TL'nin değer kaybına karşı koruma; düşüşlerde parça parça eklenebilir."}, {"code": "YBS", "weight": 10, "why": "Riski düşük tahvil fonu; faizler düştükçe para fonundan biraz daha fazla kazandırabilir."}, {"code": "AKU", "weight": 10, "why": "Faizler düştükçe borsa toparlanabilir; 3 seferde, araya zaman koyarak al."}], "title": "Uzun vade"}, "short": {"horizon": "1–3 ay", "items": [{"code": "AIS", "weight": 55, "why": "Kesintisi çok düşük, riski en az ve enflasyonun üstünde kazandırıyor."}, {"code": "ALE", "weight": 45, "why": "Büyük ve güvenli para fonu; acil durum parası için kolay bozdurulur."}], "title": "Kısa vade"}, "stocks": {"long": {"horizon": "1 yıl ve üstü", "items": [{"code": "TUPRS", "weight": 20, "why": "Güçlü nakit üreten enerji şirketi."}, {"code": "CCOLA", "weight": 20, "why": "Yurt dışında büyüyen, kârlı şirket."}, {"code": "KCHOL", "weight": 15, "why": "Birçok büyük şirkete ortak; değeri zamanla açılabilir."}, {"code": "SAHOL", "weight": 15, "why": "Sahip olduğu şirketlere göre ucuz; uzun vadede değer kazanabilir."}, {"code": "BIMAS", "weight": 15, "why": "Uzun vadede sağlam ve güvenli çekirdek hisse."}, {"code": "GARAN", "weight": 15, "why": "Faizler düştükçe banka kârları artabilir."}], "title": "Uzun vade hisse"}, "short": {"horizon": "1–3 ay", "items": [{"code": "TUPRS", "weight": 20, "why": "Son 1 yılın en güçlü yükselişi; enerji tarafında çeşitlendirme."}, {"code": "KCHOL", "weight": 20, "why": "Birçok büyük şirkete ortak; trendi diğerlerinden sağlam."}, {"code": "CCOLA", "weight": 20, "why": "Kârlılığı enflasyonun üstünde, dalgalanması düşük."}, {"code": "BIMAS", "weight": 20, "why": "Dalgalanması az, güvenli perakende şirketi."}, {"code": "SAHOL", "weight": 20, "why": "Sahip olduğu şirketlere göre ucuz; küçük tutarlarla."}], "title": "Kısa vade hisse"}, "summary": "Enflasyon sonrası en çok bankalar düştü. Hisse almak istersen güçlü ve büyük şirketlerden küçük tutarlarla, 2-3 seferde al."}, "summary": "Beklentiden yüksek gelen enflasyon borsada ve özellikle bankalarda satışa yol açtı. Merkez Bankası faiz indirimlerinde acele etmeyecek, bu yüzden paranın çoğunu para piyasası fonlarında tut. Borsa fonuna şimdilik yeni para koyma.", "watch": ["6 Kasım: ABD istihdam verisi (güçlü gelirse altın ve borsa baskılanabilir)", "12 Kasım: Merkez Bankası Enflasyon Raporu (faiz indirimi için yol haritasını gösterir)", "10 Aralık: Merkez Bankası faiz kararı (indirim hızı mevduat ve para fonu getirisini belirler)"]}, "asOf": "3 Kasım 2026 (gün içi; Ekim enflasyonu beklentinin üzerinde geldi)", "bist": {"m1": -9.5, "m3": null, "y1": 20.5}, "fullAt": "2026-11-03T07:40:28Z", "fundScan": {"at": "2026-10-29T18:25:42Z", "coverage": 589, "leaders": [{"cat": "para", "code": "AIS", "name": "Ak Portföy Para Piyasası Katılım Fonu", "score": 90, "why": "Para fonları içinde kesintisi en düşük olanlardan (%0,39), riski çok düşük ve 1 yılda %46 kazandırdı."}, {"cat": "para", "code": "EIL", "name": "Astra Portföy Para Piyasası (TL) Fonu", "score": 83, "why": "Para fonları içinde son 1 yılın en iyilerinden (%47,9) ve kesintisi düşük; fon küçük, yatırımcısı az."}, {"cat": "diger", "code": "YBS", "name": "Yapı Kredi Portföy Özel Sektör Borçlanma Araçları Fonu", "score": 71, "why": "Riski çok düşük bir tahvil fonu, 1 yılda %46 ile para fonlarına yakın kazandırdı; kesintisi biraz yüksek."}, {"cat": "diger", "code": "NJR", "name": "Nurol Portföy Birinci Borçlanma Araçları Fonu", "score": 67, "why": "Tahvil fonları içinde 1 yılda en çok kazandıranlardan (%48); fon küçük ve kesintisi yüksekçe."}], "summary": "Para piyasası, altın, hisse, tahvil, değişken, katılım ve karma türlerinde yaklaşık 590 fona baktık. En iyi sonuçlar para piyasası ve düşük riskli tahvil fonlarında: risk çok düşük, 1 yılda yaklaşık %46–48 kazandırdılar. Borsa ve altın fonları son aylarda geriledi; şimdilik paranın çoğunu para piyasası fonunda tut."}, "funds": [{"cat": "para", "code": "ALE", "d1": 0.09, "fee": 1.53, "high1y": 14.51256, "investors": 142339, "low1y": 10.6461, "m1": 2.79, "maxDD": null, "name": "Ak Portföy Para Piyasası (TL) Fonu", "parts": {"getiri": 20, "kalite": 14, "maliyet": 11, "risk": 22, "uyum": 9}, "pick": false, "price": 14.51256, "priceDate": "2026-11-03", "riskValue": 1, "score": 76, "sharpe": null, "sizeBn": 81.22, "updatedAt": "2026-11-03T07:39:30Z", "why": "Büyük ve köklü para fonu, enflasyonun belirgin üstünde kazandırıyor; ama kesintisi en ucuz para fonlarına göre yüksek.", "y1": 44.95}, {"cat": "para", "code": "TI1", "d1": 0.09, "fee": 1.42, "high1y": 1791.39, "investors": 238962, "low1y": 1313.6627, "m1": 2.8, "maxDD": null, "name": "İş Portföy Para Piyasası (TL) Fonu", "parts": {"getiri": 20, "kalite": 15, "maliyet": 13, "risk": 21, "uyum": 9}, "pick": false, "price": 1791.39, "priceDate": "2026-11-03", "riskValue": 2, "score": 78, "sharpe": null, "sizeBn": 209.56, "updatedAt": "2026-11-03T07:39:30Z", "why": "Türkiye'nin en büyük para fonlarından (210 mr TL, 237 bin yatırımcı); getiri kategori ortalamasında, ücret %1,42.", "y1": 45.09}, {"cat": "altin", "code": "AFO", "d1": -1.65, "fee": 2.04, "high1y": 1.5634, "investors": 77123, "low1y": 1.1802, "m1": -5.17, "maxDD": 24.51, "name": "Ak Portföy Altın Fonu", "parts": {"getiri": 8, "kalite": 13, "maliyet": 11, "risk": 8, "uyum": 4}, "pick": false, "price": 1.232299, "priceDate": "2026-11-03", "riskValue": 6, "score": 44, "sharpe": -1.34, "sizeBn": 16.96, "updatedAt": "2026-11-03T07:39:30Z", "why": "Altın fonu: son 1 ayda %5 düştü, risk yüksek ve ücreti pahalı; kriz sigortası olarak küçük pay tut.", "y1": 10.18}, {"cat": "altin", "code": "TTA", "d1": -0.46, "fee": 1.9, "high1y": 0.7509, "investors": 223625, "low1y": 0.5623, "m1": -2.69, "maxDD": 25.11, "name": "İş Portföy Altın Fonu", "parts": {"getiri": 6, "kalite": 15, "maliyet": 13, "risk": 7, "uyum": 4}, "pick": false, "price": 0.590828, "priceDate": "2026-11-03", "riskValue": 6, "score": 45, "sharpe": -1.6, "sizeBn": 23.7, "updatedAt": "2026-11-03T07:39:30Z", "why": "En çok yatırımcılı altın fonu ve kesintisi AFO'dan düşük; altın düştüğü için son dönem getirisi zayıf.", "y1": 6.55}, {"cat": "hisse", "code": "AKU", "d1": 1.53, "fee": 2.0, "high1y": 1.01, "investors": 17609, "low1y": 0.7073, "m1": -8.96, "maxDD": 16.79, "name": "Ak Portföy BIST 30 Endeksi Hisse Senedi (TL) Fonu", "parts": {"getiri": 9, "kalite": 9, "maliyet": 11, "risk": 11, "uyum": 3}, "pick": false, "price": 0.831309, "priceDate": "2026-11-03", "riskValue": 6, "score": 43, "sharpe": -0.92, "sizeBn": 2.14, "updatedAt": "2026-11-03T07:39:30Z", "why": "BIST 30 endeksini izleyen borsa fonu; borsa sert düştüğü için 1 ay getirisi eksi, kesintisi orta.", "y1": 21.12}, {"cat": "hisse", "code": "TIE", "d1": 1.89, "fee": 1.9, "high1y": 0.7923, "investors": 18752, "low1y": 0.5614, "m1": -11.21, "maxDD": 20.97, "name": "İş Portföy BIST 30 Endeksi Hisse Senedi (TL) Fonu", "parts": {"getiri": 5, "kalite": 8, "maliyet": 13, "risk": 9, "uyum": 3}, "pick": false, "price": 0.616936, "priceDate": "2026-11-03", "riskValue": 6, "score": 38, "sharpe": -1.13, "sizeBn": 1.57, "updatedAt": "2026-11-03T07:39:30Z", "why": "BIST 30 endeksini izleyen borsa fonu; kesintisi daha düşük ama son aylarda getirisi zayıf ve fon küçük.", "y1": 12.98}, {"cat": "para", "code": "AIS", "d1": 0.09, "fee": 0.39, "high1y": 0.11559, "investors": 28206, "low1y": 0.0843, "m1": 2.83, "m3": 9.73, "m6": 20.91, "maxDD": 0.22, "name": "Ak Portföy Para Piyasası Katılım Fonu", "parts": {"getiri": 23, "kalite": 12, "maliyet": 20, "risk": 25, "uyum": 9}, "pick": true, "pickAt": "2026-10-29", "price": 0.11559, "priceDate": "2026-11-03", "riskValue": 1, "scan": true, "score": 89, "sharpe": 24.26, "sizeBn": 8.94, "updatedAt": "2026-11-03T07:39:30Z", "w1": null, "why": "Kategorinin en düşük ücreti (%0,39), risk değeri 1 ve 1 yılda %46 ile tutarlı reel getiri.", "y1": 45.97, "ytd": null}, {"cat": "para", "code": "EIL", "d1": 0.09, "fee": 0.8, "high1y": 5.693306, "investors": 1024, "low1y": 4.1178, "m1": 3.08, "m3": 10.13, "m6": 21.7, "maxDD": 0.03, "name": "Astra Portföy Para Piyasası (TL) Fonu", "parts": {"getiri": 26, "kalite": 6, "maliyet": 18, "risk": 23, "uyum": 9}, "pick": true, "pickAt": "2026-10-29", "price": 5.693306, "priceDate": "2026-11-03", "riskValue": 2, "scan": true, "score": 82, "sharpe": 26.26, "sizeBn": 2.6, "updatedAt": "2026-11-03T07:39:30Z", "w1": null, "why": "Para fonları içinde en yüksek 1 yıl (%47,9) ve 6 ay getirisi, düşük ücret (%0,80); fon küçük ve yatırımcı tabanı dar.", "y1": 47.62, "ytd": null}, {"cat": "diger", "code": "YBS", "d1": 0.1, "fee": 1.83, "high1y": 0.156416, "investors": 12325, "low1y": 0.1147, "m1": 2.82, "m3": 9.6, "m6": 20.63, "maxDD": 0.15, "name": "Yapı Kredi Portföy Özel Sektör Borçlanma Araçları Fonu", "parts": {"getiri": 20, "kalite": 11, "maliyet": 7, "risk": 23, "uyum": 8}, "pick": true, "pickAt": "2026-10-29", "price": 0.156416, "priceDate": "2026-11-03", "riskValue": 1, "scan": true, "score": 69, "sharpe": 24.93, "sizeBn": 2.24, "updatedAt": "2026-11-03T07:39:30Z", "w1": null, "why": "Riski düşük bir tahvil fonu, 1 yılda %46 kazandırdı; ama şirket borçlarını ödeyemeyenler arttığı için dikkatli ol, kesintisi de yüksek.", "y1": 46.02, "ytd": null}, {"cat": "diger", "code": "NJR", "d1": 0.08, "fee": 1.85, "high1y": 6.26835, "investors": 1789, "low1y": 4.52, "m1": 2.74, "m3": 9.84, "m6": 22.35, "maxDD": 0.49, "name": "Nurol Portföy Birinci Borçlanma Araçları Fonu", "parts": {"getiri": 26, "kalite": 5, "maliyet": 7, "risk": 20, "uyum": 8}, "pick": true, "pickAt": "2026-10-29", "price": 6.26835, "priceDate": "2026-11-03", "riskValue": 2, "scan": true, "score": 66, "sharpe": 17.85, "sizeBn": 1.02, "updatedAt": "2026-11-03T07:39:30Z", "w1": null, "why": "Tahvil fonları içinde 1 yılda en çok kazandıranlardan (%48); ama fon küçük, kesintisi yüksek ve şirket borcu riski arttı.", "y1": 48.23, "ytd": null}], "fx": [{"cat": "altin", "code": "GAU", "d1": -0.85, "fcst": 10366, "high1y": 7811.19, "low1y": 5843.27, "m1": -3.56, "m3": null, "m6": null, "name": "Gram altın", "parts": {"fxdeger": 7, "fxrisk": 5, "makro": 11, "tasima": 21, "trend": 6}, "price": 6285.99, "priceDate": "2026-11-03", "risk": 2, "score": 50, "signal": "izle", "unit": "TL/gr", "updatedAt": "2026-11-03T07:39:30Z", "w1": -2.77, "why": "Kurum tahminleri yükseliş gösteriyor ama altın 1 yılın dibine yakın ve trend zayıf; kriz sigortası olarak küçük pay tut.", "y1": 5.61, "ytd": 5.61}, {"cat": "altin", "code": "XAU", "d1": -0.91, "fcst": 5441, "high1y": 5598.29, "low1y": 3908, "m1": -3.88, "m3": null, "m6": null, "name": "Ons altın", "parts": {"fxdeger": 7, "fxrisk": 4, "makro": 11, "tasima": 24, "trend": 6}, "price": 3912, "priceDate": "2026-11-03", "risk": 3, "score": 52, "signal": "izle", "unit": "USD/ons", "updatedAt": "2026-11-03T07:39:30Z", "w1": -1.09, "why": "Ons altın 1 yılın en düşük seviyesine indi; ABD'de faiz artışı konuşulduğu sürece baskı sürebilir.", "y1": -7.36, "ytd": -7.36}, {"cat": "gumus", "code": "GAG", "d1": -2.84, "fcst": null, "high1y": 169.92, "low1y": 78.81, "m1": -16.19, "m3": null, "m6": null, "name": "Gram gümüş", "parts": {"fxdeger": 8, "fxrisk": 3, "makro": 9, "tasima": 12, "trend": 6}, "price": 78.84, "priceDate": "2026-11-03", "risk": 4, "score": 38, "signal": "uzak", "unit": "TL/gr", "updatedAt": "2026-11-03T07:39:30Z", "w1": -8.49, "why": "Gümüş 1 yılın dibinde ve çok oynak; şimdilik uzak dur.", "y1": -19.64, "ytd": -18.64}, {"cat": "doviz", "code": "USD", "d1": 0.06, "fcst": 59.26, "high1y": 50.0, "low1y": 42.92, "m1": 2.02, "m3": null, "m6": null, "name": "Dolar/TL", "parts": {"fxdeger": 8, "fxrisk": 9, "makro": 12, "tasima": 6, "trend": 11}, "price": 50.0, "priceDate": "2026-11-03", "risk": 2, "score": 46, "signal": "izle", "unit": "TL", "updatedAt": "2026-11-03T07:39:30Z", "w1": 0.62, "why": "Dolarda 1 yılda yaklaşık %19 artış bekleniyor; para piyasası fonu vergi sonrası daha fazla kazandırıyor, sadece küçük bir koruma payı.", "y1": 16.49, "ytd": 16.49}, {"cat": "doviz", "code": "EUR", "d1": 0.14, "fcst": null, "high1y": 56.66, "low1y": 50.01, "m1": 1.24, "m3": null, "m6": null, "name": "Euro/TL", "parts": {"fxdeger": 7, "fxrisk": 8, "makro": 11, "tasima": 12, "trend": 11}, "price": 56.06, "priceDate": "2026-11-03", "risk": 2, "score": 49, "signal": "izle", "unit": "TL", "updatedAt": "2026-11-03T07:39:30Z", "w1": 0.41, "why": "Euro 1 yılda %11 arttı, para piyasası fonunun çok gerisinde kaldı; çeşitlendirme için küçük pay yeterli.", "y1": 10.89, "ytd": 10.88}, {"cat": "doviz", "code": "GBP", "d1": 0.12, "fcst": null, "high1y": 67.15, "low1y": 57.77, "m1": 3.28, "m3": null, "m6": null, "name": "Sterlin/TL", "parts": {"fxdeger": 6, "fxrisk": 8, "makro": 11, "tasima": 12, "trend": 11}, "price": 67.15, "priceDate": "2026-11-03", "risk": 2, "score": 48, "signal": "izle", "unit": "TL", "updatedAt": "2026-11-03T07:39:30Z", "w1": 0.85, "why": "Sterlin 1 yılın zirvesinde; buradan almak pahalı ve para piyasası fonunun gerisinde.", "y1": 15.75, "ytd": 15.79}], "indicators": [{"k": "Politika faizi", "note": "22 Ekim: −100 bp; sonraki karar 10 Aralık", "v": "%36"}, {"k": "Yıllık enflasyon", "note": "Ekim, TÜİK; aylık %2,58 (beklenti ≈%2,2–2,4)", "v": "%29,77"}, {"k": "Beklenen enflasyon (12 ay)", "note": "TCMB Ekim anketi", "v": "%23,89"}, {"k": "Beklenen faiz (12 ay)", "note": "TCMB Ekim anketi", "v": "%29,01"}, {"k": "Beklenen dolar (12 ay)", "note": "TCMB Ekim anketi", "v": "59,26"}, {"k": "BIST 100", "note": "−%0,83 (3 Kasım, gün içi)", "v": "10.871"}, {"k": "Gram altın", "note": "−%0,85", "v": "6.286 TL"}, {"k": "Dolar/TL", "note": "+%0,06", "v": "50,00"}, {"k": "Sonraki PPK", "note": "30 Ekim özeti: indirimler temkinli, toplantı toplantı karar", "v": "10 Aralık"}], "news": [{"title": "Ekim enflasyonu beklentinin üzerinde geldi", "date": "2026-11-03", "source": "Forbes Türkiye", "url": "https://www.forbes.com.tr/ekonomi/ekim-enflasyonu-piyasa-beklentilerini-asarak-yuzde-2-58-artti", "impact": "yuksek", "what": "TÜİK'e göre fiyatlar Ekim'de bir önceki aya göre %2,58 arttı; yıllık enflasyon %29,77 oldu. Ekonomistler aylık %2,2 dolayında bir artış bekliyordu. Artışta gıda, konut ve ulaştırma öne çıktı.", "meaning": "Enflasyon beklenenden yüksek olunca Merkez Bankası'nın faiz indirimleri yavaşlayabilir. Para piyasası fonu ve mevduat getirisi bir süre daha yüksek kalır; borsa için ise olumsuz bir haber.", "affects": [{"cat": "para", "effect": "up", "why": "Faiz uzun süre yüksek kalabilir"}, {"cat": "mevduat", "effect": "up", "why": "Faiz indirimi gecikebilir"}, {"cat": "hisse", "effect": "down", "why": "Hızlı faiz indirimi beklentisi zayıfladı"}], "codes": ["ALE", "AIS", "TI1", "EIL", "NJR"]}, {"title": "Enflasyon verisinin ardından borsada satış, bankalar öne çıkıp düştü", "date": "2026-11-03", "source": "CNBC-e", "url": "https://cnbce.com/borsa/borsa-istanbul-canli-kritik-enflasyon-gununde-piyasalar-nasil-hareket-ediyor-3-kasim-2026-h40878", "impact": "yuksek", "what": "Enflasyon açıklanınca Borsa İstanbul 100 endeksi gün içinde %1 civarına kadar geriledi; bankacılık endeksi yaklaşık %2,5 düştü.", "meaning": "Faiz indirimi gecikirse bankaların kârı ve borsa baskı altında kalabilir. Hisse ve borsa fonuna yeni para koyacaksan acele etme, az az al.", "affects": [{"cat": "hisse", "effect": "down", "why": "Bankalar ve geniş piyasa satış gördü"}], "codes": ["AKU", "TIE", "AKBNK", "YKBNK", "GARAN", "VAKBN"]}, {"title": "Dolar 50 lirayı gördü", "date": "2026-11-03", "source": "Bigpara", "url": "https://bigpara.hurriyet.com.tr/doviz/dolar/", "impact": "orta", "what": "Dolar/TL sabah saatlerinde 50,00 liraya çıkarak son bir yılın en yüksek seviyesini gördü; euro 56,06, sterlin 67,15 lira civarında.", "meaning": "Kur yavaş ve kontrollü yükseliyor; dolar tutmak şimdilik para piyasası fonunun getirisinin gerisinde kalıyor.", "affects": [{"cat": "doviz", "effect": "up", "why": "Kur yavaş yükseliyor"}, {"cat": "para", "effect": "mixed", "why": "Fon getirisi kurun önünde"}], "codes": ["USD", "EUR", "GBP"]}, {"title": "Gram altın sabah saatlerinde geriledi", "date": "2026-11-03", "source": "Bigpara", "url": "https://bigpara.hurriyet.com.tr/altin/gram-altin-fiyati/tumu/", "impact": "orta", "what": "Gram altın %0,85 düşüşle yaklaşık 6.286 liraya indi; geçen hafta yılın en düşük seviyelerine yakındı.", "meaning": "Altın dalgalı; kriz sigortası olarak küçük pay yeterli, toplu alım yerine düşüşlerde parça parça eklenebilir.", "affects": [{"cat": "altin", "effect": "down", "why": "Gün içi satış"}], "codes": ["GAU", "XAU", "AFO", "TTA"]}, {"title": "Borsa Pazartesi bankaların öncülüğünde %1,88 yükseldi", "date": "2026-11-02", "source": "Bloomberg HT", "url": "https://www.bloomberght.com/piyasa-ozeti-2-kasim-2026-borsa-doviz-altin-ve-kripto-piyasalarindaki-son-durum-pkh-3793116", "impact": "orta", "what": "BIST 100 endeksi 10.962 puandan kapandı; bir önceki Cuma %3,64 düşmüştü.", "meaning": "Yükseliş enflasyon verisi öncesindeydi ve bugün kısmen geri verildi; dalgalanma sürüyor.", "affects": [{"cat": "hisse", "effect": "mixed", "why": "Toparlanma kalıcı olmadı"}], "codes": ["AKU", "TIE", "AKBNK", "YKBNK", "GARAN", "VAKBN"]}], "partsMax": {"analist": 10, "deger": 20, "fxdeger": 15, "fxrisk": 10, "getiri": 30, "kalite": 15, "karlilik": 30, "makro": 20, "maliyet": 20, "momentum": 25, "risk": 25, "saglamlik": 15, "tasima": 25, "trend": 30, "uyum": 10}, "quickFundsAt": "2026-10-30T22:12:28Z", "quickFxAt": "2026-10-30T16:08:20Z", "quickStocksAt": "2026-10-30T16:08:20Z", "removedStocks": [{"code": "AEFES", "date": "2026-10-29", "name": "Anadolu Efes", "score": 38, "why": "'Uzak dur' sinyali: Çarpanlar ucuz ama ROE %8 zayıf ve son 3 ayda −%23 düşüş."}, {"code": "EKGYO", "date": "2026-10-29", "name": "Emlak Konut GYO", "score": 21, "why": "'Uzak dur' sinyali: Net zarar ve 1 yılda −%11 düşüş; PD/DD 0,42 ucuz ama kârlılık yok."}, {"code": "ENKAI", "date": "2026-10-29", "name": "Enka İnşaat", "score": 39, "why": "'Uzak dur' sinyali: Sağlam bilanço, ancak ROE %9,5 zayıf ve 3 ayda −%12; halka açıklık %8."}, {"code": "EREGL", "date": "2026-10-29", "name": "Ereğli Demir Çelik", "score": 34, "why": "'Uzak dur' sinyali: ROE ~%3 ile çok düşük, F/K 23,6 pahalı ve 3 ayda −%28 düşüş."}, {"code": "FROTO", "date": "2026-10-29", "name": "Ford Otosan", "score": 34, "why": "'Uzak dur' sinyali: F/K 7,3 ucuz görünse de 3 ay ve 1 yıl eksi: trend negatif, değer tuzağı riski; halka açıklık %17,5."}, {"code": "GUBRF", "date": "2026-10-29", "name": "Gübre Fabrikaları", "score": 38, "why": "'Uzak dur' sinyali: 3 ayda −%34 sert düşüş: 3 ay ve 1 yıl eksi, trend negatif."}, {"code": "MGROS", "date": "2026-10-29", "name": "Migros", "score": 29, "why": "'Uzak dur' sinyali: ROE %7 zayıf ve 3 ayda −%34 düşüş; 1 yıl da eksi, trend negatif."}, {"code": "PETKM", "date": "2026-10-29", "name": "Petkim", "score": 23, "why": "'Uzak dur' sinyali: Net zarar ve 3 ayda −%19 düşüş; yüksek volatilite."}, {"code": "PGSUS", "date": "2026-10-29", "name": "Pegasus", "score": 23, "why": "'Uzak dur' sinyali: Net zarar ve 1 yılda −%41, 3 ayda −%25 düşüş; trend negatif."}, {"code": "SASA", "date": "2026-10-29", "name": "Sasa Polyester", "score": 28, "why": "'Uzak dur' sinyali: Yüksek net zarar ve serbest düşüş; dönem getirisi verisi tutarsız (veri eksik)."}, {"code": "SISE", "date": "2026-10-29", "name": "Şişecam", "score": 31, "why": "'Uzak dur' sinyali: PD/DD 0,39 ile defter değerinin çok altında, ama ROE ~%4 ve 3 ayda −%23: trend negatif."}, {"code": "TAVHL", "date": "2026-10-29", "name": "TAV Havalimanları", "score": 32, "why": "'Uzak dur' sinyali: 9 aylık kâr güçlü arttı ama 3 ay ve 1 yıl getirisi eksi: trend negatif, 'al' olamaz."}, {"code": "TCELL", "date": "2026-10-29", "name": "Turkcell", "score": 33, "why": "'Uzak dur' sinyali: Ucuz çarpanlar ve yüksek hedef potansiyeli, ama 3 ay ve 1 yıl eksi ve ROE %7 zayıf."}, {"code": "THYAO", "date": "2026-10-29", "name": "Türk Hava Yolları", "score": 38, "why": "'Uzak dur' sinyali: F/K 3,1 ucuz ama kâr reel olarak düşüyor ve 3 ay/1 yıl eksi: trend negatif, değer tuzağı riski."}, {"code": "TOASO", "date": "2026-10-29", "name": "Tofaş", "score": 41, "why": "'Uzak dur' sinyali: ROE %21 makul ama 3 ay (−%16) ve 1 yıl (−%8) eksi: trend negatif."}, {"code": "TRMET", "date": "2026-10-29", "name": "TR Anadolu Metal", "score": 35, "why": "'Uzak dur' sinyali: Hedefler yüksek ama ROE ~%7,5, küçük şirket ve 3 ayda −%22."}, {"code": "TTKOM", "date": "2026-10-29", "name": "Türk Telekom", "score": 30, "why": "'Uzak dur' sinyali: F/K 5,3 ucuz ama 3 ay ve 1 yıl eksi, halka açıklık %13 ve yüksek oynaklık."}, {"code": "KRDMD", "date": "2026-11-01", "name": "Kardemir (D)", "score": 41, "why": "Kârı enflasyonun çok altında ve son 3 ayda %13 düştü; düzelmezse listeden çıkacak."}, {"code": "ISCTR", "date": "2026-11-01", "name": "İş Bankası (C)", "score": 41, "why": "Kârı enflasyonun gerisinde ve yılbaşından beri %14 düştü; düzelmezse listeden çıkacak."}, {"code": "TRALT", "date": "2026-11-01", "name": "Türk Altın İşletmeleri", "score": 41, "why": "Son 3 ayda %31 düştü ve kârlılığı zayıf; düzelmezse listeden çıkacak."}], "sources": [{"title": "Midas – BIST 100", "url": "https://www.getmidas.com/canli-borsa/xu100-bist-100-hisseleri"}, {"title": "Midas – BIST 30", "url": "https://www.getmidas.com/canli-borsa/xu030-bist-30-hisseleri"}, {"title": "Forbes Türkiye – Ekim enflasyonu", "url": "https://www.forbes.com.tr/ekonomi/ekim-enflasyonu-piyasa-beklentilerini-asarak-yuzde-2-58-artti"}, {"title": "CNBC-e – 3 Kasım canlı", "url": "https://cnbce.com/borsa/borsa-istanbul-canli-kritik-enflasyon-gununde-piyasalar-nasil-hareket-ediyor-3-kasim-2026-h40878"}, {"title": "Bigpara – Gram altın", "url": "https://bigpara.hurriyet.com.tr/altin/gram-altin-fiyati/tumu/"}, {"title": "Bigpara – Dolar", "url": "https://bigpara.hurriyet.com.tr/doviz/dolar/"}, {"title": "Bigpara – Euro", "url": "https://bigpara.hurriyet.com.tr/doviz/euro/"}, {"title": "Bigpara – Sterlin", "url": "https://bigpara.hurriyet.com.tr/doviz/sterlin/"}, {"title": "Bigpara – Gümüş", "url": "https://bigpara.hurriyet.com.tr/kobi/dunya-emtia-borsalari/sxaggr-gram-gumus/"}, {"title": "fvt.com.tr – fon sayfaları", "url": "https://fvt.com.tr/fonlar/yatirim-fonlari/ALE"}], "stocks": [{"code": "TUPRS", "d1": -0.15, "exitAt": null, "exitWhy": null, "fk": 9.4, "freeFloat": 49.01, "fundAt": "2026-11-01", "haber": 0, "high1y": 416.78, "kap": "", "kapAgir": false, "low1y": 172.19, "m1": -12.8, "m3": 21.13, "mcapBn": 684, "name": "Tüpraş", "parts": {"analist": 4, "deger": 8, "karlilik": 8, "momentum": 25, "saglamlik": 12}, "pddd": 1.45, "pick": false, "price": 336.5, "priceDate": "2026-11-03", "profitGrowth": null, "risk": 3, "roe": 16, "salesGrowth": null, "score": 57, "signal": "izle", "target": 428.91, "targetAt": "2026-10-26", "targetN": 17, "targetUpside": 27.3, "updatedAt": "2026-11-03T07:39:30Z", "vol": 2.98, "w1": -1.93, "why": "Son 1 yılda %95 ile listenin en güçlü yükselişi; ama şirketin kârı önümüzdeki yılın beklenen enflasyonunu geçemiyor, bu yüzden 'al' değil 'izle'.", "y1": 91.25, "ytd": 99.84}, {"code": "KCHOL", "d1": -1.53, "exitAt": null, "exitWhy": null, "fk": 13.01, "freeFloat": 26.17, "fundAt": "2026-11-02", "haber": 0, "high1y": null, "kap": "", "kapAgir": false, "low1y": null, "m1": -9.59, "m3": -0.48, "m6": null, "mHigh": 216.8, "mLow": 188.6, "mcapBn": 494, "name": "Koç Holding", "parts": {"analist": 5, "deger": 11, "karlilik": 15, "momentum": 14, "saglamlik": 12}, "pddd": 0.62, "pick": false, "price": 192.7, "priceDate": "2026-11-03", "profitGrowth": 146.5, "risk": 3, "roe": 4.8, "salesGrowth": null, "score": 57, "signal": "izle", "target": null, "targetAt": null, "targetN": null, "targetUpside": null, "updatedAt": "2026-11-03T07:39:30Z", "vol": 2.9, "w1": -6.03, "why": "Birçok büyük şirkete ortak ve hisse, sahip olduklarının değerine göre ucuz; son 3 ayda yatay kaldı, az az alınabilir.", "y1": 20.66, "ytd": 20.3}, {"code": "CCOLA", "d1": 0.13, "exitAt": null, "exitWhy": null, "fk": 9.46, "freeFloat": 29.31, "fundAt": "2026-11-01", "haber": 0, "high1y": 93.5, "kap": "", "kapAgir": false, "low1y": 49.73, "m1": -1.45, "m3": -13.85, "m6": null, "mcapBn": 208.1, "name": "Coca-Cola İçecek", "parts": {"analist": 5, "deger": 12, "karlilik": 15, "momentum": 13, "saglamlik": 12}, "pddd": 2.23, "pick": true, "pickAt": "2026-10-29", "price": 75.45, "priceDate": "2026-11-03", "profitGrowth": null, "risk": 2, "roe": 24, "salesGrowth": null, "score": 57, "signal": "izle", "target": null, "targetAt": null, "targetN": null, "targetUpside": null, "updatedAt": "2026-11-03T07:39:30Z", "vol": 2.48, "w1": -3.03, "why": "Kârlılığı enflasyonun üstünde ve 1 yılda %47 kazandırdı; ama son 3 ayda %17 düştü, toparlanmasını bekle.", "y1": 51.24, "ytd": 32.73}, {"code": "SAHOL", "d1": -1.81, "exitAt": null, "exitWhy": null, "fk": 8.33, "freeFloat": 51.15, "fundAt": "2026-11-01", "haber": 0, "high1y": null, "kap": "", "kapAgir": false, "low1y": null, "m1": -6.25, "m3": -5.01, "m6": null, "mcapBn": 173.1, "name": "Sabancı Holding", "parts": {"analist": 5, "deger": 15, "karlilik": 15, "momentum": 11, "saglamlik": 10}, "pddd": 0.42, "pick": false, "price": 81.5, "priceDate": "2026-11-03", "profitGrowth": null, "risk": 3, "roe": 5, "salesGrowth": -5.9, "score": 56, "signal": "izle", "target": null, "targetAt": null, "targetN": null, "targetUpside": null, "updatedAt": "2026-11-03T07:39:30Z", "vol": 2.3, "w1": -7.69, "why": "Sahip olduğu şirketlerin değerine göre çok ucuz; ama son 3 ayda %5 düştü, küçük tutarlarla al.", "y1": 5.09, "ytd": -0.21}, {"code": "ASTOR", "d1": -2.42, "exitAt": null, "exitWhy": null, "fk": 13.7, "freeFloat": 42.7, "fundAt": "2026-11-02", "haber": 0, "high1y": null, "kap": "", "kapAgir": false, "low1y": null, "m1": -35.79, "m3": -42.16, "mHigh": 226.99, "mLow": 139.7, "mcapBn": 153.5, "name": "Astor Enerji", "parts": {"analist": 3, "deger": 9, "karlilik": 17, "momentum": 12, "saglamlik": 11}, "pddd": 3.5, "pick": false, "price": 149.3, "priceDate": "2026-11-03", "profitGrowth": null, "risk": 4, "roe": 25.5, "salesGrowth": null, "score": 52, "signal": "izle", "target": 425.19, "targetAt": "2026-09-23", "targetN": 8, "targetUpside": 177.9, "updatedAt": "2026-11-03T07:39:30Z", "vol": 7.99, "w1": 6.39, "why": "Bugün %10 düştü ve son 3 ayda %38 geriledi; analist hedefleri bu düşüşten önce verildi, şimdilik izle.", "y1": 75.83, "ytd": 43.49}, {"code": "BIMAS", "d1": -0.91, "exitAt": null, "exitWhy": null, "fk": 15.18, "freeFloat": 67.51, "fundAt": "2026-11-01", "haber": 0, "high1y": null, "kap": "", "kapAgir": false, "low1y": null, "m1": -12.83, "m3": -2.81, "m6": null, "mcapBn": 448, "name": "BİM Mağazalar", "parts": {"analist": 5, "deger": 8, "karlilik": 9, "momentum": 15, "saglamlik": 14}, "pddd": 2.23, "pick": false, "price": 352.75, "priceDate": "2026-11-03", "profitGrowth": 103, "risk": 2, "roe": 14.7, "salesGrowth": 10, "score": 51, "signal": "izle", "target": null, "targetAt": null, "targetN": null, "targetUpside": null, "updatedAt": "2026-11-03T07:39:30Z", "vol": 1.94, "w1": -5.38, "why": "Dalgalanması az, güvenli bir perakende şirketi; ama kâr artışı beklenen enflasyonun gerisinde.", "y1": 33.61, "ytd": 39.58}, {"code": "GARAN", "d1": -2.55, "exitAt": null, "exitWhy": null, "fk": 4.4, "freeFloat": 13.96, "fundAt": "2026-11-01", "haber": 0, "high1y": null, "kap": "28 Eki: 3Ç26 bilançosu – 9A net kâr 98,2 mr TL (+%16), beklenti üstü.", "kapAgir": false, "low1y": null, "m1": -2.0, "m3": 0.09, "m6": null, "mcapBn": 530.8, "name": "Garanti BBVA", "parts": {"analist": 5, "deger": 7, "karlilik": 12, "momentum": 11, "saglamlik": 11}, "pddd": 1.09, "pick": false, "price": 126.0, "priceDate": "2026-11-03", "profitGrowth": 16, "risk": 3, "roe": 24.8, "salesGrowth": 64.3, "score": 46, "signal": "izle", "target": null, "targetAt": null, "targetN": null, "targetUpside": null, "updatedAt": "2026-11-03T07:39:30Z", "vol": 2.41, "w1": -6.1, "why": "3. çeyrek kârı beklentiyi aştı; ama hisse kârına göre ucuz değil ve halka açık payı düşük.", "y1": 2.75, "ytd": -7.78}, {"code": "YKBNK", "d1": -3.09, "exitAt": null, "exitWhy": null, "fk": 5.4, "freeFloat": 38.55, "fundAt": "2026-11-02", "haber": 0, "high1y": null, "kap": "", "kapAgir": false, "low1y": null, "m1": -3.57, "m3": 4.86, "m6": null, "mHigh": 36.78, "mLow": 33.22, "mcapBn": 298.7, "name": "Yapı Kredi", "parts": {"analist": 5, "deger": 5, "karlilik": 13, "momentum": 13, "saglamlik": 12}, "pddd": 1.04, "pick": false, "price": 34.54, "priceDate": "2026-11-03", "profitGrowth": 36, "risk": 3, "roe": 19.3, "salesGrowth": null, "score": 48, "signal": "izle", "target": 48.17, "targetUpside": 35.2, "updatedAt": "2026-11-03T07:39:30Z", "vol": 5.01, "w1": -7.48, "why": "Son 3 ay ve 1 yılda artıda; ama kârı enflasyonun gerisinde ve hisse ucuz değil.", "y1": 7.68, "ytd": -4.74}, {"code": "AKBNK", "d1": -2.69, "exitAt": null, "exitWhy": null, "fk": 5.04, "freeFloat": 52.92, "fundAt": "2026-11-02", "haber": 0, "high1y": null, "kap": "27 Ekim: 9A26 net kâr 45,9 mr TL (+%18), beklenti altı", "kapAgir": false, "low1y": null, "m1": -10.12, "m3": -4.1, "m6": null, "mHigh": 69.85, "mLow": 60.4, "mcapBn": 324.2, "name": "Akbank", "parts": {"analist": 5, "deger": 6, "karlilik": 11, "momentum": 12, "saglamlik": 12}, "pddd": 0.98, "pick": false, "price": 61.6, "priceDate": "2026-11-03", "profitGrowth": 18, "risk": 3, "roe": 19.4, "salesGrowth": null, "score": 46, "signal": "izle", "target": null, "targetUpside": null, "updatedAt": "2026-11-03T07:39:30Z", "vol": 3.04, "w1": -7.76, "why": "Kârı beklentinin altında kaldı ve son ayda %11 düştü; şimdilik izlemek yeterli.", "y1": 11.85, "ytd": -5.78}, {"code": "ASELS", "d1": 0.51, "exitAt": null, "exitWhy": null, "fk": 32.19, "freeFloat": 25.77, "fundAt": "2026-11-02", "haber": 0, "high1y": null, "kap": "27 Ekim: 3Ç26 net kâr 11,2 mr TL, beklenti üstü", "kapAgir": false, "low1y": null, "m1": -4.52, "m3": -1.41, "m6": null, "mHigh": 384.25, "mLow": 318.5, "mcapBn": 1564.1, "name": "Aselsan", "parts": {"analist": 5, "deger": 0, "karlilik": 8, "momentum": 18, "saglamlik": 12}, "pddd": 4.67, "pick": false, "price": 344.0, "priceDate": "2026-11-03", "profitGrowth": 75, "risk": 3, "roe": 14.5, "salesGrowth": 28, "score": 43, "signal": "izle", "target": 520, "targetUpside": 51.9, "updatedAt": "2026-11-03T07:39:30Z", "vol": 2.81, "w1": 4.6, "why": "Savunma işleri büyüyor ve kârı beklentiyi aştı; ama hisse kârına göre çok pahalı.", "y1": 70.43, "ytd": 53.39}, {"code": "VAKBN", "d1": -2.36, "exitAt": null, "exitWhy": null, "fk": 4.14, "freeFloat": 5.68, "fundAt": "2026-11-02", "haber": 0, "high1y": null, "kap": "", "kapAgir": false, "low1y": null, "m1": -12.32, "m3": -0.75, "m6": null, "mHigh": 34.78, "mLow": 28.4, "mcapBn": 290.5, "name": "Vakıfbank", "parts": {"analist": 5, "deger": 6, "karlilik": 11, "momentum": 14, "saglamlik": 7}, "pddd": 0.82, "pick": false, "price": 28.9, "priceDate": "2026-11-03", "profitGrowth": null, "risk": 3, "roe": 19.8, "salesGrowth": null, "score": 43, "signal": "izle", "target": null, "targetUpside": null, "updatedAt": "2026-11-03T07:39:30Z", "vol": 3.95, "w1": -10.8, "why": "Son 1 yılda %24 kazandırdı ama bugün %6 düştü; halka açık payı çok düşük (%6), izlemek yeterli.", "y1": 24.2, "ytd": -3.41}], "updatedAt": "2026-11-03T07:40:28Z"}
+{
+ "advice": {
+  "summary": "Borsa bu hafta sert dalgalandı; önce yükseldi, sonra küresel satışlarla yeniden geriledi. Merkez Bankası faizi yavaş indireceği için para piyasası fonları hâlâ enflasyonun üstünde kazandırıyor. Paranın çoğunu bu fonlarda tut; haftalık taramada da öne çıkanlar düşük riskli para ve tahvil fonları oldu.",
+  "short": {
+   "title": "Kısa vade",
+   "horizon": "1–3 ay",
+   "items": [
+    {
+     "code": "AIS",
+     "weight": 40,
+     "why": "Kesintisi çok düşük, riski en az ve enflasyonun üstünde kazandırıyor."
+    },
+    {
+     "code": "TI1",
+     "weight": 20,
+     "why": "Çok büyük, banka kökenli para fonu; acil durum parası için kolay bozdurulur."
+    },
+    {
+     "code": "ALE",
+     "weight": 20,
+     "why": "Büyük ve köklü para fonu; kolay alınıp satılır."
+    },
+    {
+     "code": "FYO",
+     "weight": 10,
+     "why": "Özel sektör tahvil fonu; para fonlarına yakın getiri, biraz daha fazla çeşitlendirme."
+    },
+    {
+     "code": "EIL",
+     "weight": 10,
+     "why": "Getirisi para fonlarının üst sırasında; küçük fon olduğu için payı sınırlı."
+    }
+   ]
+  },
+  "long": {
+   "title": "Uzun vade",
+   "horizon": "1 yıl ve üstü",
+   "items": [
+    {
+     "code": "AIS",
+     "weight": 30,
+     "why": "Faiz indirimleri yavaş ilerledikçe düşük kesintili para fonu enflasyonun üstünde kalır."
+    },
+    {
+     "code": "TI1",
+     "weight": 15,
+     "why": "Büyük ve güvenli para fonu; düşük riskli çekirdek."
+    },
+    {
+     "code": "FYO",
+     "weight": 15,
+     "why": "Faizler düşerken tahvil fonu para fonundan biraz daha fazla kazandırabilir."
+    },
+    {
+     "code": "TBV",
+     "weight": 10,
+     "why": "Banka kökenli düşük riskli tahvil fonu; çeşitlendirme için."
+    },
+    {
+     "code": "AKU",
+     "weight": 15,
+     "why": "Faizler düştükçe borsa toparlanabilir; 3 seferde, araya zaman koyarak al."
+    },
+    {
+     "code": "TTA",
+     "weight": 10,
+     "why": "Uzun vadede TL değer kaybına karşı sigorta; düşüşlerde parça parça eklenebilir."
+    },
+    {
+     "code": "ALE",
+     "weight": 5,
+     "why": "Acil durum parası için güvenli ve kolay bozdurulan fon."
+    }
+   ]
+  },
+  "watch": [
+   "6 Kasım: ABD istihdam verisi (güçlü gelirse altın ve borsa baskılanabilir)",
+   "12 Kasım: Merkez Bankası Enflasyon Raporu (faiz indirimi için yol haritasını gösterir)",
+   "9 Aralık: ABD Merkez Bankası faiz kararı (dolar ve altının yönünü etkiler)",
+   "10 Aralık: Merkez Bankası faiz kararı (indirim hızı mevduat ve para fonu getirisini belirler)"
+  ],
+  "stocks": {
+   "summary": "Bankaların kâr artışı yavaşladı, bu yüzden bankalar şimdilik geride. Büyük ve sağlam şirketlerden küçük tutarlarla, 2–3 seferde almak daha güvenli.",
+   "short": {
+    "title": "Kısa vade hisse",
+    "horizon": "1–3 ay",
+    "items": [
+     {
+      "code": "TUPRS",
+      "weight": 25,
+      "why": "Son 1 yılın en güçlü yükselişlerinden biri; enerji tarafında çeşitlendirme."
+     },
+     {
+      "code": "KCHOL",
+      "weight": 20,
+      "why": "Birçok büyük şirkete ortak; ortaklıklarının değerine göre ucuz."
+     },
+     {
+      "code": "BIMAS",
+      "weight": 20,
+      "why": "Dalgalanması az, güvenli perakende şirketi."
+     },
+     {
+      "code": "SAHOL",
+      "weight": 20,
+      "why": "Sahip olduğu şirketlere göre çok ucuz; küçük tutarlarla."
+     },
+     {
+      "code": "CCOLA",
+      "weight": 15,
+      "why": "Kârlılığı sağlam, dalgalanması düşük; son düşüşte kademeli alınabilir."
+     }
+    ]
+   },
+   "long": {
+    "title": "Uzun vade hisse",
+    "horizon": "1 yıl ve üstü",
+    "items": [
+     {
+      "code": "TUPRS",
+      "weight": 20,
+      "why": "Güçlü nakit üreten enerji şirketi."
+     },
+     {
+      "code": "KCHOL",
+      "weight": 15,
+      "why": "Birçok büyük şirkete ortak; değeri zamanla açılabilir."
+     },
+     {
+      "code": "BIMAS",
+      "weight": 15,
+      "why": "Uzun vadede sağlam ve güvenli çekirdek hisse."
+     },
+     {
+      "code": "CCOLA",
+      "weight": 15,
+      "why": "Yurt dışında büyüyen, kârlı şirket."
+     },
+     {
+      "code": "SAHOL",
+      "weight": 15,
+      "why": "Sahip olduğu şirketlere göre ucuz; uzun vadede değer kazanabilir."
+     },
+     {
+      "code": "ASELS",
+      "weight": 10,
+      "why": "Kârı ve siparişleri hızla büyüyen savunma şirketi; pahalı olduğu için küçük pay."
+     },
+     {
+      "code": "GARAN",
+      "weight": 10,
+      "why": "Faizler düştükçe banka kârları artabilir."
+     }
+    ]
+   }
+  },
+  "fx": {
+   "summary": "Altın iki günde toparlandı ama yıl içindeki düşüşünü silmedi. Dolar ve euro tutmak TL faizinin gerisinde kalıyor. Altını küçük bir sigorta payı olarak tut, gümüşten uzak dur.",
+   "short": {
+    "title": "Kısa vade döviz/altın",
+    "horizon": "1–3 ay",
+    "items": [
+     {
+      "code": "GAU",
+      "weight": 55,
+      "why": "Kriz ve kur riskine karşı ana sigorta; döviz ve altın içinde en güçlü seçenek."
+     },
+     {
+      "code": "USD",
+      "weight": 30,
+      "why": "Düşük oynaklıklı kur koruması; TL faizinin gerisinde kaldığı için sınırlı."
+     },
+     {
+      "code": "EUR",
+      "weight": 15,
+      "why": "Dolara karşı küçük çeşitlendirme."
+     }
+    ]
+   },
+   "long": {
+    "title": "Uzun vade döviz/altın",
+    "horizon": "1 yıl ve üstü",
+    "items": [
+     {
+      "code": "GAU",
+      "weight": 55,
+      "why": "Uzun vadede TL değer kaybına ve küresel risklere karşı koruma; düşüşlerde parça parça eklenebilir."
+     },
+     {
+      "code": "USD",
+      "weight": 25,
+      "why": "Anket 12 ayda ~59 TL bekliyor; kur riskine karşı denge."
+     },
+     {
+      "code": "EUR",
+      "weight": 10,
+      "why": "Para birimi çeşitlendirmesi."
+     },
+     {
+      "code": "XAU",
+      "weight": 10,
+      "why": "Dolar cinsinden altın; küresel faiz düşünce desteklenebilir."
+     }
+    ]
+   }
+  }
+ },
+ "asOf": "6 Kasım 2026 (gün içi)",
+ "bist": {
+  "m1": -8.42,
+  "m3": -7.99,
+  "y1": 24.03
+ },
+ "fullAt": "2026-11-06T08:05:00Z",
+ "fundScan": {
+  "at": "2026-11-06T08:05:00Z",
+  "coverage": 268,
+  "summary": "Para piyasası, altın, hisse, tahvil, değişken, katılım ve karma türlerinde yaklaşık 270 fona baktık. En iyi sonuçlar para piyasası ve düşük riskli tahvil fonlarında: risk çok düşük, 1 yılda yaklaşık %45–48 kazandırdılar. Borsa ve altın fonları son aylarda geriledi; şimdilik paranın çoğunu para piyasası fonunda tut.",
+  "leaders": [
+   {
+    "code": "AIS",
+    "name": "Ak Portföy Para Piyasası Katılım Fonu",
+    "cat": "para",
+    "score": 82,
+    "why": "Para fonları içinde en düşük ücret (%0,39); risk değeri 1 ve 1 yılda %46 kazandırdı."
+   },
+   {
+    "code": "EIL",
+    "name": "Astra Portföy Para Piyasası (TL) Fonu",
+    "cat": "para",
+    "score": 75,
+    "why": "Para fonlarında 1 yıl ve 3 ayda üst sırada; ücreti düşük ama fon küçük ve yatırımcısı az."
+   },
+   {
+    "code": "FYO",
+    "name": "QNB Portföy Özel Sektör Borçlanma Araçları Fonu",
+    "cat": "diger",
+    "score": 79,
+    "why": "Özel sektör borçlanma fonu: 1 yılda %45,6 ile para fonlarına yakın; ücreti biraz yüksek."
+   },
+   {
+    "code": "TBV",
+    "name": "İş Portföy Özel Sektör Borçlanma Araçları (TL) Fonu",
+    "cat": "diger",
+    "score": 74,
+    "why": "Banka kökenli düşük riskli tahvil fonu: 1 yılda %45 kazandırdı; ücreti orta."
+   }
+  ]
+ },
+ "funds": [
+  {
+   "cat": "para",
+   "code": "ALE",
+   "d1": 0.0985,
+   "fee": 1.53,
+   "high1y": 14.556307,
+   "investors": 143686,
+   "low1y": 10.6461,
+   "m1": 3,
+   "maxDD": null,
+   "name": "Ak Portföy Para Piyasası (TL) Fonu",
+   "parts": {
+    "getiri": 14,
+    "maliyet": 10,
+    "risk": 22,
+    "kalite": 15,
+    "uyum": 8
+   },
+   "pick": false,
+   "price": 14.556307,
+   "priceDate": "2026-11-06",
+   "riskValue": 1,
+   "score": 69,
+   "sharpe": null,
+   "sizeBn": 82.7,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "why": "Büyük ve köklü para fonu, enflasyonun belirgin üstünde kazandırıyor; ücreti en ucuzlara göre yüksek. (bazı risk verileri eksik)",
+   "y1": 44.92
+  },
+  {
+   "cat": "para",
+   "code": "TI1",
+   "d1": 0.0948,
+   "fee": 1.42,
+   "high1y": 1796.83598,
+   "investors": 241181,
+   "low1y": 1313.6627,
+   "m1": 3.01,
+   "maxDD": null,
+   "name": "İş Portföy Para Piyasası (TL) Fonu",
+   "parts": {
+    "getiri": 14,
+    "maliyet": 13,
+    "risk": 19,
+    "kalite": 15,
+    "uyum": 8
+   },
+   "pick": false,
+   "price": 1796.83598,
+   "priceDate": "2026-11-06",
+   "riskValue": 2,
+   "score": 69,
+   "sharpe": null,
+   "sizeBn": 212.77,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "why": "Çok büyük, banka kökenli para fonu; 1 yılda enflasyonun üstünde ama ücreti orta. (bazı risk verileri eksik)",
+   "y1": 45.05
+  },
+  {
+   "cat": "altin",
+   "code": "AFO",
+   "d1": 1.5755,
+   "fee": 2.04,
+   "high1y": 1.5634,
+   "investors": 76919,
+   "low1y": 1.1802,
+   "m1": -2.07,
+   "maxDD": 24.51,
+   "name": "Ak Portföy Altın Fonu",
+   "parts": {
+    "getiri": 12,
+    "maliyet": 9,
+    "risk": 3,
+    "kalite": 12,
+    "uyum": 5
+   },
+   "pick": false,
+   "price": 1.292508,
+   "priceDate": "2026-11-06",
+   "riskValue": 6,
+   "score": 41,
+   "sharpe": -1.12,
+   "sizeBn": 17.75,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "why": "Altın fonu son aylarda toparlandı ama ücreti yüksek ve dalgalanması çok.",
+   "y1": 14.68,
+   "m3": 4.39
+  },
+  {
+   "cat": "altin",
+   "code": "TTA",
+   "d1": 1.0553,
+   "fee": 1.9,
+   "high1y": 0.7509,
+   "investors": 223629,
+   "low1y": 0.5623,
+   "m1": 0.08,
+   "maxDD": 25.11,
+   "name": "İş Portföy Altın Fonu",
+   "parts": {
+    "getiri": 11,
+    "maliyet": 13,
+    "risk": 3,
+    "kalite": 13,
+    "uyum": 5
+   },
+   "pick": false,
+   "price": 0.607327,
+   "priceDate": "2026-11-06",
+   "riskValue": 6,
+   "score": 45,
+   "sharpe": -1.39,
+   "sizeBn": 24.27,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "why": "Altın fonu: ücreti AFO'dan düşük, 1 yılda enflasyonun altında kaldı; dalgalanması çok.",
+   "y1": 10.86,
+   "m3": 4.18
+  },
+  {
+   "cat": "hisse",
+   "code": "AKU",
+   "d1": -1.31,
+   "fee": 2,
+   "high1y": 1.01,
+   "investors": 17611,
+   "low1y": 0.7073,
+   "m1": -8.42,
+   "maxDD": 18.93,
+   "name": "Ak Portföy BIST 30 Endeksi Hisse Senedi (TL) Fonu",
+   "parts": {
+    "getiri": 18,
+    "maliyet": 13,
+    "risk": 6,
+    "kalite": 8,
+    "uyum": 3
+   },
+   "pick": false,
+   "price": 0.84719,
+   "priceDate": "2026-11-06",
+   "riskValue": 6,
+   "score": 48,
+   "sharpe": -0.88,
+   "sizeBn": 2.19,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "why": "Borsa fonu: 1 ayda %8 düştü, 3 ay getirisi eksi; trend zayıf.",
+   "y1": 24.03,
+   "m3": -7.99
+  },
+  {
+   "cat": "hisse",
+   "code": "TIE",
+   "d1": -1.61,
+   "fee": 1.9,
+   "high1y": 0.7923,
+   "investors": 18689,
+   "low1y": 0.5614,
+   "m1": -10.09,
+   "maxDD": 23.58,
+   "name": "İş Portföy BIST 30 Endeksi Hisse Senedi (TL) Fonu",
+   "parts": {
+    "getiri": 13,
+    "maliyet": 13,
+    "risk": 3,
+    "kalite": 5,
+    "uyum": 3
+   },
+   "pick": false,
+   "price": 0.633491,
+   "priceDate": "2026-11-06",
+   "riskValue": 6,
+   "score": 37,
+   "sharpe": -1.05,
+   "sizeBn": 1.63,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "why": "Borsa fonu: son 1 ayda %10 düştü ve en kötü dönemde kaybı büyük; trend zayıf.",
+   "y1": 16.6
+  },
+  {
+   "code": "AIS",
+   "name": "Ak Portföy Para Piyasası Katılım Fonu",
+   "price": 0.115945,
+   "priceDate": "2026-11-06",
+   "d1": 0.09,
+   "w1": null,
+   "m1": 3.04,
+   "m3": 9.68,
+   "m6": null,
+   "ytd": null,
+   "y1": 45.96,
+   "sizeBn": 9.14,
+   "riskValue": 1,
+   "maxDD": 0.22,
+   "sharpe": 24.26,
+   "fee": 0.39,
+   "investors": 28922,
+   "low1y": 0.0843,
+   "high1y": 0.115945,
+   "cat": "para",
+   "score": 82,
+   "parts": {
+    "getiri": 19,
+    "maliyet": 20,
+    "risk": 25,
+    "kalite": 10,
+    "uyum": 8
+   },
+   "why": "Para fonları içinde en düşük ücret (%0,39); risk değeri 1 ve 1 yılda %46 kazandırdı.",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "pick": true,
+   "scan": true,
+   "pickAt": "2026-10-29"
+  },
+  {
+   "code": "EIL",
+   "name": "Astra Portföy Para Piyasası (TL) Fonu",
+   "price": 5.709388,
+   "priceDate": "2026-11-06",
+   "d1": 0.09,
+   "w1": null,
+   "m1": 3.03,
+   "m3": 10.01,
+   "m6": null,
+   "ytd": null,
+   "y1": 47.64,
+   "sizeBn": 2.61,
+   "riskValue": 2,
+   "maxDD": 0.03,
+   "sharpe": 26.26,
+   "fee": 0.8,
+   "investors": 1011,
+   "low1y": 4.1178,
+   "high1y": 5.709388,
+   "cat": "para",
+   "score": 75,
+   "parts": {
+    "getiri": 21,
+    "maliyet": 17,
+    "risk": 22,
+    "kalite": 7,
+    "uyum": 8
+   },
+   "why": "Para fonlarında 1 yıl ve 3 ayda üst sırada; ücreti düşük ama fon küçük ve yatırımcısı az.",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "pick": true,
+   "scan": true,
+   "pickAt": "2026-10-29"
+  },
+  {
+   "code": "FYO",
+   "name": "QNB Portföy Özel Sektör Borçlanma Araçları Fonu",
+   "price": 1.281634,
+   "priceDate": "2026-11-06",
+   "d1": 0.0965,
+   "w1": null,
+   "m1": 3.11,
+   "m3": 9.69,
+   "m6": null,
+   "ytd": null,
+   "y1": 45.6,
+   "sizeBn": 2.26,
+   "riskValue": 1,
+   "maxDD": null,
+   "sharpe": 25.29,
+   "fee": 1.5,
+   "investors": 1621,
+   "low1y": 0.9338,
+   "high1y": 1.281634,
+   "cat": "diger",
+   "score": 79,
+   "parts": {
+    "getiri": 30,
+    "maliyet": 13,
+    "risk": 22,
+    "kalite": 7,
+    "uyum": 7
+   },
+   "why": "Özel sektör borçlanma fonu: 1 yılda %45,6 ile para fonlarına yakın; ücreti biraz yüksek.",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "pick": true,
+   "scan": true,
+   "pickAt": "2026-11-06"
+  },
+  {
+   "code": "TBV",
+   "name": "İş Portföy Özel Sektör Borçlanma Araçları (TL) Fonu",
+   "price": 0.442954,
+   "priceDate": "2026-11-06",
+   "d1": 0.07,
+   "w1": null,
+   "m1": 3.07,
+   "m3": 9.7,
+   "m6": null,
+   "ytd": null,
+   "y1": 45.19,
+   "sizeBn": 1.53,
+   "riskValue": 1,
+   "maxDD": 0.19,
+   "sharpe": 24.8,
+   "fee": 1.75,
+   "investors": 8511,
+   "low1y": 0.3236,
+   "high1y": 0.442954,
+   "cat": "diger",
+   "score": 74,
+   "parts": {
+    "getiri": 30,
+    "maliyet": 7,
+    "risk": 25,
+    "kalite": 5,
+    "uyum": 7
+   },
+   "why": "Banka kökenli düşük riskli tahvil fonu: 1 yılda %45 kazandırdı; ücreti orta.",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "pick": true,
+   "scan": true,
+   "pickAt": "2026-11-06"
+  }
+ ],
+ "fx": [
+  {
+   "cat": "altin",
+   "code": "GAU",
+   "d1": 1.24,
+   "fcst": 10366,
+   "high1y": 7811.19,
+   "low1y": 5843.27,
+   "m1": 1.51,
+   "m3": null,
+   "m6": null,
+   "name": "Gram altın",
+   "parts": {
+    "fxdeger": 7,
+    "fxrisk": 5,
+    "makro": 11,
+    "tasima": 18,
+    "trend": 8
+   },
+   "price": 6616.51,
+   "priceDate": "2026-11-05",
+   "risk": 2,
+   "score": 49,
+   "signal": "izle",
+   "unit": "TL/gr",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "w1": 2.34,
+   "why": "Altın iki günde toparlandı ama yıl içindeki düşüşü henüz silmedi; kriz sigortası olarak küçük pay tut.",
+   "y1": 11.16,
+   "ytd": 11.16
+  },
+  {
+   "cat": "altin",
+   "code": "XAU",
+   "d1": 0.88,
+   "fcst": 5441,
+   "high1y": 5598.29,
+   "low1y": 3908,
+   "m1": 0.64,
+   "m3": null,
+   "m6": null,
+   "name": "Ons altın",
+   "parts": {
+    "fxdeger": 7,
+    "fxrisk": 4,
+    "makro": 11,
+    "tasima": 23,
+    "trend": 6
+   },
+   "price": 4096,
+   "priceDate": "2026-11-05",
+   "risk": 3,
+   "score": 51,
+   "signal": "izle",
+   "unit": "USD/ons",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "w1": 3.56,
+   "why": "Ons altın dibinden döndü; ABD faiz kaygısı sürdüğü için yükseliş kalıcı olmayabilir.",
+   "y1": -3,
+   "ytd": -3
+  },
+  {
+   "cat": "gumus",
+   "code": "GAG",
+   "d1": -2.84,
+   "fcst": null,
+   "high1y": 169.92,
+   "low1y": 78.81,
+   "m1": -16.19,
+   "m3": null,
+   "m6": null,
+   "name": "Gram gümüş",
+   "parts": {
+    "fxdeger": 8,
+    "fxrisk": 3,
+    "makro": 9,
+    "tasima": 12,
+    "trend": 6
+   },
+   "price": 78.84,
+   "priceDate": "2026-11-03",
+   "risk": 4,
+   "score": 38,
+   "signal": "uzak",
+   "unit": "TL/gr",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "w1": -8.49,
+   "why": "Gümüş 1 yılın dibine yakın ve çok oynak; şimdilik uzak dur.",
+   "y1": -19.64,
+   "ytd": -18.64
+  },
+  {
+   "cat": "doviz",
+   "code": "USD",
+   "d1": 0.22,
+   "fcst": 59.26,
+   "high1y": 50.1574,
+   "low1y": 42.92,
+   "m1": 2.34,
+   "m3": null,
+   "m6": null,
+   "name": "Dolar/TL",
+   "parts": {
+    "fxdeger": 8,
+    "fxrisk": 9,
+    "makro": 12,
+    "tasima": 6,
+    "trend": 11
+   },
+   "price": 50.1574,
+   "priceDate": "2026-11-06",
+   "risk": 2,
+   "score": 46,
+   "signal": "izle",
+   "unit": "TL",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "w1": 0.94,
+   "why": "Dolarda 1 yılda yaklaşık %18 artış bekleniyor; para piyasası fonu vergi sonrası daha fazla kazandırıyor, sadece küçük koruma payı.",
+   "y1": 16.86,
+   "ytd": 16.86
+  },
+  {
+   "cat": "doviz",
+   "code": "EUR",
+   "d1": -0.13,
+   "fcst": null,
+   "high1y": 56.66,
+   "low1y": 50.01,
+   "m1": 1.49,
+   "m3": null,
+   "m6": null,
+   "name": "Euro/TL",
+   "parts": {
+    "fxdeger": 7,
+    "fxrisk": 8,
+    "makro": 11,
+    "tasima": 12,
+    "trend": 11
+   },
+   "price": 56.201,
+   "priceDate": "2026-11-06",
+   "risk": 2,
+   "score": 49,
+   "signal": "izle",
+   "unit": "TL",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "w1": 0.66,
+   "why": "Euro 1 yılda %11 arttı, para piyasası fonunun çok gerisinde kaldı; çeşitlendirme için küçük pay yeterli.",
+   "y1": 11.17,
+   "ytd": 11.16
+  },
+  {
+   "cat": "doviz",
+   "code": "GBP",
+   "d1": 0.12,
+   "fcst": null,
+   "high1y": 67.15,
+   "low1y": 57.77,
+   "m1": 3.28,
+   "m3": null,
+   "m6": null,
+   "name": "Sterlin/TL",
+   "parts": {
+    "fxdeger": 6,
+    "fxrisk": 8,
+    "makro": 11,
+    "tasima": 12,
+    "trend": 11
+   },
+   "price": 67.15,
+   "priceDate": "2026-11-03",
+   "risk": 2,
+   "score": 48,
+   "signal": "izle",
+   "unit": "TL",
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "w1": 0.85,
+   "why": "Sterlin 1 yılın zirvesine yakın; buradan almak pahalı ve para piyasası fonunun gerisinde.",
+   "y1": 15.75,
+   "ytd": 15.79
+  }
+ ],
+ "indicators": [
+  {
+   "k": "Politika faizi",
+   "note": "22 Ekim: −100 bp; sonraki karar 10 Aralık",
+   "v": "%36"
+  },
+  {
+   "k": "Yıllık enflasyon",
+   "note": "Ekim, TÜİK; aylık %2,58 (beklenti ≈%2,2–2,4)",
+   "v": "%29,77"
+  },
+  {
+   "k": "Beklenen enflasyon (12 ay)",
+   "note": "TCMB Ekim anketi",
+   "v": "%23,89"
+  },
+  {
+   "k": "Beklenen faiz (12 ay)",
+   "note": "TCMB Ekim anketi",
+   "v": "%29,01"
+  },
+  {
+   "k": "Beklenen dolar (12 ay)",
+   "note": "TCMB Ekim anketi",
+   "v": "59,26"
+  },
+  {
+   "k": "BIST 100",
+   "note": "−%0,84 (6 Kasım, açılış)",
+   "v": "11.238"
+  },
+  {
+   "k": "Gram altın",
+   "note": "+%1,24 (5 Kasım)",
+   "v": "6.617 TL"
+  },
+  {
+   "k": "Dolar/TL",
+   "note": "+%0,22",
+   "v": "50,16"
+  },
+  {
+   "k": "Sonraki PPK",
+   "note": "Faiz indirimleri temkinli, toplantı toplantı karar",
+   "v": "10 Aralık"
+  }
+ ],
+ "news": [
+  {
+   "title": "Ekim enflasyonu beklentinin üzerinde geldi: yıllık %29,77",
+   "date": "2026-11-03",
+   "source": "Timeturk / TÜİK",
+   "url": "https://www.timeturk.com/2026-ekim-enflasyonu-aciklandi-tufe-aylik-258-yillik-2977",
+   "impact": "yuksek",
+   "what": "TÜİK'e göre Ekim'de fiyatlar aylık %2,58, yıllık %29,77 arttı; aylık artış %2,2-2,3 olan beklentinin üzerinde kaldı.",
+   "meaning": "Enflasyonun inatla yüksek kalması Merkez Bankası'nın faiz indirimlerini yavaşlatabilir; mevduat ve tahvil getirisi bu yüzden önemli.",
+   "affects": [
+    {
+     "cat": "mevduat",
+     "effect": "up",
+     "why": "Faiz indirimi gecikirse mevduat faizi yüksek kalır"
+    },
+    {
+     "cat": "hisse",
+     "effect": "mixed",
+     "why": "Banka dışı şirketlerde yüksek faiz baskısı, bankalarda marj etkisi"
+    },
+    {
+     "cat": "altin",
+     "effect": "up",
+     "why": "Enflasyon korunma talebi"
+    }
+   ],
+   "codes": [
+    "GAU",
+    "USD",
+    "GARAN",
+    "AKBNK",
+    "YKBNK"
+   ]
+  },
+  {
+   "title": "Borsa İstanbul günü %1,26 düşüşle kapattı",
+   "date": "2026-11-05",
+   "source": "AA",
+   "url": "https://www.aa.com.tr/tr/ekonomi/borsa-gunu-dususle-tamamladi/4113197",
+   "impact": "yuksek",
+   "what": "BIST 100 endeksi 11.333,27 puana indi. Bankacılık endeksi %1,75 yükselirken metal eşya makine sektörü %3,59 düştü. Haberde küresel teknoloji satışı ve ABD ara seçimi sonrası yapay zekaya denetim endişesi anılıyor.",
+   "meaning": "Bir önceki günkü sert yükselişin bir kısmı geri verildi; banka hisseleri güçlü, sanayi zayıf kaldı.",
+   "affects": [
+    {
+     "cat": "hisse",
+     "effect": "down",
+     "why": "Endeks geriledi, bankalar ayrışıyor"
+    }
+   ],
+   "codes": [
+    "GARAN",
+    "AKBNK",
+    "YKBNK",
+    "VAKBN",
+    "KCHOL",
+    "SAHOL"
+   ]
+  },
+  {
+   "title": "Dolar/TL 50 liranın üzerinde, euro 56 lirada",
+   "date": "2026-11-06",
+   "source": "Bigpara",
+   "url": "https://bigpara.hurriyet.com.tr/doviz/dolar-ne-kadar/",
+   "impact": "orta",
+   "what": "Dolar/TL 6 Kasım sabahı yaklaşık 50,16, euro/TL 56,20 civarında. Dolar 5 Kasım'da yaklaşık 50,05 idi.",
+   "meaning": "Lira kontrollü biçimde değer kaybediyor; dövizle tasarruf yapanlar için kur artışı sürüyor.",
+   "affects": [
+    {
+     "cat": "doviz",
+     "effect": "up",
+     "why": "Kur kademeli yükseliyor"
+    },
+    {
+     "cat": "mevduat",
+     "effect": "mixed",
+     "why": "TL faizi kur artışına karşı getiri sağlıyor"
+    }
+   ],
+   "codes": [
+    "USD",
+    "EUR"
+   ]
+  },
+  {
+   "title": "Gram altın 5 Kasım'da yükseldi, ons 4.000 doların üzerinde",
+   "date": "2026-11-05",
+   "source": "Bloomberg HT",
+   "url": "https://www.bloomberght.com/guncel-altin-fiyatlari-5-kasim-2026-persembe-gram-ve-ceyrek-altin-ne-kadar-oldu-pkh1-3793588",
+   "impact": "orta",
+   "what": "Kapalıçarşı'da gram altın 5 Kasım'da yaklaşık 6.600 TL'ye çıktı; ons altın 4.000 doların üzerinde işlem gördü.",
+   "meaning": "Altın önceki günlerin düşüşünden toparlandı; almak istersen parça parça al.",
+   "affects": [
+    {
+     "cat": "altin",
+     "effect": "up",
+     "why": "Günlük toparlanma"
+    }
+   ],
+   "codes": [
+    "GAU",
+    "XAU"
+   ]
+  },
+  {
+   "title": "Küresel piyasalarda satış: Fed'den sıkı duruş mesajı, TCMB rezervleri eriyor",
+   "date": "2026-11-05",
+   "source": "Bloomberg HT",
+   "url": "https://www.bloomberght.com/piyasalarda-gunun-ozeti-5-kasim-2026-bist-100-de-degisimler-ve-doviz-fiyatlari-pkh-3793683",
+   "impact": "orta",
+   "what": "Günün başlıklarında bir Fed yetkilisinin 'kısıtlayıcı duruş' mesajı, TCMB rezervlerinde gerilemenin sürmesi ve TCMB'nin yılın son Enflasyon Raporu'nu 12 Kasım'da sunacağı yer alıyor.",
+   "meaning": "Fed'in faiz indirmeye uzak durması doları güçlü tutuyor ve gelişen ülke varlıklarına baskı yapıyor; 12 Kasım raporu faiz yolu için ipucu verecek.",
+   "affects": [
+    {
+     "cat": "doviz",
+     "effect": "up",
+     "why": "Güçlü dolar ve rezerv kaybı"
+    },
+    {
+     "cat": "altin",
+     "effect": "mixed",
+     "why": "Yüksek ABD faizi altına baskı, belirsizlik destek"
+    },
+    {
+     "cat": "hisse",
+     "effect": "down",
+     "why": "Risk iştahı zayıf"
+    }
+   ],
+   "codes": [
+    "USD",
+    "XAU",
+    "GAU"
+   ]
+  },
+  {
+   "title": "BIST 100 6 Kasım'da düşüşle açıldı; Asya'da yapay zeka ve İran savaşı endişesi",
+   "date": "2026-11-06",
+   "source": "Diken / Gmt8press",
+   "url": "https://www.diken.com.tr/borsa-gune-nasil-basladi-6-kasim-2026/",
+   "impact": "orta",
+   "what": "BIST 100 güne %0,84 düşüşle 11.237,83 puandan başladı; analistler destek 11.200-11.100, direnç 11.300-11.400 diyor. Kore borsası gün içinde %4,4'e varan düşüşle 6 ayın dibini gördü, yatırımcılar yapay zeka yatırım döngüsü ve İran savaşından endişeli.",
+   "meaning": "Küresel risk iştahı zayıf; kısa vadede borsada dalgalanma sürebilir.",
+   "affects": [
+    {
+     "cat": "hisse",
+     "effect": "down",
+     "why": "Açılışta düşüş, küresel satış"
+    }
+   ],
+   "codes": [
+    "KCHOL",
+    "SAHOL",
+    "ASELS",
+    "GARAN"
+   ]
+  }
+ ],
+ "partsMax": {
+  "analist": 10,
+  "deger": 20,
+  "fxdeger": 15,
+  "fxrisk": 10,
+  "getiri": 30,
+  "kalite": 15,
+  "karlilik": 30,
+  "makro": 20,
+  "maliyet": 20,
+  "momentum": 25,
+  "risk": 25,
+  "saglamlik": 15,
+  "tasima": 25,
+  "trend": 30,
+  "uyum": 10
+ },
+ "quickFundsAt": "2026-10-30T22:12:28Z",
+ "quickFxAt": "2026-10-30T16:08:20Z",
+ "quickStocksAt": "2026-10-30T16:08:20Z",
+ "removedStocks": [
+  {
+   "code": "KRDMD",
+   "date": "2026-11-01",
+   "name": "Kardemir (D)",
+   "score": 41,
+   "why": "Kârı enflasyonun çok altında ve son 3 ayda %13 düştü; düzelmezse listeden çıkacak."
+  },
+  {
+   "code": "ISCTR",
+   "date": "2026-11-01",
+   "name": "İş Bankası (C)",
+   "score": 41,
+   "why": "Kârı enflasyonun gerisinde ve yılbaşından beri %14 düştü; düzelmezse listeden çıkacak."
+  },
+  {
+   "code": "TRALT",
+   "date": "2026-11-01",
+   "name": "Türk Altın İşletmeleri",
+   "score": 41,
+   "why": "Son 3 ayda %31 düştü ve kârlılığı zayıf; düzelmezse listeden çıkacak."
+  }
+ ],
+ "sources": [
+  {
+   "title": "Midas – BIST 100",
+   "url": "https://www.getmidas.com/canli-borsa/xu100-bist-100-hisseleri"
+  },
+  {
+   "title": "Bigpara – Dolar",
+   "url": "https://bigpara.hurriyet.com.tr/doviz/dolar-ne-kadar/"
+  },
+  {
+   "title": "fvt.com.tr – fon sayfaları",
+   "url": "https://fvt.com.tr/fonlar/yatirim-fonlari/ALE"
+  }
+ ],
+ "stocks": [
+  {
+   "code": "TUPRS",
+   "d1": 0.68,
+   "exitAt": null,
+   "exitWhy": null,
+   "fk": 8.84,
+   "freeFloat": 49.04,
+   "fundAt": "2026-11-06",
+   "haber": 0,
+   "high1y": 416.78,
+   "kap": "",
+   "kapAgir": false,
+   "low1y": 172.19,
+   "m1": -14.76,
+   "m3": 11.76,
+   "mcapBn": 643.07,
+   "name": "Tüpraş",
+   "parts": {
+    "karlilik": 9,
+    "deger": 10,
+    "saglamlik": 13,
+    "momentum": 22,
+    "analist": 4
+   },
+   "pddd": 1.41,
+   "pick": false,
+   "price": 334,
+   "priceDate": "2026-11-06",
+   "profitGrowth": null,
+   "risk": 3,
+   "roe": 16,
+   "salesGrowth": null,
+   "score": 58,
+   "signal": "izle",
+   "target": 461.18,
+   "targetAt": "2026-11-04",
+   "targetN": 7,
+   "targetUpside": 38.1,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 1.43,
+   "w1": -6.06,
+   "why": "Son 1 yılda %81 yükseldi ve fiyat hâlâ hedeflerin altında; ama şirketin kârı gelecek yılın beklenen enflasyonunu geçemiyor, bu yüzden 'izle'.",
+   "y1": 80.86,
+   "ytd": 91.65
+  },
+  {
+   "code": "KCHOL",
+   "d1": -1.29,
+   "exitAt": null,
+   "exitWhy": null,
+   "fk": 13.34,
+   "freeFloat": 26.18,
+   "fundAt": "2026-11-06",
+   "haber": 0,
+   "high1y": null,
+   "kap": "",
+   "kapAgir": false,
+   "low1y": null,
+   "m1": -7.12,
+   "m3": -3.11,
+   "m6": null,
+   "mcapBn": 506.67,
+   "name": "Koç Holding",
+   "parts": {
+    "karlilik": 15,
+    "deger": 11,
+    "saglamlik": 12,
+    "momentum": 13,
+    "analist": 5
+   },
+   "pddd": 0.64,
+   "pick": false,
+   "price": 199.7,
+   "priceDate": "2026-11-06",
+   "profitGrowth": 146.5,
+   "risk": 3,
+   "roe": 4.8,
+   "salesGrowth": null,
+   "score": 56,
+   "signal": "izle",
+   "target": null,
+   "targetAt": null,
+   "targetN": null,
+   "targetUpside": null,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 1.38,
+   "w1": -0.1,
+   "why": "Birçok büyük şirkete ortak, fiyatı ortaklıklarının değerinin altında; son aylarda yatay seyrediyor.",
+   "y1": 21.09,
+   "ytd": 22.67
+  },
+  {
+   "code": "CCOLA",
+   "d1": -1.99,
+   "exitAt": null,
+   "exitWhy": null,
+   "fk": 8.87,
+   "freeFloat": 29.35,
+   "fundAt": "2026-11-06",
+   "haber": 0,
+   "high1y": 93.5,
+   "kap": "3 Kasım: Dokuz aylık kâr arttı, beklentiyle uyumlu.",
+   "kapAgir": false,
+   "low1y": 49.73,
+   "m1": -14.1,
+   "m3": -21.72,
+   "m6": null,
+   "mcapBn": 192.51,
+   "name": "Coca-Cola İçecek",
+   "parts": {
+    "karlilik": 14,
+    "deger": 13,
+    "saglamlik": 11,
+    "momentum": 8,
+    "analist": 5
+   },
+   "pddd": 1.81,
+   "pick": true,
+   "pickAt": "2026-10-29",
+   "price": 68.85,
+   "priceDate": "2026-11-06",
+   "profitGrowth": null,
+   "risk": 2,
+   "roe": 20.4,
+   "salesGrowth": null,
+   "score": 51,
+   "signal": "izle",
+   "target": null,
+   "targetAt": null,
+   "targetN": null,
+   "targetUpside": null,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 2.63,
+   "w1": -8.99,
+   "why": "Kârı enflasyonu yakalıyor ama son 3 ayda %22 düştü, trend zayıf.",
+   "y1": 27.37,
+   "ytd": 19.03
+  },
+  {
+   "code": "SAHOL",
+   "d1": -1.47,
+   "exitAt": null,
+   "exitWhy": null,
+   "fk": 6.96,
+   "freeFloat": 51.23,
+   "fundAt": "2026-11-06",
+   "haber": 1,
+   "high1y": null,
+   "kap": "",
+   "kapAgir": false,
+   "low1y": null,
+   "m1": -5.57,
+   "m3": -5.89,
+   "m6": null,
+   "mcapBn": 176.12,
+   "name": "Sabancı Holding",
+   "parts": {
+    "karlilik": 15,
+    "deger": 15,
+    "saglamlik": 12,
+    "momentum": 8,
+    "analist": 6
+   },
+   "pddd": 0.4,
+   "pick": false,
+   "price": 83.85,
+   "priceDate": "2026-11-06",
+   "profitGrowth": null,
+   "risk": 3,
+   "roe": 5.7,
+   "salesGrowth": -5.9,
+   "score": 56,
+   "signal": "izle",
+   "target": 156.38,
+   "targetAt": "2026-11-05",
+   "targetN": 6,
+   "targetUpside": 86.5,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 1.29,
+   "w1": 0.72,
+   "why": "Ortak olduğu şirketlerin değerine göre çok ucuz ve analist hedefleri yüksek; ama son 3 ayda zayıf gitti.",
+   "y1": 6.23,
+   "ytd": 1.12
+  },
+  {
+   "code": "ASTOR",
+   "d1": 1.88,
+   "exitAt": "2026-11-06",
+   "exitWhy": "Son 3 ayda yarıdan fazla değer kaybetti ve bilançoda kârının sert düşmesi bekleniyor.",
+   "fk": 13.55,
+   "freeFloat": 42.7,
+   "fundAt": "2026-11-06",
+   "haber": -2,
+   "high1y": null,
+   "kap": "",
+   "kapAgir": false,
+   "low1y": null,
+   "m1": -22.76,
+   "m3": -50.82,
+   "mcapBn": 151.8,
+   "name": "Astor Enerji",
+   "parts": {
+    "karlilik": 10,
+    "deger": 7,
+    "saglamlik": 8,
+    "momentum": 12,
+    "analist": 3
+   },
+   "pddd": 3.47,
+   "pick": false,
+   "price": 152.1,
+   "priceDate": "2026-11-06",
+   "profitGrowth": null,
+   "risk": 4,
+   "roe": 25.6,
+   "salesGrowth": null,
+   "score": 40,
+   "signal": "uzak",
+   "target": 425.18,
+   "targetAt": "2026-09-25",
+   "targetN": 8,
+   "targetUpside": 179.5,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 4.76,
+   "w1": -14.33,
+   "why": "Son 3 ayda yarıdan fazla düştü ve bilançoda kârın sert düşmesi bekleniyor; analist hedefleri bayat kaldı.",
+   "y1": 52.94,
+   "ytd": 30.83
+  },
+  {
+   "code": "BIMAS",
+   "d1": 0.41,
+   "exitAt": null,
+   "exitWhy": null,
+   "fk": 15.03,
+   "freeFloat": 67.49,
+   "fundAt": "2026-11-06",
+   "haber": 0,
+   "high1y": null,
+   "kap": "",
+   "kapAgir": false,
+   "low1y": null,
+   "m1": -12.83,
+   "m3": -2.81,
+   "m6": null,
+   "mcapBn": 443.7,
+   "name": "BİM Mağazalar",
+   "parts": {
+    "karlilik": 9,
+    "deger": 8,
+    "saglamlik": 14,
+    "momentum": 17,
+    "analist": 5
+   },
+   "pddd": 2.2,
+   "pick": false,
+   "price": 370.75,
+   "priceDate": "2026-11-06",
+   "profitGrowth": 103,
+   "risk": 2,
+   "roe": 14.6,
+   "salesGrowth": 10,
+   "score": 53,
+   "signal": "izle",
+   "target": null,
+   "targetAt": null,
+   "targetN": null,
+   "targetUpside": null,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 1.15,
+   "w1": -5.38,
+   "why": "Dalgalanması az, sağlam perakendeci; kârı enflasyonun gerisinde ve fiyatı biraz pahalı.",
+   "y1": 33.61,
+   "ytd": 39.58
+  },
+  {
+   "code": "GARAN",
+   "d1": -1.62,
+   "exitAt": null,
+   "exitWhy": null,
+   "fk": 4.74,
+   "freeFloat": 13.96,
+   "fundAt": "2026-11-06",
+   "haber": 1,
+   "high1y": null,
+   "kap": "28 Ekim: Üçüncü çeyrek kârı beklentinin üstünde geldi.",
+   "kapAgir": false,
+   "low1y": null,
+   "m1": 7.13,
+   "m3": 7.71,
+   "m6": null,
+   "mcapBn": 586.74,
+   "name": "Garanti BBVA",
+   "parts": {
+    "karlilik": 14,
+    "deger": 5,
+    "saglamlik": 10,
+    "momentum": 13,
+    "analist": 5
+   },
+   "pddd": 1.13,
+   "pick": false,
+   "price": 139.7,
+   "priceDate": "2026-11-06",
+   "profitGrowth": 16,
+   "risk": 3,
+   "roe": 23.8,
+   "salesGrowth": 64.3,
+   "score": 47,
+   "signal": "izle",
+   "target": null,
+   "targetAt": null,
+   "targetN": null,
+   "targetUpside": null,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 1.48,
+   "w1": 10.26,
+   "why": "Kârı güçlü ve beklentinin üstünde geldi; ama banka şu an defter değerine göre pahalı ve halka açık payı az.",
+   "y1": 7.66,
+   "ytd": 1.29
+  },
+  {
+   "code": "YKBNK",
+   "d1": -1.97,
+   "exitAt": "2026-11-06",
+   "exitWhy": "Son çeyrek kârı %29 düştü ve hisse kârına göre pahalı kaldı.",
+   "fk": 5.94,
+   "freeFloat": 38.55,
+   "fundAt": "2026-11-06",
+   "haber": -1,
+   "high1y": null,
+   "kap": "3 Kasım: Üçüncü çeyrek kârı yıllık %29 düştü, beklentiyle uyumlu.",
+   "kapAgir": false,
+   "low1y": null,
+   "m1": -3.57,
+   "m3": 4.86,
+   "m6": null,
+   "mcapBn": 302.74,
+   "name": "Yapı Kredi",
+   "parts": {
+    "karlilik": 8,
+    "deger": 3,
+    "saglamlik": 12,
+    "momentum": 13,
+    "analist": 5
+   },
+   "pddd": 1.02,
+   "pick": false,
+   "price": 35.8,
+   "priceDate": "2026-11-06",
+   "profitGrowth": -29.2,
+   "risk": 3,
+   "roe": 17.2,
+   "salesGrowth": null,
+   "score": 41,
+   "signal": "uzak",
+   "target": null,
+   "targetUpside": null,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 1.7,
+   "w1": -7.48,
+   "why": "Son çeyrek kârı bir önceki yıla göre %29 düştü ve fiyatı kârına göre pahalı kaldı.",
+   "y1": 7.68,
+   "ytd": -4.74,
+   "targetN": null,
+   "targetAt": null
+  },
+  {
+   "code": "AKBNK",
+   "d1": -2.16,
+   "exitAt": null,
+   "exitWhy": null,
+   "fk": 5.32,
+   "freeFloat": 52.93,
+   "fundAt": "2026-11-06",
+   "haber": 0,
+   "high1y": null,
+   "kap": "",
+   "kapAgir": false,
+   "low1y": null,
+   "m1": -4.64,
+   "m3": -2.66,
+   "m6": null,
+   "mcapBn": 341.9,
+   "name": "Akbank",
+   "parts": {
+    "karlilik": 11,
+    "deger": 4,
+    "saglamlik": 13,
+    "momentum": 11,
+    "analist": 5
+   },
+   "pddd": 1.04,
+   "pick": false,
+   "price": 65.75,
+   "priceDate": "2026-11-06",
+   "profitGrowth": 18,
+   "risk": 3,
+   "roe": 19.5,
+   "salesGrowth": null,
+   "score": 44,
+   "signal": "izle",
+   "target": null,
+   "targetUpside": null,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 1.56,
+   "w1": 4.37,
+   "why": "Kâr beklentiyle uyumlu ama enflasyonun altında; defter değerine göre pahalı.",
+   "y1": 10.88,
+   "ytd": -2.78,
+   "targetN": null,
+   "targetAt": null
+  },
+  {
+   "code": "ASELS",
+   "d1": 1.67,
+   "exitAt": null,
+   "exitWhy": null,
+   "fk": 31.37,
+   "freeFloat": 25.77,
+   "fundAt": "2026-11-06",
+   "haber": 2,
+   "high1y": null,
+   "kap": "27 Ekim: Üçüncü çeyrek kârı beklentinin üstünde, sipariş bakiyesi arttı.",
+   "kapAgir": false,
+   "low1y": null,
+   "m1": -10.5,
+   "m3": -4.11,
+   "m6": null,
+   "mcapBn": 1524.18,
+   "name": "Aselsan",
+   "parts": {
+    "karlilik": 10,
+    "deger": 2,
+    "saglamlik": 12,
+    "momentum": 19,
+    "analist": 6
+   },
+   "pddd": 4.55,
+   "pick": false,
+   "price": 334.5,
+   "priceDate": "2026-11-06",
+   "profitGrowth": 82,
+   "risk": 3,
+   "roe": 14.5,
+   "salesGrowth": 28,
+   "score": 49,
+   "signal": "izle",
+   "target": 528,
+   "targetUpside": 57.8,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 1.6,
+   "w1": -7.25,
+   "why": "Kârı bir yılda %82 arttı ve sipariş bakiyesi rekor; ama hisse kârına göre çok pahalı.",
+   "y1": 71.52,
+   "ytd": 43.5,
+   "targetN": 5,
+   "targetAt": "2026-10-30"
+  },
+  {
+   "code": "VAKBN",
+   "d1": -2.45,
+   "exitAt": null,
+   "exitWhy": null,
+   "fk": 4.18,
+   "freeFloat": 5.38,
+   "fundAt": "2026-11-06",
+   "haber": 0,
+   "high1y": null,
+   "kap": "",
+   "kapAgir": false,
+   "low1y": null,
+   "m1": -12.32,
+   "m3": -0.75,
+   "m6": null,
+   "mcapBn": 307.59,
+   "name": "Vakıfbank",
+   "parts": {
+    "karlilik": 11,
+    "deger": 5,
+    "saglamlik": 7,
+    "momentum": 16,
+    "analist": 5
+   },
+   "pddd": 0.86,
+   "pick": false,
+   "price": 31.02,
+   "priceDate": "2026-11-06",
+   "profitGrowth": null,
+   "risk": 3,
+   "roe": 20.6,
+   "salesGrowth": null,
+   "score": 44,
+   "signal": "izle",
+   "target": null,
+   "targetUpside": null,
+   "updatedAt": "2026-11-06T07:55:00Z",
+   "vol": 2.08,
+   "w1": -10.8,
+   "why": "Kârı enflasyonun gerisinde; halka açık payı çok az olduğu için fiyatı kolay oynayabilir.",
+   "y1": 24.2,
+   "ytd": -3.41,
+   "targetN": null,
+   "targetAt": null
+  }
+ ],
+ "updatedAt": "2026-11-06T08:05:00Z"
+}
