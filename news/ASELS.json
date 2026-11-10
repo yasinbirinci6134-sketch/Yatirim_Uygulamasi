@@ -1,1 +1,25 @@
-{"at": "2026-11-09T07:46:40Z", "code": "ASELS", "items": [{"date": "2026-10-26", "effect": "up", "meaning": "Yeni sipariş gelir görünürlüğünü artırır.", "source": "Alomaliye", "title": "Aselsan 523 milyon euroluk hava savunma sözleşmesi imzaladı", "url": "https://www.alomaliye.com/2026/10/26/aselsandan-523-milyon-avroluk-hava-savunma-sozlesmesi/", "what": "Savunma Sanayii Başkanlığı ile yeni nesil hava ve füze savunma sistemi sözleşmesi imzalandı."}], "summary": "523 milyon euroluk yeni savunma sözleşmesi imzalandı."}
+{
+ "code": "ASELS",
+ "at": "2026-11-10T18:55:00Z",
+ "summary": "Yeni büyük ihracat sözleşmesi ve güçlü çeyrek sonuçları geldi. Analistlerin çoğu hedef fiyatını yükseltti.",
+ "items": [
+  {
+   "title": "Yeni İş İlişkisi",
+   "date": "2026-11-03",
+   "source": "borsacoo.com",
+   "url": "https://borsacoo.com/bildirim/104488",
+   "what": "Uluslararası müşteri ile 1.1 mlr $ hava savunma sistemleri ihracat sözleşmesi",
+   "meaning": "Hisse için olumlu bir gelişme.",
+   "effect": "up"
+  },
+  {
+   "title": "9A26 finansal tablolar / Faaliyet Raporu",
+   "date": "2026-10-27",
+   "source": "borsacoo.com",
+   "url": "https://borsacoo.com/bildirim/102971",
+   "what": "3Ç26 net kâr 11.2-11.9 mlr TL (+%81-82 YoY, beklenti 8.87 mlr), 9A 26.47 mlr TL (+%75), 9A satış 151.4 mlr TL",
+   "meaning": "Hisse için olumlu bir gelişme.",
+   "effect": "up"
+  }
+ ]
+}

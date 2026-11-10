@@ -1,1 +1,16 @@
-{"at": "2026-11-09T07:46:40Z", "code": "GARAN", "items": [{"date": "2026-10-28", "effect": "up", "meaning": "Hafif beklenti üstü bilanço.", "source": "CNBC-e", "title": "Garanti BBVA dokuz aylık kârı %16 arttı", "url": "https://www.cnbce.com/sirket-bilancolari/borsa-istanbulun-bankacilik-devinden-guclu-bilanco-kari-yuzde-16-yukseldi-h40539", "what": "Dokuz aylık net kâr yaklaşık 96,6 milyar TL; üçüncü çeyrek yaklaşık 33,2 milyar TL ile beklentinin biraz üstünde."}], "summary": "Üçüncü çeyrek kârı beklentinin biraz üzerinde geldi."}
+{
+ "at": "2026-11-09T07:46:40Z",
+ "code": "GARAN",
+ "items": [
+  {
+   "date": "2026-10-28",
+   "effect": "up",
+   "meaning": "Hafif beklenti üstü bilanço.",
+   "source": "CNBC-e",
+   "title": "Garanti BBVA dokuz aylık kârı %16 arttı",
+   "url": "https://www.cnbce.com/sirket-bilancolari/borsa-istanbulun-bankacilik-devinden-guclu-bilanco-kari-yuzde-16-yukseldi-h40539",
+   "what": "Dokuz aylık net kâr yaklaşık 96,6 milyar TL; üçüncü çeyrek yaklaşık 33,2 milyar TL ile beklentinin biraz üstünde."
+  }
+ ],
+ "summary": "Üçüncü çeyrek kârı beklentinin biraz üzerinde geldi."
+}

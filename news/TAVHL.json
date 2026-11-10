@@ -1,0 +1,25 @@
+{
+ "code": "TAVHL",
+ "at": "2026-11-10T18:55:00Z",
+ "summary": "Üçüncü çeyrek kârı beklentiyi belirgin şekilde aştı. Net borcu çeyrekte azaldı.",
+ "items": [
+  {
+   "title": "Pay Alım Satım Bildirimi",
+   "date": "2026-11-10",
+   "source": "borsacoo.com",
+   "url": "https://borsacoo.com/bildirim/106283",
+   "what": "Goldman Sachs International 341,694 pay aldı; Goldman Sachs Group dolaylı payı %2.98 → %3.07 (tarih borsacoo'da göreli, ~10.11)",
+   "meaning": "Hisse için olumlu bir gelişme.",
+   "effect": "up"
+  },
+  {
+   "title": "Özel Durum Açıklaması (Genel)",
+   "date": "2026-11-10",
+   "source": "borsacoo.com",
+   "url": "https://borsacoo.com/bildirim/106286",
+   "what": "Ekim 2026 yatırımcı bülteni (trafik) yayımlandı (tarih göreli, ~10.11)",
+   "meaning": "Etkisi sınırlı ya da karışık olabilir.",
+   "effect": "mixed"
+  }
+ ]
+}

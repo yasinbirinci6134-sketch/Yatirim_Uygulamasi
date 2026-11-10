@@ -1,1 +1,43 @@
-{"at": "2026-11-09T07:46:40Z", "code": "VAKBN", "items": [{"date": "2026-11-05", "effect": "up", "meaning": "Güçlü beklenti üstü sonuç olumlu.", "source": "CNBC-e", "title": "Vakıfbank üçüncü çeyrek kârı beklentiyi aştı", "url": "https://www.cnbce.com/sirket-bilancolari/vakifbanktan-vakbn-181-milyar-tl-net-kar-bilanco-beklentileri-asti-h41132", "what": "Konsolide net kâr 18,1 milyar TL; dokuz aylık 51,8 milyar TL."}], "summary": "Üçüncü çeyrek kârı beklentinin belirgin üzerinde."}
+{
+ "code": "VAKBN",
+ "at": "2026-11-10T18:55:00Z",
+ "summary": "Çeyrek kârı yıllık %30 arttı. Takipteki krediler yükseldi ve sermaye oranı geriledi.",
+ "items": [
+  {
+   "title": "Pay Dışında SPA İşlemlerine İlişkin Bildirim",
+   "date": "2026-11-09",
+   "source": "borsacoo.com",
+   "url": "https://borsacoo.com/bildirim/105698",
+   "what": "1.08 mlr TL 91 gün vadeli finansman bonosu ihracı",
+   "meaning": "Etkisi sınırlı ya da karışık olabilir.",
+   "effect": "mixed"
+  },
+  {
+   "title": "Kurumsal Yönetim İlkelerine Uyum Derecelendirmesi",
+   "date": "2026-11-06",
+   "source": "borsacoo.com",
+   "url": "https://borsacoo.com/bildirim/105223",
+   "what": "JCR Avrasya ile kurumsal yönetim derecelendirme sözleşmesi 1 yıl yenilendi",
+   "meaning": "Etkisi sınırlı ya da karışık olabilir.",
+   "effect": "mixed"
+  },
+  {
+   "title": "Faaliyet Raporu (Konsolide / Konsolide Olmayan) 9A26",
+   "date": "2026-11-05",
+   "source": "borsacoo.com",
+   "url": "https://borsacoo.com/bildirim/105074",
+   "what": "9A26 faaliyet raporları; 3Ç26 solo net kâr 15.43 mlr TL (+%29.8 YoY, beklenti +%7.6 üstü), konsolide 18.13 mlr TL",
+   "meaning": "Hisse için olumlu bir gelişme.",
+   "effect": "up"
+  },
+  {
+   "title": "Özel Durum Açıklaması (Genel)",
+   "date": "2026-10-27",
+   "source": "borsacoo.com",
+   "url": "https://borsacoo.com/bildirim/102916",
+   "what": "143,761 adet pay ort. 29.98 TL'den geri alındı",
+   "meaning": "Hisse için olumlu bir gelişme.",
+   "effect": "up"
+  }
+ ]
+}
