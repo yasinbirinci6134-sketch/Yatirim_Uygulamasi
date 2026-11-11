@@ -1,34 +1,34 @@
 {
- "code": "YKBNK",
  "at": "2026-11-10T18:55:00Z",
- "summary": "Son çeyrek kârı geçen yıla göre düştü, beklentiyle uyumlu geldi. Banka yurt dışından yeni kredi sağladı.",
+ "code": "YKBNK",
  "items": [
   {
-   "title": "Özel Durum Açıklaması (Genel) - sendikasyon",
    "date": "2026-11-10",
-   "source": "borsacoo.com",
-   "url": "https://borsacoo.com/bildirim/106529",
-   "what": "933 mn $ sendikasyon kredisi yenilendi (tarih borsacoo'da göreli; ~10.11.2026)",
+   "effect": "up",
    "meaning": "Hisse için olumlu bir gelişme.",
-   "effect": "up"
+   "source": "borsacoo.com",
+   "title": "Özel Durum Açıklaması (Genel) - sendikasyon",
+   "url": "https://borsacoo.com/bildirim/106529",
+   "what": "933 mn $ sendikasyon kredisi yenilendi (tarih borsacoo'da göreli; ~10.11.2026)"
   },
   {
-   "title": "Özel Durum Açıklaması (Genel) - SPK talebi",
    "date": "2026-11-04",
-   "source": "borsacoo.com",
-   "url": "https://borsacoo.com/bildirim/104699",
-   "what": "SPK talebiyle: 1.13 mn TL'lik Eksan İnşaat davası temyizde (önemsiz)",
+   "effect": "mixed",
    "meaning": "Etkisi sınırlı ya da karışık olabilir.",
-   "effect": "mixed"
+   "source": "borsacoo.com",
+   "title": "Özel Durum Açıklaması (Genel) - SPK talebi",
+   "url": "https://borsacoo.com/bildirim/104699",
+   "what": "SPK talebiyle: 1.13 mn TL'lik Eksan İnşaat davası temyizde (önemsiz)"
   },
   {
-   "title": "Özel Durum Açıklaması (Genel) - 9A26 finansal tablolar",
    "date": "2026-11-03",
-   "source": "borsacoo.com",
-   "url": "https://borsacoo.com/bildirim/104441",
-   "what": "3Ç26 net kâr 10.67 mlr TL (yıllık -%29, çeyreklik yatay), beklentiyle uyumlu; 9A 41.7 mlr TL (+%10)",
+   "effect": "mixed",
    "meaning": "Etkisi sınırlı ya da karışık olabilir.",
-   "effect": "mixed"
+   "source": "borsacoo.com",
+   "title": "Özel Durum Açıklaması (Genel) - 9A26 finansal tablolar",
+   "url": "https://borsacoo.com/bildirim/104441",
+   "what": "3Ç26 net kâr 10.67 mlr TL (yıllık -%29, çeyreklik yatay), beklentiyle uyumlu; 9A 41.7 mlr TL (+%10)"
   }
- ]
+ ],
+ "summary": "Son çeyrek kârı geçen yıla göre düştü, beklentiyle uyumlu geldi. Banka yurt dışından yeni kredi sağladı."
 }

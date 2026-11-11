@@ -1,34 +1,34 @@
 {
- "code": "CCOLA",
  "at": "2026-11-10T18:55:00Z",
- "summary": "Çeyrek kârı enflasyon etkisiyle geriledi ve kâr marjı daraldı. Borcu ise belirgin şekilde azaldı.",
+ "code": "CCOLA",
  "items": [
   {
+   "date": "2026-11-03",
+   "effect": "mixed",
+   "meaning": "Etkisi sınırlı ya da karışık olabilir.",
+   "source": "borsacoo.com",
    "title": "Geleceğe Dönük Değerlendirmeler",
-   "date": "2026-11-03",
-   "source": "borsacoo.com",
    "url": "https://borsacoo.com/bildirim/104613",
-   "what": "2026 beklentisi güncellendi: konsolide satış hacminde yüksek tek haneli büyüme, FAVÖK marjı yatay",
-   "meaning": "Etkisi sınırlı ya da karışık olabilir.",
-   "effect": "mixed"
+   "what": "2026 beklentisi güncellendi: konsolide satış hacminde yüksek tek haneli büyüme, FAVÖK marjı yatay"
   },
   {
-   "title": "Özel Durum Açıklaması (Genel) - 9A26 finansallar",
    "date": "2026-11-03",
-   "source": "borsacoo.com",
-   "url": "https://borsacoo.com/bildirim/104612",
-   "what": "3Ç26 net kâr 7.8 mlr TL (-%16.4 YoY, beklentiyle uyumlu), gelir 68.4 mlr TL (+%1 reel)",
+   "effect": "mixed",
    "meaning": "Etkisi sınırlı ya da karışık olabilir.",
-   "effect": "mixed"
+   "source": "borsacoo.com",
+   "title": "Özel Durum Açıklaması (Genel) - 9A26 finansallar",
+   "url": "https://borsacoo.com/bildirim/104612",
+   "what": "3Ç26 net kâr 7.8 mlr TL (-%16.4 YoY, beklentiyle uyumlu), gelir 68.4 mlr TL (+%1 reel)"
   },
   {
-   "title": "Pay Dışında SPA İşlemlerine İlişkin Bildirim",
    "date": "2026-10-27",
-   "source": "borsacoo.com",
-   "url": "https://borsacoo.com/bildirim/102769",
-   "what": "TRFCCLA42713 tahvilinin 2. kuponu ödendi (~293.7 mn TL)",
+   "effect": "mixed",
    "meaning": "Etkisi sınırlı ya da karışık olabilir.",
-   "effect": "mixed"
+   "source": "borsacoo.com",
+   "title": "Pay Dışında SPA İşlemlerine İlişkin Bildirim",
+   "url": "https://borsacoo.com/bildirim/102769",
+   "what": "TRFCCLA42713 tahvilinin 2. kuponu ödendi (~293.7 mn TL)"
   }
- ]
+ ],
+ "summary": "Çeyrek kârı enflasyon etkisiyle geriledi ve kâr marjı daraldı. Borcu ise belirgin şekilde azaldı."
 }

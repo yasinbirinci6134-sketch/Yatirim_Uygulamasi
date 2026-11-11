@@ -1,25 +1,25 @@
 {
- "code": "ASELS",
  "at": "2026-11-10T18:55:00Z",
- "summary": "Yeni büyük ihracat sözleşmesi ve güçlü çeyrek sonuçları geldi. Analistlerin çoğu hedef fiyatını yükseltti.",
+ "code": "ASELS",
  "items": [
   {
-   "title": "Yeni İş İlişkisi",
    "date": "2026-11-03",
-   "source": "borsacoo.com",
-   "url": "https://borsacoo.com/bildirim/104488",
-   "what": "Uluslararası müşteri ile 1.1 mlr $ hava savunma sistemleri ihracat sözleşmesi",
+   "effect": "up",
    "meaning": "Hisse için olumlu bir gelişme.",
-   "effect": "up"
+   "source": "borsacoo.com",
+   "title": "Yeni İş İlişkisi",
+   "url": "https://borsacoo.com/bildirim/104488",
+   "what": "Uluslararası müşteri ile 1.1 mlr $ hava savunma sistemleri ihracat sözleşmesi"
   },
   {
-   "title": "9A26 finansal tablolar / Faaliyet Raporu",
    "date": "2026-10-27",
-   "source": "borsacoo.com",
-   "url": "https://borsacoo.com/bildirim/102971",
-   "what": "3Ç26 net kâr 11.2-11.9 mlr TL (+%81-82 YoY, beklenti 8.87 mlr), 9A 26.47 mlr TL (+%75), 9A satış 151.4 mlr TL",
+   "effect": "up",
    "meaning": "Hisse için olumlu bir gelişme.",
-   "effect": "up"
+   "source": "borsacoo.com",
+   "title": "9A26 finansal tablolar / Faaliyet Raporu",
+   "url": "https://borsacoo.com/bildirim/102971",
+   "what": "3Ç26 net kâr 11.2-11.9 mlr TL (+%81-82 YoY, beklenti 8.87 mlr), 9A 26.47 mlr TL (+%75), 9A satış 151.4 mlr TL"
   }
- ]
+ ],
+ "summary": "Yeni büyük ihracat sözleşmesi ve güçlü çeyrek sonuçları geldi. Analistlerin çoğu hedef fiyatını yükseltti."
 }
