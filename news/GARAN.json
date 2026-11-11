@@ -1,16 +1,52 @@
 {
- "at": "2026-11-09T07:46:40Z",
+ "at": "2026-11-11T18:55:00Z",
  "code": "GARAN",
  "items": [
   {
    "date": "2026-10-28",
+   "effect": "mixed",
+   "meaning": "Banka beklenenden fazla kâr etti. Ancak kâr artışı %30 civarındaki enflasyonun altında kaldığı için reel olarak küçülme var.",
+   "source": "hisse.net",
+   "title": "Garanti BBVA (GARAN) 2026 3. çeyrek bilançosu: net kâr %16 arttı",
+   "url": "https://www.hisse.net/haber/garanti-bbva-garan-2026-3-ceyrek-bilancosu-net-kar-yuzde-16-artti-104422",
+   "what": "9 aylık ana ortaklık net kârı 96,62 milyar TL ile yıllık %15,8 arttı; 3Ç kârı 33,18 milyar TL ile beklentinin üzerinde geldi."
+  },
+  {
+   "date": "2026-10-30",
+   "effect": "mixed",
+   "meaning": "Uzmanlar hisseyi hâlâ bugünkü fiyatın üzerinde değerliyor, ama bazıları beklentisini biraz aşağı çekti.",
+   "source": "Rota Borsa",
+   "title": "Garanti Bankası (GARAN) hisse hedef fiyat 2027! 6 aracı kurum açıkladı",
+   "url": "https://rotaborsa.com/garanti-bankasi-garan-hisse-hedef-fiyat-2027-6-araci-kurum-acikladi/",
+   "what": "Bilanço sonrası 6 kurum hedef fiyat verdi (165–211,30 TL); Şeker ve Yapı Kredi Yatırım hedeflerini düşürdü."
+  },
+  {
+   "date": "2026-11-03",
    "effect": "up",
-   "meaning": "Hafif beklenti üstü bilanço.",
-   "source": "CNBC-e",
-   "title": "Garanti BBVA dokuz aylık kârı %16 arttı",
-   "url": "https://www.cnbce.com/sirket-bilancolari/borsa-istanbulun-bankacilik-devinden-guclu-bilanco-kari-yuzde-16-yukseldi-h40539",
-   "what": "Dokuz aylık net kâr yaklaşık 96,6 milyar TL; üçüncü çeyrek yaklaşık 33,2 milyar TL ile beklentinin biraz üstünde."
+   "meaning": "Banka kendi hissesini borsadan satın alıyor; bu hem talep yaratır hem de yönetimin hisseyi ucuz bulduğunu gösterir.",
+   "source": "borsacoo (KAP #1691943)",
+   "title": "GARAN pay geri alım programı bildirimi",
+   "url": "https://borsacoo.com/bildirim/104635",
+   "what": "Banka 4 Kasım'dan itibaren 3 yıl boyunca en fazla 11 milyar TL ile kendi hisselerini geri alacak; alınan paylar itfa edilecek. 4–9 Kasım arasında düzenli alımlar yapıldı."
+  },
+  {
+   "date": "2026-11-03",
+   "effect": "up",
+   "meaning": "Yurt dışındaki şirket satışından gelecek ek kâr 4. çeyrek sonuçlarını yukarı taşıyacak; ancak bu tek seferlik bir gelir.",
+   "source": "hisse.net",
+   "title": "Garanti BBVA Romanya'daki iki şirketini sattı: 6,7 milyar TL'lik kâr",
+   "url": "https://www.hisse.net/haber/garanti-bbva-romanya-daki-iki-sirketini-satti-6-7-milyar-tl-lik-k-r-105073",
+   "what": "Romanya iştirakleri 3,01 milyar RON'a Raiffeisen'e satıldı; işlem 2 Kasım'da tamamlandı ve yaklaşık 6,7 milyar TL tek seferlik kâr oluştu."
+  },
+  {
+   "date": "2026-11-05",
+   "effect": "mixed",
+   "meaning": "Banka kendi grubundaki leasing şirketine sermaye koyuyor; bu grup içi bir işlem, hisseye doğrudan etkisi sınırlı.",
+   "source": "getmidas (KAP)",
+   "title": "GARAN KAP bildirimleri: Garanti BBVA Leasing sermaye artırımına 17 milyar TL katılım",
+   "url": "https://www.getmidas.com/canli-borsa/garan-hisse/haber/",
+   "what": "Banka, iştiraki Garanti BBVA Leasing'in sermaye artırımına 17 milyar TL ile katılma kararı aldı (tarih getmidas'taki göreli tarihten tahmini)."
   }
  ],
- "summary": "Üçüncü çeyrek kârı beklentinin biraz üzerinde geldi."
+ "summary": "Garanti BBVA beklentiyi aşan 3. çeyrek kârı açıkladı, 11 milyar TL'lik hisse geri alımına başladı ve Romanya satışından 6,7 milyar TL ek kâr yazacak. Hisse son bir ayda yaklaşık %20 yükseldi."
 }

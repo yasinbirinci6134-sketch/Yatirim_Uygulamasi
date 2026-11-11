@@ -1,43 +1,43 @@
 {
- "at": "2026-11-10T18:55:00Z",
+ "at": "2026-11-11T18:55:00Z",
  "code": "VAKBN",
  "items": [
   {
-   "date": "2026-11-09",
-   "effect": "mixed",
-   "meaning": "Etkisi sınırlı ya da karışık olabilir.",
-   "source": "borsacoo.com",
-   "title": "Pay Dışında SPA İşlemlerine İlişkin Bildirim",
-   "url": "https://borsacoo.com/bildirim/105698",
-   "what": "1.08 mlr TL 91 gün vadeli finansman bonosu ihracı"
+   "date": "2026-11-05",
+   "effect": "up",
+   "meaning": "Banka analistlerin tahmininden belirgin şekilde fazla kâr etti. Kâr geçen yılın aynı dönemine göre yaklaşık %30 arttı, bu da enflasyonla aşağı yukarı aynı hız.",
+   "source": "CNBC-e",
+   "title": "VakıfBank'tan (VAKBN) 18,1 milyar TL net kâr! Bilanço beklentileri aştı",
+   "url": "https://www.cnbce.com/sirket-bilancolari/vakifbanktan-vakbn-181-milyar-tl-net-kar-bilanco-beklentileri-asti-h41132",
+   "what": "Vakıfbank 3. çeyrekte 18,13 mlr TL net kâr açıkladı; beklenti ~14,5 mlr TL idi. 9 aylık kâr 51,8 mlr TL."
   },
   {
    "date": "2026-11-06",
    "effect": "mixed",
-   "meaning": "Etkisi sınırlı ya da karışık olabilir.",
-   "source": "borsacoo.com",
-   "title": "Kurumsal Yönetim İlkelerine Uyum Derecelendirmesi",
-   "url": "https://borsacoo.com/bildirim/105223",
-   "what": "JCR Avrasya ile kurumsal yönetim derecelendirme sözleşmesi 1 yıl yenilendi"
+   "meaning": "Kâr iyi olsa da geri ödenmeyen kredilerin artması ve sermaye tamponunun azalması risk işaretleri. Denetçinin çekincesi bilançonun kalitesine dair soru işareti yaratıyor.",
+   "source": "Midas",
+   "title": "Vakıfbank 3Ç26: Kâr beklentiyi aştı, sonuç bankacılık faaliyetlerinden geldi",
+   "url": "https://www.getmidas.com/midasin-kulaklari/vakifbank-3c26-kar-beklentiyi-asti-sonuc-bankacilik-faaliyetlerinden-geldi-p-892415",
+   "what": "Net faiz geliri güçlü arttı; ancak takibe dönüşen kredi oranı %4,08'e çıktı, sermaye yeterlilik oranı %13,60'a geriledi ve denetçi şartlı görüş verdi."
   },
   {
    "date": "2026-11-05",
    "effect": "up",
-   "meaning": "Hisse için olumlu bir gelişme.",
-   "source": "borsacoo.com",
-   "title": "Faaliyet Raporu (Konsolide / Konsolide Olmayan) 9A26",
-   "url": "https://borsacoo.com/bildirim/105074",
-   "what": "9A26 faaliyet raporları; 3Ç26 solo net kâr 15.43 mlr TL (+%29.8 YoY, beklenti +%7.6 üstü), konsolide 18.13 mlr TL"
+   "meaning": "Banka büyümeye devam ediyor. Bu, faaliyetlerin genişlediğini gösteren nötr-olumlu bir bilgi.",
+   "source": "Foreks",
+   "title": "VakıfBank, 2026 yılının üçüncü çeyreğinde aktif büyüklüğünü 6,2 trilyon TL'ye taşıdı",
+   "url": "https://www.foreks.com/haber/detay/6aecaff995131d72027d7a48/FRKS/tr/vakifbank-2026-yilinin-ucuncu-ceyreginde-aktif-buyuklugunu-6-2-trilyon-tl-ye-tasidi-05-11-26/",
+   "what": "Bankanın toplam aktifleri 6,2 trilyon TL'ye ulaştı; solo 9 aylık net kâr 45,5 mlr TL."
   },
   {
-   "date": "2026-10-27",
-   "effect": "up",
-   "meaning": "Hisse için olumlu bir gelişme.",
-   "source": "borsacoo.com",
-   "title": "Özel Durum Açıklaması (Genel)",
-   "url": "https://borsacoo.com/bildirim/102916",
-   "what": "143,761 adet pay ort. 29.98 TL'den geri alındı"
+   "date": "2026-11-09",
+   "effect": "mixed",
+   "meaning": "Bu, bankanın olağan borçlanma işlemi. Hisse için kayda değer bir etkisi beklenmez.",
+   "source": "Midas (KAP)",
+   "title": "Vakıfbank 1,07 milyar TL finansman bonosu ihraç etti (KAP)",
+   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
+   "what": "Nitelikli yatırımcılara 91 gün vadeli, %31,50 faizli 1,07 mlr TL nominal finansman bonosu ihraç edildi (tarih sayfadaki '2 gün önce' ifadesinden çıkarıldı)."
   }
  ],
- "summary": "Çeyrek kârı yıllık %30 arttı. Takipteki krediler yükseldi ve sermaye oranı geriledi."
+ "summary": "Vakıfbank 3. çeyrekte beklentinin belirgin üzerinde kâr açıkladı ve kâr yaklaşık enflasyon kadar büyüdü. Ancak artan sorunlu krediler, gerileyen sermaye oranı ve denetçinin şartlı görüşü temkinli olmayı gerektiriyor."
 }

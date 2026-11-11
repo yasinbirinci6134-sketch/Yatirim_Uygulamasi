@@ -1,25 +1,61 @@
 {
- "at": "2026-11-10T18:55:00Z",
+ "at": "2026-11-11T18:55:00Z",
  "code": "ASELS",
  "items": [
   {
    "date": "2026-11-03",
    "effect": "up",
-   "meaning": "Hisse için olumlu bir gelişme.",
-   "source": "borsacoo.com",
-   "title": "Yeni İş İlişkisi",
-   "url": "https://borsacoo.com/bildirim/104488",
-   "what": "Uluslararası müşteri ile 1.1 mlr $ hava savunma sistemleri ihracat sözleşmesi"
+   "meaning": "Şirket önümüzdeki yıllarda bu sözleşmeden büyük gelir elde edecek. Bu, gelecekteki satışların daha da güvenceye alındığı anlamına geliyor.",
+   "source": "Alomaliye",
+   "title": "Aselsan'dan 1,1 milyar dolarlık ihracat imzası",
+   "url": "https://www.alomaliye.com/2026/11/03/aselsandan-1-1-milyar-dolarlik-ihracat-imzasi/",
+   "what": "Aselsan, yurt dışındaki bir müşteriye hava savunma sistemi satmak için 1,1 milyar dolarlık sözleşme imzaladı ve KAP'a bildirdi."
   },
   {
-   "date": "2026-10-27",
+   "date": "2026-10-28",
    "effect": "up",
-   "meaning": "Hisse için olumlu bir gelişme.",
-   "source": "borsacoo.com",
-   "title": "9A26 finansal tablolar / Faaliyet Raporu",
-   "url": "https://borsacoo.com/bildirim/102971",
-   "what": "3Ç26 net kâr 11.2-11.9 mlr TL (+%81-82 YoY, beklenti 8.87 mlr), 9A 26.47 mlr TL (+%75), 9A satış 151.4 mlr TL"
+   "meaning": "Şirket hem satışlarını hem kârını enflasyondan hızlı büyüttü. Beklenenden iyi sonuç hisse için olumlu bir işaret.",
+   "source": "Bloomberg HT",
+   "title": "Aselsan'ın üçüncü çeyrek net kârı beklentileri aştı",
+   "url": "https://bloomberght.com/aselsan-in-ucuncu-ceyrek-net-kari-beklentileri-asti-3792704",
+   "what": "3. çeyrekte net kâr yıllık %81 artışla 11,2 milyar TL, satışlar %35 artışla 58 milyar TL oldu; ikisi de beklentinin üzerinde."
+  },
+  {
+   "date": "2026-10-28",
+   "effect": "up",
+   "meaning": "Şirketin elinde yıllarca sürecek büyük bir iş yükü var. Ancak yatırımlar için harcanan para borçların artmasına yol açıyor.",
+   "source": "Ekonomi Gazetesi",
+   "title": "Aselsan'ın 9 aylık cirosu 151,5 milyar lira",
+   "url": "https://www.ekonomigazetesi.com/sirket-haberleri/aselsanin-9-aylik-cirosu-1515-milyar-lira-90761",
+   "what": "Bekleyen sipariş tutarı ilk kez 30 milyar doları aştı; 9 ayda 14 milyar dolarlık yeni sipariş alındı, yatırımlar %228 arttı."
+  },
+  {
+   "date": "2026-10-29",
+   "effect": "up",
+   "meaning": "Analistlerin çoğu hissenin bugünkü fiyatın epey üzerine çıkabileceğini düşünüyor. Yine de Deniz Yatırım gibi temkinli kurumlar da var.",
+   "source": "Rota Borsa",
+   "title": "Aselsan (ASELS) hisseleri 12 ay içinde bu fiyatları görebilir",
+   "url": "https://rotaborsa.com/aselsan-asels-hisseleri-12-ay-icinde-bu-fiyatlari-gorebilir-4/",
+   "what": "Bilanço sonrası 15 aracı kurum hedef fiyat açıkladı; Phillip Capital, Ak, Tacirler ve İş Yatırım hedeflerini yükseltti."
+  },
+  {
+   "date": "2026-10-30",
+   "effect": "up",
+   "meaning": "Bir aracı kurum daha hisseye olan güvenini artırdı. Hedef fiyat yükseltmeleri genelde yatırımcı ilgisini artırır.",
+   "source": "Rota Borsa",
+   "title": "Aselsan (ASELS) hisseleri 12 ay içinde bu fiyatı görebilir (Gedik 594 TL)",
+   "url": "https://rotaborsa.com/aselsan-asels-hisseleri-12-ay-icinde-bu-fiyati-gorebilir-7/",
+   "what": "Gedik Yatırım hedef fiyatını 587 TL'den 594 TL'ye yükseltti, 'endeks üstü getiri' tavsiyesini korudu."
+  },
+  {
+   "date": "2026-11-02",
+   "effect": "up",
+   "meaning": "Analistler bilanço sonrası beklentilerini yukarı çekmeye devam ediyor. Bu, hisseye olumlu bakışın sürdüğünü gösteriyor.",
+   "source": "hisse.net",
+   "title": "Aselsan'da hedef fiyat yükseldi, potansiyeli yüzde 58'i aştı",
+   "url": "https://www.hisse.net/haber/aselsan-da-hedef-fiyat-yukseldi-potansiyeli-yuzde-58-i-asti-105007",
+   "what": "Kuveyt Türk Yatırım hedef fiyatını 534,50 TL'den 540 TL'ye çıkardı ve 'AL' tavsiyesini sürdürdü."
   }
  ],
- "summary": "Yeni büyük ihracat sözleşmesi ve güçlü çeyrek sonuçları geldi. Analistlerin çoğu hedef fiyatını yükseltti."
+ "summary": "Aselsan beklentileri aşan güçlü bir 3. çeyrek açıkladı ve ardından 1,1 milyar dolarlık yeni bir ihracat sözleşmesi imzaladı. Analistler hedef fiyatlarını yükseltiyor, ancak artan borç ve yüksek değerleme izlenmesi gereken riskler."
 }
