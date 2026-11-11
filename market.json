@@ -58,7 +58,7 @@
     ],
     "title": "Kısa vade döviz/altın"
    },
-   "summary": "Altın bugün sert düştü; ABD'de faiz artışı beklentisi sürdükçe baskı devam edebilir, bu yüzden yalnız küçük bir sigorta payı tut. Dolar rekor seviyede ama elde tutmanın getirisi para fonunun gerisinde. Gümüşten uzak dur."
+   "summary": "Altın dün sert düştü; ABD'de faizlerin yüksek kalacağı beklentisi sürdükçe baskı devam edebilir, bu yüzden yalnız küçük bir sigorta payı tut. Dolar rekor seviyede ama elde tutmanın getirisi para fonunun gerisinde. Gümüşten uzak dur."
   },
   "long": {
    "horizon": "1 yıl ve üstü",
@@ -225,9 +225,9 @@
     ],
     "title": "Kısa vade hisse"
    },
-   "summary": "Beklentiyi aşan çeyrek kârlarıyla enerji ve büyük holdingler öne çıkıyor; TAV Havalimanları ve MLP Sağlık da listeye eklendi. Bankalar defter değerine göre pahalı kaldığı için onlara küçük pay yeter. Hisseleri 2–3 seferde, küçük tutarlarla al."
+   "summary": "Beklentiyi aşan çeyrek kârlarıyla enerji şirketleri ve büyük holdingler öne çıkıyor; havalimanı ve hastane işletmecileri de güçlü sonuç açıkladı. Bankalar sahip oldukları varlıklara göre pahalı kaldığı için onlara küçük pay yeter. Hisseleri 2–3 seferde, küçük tutarlarla al."
   },
-  "summary": "ABD'de enflasyonun beklentiden yüksek gelmesiyle altın bugün sert düştü; borsa ise bilanço yükselişinin ardından hafif geriledi. Faiz hâlâ enflasyonun üstünde, bu yüzden paranın çoğunu para piyasası fonlarında tut. Perşembe günkü Merkez Bankası enflasyon raporu faiz indirimlerinin hızını gösterecek.",
+  "summary": "ABD'de enflasyonun beklentiden yüksek gelmesi dün piyasaları sarstı; borsa da bilanço yükselişinin ardından hafif geriledi. Faiz hâlâ enflasyonun üstünde, bu yüzden paranın çoğunu para piyasası fonlarında tut. Yarın açıklanacak Merkez Bankası enflasyon raporu faiz indirimlerinin hızını gösterecek.",
   "watch": [
    "12 Kasım: Merkez Bankası Enflasyon Raporu (faiz indirimi yolunu gösterir)",
    "12 Kasım: MSCI endeks değişikliği (yabancı alımını etkileyebilir)",
@@ -235,7 +235,7 @@
    "10 Aralık: Merkez Bankası faiz kararı (indirim hızı mevduat ve para fonu getirisini belirler)"
   ]
  },
- "asOf": "10 Kasım 2026 (akşam)",
+ "asOf": "11 Kasım 2026 (sabah)",
  "bist": {
   "m1": -4.93,
   "m3": -15.56,
@@ -802,59 +802,52 @@
  "indicators": [
   {
    "k": "Politika faizi",
-   "v": "%36",
-   "note": "22 Ekim: −100 bp; sonraki karar 10 Aralık"
+   "note": "22 Ekim: −100 bp; sonraki karar 10 Aralık",
+   "v": "%36"
   },
   {
    "k": "Yıllık enflasyon",
-   "v": "%29,77",
-   "note": "Ekim, TÜİK; aylık %2,58"
+   "note": "Ekim, TÜİK; aylık %2,58",
+   "v": "%29,77"
   },
   {
    "k": "Beklenen enflasyon (12 ay)",
-   "v": "%23,89",
-   "note": "TCMB Ekim anketi"
+   "note": "TCMB Ekim anketi",
+   "v": "%23,89"
   },
   {
    "k": "Beklenen faiz (12 ay)",
-   "v": "%29,01",
-   "note": "TCMB Ekim anketi"
+   "note": "TCMB Ekim anketi",
+   "v": "%29,01"
   },
   {
    "k": "Beklenen dolar (12 ay)",
-   "v": "59,26",
-   "note": "TCMB Ekim anketi"
+   "note": "TCMB Ekim anketi",
+   "v": "59,26"
   },
   {
    "k": "BIST 100",
-   "v": "11.662",
-   "note": "−%0,43 (10 Kasım kapanış)"
+   "note": "−%0,43 (10 Kasım kapanış)",
+   "v": "11.662"
   },
   {
    "k": "Gram altın",
-   "v": "6.491 TL",
-   "note": "−%2,86 (10 Kasım)"
+   "note": "−%2,86 (10 Kasım)",
+   "v": "6.491 TL"
   },
   {
    "k": "Dolar/TL",
-   "v": "50,23",
-   "note": "+%0,11 (10 Kasım)"
+   "note": "+%0,11 (10 Kasım)",
+   "v": "50,23"
   },
   {
    "k": "Sonraki PPK",
-   "v": "10 Aralık",
-   "note": "12 Kasım: Enflasyon Raporu"
+   "note": "12 Kasım: Enflasyon Raporu",
+   "v": "10 Aralık"
   }
  ],
  "news": [
   {
-   "title": "ABD'de enflasyon beklentiyi aştı, altın sert düştü",
-   "date": "2026-11-10",
-   "source": "TRT Haber (trtv.net)",
-   "url": "https://www.trtv.net/2026/11/10/abd-tufe-enflasyon-altin-dolar-rekor/",
-   "impact": "yuksek",
-   "what": "ABD'de ekim ayı tüketici fiyatları (TÜFE) aylık %0,4 artarak beklentinin üzerinde geldi; gıda ve enerji hariç çekirdek enflasyon da %0,3 oldu. Verinin ardından ons altın %2,6'dan fazla düşerek 4.039 dolara, gram altın 6.511 TL'ye kadar geriledi; dolar/TL 50,23 ile rekor gördü.",
-   "meaning": "Piyasalar ABD Merkez Bankası'nın (Fed) faizleri yüksek tutacağını, hatta artırabileceğini düşünüyor. Yüksek ABD faizi genelde altını baskılar ve doları güçlendirir; altın tutan kısa vadede dalgalanmaya hazırlıklı olmalı.",
    "affects": [
     {
      "cat": "altin",
@@ -876,16 +869,16 @@
     "XAU",
     "GAU",
     "USD"
-   ]
+   ],
+   "date": "2026-11-10",
+   "impact": "yuksek",
+   "meaning": "Piyasalar ABD Merkez Bankası'nın (Fed) faizleri yüksek tutacağını, hatta artırabileceğini düşünüyor. Yüksek ABD faizi genelde altını baskılar ve doları güçlendirir; altın tutan kısa vadede dalgalanmaya hazırlıklı olmalı.",
+   "source": "TRT Haber (trtv.net)",
+   "title": "ABD'de enflasyon beklentiyi aştı, altın sert düştü",
+   "url": "https://www.trtv.net/2026/11/10/abd-tufe-enflasyon-altin-dolar-rekor/",
+   "what": "ABD'de ekim ayı tüketici fiyatları (TÜFE) aylık %0,4 artarak beklentinin üzerinde geldi; gıda ve enerji hariç çekirdek enflasyon da %0,3 oldu. Verinin ardından ons altın %2,6'dan fazla düşerek 4.039 dolara, gram altın 6.511 TL'ye kadar geriledi; dolar/TL 50,23 ile rekor gördü."
   },
   {
-   "title": "Petrol fiyatı 90 doların altına indi",
-   "date": "2026-11-10",
-   "source": "Forbes Türkiye",
-   "url": "https://www.forbes.com.tr/ekonomi/brent-petrol-agustos-ayindan-bu-yana-ilk-kez-90-dolarin-altina-indi",
-   "impact": "yuksek",
-   "what": "Brent petrol, Trump'ın İran'a yeni saldırıları şimdilik ertelediğini söylemesi ve savaşın bitebileceği umuduyla ağustostan bu yana ilk kez 90 doların altına (89,86 dolar) indi. Bir önceki gün de %5,85 düşmüştü; 30 Ekim'deki 118 dolarlık zirveden belirgin şekilde uzaklaştı.",
-   "meaning": "Türkiye enerjisini büyük ölçüde ithal ettiği için ucuz petrol enflasyon ve dış ticaret açığı açısından olumlu; akaryakıt indirimi beklentisi oluştu. Ancak Hürmüz Boğazı'ndaki riskler sürdüğü için fiyatlar yeniden oynak hale gelebilir.",
    "affects": [
     {
      "cat": "hisse",
@@ -905,16 +898,16 @@
    ],
    "codes": [
     "TUPRS"
-   ]
+   ],
+   "date": "2026-11-10",
+   "impact": "yuksek",
+   "meaning": "Türkiye enerjisini büyük ölçüde ithal ettiği için ucuz petrol enflasyon ve dış ticaret açığı açısından olumlu; akaryakıt indirimi beklentisi oluştu. Ancak Hürmüz Boğazı'ndaki riskler sürdüğü için fiyatlar yeniden oynak hale gelebilir.",
+   "source": "Forbes Türkiye",
+   "title": "Petrol fiyatı 90 doların altına indi",
+   "url": "https://www.forbes.com.tr/ekonomi/brent-petrol-agustos-ayindan-bu-yana-ilk-kez-90-dolarin-altina-indi",
+   "what": "Brent petrol, Trump'ın İran'a yeni saldırıları şimdilik ertelediğini söylemesi ve savaşın bitebileceği umuduyla ağustostan bu yana ilk kez 90 doların altına (89,86 dolar) indi. Bir önceki gün de %5,85 düşmüştü; 30 Ekim'deki 118 dolarlık zirveden belirgin şekilde uzaklaştı."
   },
   {
-   "title": "Koç Holding üçüncü çeyrekte beklentinin çok üzerinde kâr etti",
-   "date": "2026-11-09",
-   "source": "CNBC-e",
-   "url": "https://www.cnbce.com/sirket-bilancolari/koc-holding-kchol-3-ceyrekte-beklentileri-asti-iste-dev-holdingin-3-ceyrek-bilancosu-h41391",
-   "impact": "orta",
-   "what": "Koç Holding temmuz-eylül döneminde 34,9 milyar TL net kâr açıkladı; analistlerin ortalama beklentisi yaklaşık 25 milyar TL idi. İlk 9 aydaki kârı geçen yıla göre %203 artışla 56,4 milyar TL oldu.",
-   "meaning": "Borsanın en büyük şirketlerinden birinin güçlü sonucu, hissenin değerlemesini destekleyebilir. Yine de 10 Kasım'da holding hisseleri endeksi %1,38 düştü; tek bir bilanço kısa vadeli fiyatı garanti etmez.",
    "affects": [
     {
      "cat": "hisse",
@@ -924,16 +917,16 @@
    ],
    "codes": [
     "KCHOL"
-   ]
+   ],
+   "date": "2026-11-09",
+   "impact": "orta",
+   "meaning": "Borsanın en büyük şirketlerinden birinin güçlü sonucu, hissenin değerlemesini destekleyebilir. Yine de 10 Kasım'da holding hisseleri endeksi %1,38 düştü; tek bir bilanço kısa vadeli fiyatı garanti etmez.",
+   "source": "CNBC-e",
+   "title": "Koç Holding üçüncü çeyrekte beklentinin çok üzerinde kâr etti",
+   "url": "https://www.cnbce.com/sirket-bilancolari/koc-holding-kchol-3-ceyrekte-beklentileri-asti-iste-dev-holdingin-3-ceyrek-bilancosu-h41391",
+   "what": "Koç Holding temmuz-eylül döneminde 34,9 milyar TL net kâr açıkladı; analistlerin ortalama beklentisi yaklaşık 25 milyar TL idi. İlk 9 aydaki kârı geçen yıla göre %203 artışla 56,4 milyar TL oldu."
   },
   {
-   "title": "BİM'in kârı beklentiyi aştı",
-   "date": "2026-11-09",
-   "source": "CNBC-e",
-   "url": "https://www.cnbce.com/sirket-bilancolari/bimin-bimas-kari-yuzde-79-artti-ucuncu-ceyrekte-104-milyar-tl-net-kar-h41400",
-   "impact": "orta",
-   "what": "BİM üçüncü çeyrekte 10,39 milyar TL net kâr açıkladı; 15 aracı kurumun ortalama beklentisi 8,78 milyar TL idi. İlk 9 ayda net kâr %79 artışla 26,15 milyar TL'ye ulaştı.",
-   "meaning": "Market zinciri, zorlu tüketim ortamına rağmen beklenenden fazla kazandı. Bu sonuç BİM hissesine olumlu yansıyabilir.",
    "affects": [
     {
      "cat": "hisse",
@@ -943,16 +936,16 @@
    ],
    "codes": [
     "BIMAS"
-   ]
+   ],
+   "date": "2026-11-09",
+   "impact": "orta",
+   "meaning": "Market zinciri, zorlu tüketim ortamına rağmen beklenenden fazla kazandı. Bu sonuç BİM hissesine olumlu yansıyabilir.",
+   "source": "CNBC-e",
+   "title": "BİM'in kârı beklentiyi aştı",
+   "url": "https://www.cnbce.com/sirket-bilancolari/bimin-bimas-kari-yuzde-79-artti-ucuncu-ceyrekte-104-milyar-tl-net-kar-h41400",
+   "what": "BİM üçüncü çeyrekte 10,39 milyar TL net kâr açıkladı; 15 aracı kurumun ortalama beklentisi 8,78 milyar TL idi. İlk 9 ayda net kâr %79 artışla 26,15 milyar TL'ye ulaştı."
   },
   {
-   "title": "Sanayi üretimi eylülde toparlandı",
-   "date": "2026-11-10",
-   "source": "Takvim",
-   "url": "https://www.takvim.com.tr/ekonomi/2026/11/10/tuik-2026-eylul-ayi-sanayi-uretimi-verilerini-acikladi",
-   "impact": "orta",
-   "what": "TÜİK verilerine göre sanayi üretimi eylülde bir önceki aya göre %2,1, geçen yılın aynı ayına göre %2,6 arttı. Fabrika üretimini gösteren imalat sanayi aylık %2,3 büyüdü.",
-   "meaning": "Haziran-ağustos döneminde yıllık bazda gerileyen sanayi üretimi eylülde yeniden büyümeye geçti. Bu, ekonominin üçüncü çeyrekte beklenenden daha dirençli olabileceğine işaret ediyor.",
    "affects": [
     {
      "cat": "hisse",
@@ -960,16 +953,16 @@
      "why": "Sanayi şirketleri için talep ve üretim toparlanması sinyali"
     }
    ],
-   "codes": []
+   "codes": [],
+   "date": "2026-11-10",
+   "impact": "orta",
+   "meaning": "Haziran-ağustos döneminde yıllık bazda gerileyen sanayi üretimi eylülde yeniden büyümeye geçti. Bu, ekonominin üçüncü çeyrekte beklenenden daha dirençli olabileceğine işaret ediyor.",
+   "source": "Takvim",
+   "title": "Sanayi üretimi eylülde toparlandı",
+   "url": "https://www.takvim.com.tr/ekonomi/2026/11/10/tuik-2026-eylul-ayi-sanayi-uretimi-verilerini-acikladi",
+   "what": "TÜİK verilerine göre sanayi üretimi eylülde bir önceki aya göre %2,1, geçen yılın aynı ayına göre %2,6 arttı. Fabrika üretimini gösteren imalat sanayi aylık %2,3 büyüdü."
   },
   {
-   "title": "Ekimde en çok mevduat kazandırdı, borsa en çok kaybettirdi",
-   "date": "2026-11-09",
-   "source": "Paratic",
-   "url": "https://paratic.com/ekim-ayinda-en-cok-kazandiran-yatirim-araci-mevduat-faizi-oldu/",
-   "impact": "orta",
-   "what": "TÜİK'in ekim ayı reel getiri (enflasyondan arındırılmış kazanç) verisine göre enflasyonu yenen tek araç %0,39 ile mevduat faizi oldu; devlet tahvili (DİBS) %0,01 ile yatay kaldı. Dolar %0,95, euro %3,53, külçe altın %5,57, BIST 100 ise %15,31 reel kayıp yaşattı.",
-   "meaning": "Ekim ayında risksiz mevduat, altın, döviz ve hisseden daha iyi sonuç verdi. Bu tablo tek bir aya ait; uzun vadeli kararlarda dönemsel getiriler yanıltıcı olabilir.",
    "affects": [
     {
      "cat": "mevduat",
@@ -996,16 +989,16 @@
     "XAU",
     "USD",
     "EUR"
-   ]
+   ],
+   "date": "2026-11-09",
+   "impact": "orta",
+   "meaning": "Ekim ayında risksiz mevduat, altın, döviz ve hisseden daha iyi sonuç verdi. Bu tablo tek bir aya ait; uzun vadeli kararlarda dönemsel getiriler yanıltıcı olabilir.",
+   "source": "Paratic",
+   "title": "Ekimde en çok mevduat kazandırdı, borsa en çok kaybettirdi",
+   "url": "https://paratic.com/ekim-ayinda-en-cok-kazandiran-yatirim-araci-mevduat-faizi-oldu/",
+   "what": "TÜİK'in ekim ayı reel getiri (enflasyondan arındırılmış kazanç) verisine göre enflasyonu yenen tek araç %0,39 ile mevduat faizi oldu; devlet tahvili (DİBS) %0,01 ile yatay kaldı. Dolar %0,95, euro %3,53, külçe altın %5,57, BIST 100 ise %15,31 reel kayıp yaşattı."
   },
   {
-   "title": "Borsa yükselişin ardından günü hafif düşüşle kapattı",
-   "date": "2026-11-10",
-   "source": "CNBC-e",
-   "url": "https://www.cnbce.com/borsa/borsa-gunu-dususle-kapadi-10-kasim-2026-h41431",
-   "impact": "dusuk",
-   "what": "BIST 100 endeksi 10 Kasım'da %0,43 düşüşle 11.661,86 puandan kapandı; bir gün önce 11.712,67 puanla 20 Ekim'den bu yana en yüksek kapanışını yapmıştı. Bankacılık endeksi yatay kalırken holding endeksi %1,38 geriledi.",
-   "meaning": "Bilanço haberleriyle gelen yükselişin ardından kâr satışı görüldü. Perşembe günü (12 Kasım) açıklanacak TCMB Enflasyon Raporu yakın vadede borsanın yönü için önemli olacak.",
    "affects": [
     {
      "cat": "hisse",
@@ -1015,16 +1008,16 @@
    ],
    "codes": [
     "KCHOL"
-   ]
+   ],
+   "date": "2026-11-10",
+   "impact": "dusuk",
+   "meaning": "Bilanço haberleriyle gelen yükselişin ardından kâr satışı görüldü. Perşembe günü (12 Kasım) açıklanacak TCMB Enflasyon Raporu yakın vadede borsanın yönü için önemli olacak.",
+   "source": "CNBC-e",
+   "title": "Borsa yükselişin ardından günü hafif düşüşle kapattı",
+   "url": "https://www.cnbce.com/borsa/borsa-gunu-dususle-kapadi-10-kasim-2026-h41431",
+   "what": "BIST 100 endeksi 10 Kasım'da %0,43 düşüşle 11.661,86 puandan kapandı; bir gün önce 11.712,67 puanla 20 Ekim'den bu yana en yüksek kapanışını yapmıştı. Bankacılık endeksi yatay kalırken holding endeksi %1,38 geriledi."
   },
   {
-   "title": "Turkcell üçüncü çeyrekte beklentiden fazla kâr etti",
-   "date": "2026-11-09",
-   "source": "Bloomberg HT",
-   "url": "https://www.bloomberght.com/turkcell-den-ucuncu-ceyrekte-6-7-milyar-tl-net-kr-3794015",
-   "impact": "dusuk",
-   "what": "Turkcell üçüncü çeyrekte 6,7 milyar TL net kâr açıkladı; piyasa beklentisi 5,5 milyar TL idi. Kâr geçen yılın aynı dönemine göre %3,8 azaldı, gelirler ise %6,2 artışla 82 milyar TL oldu.",
-   "meaning": "Beklentinin üzerindeki sonuç hisse için olumlu bir sürpriz. 10 Kasım'da iletişim sektörü borsada günün en çok yükselen sektörü oldu.",
    "affects": [
     {
      "cat": "hisse",
@@ -1032,7 +1025,14 @@
      "why": "Beklentinin üzerinde kâr"
     }
    ],
-   "codes": []
+   "codes": [],
+   "date": "2026-11-09",
+   "impact": "dusuk",
+   "meaning": "Beklentinin üzerindeki sonuç hisse için olumlu bir sürpriz. 10 Kasım'da iletişim sektörü borsada günün en çok yükselen sektörü oldu.",
+   "source": "Bloomberg HT",
+   "title": "Turkcell üçüncü çeyrekte beklentiden fazla kâr etti",
+   "url": "https://www.bloomberght.com/turkcell-den-ucuncu-ceyrekte-6-7-milyar-tl-net-kr-3794015",
+   "what": "Turkcell üçüncü çeyrekte 6,7 milyar TL net kâr açıkladı; piyasa beklentisi 5,5 milyar TL idi. Kâr geçen yılın aynı dönemine göre %3,8 azaldı, gelirler ise %6,2 artışla 82 milyar TL oldu."
   }
  ],
  "partsMax": {
@@ -1659,5 +1659,5 @@
    "pickAt": "2026-11-10"
   }
  ],
- "updatedAt": "2026-11-10T18:55:00Z"
+ "updatedAt": "2026-11-11T06:17:10Z"
 }
