@@ -1,16 +1,1 @@
-{
- "at": "2026-11-11T07:55:00Z",
- "code": "TAVHL",
- "items": [
-  {
-   "date": "2026-11-10",
-   "effect": "up",
-   "meaning": "Büyük bir yabancı yatırım bankası hisse aldı.",
-   "source": "Borsacoo/KAP",
-   "title": "Goldman Sachs TAV payını artırdı",
-   "url": "https://borsacoo.com/firma/TAVHL/bildirimler?kaynak=gonderdi",
-   "what": "Goldman Sachs 341.694 TAV hissesi alarak dolaylı payını %3,07'ye çıkardı."
-  }
- ],
- "summary": "Yabancı bir yatırım bankası şirketteki payını biraz artırdı. Önemli bir olumsuz haber yok."
-}
+{"at": "2026-11-11T07:55:00Z", "code": "TAVHL", "items": [{"date": "2026-11-10", "effect": "up", "meaning": "Büyük bir yabancı yatırım bankası hisse aldı.", "source": "Borsacoo/KAP", "title": "Goldman Sachs TAV payını artırdı", "url": "https://borsacoo.com/firma/TAVHL/bildirimler?kaynak=gonderdi", "what": "Goldman Sachs 341.694 TAV hissesi alarak dolaylı payını %3,07'ye çıkardı."}], "summary": "Yabancı bir yatırım bankası şirketteki payını biraz artırdı. Önemli bir olumsuz haber yok."}
