@@ -1,1 +1,52 @@
-{"code": "TUPRS", "at": "2026-11-13T08:30:00Z", "summary": "Çeyrek kârı beklentiyi aştı ve şirket bu yılki kâr marjı beklentisini yükseltti. Rafinerileri indirimli vergiden çıkaran yeni kanun teklifi kârı biraz azaltabilir.", "items": [{"title": "Enerji devi Tüpraş'tan (TUPRS) beklentileri aşan bilanço", "date": "2026-11-06", "source": "CNBC-e", "url": "https://www.cnbce.com/sirket-bilancolari/enerji-devi-tuprastan-tuprs-beklentileri-asan-bilanco-iste-detaylar-h41222", "what": "Tüpraş 3. çeyrekte 68.7 milyar TL net kâr açıkladı, piyasa beklentisi 60.6 milyar TL idi.", "meaning": "Şirket beklenenden çok daha fazla kâr etti.", "effect": "up"}, {"title": "Tüpraş (TUPRS) 2026 net rafineri marjı beklentisini 13-15 $/varilden 20-22 $/varile yükseltti", "date": "2026-11-06", "source": "USC Markets", "url": "https://www.uscmarkets.com/haberler/tuprs-2026-net-rafineri-marji-beklentisi-20-22-dolar", "what": "Şirket yıl sonu rafineri marjı beklentisini belirgin şekilde yükseltti.", "meaning": "Yönetim yılın geri kalanında da yüksek kârlılık bekliyor.", "effect": "up"}, {"title": "Tüpraş 3Ç26 Bilanço Analizi: Rekor Marjlar, Rekor Kâr ve Yükseltilen Beklentiler", "date": "2026-11-09", "source": "Midas", "url": "https://www.getmidas.com/midasin-kulaklari/tupras-3c26-bilanco-analizi-rekor-marjlar-rekor-kar-ve-yukseltilen-beklentiler-p-896751", "what": "Analiz rekor 36.3 $/varil marjı, 204 milyar TL net nakdi ve 4. çeyrekte marjın ~15 $'a inebileceğini vurguluyor.", "meaning": "Kâr zirvede; sonraki çeyreklerde normalleşme riski var.", "effect": "mixed"}, {"title": "Tüpraş (TUPRS) hisse hedef fiyatları 2027 - Güncel Liste", "date": "2026-11-11", "source": "Rota Borsa", "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/", "what": "Bilanço sonrası 9 kurumun hedefi ortalama 476 TL; birçoğu hedefini yükseltti.", "meaning": "Analistler hissede mevcut fiyatın üzerinde değer görüyor.", "effect": "up"}, {"title": "Fiyatın Ardında: Yükselişin yeni sınavı kârlılık", "date": "2026-11-10", "source": "Midas", "url": "https://www.getmidas.com/midasin-kulaklari/fiyatin-ardinda-yukselisin-yeni-sinavi-karlilik-p-901644", "what": "Yılbaşından beri ~%100 yükselen hissede sıradaki sınavın kârlılığın sürdürülmesi olduğu yorumu.", "meaning": "Güçlü yükselişin devamı yüksek marjların korunmasına bağlı.", "effect": "mixed"}]}
+{
+  "at": "2026-11-13T08:30:00Z",
+  "code": "TUPRS",
+  "items": [
+    {
+      "date": "2026-11-06",
+      "effect": "up",
+      "meaning": "Şirket beklenenden çok daha fazla kâr etti.",
+      "source": "CNBC-e",
+      "title": "Enerji devi Tüpraş'tan (TUPRS) beklentileri aşan bilanço",
+      "url": "https://www.cnbce.com/sirket-bilancolari/enerji-devi-tuprastan-tuprs-beklentileri-asan-bilanco-iste-detaylar-h41222",
+      "what": "Tüpraş 3. çeyrekte 68.7 milyar TL net kâr açıkladı, piyasa beklentisi 60.6 milyar TL idi."
+    },
+    {
+      "date": "2026-11-06",
+      "effect": "up",
+      "meaning": "Yönetim yılın geri kalanında da yüksek kârlılık bekliyor.",
+      "source": "USC Markets",
+      "title": "Tüpraş (TUPRS) 2026 net rafineri marjı beklentisini 13-15 $/varilden 20-22 $/varile yükseltti",
+      "url": "https://www.uscmarkets.com/haberler/tuprs-2026-net-rafineri-marji-beklentisi-20-22-dolar",
+      "what": "Şirket yıl sonu rafineri marjı beklentisini belirgin şekilde yükseltti."
+    },
+    {
+      "date": "2026-11-09",
+      "effect": "mixed",
+      "meaning": "Kâr zirvede; sonraki çeyreklerde normalleşme riski var.",
+      "source": "Midas",
+      "title": "Tüpraş 3Ç26 Bilanço Analizi: Rekor Marjlar, Rekor Kâr ve Yükseltilen Beklentiler",
+      "url": "https://www.getmidas.com/midasin-kulaklari/tupras-3c26-bilanco-analizi-rekor-marjlar-rekor-kar-ve-yukseltilen-beklentiler-p-896751",
+      "what": "Analiz rekor 36.3 $/varil marjı, 204 milyar TL net nakdi ve 4. çeyrekte marjın ~15 $'a inebileceğini vurguluyor."
+    },
+    {
+      "date": "2026-11-11",
+      "effect": "up",
+      "meaning": "Analistler hissede mevcut fiyatın üzerinde değer görüyor.",
+      "source": "Rota Borsa",
+      "title": "Tüpraş (TUPRS) hisse hedef fiyatları 2027 - Güncel Liste",
+      "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/",
+      "what": "Bilanço sonrası 9 kurumun hedefi ortalama 476 TL; birçoğu hedefini yükseltti."
+    },
+    {
+      "date": "2026-11-10",
+      "effect": "mixed",
+      "meaning": "Güçlü yükselişin devamı yüksek marjların korunmasına bağlı.",
+      "source": "Midas",
+      "title": "Fiyatın Ardında: Yükselişin yeni sınavı kârlılık",
+      "url": "https://www.getmidas.com/midasin-kulaklari/fiyatin-ardinda-yukselisin-yeni-sinavi-karlilik-p-901644",
+      "what": "Yılbaşından beri ~%100 yükselen hissede sıradaki sınavın kârlılığın sürdürülmesi olduğu yorumu."
+    }
+  ],
+  "summary": "Çeyrek kârı beklentiyi aştı ve şirket bu yılki kâr marjı beklentisini yükseltti. Rafinerileri indirimli vergiden çıkaran yeni kanun teklifi kârı biraz azaltabilir."
+}

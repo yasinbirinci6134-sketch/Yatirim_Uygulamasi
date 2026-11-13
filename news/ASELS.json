@@ -1,1 +1,34 @@
-{"code": "ASELS", "at": "2026-11-13T08:30:00Z", "summary": "Yeni ihracat sözleşmesi ve güçlü kâr artışıyla analistler hedeflerini yükseltti. Hisse kârına göre pahalı.", "items": [{"title": "Aselsan'dan 1,1 milyar dolarlık ihracat imzası", "date": "2026-11-03", "source": "Alo Maliye", "url": "https://www.alomaliye.com/2026/11/03/aselsandan-1-1-milyar-dolarlik-ihracat-imzasi/", "what": "Aselsan, adı açıklanmayan yabancı bir müşteriyle 1,1 milyar dolarlık hava savunma sistemi ihracat sözleşmesi imzaladığını KAP'a bildirdi.", "meaning": "Şirketin gelecek yıllardaki satışları için büyük ve dövizli yeni bir iş geldi.", "effect": "up"}, {"title": "Hava savunma ASELSAN'ı yeni ihracat rekoruna taşıdı", "date": "2026-11-04", "source": "Foreks (AA)", "url": "https://www.foreks.com/haber/detay/6aeaf37d4b1852391445b374/AA/tr/hava-savunma-aselsan-i-yeni-ihracat-rekoruna-tasidi-04-11-26/", "what": "Tek kalemde en büyük ihracat sözleşmesiyle 2026'daki yeni ihracat işleri ~4,3 milyar dolara, bekleyen siparişler 30 milyar doları aştı.", "meaning": "Şirketin önünde yıllarca sürecek bir iş yükü var; gelir görünürlüğü yüksek.", "effect": "up"}, {"title": "ASELSAN (ASELS) hedef fiyat 2027: 17 kurum", "date": "2026-11-02", "source": "Rota Borsa", "url": "https://rotaborsa.com/aselsan-asels-hisse-hedef-fiyatlari/", "what": "Bilanço sonrası 17 kurumun ortalama hedefi 506,86 TL; Kuveyt Türk 540 TL ile 'al' verdi.", "meaning": "Analistlerin çoğu hissenin mevcut fiyatın epey üstüne çıkabileceğini düşünüyor, ama birkaç kurum 'tut' diyor.", "effect": "up"}]}
+{
+  "at": "2026-11-13T08:30:00Z",
+  "code": "ASELS",
+  "items": [
+    {
+      "date": "2026-11-03",
+      "effect": "up",
+      "meaning": "Şirketin gelecek yıllardaki satışları için büyük ve dövizli yeni bir iş geldi.",
+      "source": "Alo Maliye",
+      "title": "Aselsan'dan 1,1 milyar dolarlık ihracat imzası",
+      "url": "https://www.alomaliye.com/2026/11/03/aselsandan-1-1-milyar-dolarlik-ihracat-imzasi/",
+      "what": "Aselsan, adı açıklanmayan yabancı bir müşteriyle 1,1 milyar dolarlık hava savunma sistemi ihracat sözleşmesi imzaladığını KAP'a bildirdi."
+    },
+    {
+      "date": "2026-11-04",
+      "effect": "up",
+      "meaning": "Şirketin önünde yıllarca sürecek bir iş yükü var; gelir görünürlüğü yüksek.",
+      "source": "Foreks (AA)",
+      "title": "Hava savunma ASELSAN'ı yeni ihracat rekoruna taşıdı",
+      "url": "https://www.foreks.com/haber/detay/6aeaf37d4b1852391445b374/AA/tr/hava-savunma-aselsan-i-yeni-ihracat-rekoruna-tasidi-04-11-26/",
+      "what": "Tek kalemde en büyük ihracat sözleşmesiyle 2026'daki yeni ihracat işleri ~4,3 milyar dolara, bekleyen siparişler 30 milyar doları aştı."
+    },
+    {
+      "date": "2026-11-02",
+      "effect": "up",
+      "meaning": "Analistlerin çoğu hissenin mevcut fiyatın epey üstüne çıkabileceğini düşünüyor, ama birkaç kurum 'tut' diyor.",
+      "source": "Rota Borsa",
+      "title": "ASELSAN (ASELS) hedef fiyat 2027: 17 kurum",
+      "url": "https://rotaborsa.com/aselsan-asels-hisse-hedef-fiyatlari/",
+      "what": "Bilanço sonrası 17 kurumun ortalama hedefi 506,86 TL; Kuveyt Türk 540 TL ile 'al' verdi."
+    }
+  ],
+  "summary": "Yeni ihracat sözleşmesi ve güçlü kâr artışıyla analistler hedeflerini yükseltti. Hisse kârına göre pahalı."
+}

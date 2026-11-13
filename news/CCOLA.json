@@ -1,1 +1,52 @@
-{"at": "2026-11-12T18:55:00Z", "code": "CCOLA", "items": [{"date": "2026-11-03", "effect": "mixed", "meaning": "Kâr beklentiye yakın; çeyreklik kâr yıllık düşük", "source": "CNBC-e", "title": "Coca-Cola İçecek 2026 üçüncü çeyrek bilançosunu açıkladı", "url": "https://www.cnbce.com/sirket-bilancolari/coca-cola-icecek-ccola-2026-ucuncu-ceyrek-bilancosunu-acikladi-net-kar-belli-oldu-h40957", "what": "3Ç net kâr 7,79 mlr TL, beklentiye paralel"}, {"date": "2026-11-03", "effect": "down", "meaning": "Marj/kârlılık baskısı", "source": "USC Markets", "title": "CCOLA 3Ç net kârı %16,4 azalarak 7,786 mlr TL", "url": "https://www.uscmarkets.com/haberler/ccola-2026-3-ceyrek-finansal-sonuclar", "what": "TMS29 bazında yıllık düşüş"}, {"date": "2026-11-04", "effect": "up", "meaning": "Fiyata göre ~%60+ potansiyel", "source": "Rota Borsa", "title": "CCOLA hisse hedef fiyat 2027: 7 aracı kurum açıkladı", "url": "https://rotaborsa.com/coca-cola-icecek-ccola-hisse-hedef-fiyat-2027-7-araci-kurum-acikladi/", "what": "7 kurum 120-130,2 TL hedef"}], "summary": "Çeyrek kârı beklentiye yakın geldi, borcu belirgin azaldı. Analistlerden hedef artışı var."}
+{
+  "at": "2026-11-13T19:10:00Z",
+  "code": "CCOLA",
+  "items": [
+    {
+      "date": "2026-11-12",
+      "effect": "up",
+      "meaning": "Kredi kalitesi iyileşiyor; borçlanma maliyeti düşebilir.",
+      "source": "Midas (KAP)",
+      "title": "CCOLA KAP bildirimi: S&P not görünümünü pozitife çevirdi",
+      "url": "https://www.getmidas.com/canli-borsa/ccola-hisse/haber/",
+      "what": "S&P BB+ uzun vadeli notu teyit etti, görünümü durağandan pozitife yükseltti."
+    },
+    {
+      "date": "2026-11-04",
+      "effect": "up",
+      "meaning": "Analistler bilanço sonrası olumlu görüşünü korudu.",
+      "source": "Rota Borsa",
+      "title": "Coca-Cola İçecek (CCOLA) hisse hedef fiyat 2027! 7 aracı kurum açıkladı",
+      "url": "https://rotaborsa.com/coca-cola-icecek-ccola-hisse-hedef-fiyat-2027-7-araci-kurum-acikladi/",
+      "what": "7 kurum 120–130,2 TL hedef verdi; Ak Yatırım 125→129 TL."
+    },
+    {
+      "date": "2026-11-03",
+      "effect": "mixed",
+      "meaning": "Kâr beklentiye uydu, marj daraldı ama bilanço güçlendi.",
+      "source": "Bloomberg HT",
+      "title": "Coca-Cola İçecek üçüncü çeyrekte 7,8 milyar TL net kâr açıkladı",
+      "url": "https://www.bloomberght.com/coca-cola-icecek-ucuncu-ceyrekte-7-8-milyar-tl-net-kr-acikladi-3793351",
+      "what": "Net kâr −%16,4, satış +%1; net borç/FAVÖK 0,29x'e indi."
+    },
+    {
+      "date": "2026-11-03",
+      "effect": "up",
+      "meaning": "Yurt dışı büyüme Türkiye'deki zayıflığı dengeliyor.",
+      "source": "Foreks",
+      "title": "Coca-Cola İçecek uluslararası operasyonlarda büyüme beklentisini yükseltti",
+      "url": "https://www.foreks.com/haber/detay/6aea036f422c786f3f7affc0/PICNEWS/tr/coca-cola-icecek-uluslararasi-operasyonlarda-buyume-beklentisini-yukseltti-03-11-26/",
+      "what": "2026 rehberi: konsolide hacimde yüksek tek hane büyüme, uluslararasında düşük çift hane."
+    },
+    {
+      "date": "2026-11-04",
+      "effect": "mixed",
+      "meaning": "Operasyon zayıf, nakit üretimi güçlü.",
+      "source": "Foreks",
+      "title": "ANALİZ- Coca-Cola İçecek 3.Çeyrek 2026 Finansal Sonuçları Değerlendirmesi (Fibayatırım)",
+      "url": "https://www.foreks.com/haber/detay/6aeac3214b1852391445b141/FRKS/tr/analiz-coca-cola-icecek-3ceyrek-2026-finansal-sonuclari-degerlendirmesi-fibayatirim-04-11-26/",
+      "what": "Türkiye operasyonları beklentinin altında; net borç çeyreklik %55 azaldı."
+    }
+  ],
+  "summary": "Coca-Cola İçecek'in borcu hızla azaldı ve S&P görünümünü pozitife çevirdi. Kârı enflasyon muhasebesiyle geriledi, Türkiye'de marj baskısı sürüyor; hisse bugün %5,45 yükseldi."
+}

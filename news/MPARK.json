@@ -1,1 +1,52 @@
-{"code": "MPARK", "at": "2026-11-13T08:30:00Z", "summary": "Dokuz aylık kârı beklentiyi aştı ve bazı analistler hedeflerini yükseltti. Kâr marjı biraz geriledi.", "items": [{"title": "Medical Park (MPARK) 2026 3. çeyrek bilançosu beklentiyi karşıladı mı?", "date": "2026-11-04", "source": "Rota Borsa", "url": "https://rotaborsa.com/?p=490756", "what": "MLP Sağlık 3. çeyrekte 2,22 milyar TL net kâr açıkladı; ortalama beklenti 1,59 milyar TL idi.", "meaning": "Şirket piyasanın beklediğinden belirgin şekilde fazla kâr etti.", "effect": "up"}, {"title": "Oyak Yatırım, MLP Sağlık için hedef fiyatını 633,10 TL'den 658,42 TL'ye revize etti", "date": "2026-11-05", "source": "Foreks", "url": "https://www.foreks.com/haber/detay/6aec27ec1d7c6051898e37d9/FRKS/tr/hisse-degerlendirmesi-oyak-yatirim-mlp-saglik-icin-hedef-fiyatini-633-10-tl-den-658-42-tl-ye-revize-etti-tavsiyesini-endeks-ustu-getiri-olarak-korudu-05-11-26/", "what": "Oyak hedefini yükseltti ve 'endeks üstü getiri' tavsiyesini korudu; net borç/FAVÖK'ün 0,67x'e indiğini not etti.", "meaning": "Bilanço sonrası bir kurum hisseye daha yüksek değer biçti.", "effect": "up"}, {"title": "Fiba Yatırım, MLP Sağlık için hedef fiyatını 728,50 TL ve tavsiyesini 'Endeksin Üzerinde Getiri' olarak korudu", "date": "2026-11-05", "source": "Foreks", "url": "https://www.foreks.com/haber/detay/6aec15164b1852391445c1f3/FRKS/tr/hisse-degerlendirmesi-fiba-yatirim-mlp-saglik-icin-hedef-fiyatini-728-50-tl-ve-tavsiyesini-endeksin-uzerinde-getiri-olarak-korudu-05-11-26/", "what": "Fiba en yüksek hedef olan 728,50 TL'yi korudu ve net kârın beklenti üstü geldiğini vurguladı.", "meaning": "En iyimser kurum görüşünü değiştirmedi.", "effect": "up"}, {"title": "MLP Sağlık bilançosu sonrası kurumların MPARK hissesinde beklentileri", "date": "2026-11-05", "source": "Borsa Gündem", "url": "https://www.borsagundem.com.tr/mlp-saglik-bilancosu-sonrasi-kurumlarin-mpark-hissesinde-beklentileri", "what": "Kurumların çoğu hedeflerini korudu; hedefler 608-728,50 TL aralığında.", "meaning": "Analistler bilanço sonrası olumlu görüşlerini sürdürüyor.", "effect": "up"}, {"title": "ANALİZ- MLP Sağlık Analist Toplantısı Notu (Ahlatcı Yatırım)", "date": "2026-11-05", "source": "Foreks", "url": "https://www.foreks.com/haber/detay/6aec8f7395131d72027d770c/FRKS/tr/analiz-mlp-saglik-analist-toplantisi-notu-ahlatci-yatirim-05-11-26/", "what": "Yönetim marjların sınıra ulaştığını, 2027 kâr büyümesinin ağırlıkla gelir artışından geleceğini söyledi.", "meaning": "Kârlılıkta ek iyileşme sınırlı; büyüme hasta sayısı ve fiyat artışına bağlı kalacak.", "effect": "mixed"}]}
+{
+  "at": "2026-11-13T08:30:00Z",
+  "code": "MPARK",
+  "items": [
+    {
+      "date": "2026-11-04",
+      "effect": "up",
+      "meaning": "Şirket piyasanın beklediğinden belirgin şekilde fazla kâr etti.",
+      "source": "Rota Borsa",
+      "title": "Medical Park (MPARK) 2026 3. çeyrek bilançosu beklentiyi karşıladı mı?",
+      "url": "https://rotaborsa.com/?p=490756",
+      "what": "MLP Sağlık 3. çeyrekte 2,22 milyar TL net kâr açıkladı; ortalama beklenti 1,59 milyar TL idi."
+    },
+    {
+      "date": "2026-11-05",
+      "effect": "up",
+      "meaning": "Bilanço sonrası bir kurum hisseye daha yüksek değer biçti.",
+      "source": "Foreks",
+      "title": "Oyak Yatırım, MLP Sağlık için hedef fiyatını 633,10 TL'den 658,42 TL'ye revize etti",
+      "url": "https://www.foreks.com/haber/detay/6aec27ec1d7c6051898e37d9/FRKS/tr/hisse-degerlendirmesi-oyak-yatirim-mlp-saglik-icin-hedef-fiyatini-633-10-tl-den-658-42-tl-ye-revize-etti-tavsiyesini-endeks-ustu-getiri-olarak-korudu-05-11-26/",
+      "what": "Oyak hedefini yükseltti ve 'endeks üstü getiri' tavsiyesini korudu; net borç/FAVÖK'ün 0,67x'e indiğini not etti."
+    },
+    {
+      "date": "2026-11-05",
+      "effect": "up",
+      "meaning": "En iyimser kurum görüşünü değiştirmedi.",
+      "source": "Foreks",
+      "title": "Fiba Yatırım, MLP Sağlık için hedef fiyatını 728,50 TL ve tavsiyesini 'Endeksin Üzerinde Getiri' olarak korudu",
+      "url": "https://www.foreks.com/haber/detay/6aec15164b1852391445c1f3/FRKS/tr/hisse-degerlendirmesi-fiba-yatirim-mlp-saglik-icin-hedef-fiyatini-728-50-tl-ve-tavsiyesini-endeksin-uzerinde-getiri-olarak-korudu-05-11-26/",
+      "what": "Fiba en yüksek hedef olan 728,50 TL'yi korudu ve net kârın beklenti üstü geldiğini vurguladı."
+    },
+    {
+      "date": "2026-11-05",
+      "effect": "up",
+      "meaning": "Analistler bilanço sonrası olumlu görüşlerini sürdürüyor.",
+      "source": "Borsa Gündem",
+      "title": "MLP Sağlık bilançosu sonrası kurumların MPARK hissesinde beklentileri",
+      "url": "https://www.borsagundem.com.tr/mlp-saglik-bilancosu-sonrasi-kurumlarin-mpark-hissesinde-beklentileri",
+      "what": "Kurumların çoğu hedeflerini korudu; hedefler 608-728,50 TL aralığında."
+    },
+    {
+      "date": "2026-11-05",
+      "effect": "mixed",
+      "meaning": "Kârlılıkta ek iyileşme sınırlı; büyüme hasta sayısı ve fiyat artışına bağlı kalacak.",
+      "source": "Foreks",
+      "title": "ANALİZ- MLP Sağlık Analist Toplantısı Notu (Ahlatcı Yatırım)",
+      "url": "https://www.foreks.com/haber/detay/6aec8f7395131d72027d770c/FRKS/tr/analiz-mlp-saglik-analist-toplantisi-notu-ahlatci-yatirim-05-11-26/",
+      "what": "Yönetim marjların sınıra ulaştığını, 2027 kâr büyümesinin ağırlıkla gelir artışından geleceğini söyledi."
+    }
+  ],
+  "summary": "Dokuz aylık kârı beklentiyi aştı ve bazı analistler hedeflerini yükseltti. Kâr marjı biraz geriledi."
+}

@@ -1,0 +1,43 @@
+{
+  "at": "2026-11-13T19:10:00Z",
+  "code": "THYAO",
+  "items": [
+    {
+      "date": "2026-11-09",
+      "effect": "mixed",
+      "meaning": "Trafik yatay, doluluk iyileşiyor.",
+      "source": "Foreks",
+      "title": "THY'nin yolcu sayısında ekimde sınırlı düşüş yaşandı",
+      "url": "https://www.foreks.com/haber/detay/6af1e5d895131d72027d9e6e/PICNEWS/tr/thy-nin-yolcu-sayisinda-ekimde-sinirli-dusus-yasandi-09-11-26/",
+      "what": "Ekim'de 8,5 milyon yolcu (−%0,6); dış hat +%1,3, iç hat −%4,4; doluluk %86,3."
+    },
+    {
+      "date": "2026-11-04",
+      "effect": "up",
+      "meaning": "Kâr büyümesi ılımlı.",
+      "source": "CNBC-e",
+      "title": "THY'nin üçüncü çeyrek net karı yüzde 9,7 arttı",
+      "url": "https://www.cnbce.com/sirket-bilancolari/thynin-ucuncu-ceyrek-net-kari-yuzde-97-artti-h40977",
+      "what": "3Ç26 net kâr 61,46 mlr TL (+%9,7), gelir 395,96 mlr TL (+%40)."
+    },
+    {
+      "date": "2026-11-04",
+      "effect": "mixed",
+      "meaning": "Kâr beklentiyi aştı ama marj baskısı sürüyor.",
+      "source": "Bloomberg HT",
+      "title": "THY'nin kârı yakıt baskısına rağmen beklentileri aştı",
+      "url": "https://www.bloomberght.com/thy-nin-kri-yakit-baskisina-ragmen-beklentileri-asti-3793435",
+      "what": "Net kâr 1,3 mlr $ (beklenti 1,1 mlr $); FAVKÖK marjı %25,4'e geriledi."
+    },
+    {
+      "date": "2026-11-11",
+      "effect": "mixed",
+      "meaning": "Hedefler hâlâ fiyatın belirgin üstünde ama yön karışık.",
+      "source": "Rota Borsa",
+      "title": "Türk Hava Yolları (THYAO) Hisse Hedef Fiyatları 2026",
+      "url": "https://rotaborsa.com/turk-hava-yollari-thy-hedef-fiyatlari/",
+      "what": "Bilanço sonrası 10 kurum hedef açıkladı; QNB 450→400 TL'ye indirdi, İş 455→490 TL'ye çıkardı."
+    }
+  ],
+  "summary": "THY 3. çeyrekte beklentiyi aşan kâr açıkladı ama yakıt maliyeti marjı daralttı. Ekim yolcu sayısı hafif düştü; analist hedefleri karışık, birkaç kurum hedefini düşürdü."
+}

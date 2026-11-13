@@ -1,1 +1,43 @@
-{"code": "TOASO", "at": "2026-11-13T08:30:00Z", "summary": "Çeyrek kârı beklentinin çok üstünde geldi. Ama satışlar düştü ve şirket bu yılki satış ve üretim beklentisini indirdi.", "items": [{"title": "Tofaş'tan (TOASO) beklentileri aşan 3. çeyrek bilançosu", "date": "2026-11-05", "source": "CNBC-e", "url": "https://www.cnbce.com/sirket-bilancolari/tofastan-toaso-beklentileri-asan-3ceyrek-bilancosu-iste-detaylar-h41136", "what": "Tofaş 3. çeyrekte 4,33 milyar TL net kâr açıkladı; beklenti 2,51 milyar TL idi.", "meaning": "Kâr beklenenden çok daha iyi geldi; ama çeyreklik satış geliri geçen yıla göre düştü.", "effect": "up"}, {"title": "Tofaş 2026 satış, ihracat ve üretim beklentilerini düşürdü", "date": "2026-11-05", "source": "Foreks", "url": "https://www.foreks.com/haber/detay/6aecc17195131d72027d7c26/PICNEWS/tr/tofas-2026-satis-ihracat-ve-uretim-beklentilerini-dusurdu-05-11-26/", "what": "Şirket 2026 yurt içi satış beklentisini 300-320 binden 270-290 bin araca, üretim beklentisini 135-145 bin araca indirdi.", "meaning": "Yılın geri kalanında daha az araç satılması bekleniyor; bu, büyümenin yavaşladığını gösteriyor.", "effect": "down"}, {"title": "Tofaş için 8 aracı kurumdan hedef fiyat (2027)", "date": "2026-11-06", "source": "Rota Borsa", "url": "https://rotaborsa.com/tofas-otomobil-toaso-hisse-hedef-fiyat-2027-8-araci-kurum-acikladi/", "what": "Bilanço sonrası 8 kurum 400-530 TL aralığında hedef fiyat yayımladı; çoğunun tavsiyesi 'al' ya da 'endeks üstü'.", "meaning": "Analistler 242 TL civarındaki hisse için hâlâ belirgin yükseliş potansiyeli görüyor.", "effect": "up"}, {"title": "Oyak Yatırım, Tofaş için hedef fiyatını 415 TL, tavsiyesini 'Endeks Üstü Getiri' olarak korudu", "date": "2026-11-06", "source": "Foreks", "url": "https://www.foreks.com/haber/detay/6aed90934b1852391445d4c5/FRKS/tr/hisse-degerlendirmesi-oyak-yatirim-tofas-icin-hedef-fiyatini-415-tl-tavsiyesini-endeks-ustu-getiri-olarak-korudu-06-11-26/", "what": "Oyak Yatırım bilanço sonrası hedefini ve olumlu tavsiyesini değiştirmedi.", "meaning": "Kurum, beklenti düşüşüne rağmen hisseye bakışını bozmadı.", "effect": "mixed"}]}
+{
+  "at": "2026-11-13T08:30:00Z",
+  "code": "TOASO",
+  "items": [
+    {
+      "date": "2026-11-05",
+      "effect": "up",
+      "meaning": "Kâr beklenenden çok daha iyi geldi; ama çeyreklik satış geliri geçen yıla göre düştü.",
+      "source": "CNBC-e",
+      "title": "Tofaş'tan (TOASO) beklentileri aşan 3. çeyrek bilançosu",
+      "url": "https://www.cnbce.com/sirket-bilancolari/tofastan-toaso-beklentileri-asan-3ceyrek-bilancosu-iste-detaylar-h41136",
+      "what": "Tofaş 3. çeyrekte 4,33 milyar TL net kâr açıkladı; beklenti 2,51 milyar TL idi."
+    },
+    {
+      "date": "2026-11-05",
+      "effect": "down",
+      "meaning": "Yılın geri kalanında daha az araç satılması bekleniyor; bu, büyümenin yavaşladığını gösteriyor.",
+      "source": "Foreks",
+      "title": "Tofaş 2026 satış, ihracat ve üretim beklentilerini düşürdü",
+      "url": "https://www.foreks.com/haber/detay/6aecc17195131d72027d7c26/PICNEWS/tr/tofas-2026-satis-ihracat-ve-uretim-beklentilerini-dusurdu-05-11-26/",
+      "what": "Şirket 2026 yurt içi satış beklentisini 300-320 binden 270-290 bin araca, üretim beklentisini 135-145 bin araca indirdi."
+    },
+    {
+      "date": "2026-11-06",
+      "effect": "up",
+      "meaning": "Analistler 242 TL civarındaki hisse için hâlâ belirgin yükseliş potansiyeli görüyor.",
+      "source": "Rota Borsa",
+      "title": "Tofaş için 8 aracı kurumdan hedef fiyat (2027)",
+      "url": "https://rotaborsa.com/tofas-otomobil-toaso-hisse-hedef-fiyat-2027-8-araci-kurum-acikladi/",
+      "what": "Bilanço sonrası 8 kurum 400-530 TL aralığında hedef fiyat yayımladı; çoğunun tavsiyesi 'al' ya da 'endeks üstü'."
+    },
+    {
+      "date": "2026-11-06",
+      "effect": "mixed",
+      "meaning": "Kurum, beklenti düşüşüne rağmen hisseye bakışını bozmadı.",
+      "source": "Foreks",
+      "title": "Oyak Yatırım, Tofaş için hedef fiyatını 415 TL, tavsiyesini 'Endeks Üstü Getiri' olarak korudu",
+      "url": "https://www.foreks.com/haber/detay/6aed90934b1852391445d4c5/FRKS/tr/hisse-degerlendirmesi-oyak-yatirim-tofas-icin-hedef-fiyatini-415-tl-tavsiyesini-endeks-ustu-getiri-olarak-korudu-06-11-26/",
+      "what": "Oyak Yatırım bilanço sonrası hedefini ve olumlu tavsiyesini değiştirmedi."
+    }
+  ],
+  "summary": "Çeyrek kârı beklentinin çok üstünde geldi. Ama satışlar düştü ve şirket bu yılki satış ve üretim beklentisini indirdi."
+}

@@ -1,1 +1,52 @@
-{"code": "KCHOL", "at": "2026-11-13T08:30:00Z", "summary": "Çeyrek kârı beklentiyi açık farkla aştı ve analistler hedeflerini yükseltti. Kâr artışının büyük kısmı rafineri ortaklığından geliyor.", "items": [{"title": "Koç Holding (KCHOL) 3. çeyrekte beklentileri aştı: İşte dev holdingin bilançosu", "date": "2026-11-09", "source": "CNBC-e", "url": "https://www.cnbce.com/sirket-bilancolari/koc-holding-kchol-3-ceyrekte-beklentileri-asti-iste-dev-holdingin-3-ceyrek-bilancosu-h41391", "what": "Koç 3. çeyrekte 34.9 milyar TL net kâr açıkladı, beklenti 25 milyar TL civarındaydı.", "meaning": "Holding beklenenden çok daha fazla kâr etti.", "effect": "up"}, {"title": "Deniz Yatırım, Koç Holding için hedef fiyatını 321,00 TL'den 336,00 TL'ye revize etti", "date": "2026-11-10", "source": "Foreks", "url": "https://www.foreks.com/haber/detay/6af2b8274b1852391445f95b/FRKS/tr/hisse-degerlendirmesi-deniz-yatirim-koc-holding-icin-hedef-fiyatini-321-00-tl-den-336-00-tl-ye-revize-etti-tavsiyesini-al-olarak-korudu-10-11-26/", "what": "Deniz Yatırım hedefi yükseltti, 2026 kâr tahminini 50'den 77 milyar TL'ye çıkardı.", "meaning": "Analist kâr beklentisi ve değer tahmini yükseldi.", "effect": "up"}, {"title": "Koç Holding (KCHOL) hisse hedef fiyat 2027! 8 aracı kurum açıkladı", "date": "2026-11-10", "source": "Rota Borsa", "url": "https://rotaborsa.com/koc-holding-kchol-hisse-hedef-fiyat-2027-8-araci-kurum-acikladi/", "what": "8 kurumun hedefi 295-364 TL arasında; Tacirler, İş ve GCM hedef yükseltti.", "meaning": "Kurumlar hissede %40'ın üzerinde potansiyel görüyor.", "effect": "up"}, {"title": "Koç Holding (KCHOL) 2026 3. Çeyrek Bilanço Analizi", "date": "2026-11-10", "source": "GCM Yatırım", "url": "https://www.gcmyatirim.com.tr/arastirma-analiz/ozel-raporlar/2026-11-10-koc-holding-kchol-2026-3-ceyrek-bilanco-analizi", "what": "Kâr Tüpraş kaynaklı; Ford Otosan, Arçelik, Otokar, TürkTraktör tarafında ciro düşüşü ve zararlar var.", "meaning": "Kâr artışı tek bir iştirake dayanıyor, diğer iştirakler zayıf.", "effect": "mixed"}, {"title": "Üç holdingde NAD iskontosu yüzde 70'e çıktı, tarihsel ortalama aşıldı", "date": "2026-11-02", "source": "Paratic", "url": "https://paratic.com/uc-holdingde-nad-iskontosu-yuzde-70e-cikti-tarihsel-ortalama-asildi/", "what": "PhillipCapital'e göre Koç'un NAD iskontosu %37, 3 yıllık ortalaması %33.", "meaning": "Hisse iştiraklerinin toplam değerine göre ortalamadan daha ucuz.", "effect": "mixed"}]}
+{
+  "at": "2026-11-13T08:30:00Z",
+  "code": "KCHOL",
+  "items": [
+    {
+      "date": "2026-11-09",
+      "effect": "up",
+      "meaning": "Holding beklenenden çok daha fazla kâr etti.",
+      "source": "CNBC-e",
+      "title": "Koç Holding (KCHOL) 3. çeyrekte beklentileri aştı: İşte dev holdingin bilançosu",
+      "url": "https://www.cnbce.com/sirket-bilancolari/koc-holding-kchol-3-ceyrekte-beklentileri-asti-iste-dev-holdingin-3-ceyrek-bilancosu-h41391",
+      "what": "Koç 3. çeyrekte 34.9 milyar TL net kâr açıkladı, beklenti 25 milyar TL civarındaydı."
+    },
+    {
+      "date": "2026-11-10",
+      "effect": "up",
+      "meaning": "Analist kâr beklentisi ve değer tahmini yükseldi.",
+      "source": "Foreks",
+      "title": "Deniz Yatırım, Koç Holding için hedef fiyatını 321,00 TL'den 336,00 TL'ye revize etti",
+      "url": "https://www.foreks.com/haber/detay/6af2b8274b1852391445f95b/FRKS/tr/hisse-degerlendirmesi-deniz-yatirim-koc-holding-icin-hedef-fiyatini-321-00-tl-den-336-00-tl-ye-revize-etti-tavsiyesini-al-olarak-korudu-10-11-26/",
+      "what": "Deniz Yatırım hedefi yükseltti, 2026 kâr tahminini 50'den 77 milyar TL'ye çıkardı."
+    },
+    {
+      "date": "2026-11-10",
+      "effect": "up",
+      "meaning": "Kurumlar hissede %40'ın üzerinde potansiyel görüyor.",
+      "source": "Rota Borsa",
+      "title": "Koç Holding (KCHOL) hisse hedef fiyat 2027! 8 aracı kurum açıkladı",
+      "url": "https://rotaborsa.com/koc-holding-kchol-hisse-hedef-fiyat-2027-8-araci-kurum-acikladi/",
+      "what": "8 kurumun hedefi 295-364 TL arasında; Tacirler, İş ve GCM hedef yükseltti."
+    },
+    {
+      "date": "2026-11-10",
+      "effect": "mixed",
+      "meaning": "Kâr artışı tek bir iştirake dayanıyor, diğer iştirakler zayıf.",
+      "source": "GCM Yatırım",
+      "title": "Koç Holding (KCHOL) 2026 3. Çeyrek Bilanço Analizi",
+      "url": "https://www.gcmyatirim.com.tr/arastirma-analiz/ozel-raporlar/2026-11-10-koc-holding-kchol-2026-3-ceyrek-bilanco-analizi",
+      "what": "Kâr Tüpraş kaynaklı; Ford Otosan, Arçelik, Otokar, TürkTraktör tarafında ciro düşüşü ve zararlar var."
+    },
+    {
+      "date": "2026-11-02",
+      "effect": "mixed",
+      "meaning": "Hisse iştiraklerinin toplam değerine göre ortalamadan daha ucuz.",
+      "source": "Paratic",
+      "title": "Üç holdingde NAD iskontosu yüzde 70'e çıktı, tarihsel ortalama aşıldı",
+      "url": "https://paratic.com/uc-holdingde-nad-iskontosu-yuzde-70e-cikti-tarihsel-ortalama-asildi/",
+      "what": "PhillipCapital'e göre Koç'un NAD iskontosu %37, 3 yıllık ortalaması %33."
+    }
+  ],
+  "summary": "Çeyrek kârı beklentiyi açık farkla aştı ve analistler hedeflerini yükseltti. Kâr artışının büyük kısmı rafineri ortaklığından geliyor."
+}
