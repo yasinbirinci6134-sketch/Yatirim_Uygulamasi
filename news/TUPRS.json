@@ -1,1 +1,43 @@
-{"at": "2026-11-18T07:55:00Z", "code": "TUPRS", "items": [{"date": "2026-11-06", "effect": "up", "meaning": "Şirketin kazancı çok güçlü; bu, temettü ve hisse değeri için olumlu bir işaret.", "source": "Rota Borsa", "title": "Tüpraş 3. çeyrekte rekor kâr açıkladı", "url": "https://rotaborsa.com/?p=490569", "what": "Tüpraş 3. çeyrekte 68,7 milyar TL net kâr açıkladı, 9 aylık kâr yüzde 328 arttı. Kâr piyasa beklentisinin üzerinde geldi."}, {"date": "2026-11-06", "effect": "up", "meaning": "Şirket yılın geri kalanında da yüksek kâr bekliyor; ancak 4. çeyrekte marjın 3. çeyrekten düşük olacağı anlaşılıyor.", "source": "USC Markets", "title": "Rafineri marjı beklentisi yükseltildi", "url": "https://www.uscmarkets.com/haberler/tuprs-2026-net-rafineri-marji-beklentisi-20-22-dolar", "what": "Tüpraş 2026 net rafineri marjı beklentisini 13-15 dolardan 20-22 dolar/varile çıkardı."}, {"date": "2026-11-11", "effect": "up", "meaning": "Analistler hissenin mevcut fiyatın belirgin üzerinde değer taşıdığını düşünüyor.", "source": "Rota Borsa", "title": "Bilanço sonrası 9 kurum hedef fiyat verdi", "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/", "what": "Aracı kurumların hedef fiyatları 395-510 TL aralığında, ortalama yaklaşık 476 TL."}, {"date": "2026-11-11", "effect": "up", "meaning": "Bilanço sonrası analist beklentileri yukarı yönlü güncelleniyor.", "source": "Paratic", "title": "Ziraat Yatırım hedefi 490 TL'ye çıkardı", "url": "https://paratic.com/ziraat-yatirim-tupras-icin-hedef-fiyatini-490-tlye-cikardi/", "what": "Ziraat Yatırım Tüpraş hedef fiyatını 430 TL'den 490 TL'ye yükseltti, 'al' tavsiyesini korudu."}], "summary": "Çeyrek kârı beklentiyi aştı ve şirket yıl sonu rafineri kârlılığı beklentisini yükseltti. Analistler hedeflerini yukarı çekti."}
+{
+ "at": "2026-11-18T07:55:00Z",
+ "code": "TUPRS",
+ "items": [
+  {
+   "date": "2026-11-06",
+   "effect": "up",
+   "meaning": "Şirketin kazancı çok güçlü; bu, temettü ve hisse değeri için olumlu bir işaret.",
+   "source": "Rota Borsa",
+   "title": "Tüpraş 3. çeyrekte rekor kâr açıkladı",
+   "url": "https://rotaborsa.com/?p=490569",
+   "what": "Tüpraş 3. çeyrekte 68,7 milyar TL net kâr açıkladı, 9 aylık kâr yüzde 328 arttı. Kâr piyasa beklentisinin üzerinde geldi."
+  },
+  {
+   "date": "2026-11-06",
+   "effect": "up",
+   "meaning": "Şirket yılın geri kalanında da yüksek kâr bekliyor; ancak 4. çeyrekte marjın 3. çeyrekten düşük olacağı anlaşılıyor.",
+   "source": "USC Markets",
+   "title": "Rafineri marjı beklentisi yükseltildi",
+   "url": "https://www.uscmarkets.com/haberler/tuprs-2026-net-rafineri-marji-beklentisi-20-22-dolar",
+   "what": "Tüpraş 2026 net rafineri marjı beklentisini 13-15 dolardan 20-22 dolar/varile çıkardı."
+  },
+  {
+   "date": "2026-11-11",
+   "effect": "up",
+   "meaning": "Analistler hissenin mevcut fiyatın belirgin üzerinde değer taşıdığını düşünüyor.",
+   "source": "Rota Borsa",
+   "title": "Bilanço sonrası 9 kurum hedef fiyat verdi",
+   "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/",
+   "what": "Aracı kurumların hedef fiyatları 395-510 TL aralığında, ortalama yaklaşık 476 TL."
+  },
+  {
+   "date": "2026-11-11",
+   "effect": "up",
+   "meaning": "Bilanço sonrası analist beklentileri yukarı yönlü güncelleniyor.",
+   "source": "Paratic",
+   "title": "Ziraat Yatırım hedefi 490 TL'ye çıkardı",
+   "url": "https://paratic.com/ziraat-yatirim-tupras-icin-hedef-fiyatini-490-tlye-cikardi/",
+   "what": "Ziraat Yatırım Tüpraş hedef fiyatını 430 TL'den 490 TL'ye yükseltti, 'al' tavsiyesini korudu."
+  }
+ ],
+ "summary": "Çeyrek kârı beklentiyi aştı ve şirket yıl sonu rafineri kârlılığı beklentisini yükseltti. Analistler hedeflerini yukarı çekti."
+}

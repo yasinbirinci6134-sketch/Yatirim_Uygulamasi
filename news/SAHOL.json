@@ -1,1 +1,43 @@
-{"at": "2026-11-17T07:55:00Z", "code": "SAHOL", "items": [{"date": "2026-11-05", "effect": "up", "meaning": "Analistler hisseyi hâlâ ucuz buluyor; hedefler mevcut fiyatın çok üzerinde.", "source": "Rota Borsa", "title": "Sabancı Holding (SAHOL) hisse hedef fiyat 2027! 7 aracı kurum açıkladı", "url": "https://rotaborsa.com/sabanci-holding-sahol-hisse-hedef-fiyat-2027-7-araci-kurum-acikladi/", "what": "7 kurum 132-183 TL arası hedef verdi, çoğu 'al' / 'endeks üstü getiri' tavsiyesini korudu (referans 84,60 TL)."}, {"date": "2026-11-05", "effect": "mixed", "meaning": "Enerji güçlü, banka tarafı hâlâ yük.", "source": "Midas", "title": "Sabancı Holding'de kâr artışını ne destekledi?", "url": "https://www.getmidas.com/midasin-kulaklari/sabanci-holdingde-kar-artisini-ne-destekledi-p-885392", "what": "Kâr artışı enerji ve banka dışı işlerden geldi, banka segmenti zarar yazdı."}, {"date": "2026-11-05", "effect": "mixed", "meaning": "Analistler hisseyi ucuz buluyor ama yorumlar temkinli.", "source": "Foreks", "title": "Sabancı Holding'de güçlü kara rağmen temkinli yorumlar: Hedef fiyatlar ayrıştı", "url": "https://www.foreks.com/haber/detay/6aec359995131d72027d7329/PICNEWS/tr/sabanci-holding-de-guclu-kara-ragmen-temkinli-yorumlar-hedef-fiyatlar-ayristi-05-11-26/", "what": "Kurumlar hedeflerini korudu (138-183 TL); İş Yatırım NAD iskontosunu %59 olarak verdi."}, {"date": "2026-11-04", "effect": "up", "meaning": "Şirket kârlılığa döndü, çeyrek kârı beklentiyi aştı.", "source": "CNBC-e / KAP", "title": "Sabancı Holding 3. çeyrek bilançosunu açıkladı: zarardan güçlü kâra geçti", "url": "https://www.cnbce.com/sirket-bilancolari/sabanci-holding-sahol-3-ceyrek-bilancosunu-acikladi-zarardan-guclu-kara-gecti-h41053", "what": "9 aylık net kâr 19,57 milyar TL; geçen yıl aynı dönemde 1 milyar TL zarar vardı. 3. çeyrek kârı 4,26 milyar TL ile beklentinin üzerinde."}, {"date": "2026-11-04", "effect": "mixed", "meaning": "Kâr artarken satışlar küçülüyor; borç yükü azalıyor.", "source": "Foreks", "title": "Sabancı Holding dokuz ayda gelirleri yüzde 17 geriledi", "url": "https://www.foreks.com/haber/detay/6aeb5c4495131d72027d6984/PICNEWS/tr/sabanci-holding-dokuz-ayda-gelirleri-yuzde-17-geriledi-04-11-26/", "what": "Toplam gelirler %17 azalarak 915 milyar TL'ye indi; net borç 4,19'dan 3,90 trilyon TL'ye geriledi."}], "summary": "Çeyrek kârı beklentiye yakın geldi; enerji şirketleri güçlü, banka kolu zayıf. Hisse sahip olduğu şirketlerin değerine göre çok ucuz."}
+{
+ "at": "2026-11-18T19:30:00Z",
+ "code": "SAHOL",
+ "items": [
+  {
+   "date": "2026-11-05",
+   "effect": "up",
+   "meaning": "Analistler hisseyi mevcut fiyatın oldukça üstünde değerliyor.",
+   "source": "Rota Borsa",
+   "title": "Aracı kurumlardan 7 yeni hedef fiyat",
+   "url": "https://rotaborsa.com/sabanci-holding-sahol-hisse-hedef-fiyat-2027-7-araci-kurum-acikladi/",
+   "what": "Bilanço sonrası 7 kurum 132-183 TL arası hedef fiyat ve al/endeks üstü tavsiyesi verdi."
+  },
+  {
+   "date": "2026-11-04",
+   "effect": "up",
+   "meaning": "Kâr beklentiyi aştı, ama hasılat yıllık %17 düştü ve banka (Akbank) tarafı zayıf kaldı.",
+   "source": "KAP / Bloomberg HT",
+   "title": "3Ç26 finansal sonuçlar açıklandı",
+   "url": "https://www.bloomberght.com/sabanci-holding-in-ucuncu-ceyrek-net-kri-4-3-milyar-tl-ye-yukseldi-3793557",
+   "what": "3. çeyrek ana ortaklık net kârı 4,26 milyar TL ile geçen yılın 0,88 milyar TL'sinin yaklaşık 4,8 katı oldu, Matriks beklentisi 3,75 milyar TL'nin üzerinde kaldı."
+  },
+  {
+   "date": "2026-11-04",
+   "effect": "mixed",
+   "meaning": "Holding zarardan kâra döndü, ancak bunun bir kısmı Akçansa hisse satışı gibi tek seferlik gelirlerden geliyor.",
+   "source": "finansopia / KAP",
+   "title": "9 aylık net kâr 19,6 milyar TL",
+   "url": "https://www.finansopia.com/kap-bildirimleri/sabanci-holding-sahol-2026-yili-3-ceyrek-bilancosunu-acikladi/",
+   "what": "Ocak-Eylül 2026'da 19,57 milyar TL net kâr elde edildi; geçen yıl aynı dönemde 1,02 milyar TL zarar vardı."
+  },
+  {
+   "date": "2026-11-04",
+   "effect": "up",
+   "meaning": "Holdingin borç yükü düşük, nakdi güçlü; bedelli sermaye ihtiyacı görünmüyor.",
+   "source": "Bloomberg HT",
+   "title": "Solo net nakit 31,9 milyar TL'ye yükseldi",
+   "url": "https://www.bloomberght.com/sabanci-holding-in-ucuncu-ceyrek-net-kri-4-3-milyar-tl-ye-yukseldi-3793557",
+   "what": "Holding solo net nakit pozisyonu Eylül sonunda 31,9 milyar TL'ye çıktı; banka dışı net borç/FAVÖK 1,6x."
+  }
+ ],
+ "summary": "Çeyrek kârı güçlü arttı ve holdingin kendi nakdi yüksek; analistler hedeflerini korudu. Bu hafta holding hisseleri sert satıldı."
+}

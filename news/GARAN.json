@@ -1,1 +1,52 @@
-{"at": "2026-11-13T19:10:00Z", "code": "GARAN", "items": [{"date": "2026-11-03", "effect": "up", "meaning": "Tek seferlik ek kâr ve serbest kalan sermaye, hissedara geri alım/temettü olarak dönebilir.", "source": "Foreks", "title": "Garanti BBVA, Romanya'daki iştirak satışını tamamladı", "url": "https://www.foreks.com/haber/detay/6ae974e758b1b941c2096c91/FRKS/tr/garanti-bbva-romanya-daki-istirak-satisini-tamamladi-03-11-26/", "what": "Banka Romanya'daki bankasını ve leasing şirketini Raiffeisen'e sattı; satıştan 6,7 milyar TL kâr bekleniyor."}, {"date": "2026-11-09", "effect": "up", "meaning": "Şirketin kendi hissesini alması fiyatı destekler ve hisse başına kârı artırır.", "source": "Midas (KAP)", "title": "GARAN pay geri alım bildirimleri", "url": "https://www.getmidas.com/canli-borsa/garan-hisse/haber/", "what": "Banka 3 Kasım'da 11 milyar TL'lik geri alım programı başlattı ve 4-9 Kasım arasında her gün hisse aldı."}, {"date": "2026-10-30", "effect": "mixed", "meaning": "Analistler hâlâ yukarı alan görüyor ama bazıları beklentisini biraz azalttı.", "source": "Rota Borsa", "title": "Garanti Bankası (GARAN) hisse hedef fiyat 2027! 6 aracı kurum açıkladı", "url": "https://rotaborsa.com/garanti-bankasi-garan-hisse-hedef-fiyat-2027-6-araci-kurum-acikladi/", "what": "Altı kurum hedef verdi (165–211 TL); Şeker ve Yapı Kredi Yatırım hedeflerini düşürdü."}], "summary": "Garanti BBVA kendi hisselerini geri almaya başladı ve Romanya'daki bankasını satarak ek kâr elde edecek. Bilanço sonrası iki kurum hedef fiyatını düşürdü ama ortalama hedef hâlâ bugünkü fiyatın epey üstünde."}
+{
+ "at": "2026-11-18T19:30:00Z",
+ "code": "GARAN",
+ "items": [
+  {
+   "date": "2026-11-18",
+   "effect": "up",
+   "meaning": "Banka kendi hissesini alarak fiyata destek veriyor ve hissedara değer aktarıyor.",
+   "source": "KAP / getmidas",
+   "title": "Pay geri alımı devam ediyor",
+   "url": "https://www.getmidas.com/canli-borsa/garan-hisse/haber/",
+   "what": "Banka 18 Kasım'da ortalama 148,01 TL'den 2.159.499 adet kendi payını geri aldı."
+  },
+  {
+   "date": "2026-11-17",
+   "effect": "up",
+   "meaning": "Geri alım programı düzenli işliyor, satış baskısını azaltıyor.",
+   "source": "KAP / getmidas",
+   "title": "Pay geri alımı (16-17 Kasım)",
+   "url": "https://www.getmidas.com/canli-borsa/garan-hisse/haber/",
+   "what": "16 ve 17 Kasım'da sırasıyla 1,885 mn ve 1,98 mn adet pay ~149,5 TL ortalamayla geri alındı."
+  },
+  {
+   "date": "2026-11-17",
+   "effect": "mixed",
+   "meaning": "Rutin yurt dışı borçlanma; hisseye etkisi sınırlı.",
+   "source": "KAP / getmidas",
+   "title": "50 mn USD tahvil ihracı",
+   "url": "https://www.getmidas.com/canli-borsa/garan-hisse/haber/",
+   "what": "17 Mayıs 2028 vadeli 50 milyon dolarlık sıfır kuponlu tahvil Hollanda'da yurt dışı yatırımcılara satıldı."
+  },
+  {
+   "date": "2026-11-05",
+   "effect": "mixed",
+   "meaning": "İştirak büyümesine sermaye ayrılıyor; bankanın kendi hissedarından para istenmiyor.",
+   "source": "KAP / getmidas",
+   "title": "Garanti BBVA Leasing'e 17 milyar TL sermaye artırımı",
+   "url": "https://www.getmidas.com/canli-borsa/garan-hisse/haber/",
+   "what": "Banka, iştiraki Garanti BBVA Leasing'in 17 milyar TL'lik sermaye artırımına katılma kararı aldı (tarih göreli, yaklaşık)."
+  },
+  {
+   "date": "2026-11-04",
+   "effect": "up",
+   "meaning": "Yönetim hisseyi ucuz görüyor; geri alım fiyatı destekler.",
+   "source": "KAP / fintables",
+   "title": "Pay geri alım programı başladı",
+   "url": "https://fintables.com/borsa-haber-akisi/61ca13bb-183e-4d1b-89e6-b51676352e1c/garan-paylarin-geri-alinmasina-iliskin-bildirim",
+   "what": "03.11.2026 YK kararıyla başlayan programda ilk gün ortalama 137,39 TL'den 2.474.579 adet pay alındı."
+  }
+ ],
+ "summary": "Banka kendi hisselerini düzenli olarak geri alıyor; kârı beklentiyi aştı ama bazı analistler hedeflerini düşürdü."
+}

@@ -1,1 +1,16 @@
-{"at": "2026-11-17T07:55:00Z", "code": "TAVHL", "items": [{"date": "2026-11-13", "effect": "up", "meaning": "Küçük tutarlı bir işlem; Batum havalimanı kârının tamamı şirkete kalacak.", "source": "KAP / Borsacoo", "title": "Tav Batumi'deki %24 payın satın alınması (Finansal duran varlık edinimi)", "url": "https://borsacoo.com/bildirim/101151", "what": "TAV, Tav Batumi'deki %24 payı 3 milyon dolara peşin ödemeyle aldı; ortaklık oranı %76'dan %100'e çıktı."}, {"date": "2026-11-10", "effect": "mixed", "meaning": "Trafik büyümesi yavaşladı; jeopolitik gelişmeler, yakıt fiyatları ve motor sorunları etkili oldu. Yurt dışı havalimanları daha iyi.", "source": "KAP / USC Markets", "title": "TAV Havalimanları Ekim 2026 yolcu trafiği / yatırımcı bülteni", "url": "https://www.uscmarkets.com/haberler/tavhl-ekim-2026-yolcu-trafigi", "what": "Ekim'de 11,57 milyon yolcu ağırlandı, geçen yılla aynı (%0). 10 aylık toplam 100,9 milyon yolcu ile %2 arttı. Antalya %6 düştü, Ankara %4 arttı."}, {"date": "2026-11-10", "effect": "mixed", "meaning": "Yolcu büyümesi yavaşladı; Antalya geriledi.", "source": "Foreks", "title": "TAV Havalimanları 10 ayda 100 milyon yolcu sınırını aştı", "url": "https://www.foreks.com/haber/detay/6af2bceb9cc90f0fc225f795/PICNEWS/tr/tav-havalimanlari-10-ayda-100-milyon-yolcu-sinirini-asti-10-11-26/", "what": "Ekim'de 11,57 milyon yolcu, geçen yılla aynı; Ocak–Ekim %2 artış."}, {"date": "2026-11-10", "effect": "mixed", "meaning": "Dış koşullar trafik büyümesini sınırlıyor.", "source": "Paratic", "title": "TAV Havalimanları 10 ayda 100,9 milyon yolcuya ulaştı", "url": "https://paratic.com/tav-havalimanlari-10-ayda-100-9-milyon-yolcuya-ulasti/", "what": "Şirket jeopolitik riskleri ve yüksek jet yakıtı fiyatlarını trafiği etkileyen unsurlar olarak gösterdi."}, {"date": "2026-11-09", "effect": "up", "meaning": "Yurt içi tarafta sınırlı olumlu sinyal.", "source": "Foreks", "title": "TAV Havalimanları'nın Türkiye'de işlettiği havalimanlarında yolcu trafiği ekim ayında arttı", "url": "https://www.foreks.com/haber/detay/6af1b43762bc3b2568f2faac/FRKS/tr/tav-havalimanlari-nin-turkiye-de-islettigi-havalimanlarinda-yolcu-trafigi-ekim-ayinda-artti-09-11-26/", "what": "Türkiye'deki bazı havalimanlarında Ekim trafiği arttı."}], "summary": "TAV Ekim'de yolcu sayısını yatay tuttu, on ayda 100 milyon yolcuyu aştı. Antalya'daki düşüş ve daha önce indirilen yolcu/FAVÖK rehberi kârlılığın sınavda olduğunu gösteriyor."}
+{
+ "at": "2026-11-18T19:30:00Z",
+ "code": "TAVHL",
+ "items": [
+  {
+   "date": "2026-11-10",
+   "effect": "mixed",
+   "meaning": "Trafik büyümesi zayıfladı; jeopolitik riskler ve yakıt fiyatları talebi frenliyor.",
+   "source": "Foreks",
+   "title": "Ekim yolcu trafiği yatay, 10 ayda 100 mn aşıldı",
+   "url": "https://www.foreks.com/haber/detay/6af2bceb9cc90f0fc225f795/PICNEWS/tr/tav-havalimanlari-10-ayda-100-milyon-yolcu-sinirini-asti-10-11-26/",
+   "what": "Ekim'de 11,57 mn yolcu ile yıllık bazda yatay kalındı; Ocak-Ekim toplamı %2 artışla 100,9 mn oldu, Antalya %6 geriledi."
+  }
+ ],
+ "summary": "Yolcu sayısı yatay seyrediyor; şirket yıl beklentisini düşürmüştü."
+}

@@ -1,1 +1,43 @@
-{"at": "2026-11-17T07:55:00Z", "code": "TOASO", "items": [{"date": "2026-11-06", "effect": "up", "meaning": "Kurumların hepsi olumlu tavsiyede; hedefler mevcut fiyatın belirgin üzerinde.", "source": "Foreks", "title": "Aracı kurumlardan Tofaş bilançosuna olumlu değerlendirme", "url": "https://www.foreks.com/haber/detay/6aed84a70427c75a2892f267/PICNEWS/tr/tofas-in-bilancosuna-araci-kurumlardan-olumlu-degerlendirme-06-11-26/", "what": "Ak Yatırım 530 TL, Gedik 496,70 TL, Şeker 435 TL, Vakıf 406 TL, Deniz 400 TL hedef verdi; OYAK 415 TL ile 'endeks üstü' tavsiyesini korudu."}, {"date": "2026-11-06", "effect": "up", "meaning": "Analistler 242 TL civarındaki hisse için hâlâ belirgin yükseliş potansiyeli görüyor.", "source": "Rota Borsa", "title": "Tofaş için 8 aracı kurumdan hedef fiyat (2027)", "url": "https://rotaborsa.com/tofas-otomobil-toaso-hisse-hedef-fiyat-2027-8-araci-kurum-acikladi/", "what": "Bilanço sonrası 8 kurum 400-530 TL aralığında hedef fiyat yayımladı; çoğunun tavsiyesi 'al' ya da 'endeks üstü'."}, {"date": "2026-11-06", "effect": "mixed", "meaning": "Kurum, beklenti düşüşüne rağmen hisseye bakışını bozmadı.", "source": "Foreks", "title": "Oyak Yatırım, Tofaş için hedef fiyatını 415 TL, tavsiyesini 'Endeks Üstü Getiri' olarak korudu", "url": "https://www.foreks.com/haber/detay/6aed90934b1852391445d4c5/FRKS/tr/hisse-degerlendirmesi-oyak-yatirim-tofas-icin-hedef-fiyatini-415-tl-tavsiyesini-endeks-ustu-getiri-olarak-korudu-06-11-26/", "what": "Oyak Yatırım bilanço sonrası hedefini ve olumlu tavsiyesini değiştirmedi."}, {"date": "2026-11-05", "effect": "up", "meaning": "Kâr beklentinin çok üzerinde geldi, ancak kârın bir kısmı finansman gelirleri ve enflasyon muhasebesi kazancından geldi; çeyrek satışları geriledi.", "source": "KAP / CNBC-e", "title": "Tofaş 3. çeyrek bilançosu beklentileri aştı", "url": "https://www.cnbce.com/sirket-bilancolari/tofastan-toaso-beklentileri-asan-3ceyrek-bilancosu-iste-detaylar-h41136", "what": "3. çeyrek net kâr 4,33 milyar TL oldu; piyasa beklentisi 2,51 milyar TL idi. 9 aylık net kâr 10,97 milyar TL (+%189)."}, {"date": "2026-11-05", "effect": "down", "meaning": "Şirket bu yıl daha az araç satıp üreteceğini öngörüyor; hacim tarafında zayıflık sinyali.", "source": "Foreks", "title": "Tofaş 2026 satış, ihracat ve üretim beklentilerini düşürdü", "url": "https://www.foreks.com/haber/detay/6aecc17195131d72027d7c26/PICNEWS/tr/tofas-2026-satis-ihracat-ve-uretim-beklentilerini-dusurdu-05-11-26/", "what": "Yurt içi satış beklentisi 270-290 bine, ihracat 70-80 bine, üretim 135-145 bin adede indirildi. Yatırım harcaması 250 milyon euroda korundu."}], "summary": "Çeyrek kârı beklentinin çok üstünde geldi. Ama satışlar düştü ve şirket bu yılki satış ve üretim beklentisini indirdi."}
+{
+ "at": "2026-11-18T19:30:00Z",
+ "code": "TOASO",
+ "items": [
+  {
+   "date": "2026-11-17",
+   "effect": "down",
+   "meaning": "Türkiye'den Avrupa'ya araç ihraç eden otomotiv şirketleri (Koç grubundaki Ford Otosan ve Tofaş gibi) için önemli bir risk; düzenlemenin son hali bu şirketlerin ihracatını etkileyebilir.",
+   "source": "Hisse.net (Bloomberg kaynaklı)",
+   "title": "Ford Avrupa'dan AB'ye uyarı: Türkiye 'Made in Europe' dışında kalmamalı",
+   "url": "https://www.hisse.net/haber/ford-dan-ab-ye-turkiye-uyarisi-otomotiv-sektoru-zarar-gorebilir-107614",
+   "what": "Ford Avrupa Başkanı Jim Baumbick, AB'nin teşvik ve kamu ihalelerini yerli üretime bağlayan 'Made in Europe' planında Türkiye, İngiltere ve Fas'ın dışarıda bırakılmasının Avrupa otomotivine zarar vereceğini söyledi. Türkiye'de üretilen Ford Transit, mevcut taslağa göre bu kapsama girmiyor; konu 20 Kasım'daki AB-İngiltere zirvesinde gündemde olacak."
+  },
+  {
+   "date": "2026-11-06",
+   "effect": "up",
+   "meaning": "Kurumlar fiyatı hedeflere göre çok düşük buluyor.",
+   "source": "YatırımX",
+   "title": "8 kurumdan bilanço sonrası hedef fiyat",
+   "url": "https://www.yatirimx.com.tr/sirket-haberleri/tofas-bilancosunu-acikladi-8-kurumdan-toaso-icin-hedef-fiyat/27790",
+   "what": "8 aracı kurum 400–530 TL aralığında hedef açıkladı; çoğu 'al/endeks üstü'."
+  },
+  {
+   "date": "2026-11-05",
+   "effect": "mixed",
+   "meaning": "Kar güçlü ama satışlar daralan pazarda geriliyor.",
+   "source": "Bloomberg HT",
+   "title": "3Ç26 net kar beklentinin çok üstünde",
+   "url": "https://www.bloomberght.com/tofas-tan-beklentileri-asan-kar-performansi-3793718",
+   "what": "3Ç'de 4,3 mlr TL net kar açıklandı (beklenti 2,5 mlr); hasılat yıllık %26 düştü."
+  },
+  {
+   "date": "2026-11-05",
+   "effect": "down",
+   "meaning": "Yılın kalanında hacimlerin zayıf kalması bekleniyor.",
+   "source": "Foreks",
+   "title": "2026 satış/ihracat/üretim beklentisi düşürüldü",
+   "url": "https://www.foreks.com/haber/detay/6aecc17195131d72027d7c26/PICNEWS/tr/tofas-2026-satis-ihracat-ve-uretim-beklentilerini-dusurdu-05-11-26/",
+   "what": "Tofaş 2026 iç satış, ihracat ve üretim tahminlerini aşağı çekti; yatırım beklentisi ~250 mn EUR'da korundu."
+  }
+ ],
+ "summary": "Kârı beklentinin çok üstünde geldi ama şirket satış beklentisini düşürdü; Avrupa'nın yerli üretim kuralı ihracat için risk."
+}

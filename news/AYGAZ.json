@@ -1,1 +1,52 @@
-{"at": "2026-11-18T07:55:00Z", "code": "AYGAZ", "items": [{"date": "2026-11-06", "effect": "up", "meaning": "Kâr beklentiyi belirgin aştı; bunda Tüpraş'taki dolaylı payın güçlü kârı etkili.", "source": "CNBC-e", "title": "Aygaz 3. çeyrekte 7,22 milyar TL kâr açıkladı", "url": "https://www.cnbce.com/sirket-bilancolari/aygazdan-aygaz-3-ceyrekte-722-milyar-tllik-kar-bilanco-beklentileri-asti-h41230", "what": "Aygaz 3. çeyrekte 7,22 milyar TL net kâr açıkladı; beklenti yaklaşık 5,6 milyar TL idi."}, {"date": "2026-11-09", "effect": "up", "meaning": "Analist mevcut fiyata göre yüzde 60'ın üzerinde potansiyel görüyor.", "source": "İş Yatırım", "title": "İş Yatırım hedefi 450 TL'ye yükseltti", "url": "https://arastirma.isyatirim.com.tr/2026/11/09/aygaz-is-aygaz-3c-2026-kar-analizi/", "what": "İş Yatırım, 3Ç sonuçları sonrası Aygaz hedef fiyatını 385 TL'den 450 TL'ye çıkardı, 'al' tavsiyesini korudu."}, {"date": "2026-11-09", "effect": "up", "meaning": "Analistlerin tamamı mevcut fiyatın üzerinde hedef veriyor ama görüşler karışık.", "source": "Rota Borsa", "title": "4 aracı kurum hedef fiyat açıkladı", "url": "https://rotaborsa.com/aygaz-hisse-hedef-fiyat-2027-4-araci-kurum-acikladi/", "what": "Deniz 412 TL, İş 450 TL, Gedik 375,12 TL ve Ak 358 TL hedef verdi; Gedik ve Ak'ın tavsiyesi nötr düzeyde."}, {"date": "2026-11-10", "effect": "up", "meaning": "Bilanço sonrası analist beklentileri iyileşiyor.", "source": "Borsa Gündem", "title": "Güçlü bilanço sonrası hedefler yükseldi", "url": "https://www.borsagundem.com.tr/aygazda-guclu-bilanco-3-araci-kurum-hedef-fiyatini-yukseltti", "what": "Aygaz'ın 9 aylık net kârı yüzde 233 artışla 11,9 milyar TL'ye ulaştı; üç aracı kurum hedef fiyatını yükseltti."}, {"date": "2026-11-11", "effect": "down", "meaning": "Kurumsal bir yatırımcının küçük satışı; etkisi sınırlı ama olumsuz yönde algılanabilir.", "source": "Midas (KAP)", "title": "Anadolu Hayat fonları payını azalttı", "url": "https://www.getmidas.com/canli-borsa/aygaz-hisse/haber/", "what": "Anadolu Hayat Emeklilik fonları Aygaz'daki paylarını yüzde 3'ün altına (yüzde 2,97) indirdi."}], "summary": "Dokuz aylık kârı beklentiyi aştı; kârın çoğu rafineri ortaklığından geliyor. Bir emeklilik fonu payını biraz azalttı."}
+{
+ "at": "2026-11-18T07:55:00Z",
+ "code": "AYGAZ",
+ "items": [
+  {
+   "date": "2026-11-06",
+   "effect": "up",
+   "meaning": "Kâr beklentiyi belirgin aştı; bunda Tüpraş'taki dolaylı payın güçlü kârı etkili.",
+   "source": "CNBC-e",
+   "title": "Aygaz 3. çeyrekte 7,22 milyar TL kâr açıkladı",
+   "url": "https://www.cnbce.com/sirket-bilancolari/aygazdan-aygaz-3-ceyrekte-722-milyar-tllik-kar-bilanco-beklentileri-asti-h41230",
+   "what": "Aygaz 3. çeyrekte 7,22 milyar TL net kâr açıkladı; beklenti yaklaşık 5,6 milyar TL idi."
+  },
+  {
+   "date": "2026-11-09",
+   "effect": "up",
+   "meaning": "Analist mevcut fiyata göre yüzde 60'ın üzerinde potansiyel görüyor.",
+   "source": "İş Yatırım",
+   "title": "İş Yatırım hedefi 450 TL'ye yükseltti",
+   "url": "https://arastirma.isyatirim.com.tr/2026/11/09/aygaz-is-aygaz-3c-2026-kar-analizi/",
+   "what": "İş Yatırım, 3Ç sonuçları sonrası Aygaz hedef fiyatını 385 TL'den 450 TL'ye çıkardı, 'al' tavsiyesini korudu."
+  },
+  {
+   "date": "2026-11-09",
+   "effect": "up",
+   "meaning": "Analistlerin tamamı mevcut fiyatın üzerinde hedef veriyor ama görüşler karışık.",
+   "source": "Rota Borsa",
+   "title": "4 aracı kurum hedef fiyat açıkladı",
+   "url": "https://rotaborsa.com/aygaz-hisse-hedef-fiyat-2027-4-araci-kurum-acikladi/",
+   "what": "Deniz 412 TL, İş 450 TL, Gedik 375,12 TL ve Ak 358 TL hedef verdi; Gedik ve Ak'ın tavsiyesi nötr düzeyde."
+  },
+  {
+   "date": "2026-11-10",
+   "effect": "up",
+   "meaning": "Bilanço sonrası analist beklentileri iyileşiyor.",
+   "source": "Borsa Gündem",
+   "title": "Güçlü bilanço sonrası hedefler yükseldi",
+   "url": "https://www.borsagundem.com.tr/aygazda-guclu-bilanco-3-araci-kurum-hedef-fiyatini-yukseltti",
+   "what": "Aygaz'ın 9 aylık net kârı yüzde 233 artışla 11,9 milyar TL'ye ulaştı; üç aracı kurum hedef fiyatını yükseltti."
+  },
+  {
+   "date": "2026-11-11",
+   "effect": "down",
+   "meaning": "Kurumsal bir yatırımcının küçük satışı; etkisi sınırlı ama olumsuz yönde algılanabilir.",
+   "source": "Midas (KAP)",
+   "title": "Anadolu Hayat fonları payını azalttı",
+   "url": "https://www.getmidas.com/canli-borsa/aygaz-hisse/haber/",
+   "what": "Anadolu Hayat Emeklilik fonları Aygaz'daki paylarını yüzde 3'ün altına (yüzde 2,97) indirdi."
+  }
+ ],
+ "summary": "Dokuz aylık kârı beklentiyi aştı; kârın çoğu rafineri ortaklığından geliyor. Bir emeklilik fonu payını biraz azalttı."
+}

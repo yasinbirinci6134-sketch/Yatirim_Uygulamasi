@@ -1,1 +1,43 @@
-{"at": "2026-11-18T07:55:00Z", "code": "KCHOL", "items": [{"date": "2026-11-09", "effect": "up", "meaning": "Holdingin kazancı beklenenden çok daha güçlü geldi.", "source": "CNBC-e", "title": "Koç Holding 3. çeyrekte beklentileri aştı", "url": "https://www.cnbce.com/sirket-bilancolari/koc-holding-kchol-3-ceyrekte-beklentileri-asti-iste-dev-holdingin-3-ceyrek-bilancosu-h41391", "what": "Koç Holding 3. çeyrekte 34,9 milyar TL net kâr açıkladı; analist medyan beklentisi 24,4 milyar TL idi."}, {"date": "2026-11-09", "effect": "up", "meaning": "Kâr satışlardan çok daha hızlı büyüyor; özellikle Tüpraş'ın rekor kârı katkı sağladı.", "source": "Borsa Gündem", "title": "9 ayda net kâr yüzde 203 arttı", "url": "https://www.borsagundem.com.tr/koc-holdingin-net-kari-9-ayda-yuzde-203-artisla-564-milyar-tlye-ulasti", "what": "Koç Holding'in 9 aylık net kârı yüzde 203 artışla 56,4 milyar TL'ye ulaştı, hasılat yaklaşık yüzde 11 arttı."}, {"date": "2026-11-11", "effect": "up", "meaning": "Analistler hissede yüzde 40'ın üzerinde yükseliş potansiyeli görüyor.", "source": "Borsa Gündem", "title": "Bilanço sonrası hedef fiyatlar yükseltildi", "url": "https://www.borsagundem.com.tr/koc-holdingden-beklentiyi-asan-kar-artisi-hedef-fiyatlar-revize-edildi", "what": "Tacirler, İş ve Deniz Yatırım hedeflerini yükseltti; 8 kurumun hedefleri 295-364 TL arasında."}, {"date": "2026-11-17", "effect": "mixed", "meaning": "Yönetim değişikliği; doğrudan finansal etkisi sınırlı.", "source": "Midas (KAP)", "title": "Bağımsız yönetim kurulu üyesi değişiyor", "url": "https://www.getmidas.com/canli-borsa/kchol-hisse/haber/", "what": "Bağımsız üye Ömer Önhon istifa etti; yerine eski AB Komiseri Thierry Breton için SPK'ya başvuruldu."}], "summary": "Dokuz aylık kâr geçen yılın üç katına çıktı ve analistler hedeflerini yükseltti. Kârın büyük kısmı rafineriden geliyor."}
+{
+ "at": "2026-11-18T07:55:00Z",
+ "code": "KCHOL",
+ "items": [
+  {
+   "date": "2026-11-09",
+   "effect": "up",
+   "meaning": "Holdingin kazancı beklenenden çok daha güçlü geldi.",
+   "source": "CNBC-e",
+   "title": "Koç Holding 3. çeyrekte beklentileri aştı",
+   "url": "https://www.cnbce.com/sirket-bilancolari/koc-holding-kchol-3-ceyrekte-beklentileri-asti-iste-dev-holdingin-3-ceyrek-bilancosu-h41391",
+   "what": "Koç Holding 3. çeyrekte 34,9 milyar TL net kâr açıkladı; analist medyan beklentisi 24,4 milyar TL idi."
+  },
+  {
+   "date": "2026-11-09",
+   "effect": "up",
+   "meaning": "Kâr satışlardan çok daha hızlı büyüyor; özellikle Tüpraş'ın rekor kârı katkı sağladı.",
+   "source": "Borsa Gündem",
+   "title": "9 ayda net kâr yüzde 203 arttı",
+   "url": "https://www.borsagundem.com.tr/koc-holdingin-net-kari-9-ayda-yuzde-203-artisla-564-milyar-tlye-ulasti",
+   "what": "Koç Holding'in 9 aylık net kârı yüzde 203 artışla 56,4 milyar TL'ye ulaştı, hasılat yaklaşık yüzde 11 arttı."
+  },
+  {
+   "date": "2026-11-11",
+   "effect": "up",
+   "meaning": "Analistler hissede yüzde 40'ın üzerinde yükseliş potansiyeli görüyor.",
+   "source": "Borsa Gündem",
+   "title": "Bilanço sonrası hedef fiyatlar yükseltildi",
+   "url": "https://www.borsagundem.com.tr/koc-holdingden-beklentiyi-asan-kar-artisi-hedef-fiyatlar-revize-edildi",
+   "what": "Tacirler, İş ve Deniz Yatırım hedeflerini yükseltti; 8 kurumun hedefleri 295-364 TL arasında."
+  },
+  {
+   "date": "2026-11-17",
+   "effect": "mixed",
+   "meaning": "Yönetim değişikliği; doğrudan finansal etkisi sınırlı.",
+   "source": "Midas (KAP)",
+   "title": "Bağımsız yönetim kurulu üyesi değişiyor",
+   "url": "https://www.getmidas.com/canli-borsa/kchol-hisse/haber/",
+   "what": "Bağımsız üye Ömer Önhon istifa etti; yerine eski AB Komiseri Thierry Breton için SPK'ya başvuruldu."
+  }
+ ],
+ "summary": "Dokuz aylık kâr geçen yılın üç katına çıktı ve analistler hedeflerini yükseltti. Kârın büyük kısmı rafineriden geliyor."
+}

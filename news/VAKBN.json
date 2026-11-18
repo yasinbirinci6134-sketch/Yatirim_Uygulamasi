@@ -1,1 +1,52 @@
-{"at": "2026-11-17T18:47:46Z", "code": "VAKBN", "items": [{"date": "2026-11-05", "effect": "up", "meaning": "Kâr beklentiden iyi geldi; ancak kredi kalitesindeki bozulma izlenmeli.", "source": "CNBC-e", "title": "Vakıfbank 3. çeyrekte beklentiyi aştı", "url": "https://www.cnbce.com/sirket-bilancolari/vakifbanktan-vakbn-181-milyar-tl-net-kar-bilanco-beklentileri-asti-h41132", "what": "Vakıfbank 3. çeyrekte 18,1 milyar TL net kâr açıkladı, ortalama beklentiyi yaklaşık yüzde 25 aştı."}, {"date": "2026-11-05", "effect": "mixed", "meaning": "Banka hızlı büyüyor ama kâr artışı enflasyonun altında kaldı.", "source": "Foreks", "title": "9 ayda kâr yüzde 8,5 arttı, aktifler 6,2 trilyon", "url": "https://www.foreks.com/haber/detay/6aecaff995131d72027d7a48/FRKS/tr/vakifbank-2026-yilinin-ucuncu-ceyreginde-aktif-buyuklugunu-6-2-trilyon-tl-ye-tasidi-05-11-26/", "what": "Bankanın 9 aylık solo net kârı yüzde 8,5 artışla 45,5 milyar TL oldu; krediler yüzde 34, mevduat yüzde 28,5 büyüdü."}, {"date": "2026-11-06", "effect": "down", "meaning": "Analistler hâlâ yükseliş potansiyeli görüyor ama beklentileri biraz aşağı çekti.", "source": "Foreks", "title": "Şeker ve Yapı Kredi Yatırım hedef düşürdü", "url": "https://www.foreks.com/haber/detay/6aed690995131d72027d8215/FRKS/tr/hisse-degerlendirmesi-seker-yatirim-vakbn-vakifbank-icin-hedef-fiyatini-46-39-tl-den-43-04-tl-ye-dusurdu-tavsiyesini-al-olarak-korudu-06-11-26/", "what": "Şeker Yatırım hedefini 46,39 TL'den 43,04 TL'ye, Yapı Kredi Yatırım 41 TL'den 40,5 TL'ye indirdi; 'al' tavsiyeleri sürüyor."}, {"date": "2026-11-12", "effect": "up", "meaning": "Uzun vadeli ve uygun maliyetli dış kaynak bulması bankanın fonlama yapısını destekler.", "source": "Bloomberg HT", "title": "KfW ile 250 milyon euroluk yeşil dönüşüm işbirliği", "url": "https://bloomberght.com/vakifbank-ile-kfwden-250-milyon-euroluk-yesil-donusum-isbirligi-3794371", "what": "Vakıfbank, Alman KfW ile 250 milyon euroluk yeşil dönüşüm finansmanı için mutabakat imzaladı."}, {"date": "2026-11-15", "effect": "up", "meaning": "Uluslararası kurumlardan uzun vadeli fon girişi bankaya olumlu yansır.", "source": "Bloomberg HT", "title": "Dünya Bankası ile 250 milyon dolarlık anlaşma", "url": "https://bloomberght.com/vakifbank-ile-dunya-bankasi-arasinda-250-milyon-dolarlik-finansman-anlasmasi-3794672", "what": "Vakıfbank, sanayinin teknolojik dönüşümü projesi kapsamında Dünya Bankası ile 250 milyon dolarlık finansman anlaşması imzaladı."}], "summary": "Çeyrek kârı beklentiyi aştı ama denetçi bir karşılık iptaline itiraz etti. Analistlerin bir kısmı hedefini düşürdü."}
+{
+ "at": "2026-11-18T19:30:00Z",
+ "code": "VAKBN",
+ "items": [
+  {
+   "date": "2026-11-17",
+   "effect": "up",
+   "meaning": "Uzun vadeli ucuz dış fonlama bankanın likiditesini güçlendirir.",
+   "source": "KAP / getmidas",
+   "title": "Asya Kalkınma Bankası'ndan 500 mn USD kredi",
+   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
+   "what": "ADB ile 400 mn USD'si 20 yıl, 100 mn USD'si 5 yıl vadeli toplam 500 milyon dolarlık kredi anlaşması imzalandı."
+  },
+  {
+   "date": "2026-11-17",
+   "effect": "up",
+   "meaning": "Ek uzun vadeli fonlama; olumlu ama sınırlı etki.",
+   "source": "KAP / getmidas",
+   "title": "Dünya Bankası destekli 242,5 mn USD kredi",
+   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
+   "what": "İkiz Dönüşüm Projesi kapsamında KOBİ'lerin yeşil ve dijital dönüşümü için 242,5 milyon dolarlık kredi anlaşması imzalandı."
+  },
+  {
+   "date": "2026-11-09",
+   "effect": "mixed",
+   "meaning": "Rutin kısa vadeli borçlanma.",
+   "source": "KAP / getmidas",
+   "title": "Finansman bonosu ihracı",
+   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
+   "what": "1,07 milyar TL nominal 91 gün vadeli bono, yıllık %31,50 basit faizle nitelikli yatırımcılara satıldı."
+  },
+  {
+   "date": "2026-11-05",
+   "effect": "down",
+   "meaning": "Kârın bir kısmı karşılık çözülmesinden geliyor; kâr kalitesi sorgulanabilir.",
+   "source": "KAP / getmidas",
+   "title": "3Ç26 finansallarına şartlı denetim görüşü",
+   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
+   "what": "Denetçi, 8 milyar TL serbest karşılık iptalinin TMS 37'ye uymadığı gerekçesiyle konsolide ve solo tablolara şartlı görüş verdi."
+  },
+  {
+   "date": "2026-11-05",
+   "effect": "mixed",
+   "meaning": "Kâr beklentiyi aştı, ancak 8 mlr TL karşılık iptali bu artışı destekledi.",
+   "source": "CNBC-e / KAP",
+   "title": "3Ç26 net kâr 18,1 mlr TL, beklenti üstü",
+   "url": "https://www.cnbce.com/sirket-bilancolari/vakifbanktan-vakbn-154-milyar-tl-net-kar-bilanco-beklentileri-asti-h41132",
+   "what": "3. çeyrek ana ortaklık net kârı 18,13 milyar TL (3Ç25: 13,95 mlr), Matriks beklentisi 14,48 mlr TL'nin üzerinde."
+  }
+ ],
+ "summary": "Çeyrek kârı beklentiyi aştı ama denetçi bir karşılık iptaline şerh düştü; yurt dışından uygun kredi sağlamaya devam ediyor."
+}
