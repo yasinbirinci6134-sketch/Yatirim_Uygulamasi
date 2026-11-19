@@ -1,34 +1,43 @@
 {
- "at": "2026-11-18T07:55:00Z",
  "code": "BIMAS",
+ "at": "2026-11-19T08:15:00Z",
+ "summary": "Üçüncü çeyrekte kârı güçlü arttı ama satışları yavaş büyüdü. Bilanço sonrası bazı kurumlar hedef fiyatını yükseltti.",
  "items": [
   {
-   "date": "2026-11-09",
-   "effect": "up",
-   "meaning": "Şirket hem kâr hem nakit üretiminde güçlü bir dönem geçirdi.",
-   "source": "CNBC-e",
-   "title": "BİM'in kârı yüzde 79 arttı",
-   "url": "https://www.cnbce.com/sirket-bilancolari/bimin-bimas-kari-yuzde-79-artti-ucuncu-ceyrekte-104-milyar-tl-net-kar-h41400",
-   "what": "BİM 3. çeyrekte 10,4 milyar TL net kâr açıkladı; 9 aylık kâr yüzde 79 arttı, beklentinin üzerinde geldi."
-  },
-  {
-   "date": "2026-11-10",
-   "effect": "up",
-   "meaning": "Analistler hisseye olumlu bakıyor; marjlardaki küçük geri çekilme takip edilmeli.",
-   "source": "Foreks",
-   "title": "Aracı kurumlardan olumlu değerlendirme",
-   "url": "https://www.foreks.com/haber/detay/6af2d6a54b1852391445fada/PICNEWS/tr/araci-kurumlardan-bim-bilancosuna-olumlu-degerlendirme-10-11-26/",
-   "what": "Kurumlar güçlü nakit yaratımını öne çıkardı; hedefler 495-610 TL aralığında. FAVÖK marjında hafif düşüş not edildi."
-  },
-  {
+   "title": "BIMAS bilançosu sonrası Ak Yatırım hedef fiyatı 542 TL'ye yükseltti",
    "date": "2026-11-13",
-   "effect": "up",
-   "meaning": "Bilanço sonrası beklentiler yukarı yönlü güncelleniyor.",
    "source": "YatırımX",
-   "title": "Ak Yatırım hedefi 542 TL'ye yükseltti",
    "url": "https://www.yatirimx.com.tr/sirket-haberleri/bimas-bilancosu-sonrasi-ak-yatirim-hedef-fiyati-542-tlye-yukseltti/28166",
-   "what": "Ak Yatırım BİM hedef fiyatını 524 TL'den 542 TL'ye çıkardı, 'endeks üstü getiri' tavsiyesini korudu."
+   "what": "Ak Yatırım hedefi 524'ten 542 TL'ye çıkardı, 'endeks üstü getiri' dedi.",
+   "meaning": "Hedefler yukarı yönlü güncelleniyor.",
+   "effect": "up"
+  },
+  {
+   "title": "BİM 3Ç26 bilanço değerlendirmesi",
+   "date": "2026-11-10",
+   "source": "QNB Invest",
+   "url": "https://www.qnbinvest.com.tr/investodak/qnbarastirma/bim-birlesik-magazalar-bimas-3c26-bilanco-degerlendirmesi",
+   "what": "Satışlar +%5, FAVÖK marjı %7,2'ye hafif geriledi; net nakit 41,7 mlr TL.",
+   "meaning": "Şirket borçsuz ve nakdi bol, ama büyüme yavaşladı.",
+   "effect": "mixed"
+  },
+  {
+   "title": "BİM hisseleri için 12 aracı kurum açıkladı: yüzde 49 getiri potansiyeli",
+   "date": "2026-11-10",
+   "source": "hisse.net",
+   "url": "https://www.hisse.net/haber/bim-hisseleri-icin-12-araci-kurum-acikladi-yuzde-49-getiri-potansiyeli-106417",
+   "what": "12 kurumun hedefi 427-565,90 TL, ortalama 513,94 TL.",
+   "meaning": "Analistlerin çoğu 'al' diyor.",
+   "effect": "up"
+  },
+  {
+   "title": "BİM'in kârı yüzde 79 arttı! Üçüncü çeyrekte 10,4 milyar TL net kâr",
+   "date": "2026-11-09",
+   "source": "CNBC-e",
+   "url": "https://www.cnbce.com/sirket-bilancolari/bimin-bimas-kari-yuzde-79-artti-ucuncu-ceyrekte-104-milyar-tl-net-kar-h41400",
+   "what": "3. çeyrekte 10,4 mlr TL net kâr (beklenti 8,8 mlr TL); 9 aylık kâr %79 arttı.",
+   "meaning": "Kâr beklentiyi aştı ama satış büyümesi (%5) zayıf kaldı.",
+   "effect": "mixed"
   }
- ],
- "summary": "Çeyrek kârı beklentiyi aştı ve nakit birikimi güçlü. Analistler hedeflerini yükseltti."
+ ]
 }

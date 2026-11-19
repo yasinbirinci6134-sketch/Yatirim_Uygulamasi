@@ -1,43 +1,34 @@
 {
- "at": "2026-11-18T19:30:00Z",
  "code": "SAHOL",
+ "at": "2026-11-19T08:15:00Z",
+ "summary": "Üçüncü çeyrek kârı beklentiyi aştı ve banka dışı şirketlerin kârlılığı arttı. Analistlerin hedefleri fiyatın çok üstünde.",
  "items": [
   {
+   "title": "Sabancı'dan 9 ayda 19,6 milyar TL kâr",
    "date": "2026-11-05",
-   "effect": "up",
-   "meaning": "Analistler hisseyi mevcut fiyatın oldukça üstünde değerliyor.",
+   "source": "Dünya",
+   "url": "https://www.dunya.com/ekonomi/sabancidan-9-ayda-196-milyar-tl-kar-bes-yillik-yatirimlari-10-milyar-dolara-ulasti-haberi-846515",
+   "what": "9 ayda 19,6 milyar TL kâr; satışlar %17 düştü, net borç %28 azaldı.",
+   "meaning": "Kâr ve borç tarafı iyi, satış tarafı zayıf.",
+   "effect": "mixed"
+  },
+  {
+   "title": "Sabancı Holding'in banka dışı FAVÖK marjı %16,0'ya yükseldi",
+   "date": "2026-11-05",
+   "source": "Foreks",
+   "url": "https://www.foreks.com/haber/detay/6aec0bff4b1852391445c1ae/FRKS/tr/sabanci-holding-in-banka-disi-favok-marji-yillik-bazda-318-baz-puan-artisla-16-0-ya-yukseldi-05-11-26/",
+   "what": "Banka dışı işlerde kârlılık marjı 3,2 puan arttı.",
+   "meaning": "Sanayi/enerji tarafı daha verimli çalışıyor.",
+   "effect": "up"
+  },
+  {
+   "title": "Sabancı Holding (SAHOL) hedef fiyat: 7 aracı kurum açıkladı",
+   "date": "2026-11-05",
    "source": "Rota Borsa",
-   "title": "Aracı kurumlardan 7 yeni hedef fiyat",
    "url": "https://rotaborsa.com/sabanci-holding-sahol-hisse-hedef-fiyat-2027-7-araci-kurum-acikladi/",
-   "what": "Bilanço sonrası 7 kurum 132-183 TL arası hedef fiyat ve al/endeks üstü tavsiyesi verdi."
-  },
-  {
-   "date": "2026-11-04",
-   "effect": "up",
-   "meaning": "Kâr beklentiyi aştı, ama hasılat yıllık %17 düştü ve banka (Akbank) tarafı zayıf kaldı.",
-   "source": "KAP / Bloomberg HT",
-   "title": "3Ç26 finansal sonuçlar açıklandı",
-   "url": "https://www.bloomberght.com/sabanci-holding-in-ucuncu-ceyrek-net-kri-4-3-milyar-tl-ye-yukseldi-3793557",
-   "what": "3. çeyrek ana ortaklık net kârı 4,26 milyar TL ile geçen yılın 0,88 milyar TL'sinin yaklaşık 4,8 katı oldu, Matriks beklentisi 3,75 milyar TL'nin üzerinde kaldı."
-  },
-  {
-   "date": "2026-11-04",
-   "effect": "mixed",
-   "meaning": "Holding zarardan kâra döndü, ancak bunun bir kısmı Akçansa hisse satışı gibi tek seferlik gelirlerden geliyor.",
-   "source": "finansopia / KAP",
-   "title": "9 aylık net kâr 19,6 milyar TL",
-   "url": "https://www.finansopia.com/kap-bildirimleri/sabanci-holding-sahol-2026-yili-3-ceyrek-bilancosunu-acikladi/",
-   "what": "Ocak-Eylül 2026'da 19,57 milyar TL net kâr elde edildi; geçen yıl aynı dönemde 1,02 milyar TL zarar vardı."
-  },
-  {
-   "date": "2026-11-04",
-   "effect": "up",
-   "meaning": "Holdingin borç yükü düşük, nakdi güçlü; bedelli sermaye ihtiyacı görünmüyor.",
-   "source": "Bloomberg HT",
-   "title": "Solo net nakit 31,9 milyar TL'ye yükseldi",
-   "url": "https://www.bloomberght.com/sabanci-holding-in-ucuncu-ceyrek-net-kri-4-3-milyar-tl-ye-yukseldi-3793557",
-   "what": "Holding solo net nakit pozisyonu Eylül sonunda 31,9 milyar TL'ye çıktı; banka dışı net borç/FAVÖK 1,6x."
+   "what": "7 kurum 132-183 TL arası hedef verdi, çoğu 'al'.",
+   "meaning": "Kurumlara göre hisse çok iskontolu.",
+   "effect": "up"
   }
- ],
- "summary": "Çeyrek kârı güçlü arttı ve holdingin kendi nakdi yüksek; analistler hedeflerini korudu. Bu hafta holding hisseleri sert satıldı."
+ ]
 }
