@@ -1,16 +1,16 @@
 {
- "code": "CCOLA",
  "at": "2026-11-19T08:15:00Z",
- "summary": "Kredi kuruluşu S&P şirketin not görünümünü olumluya çevirdi. Dokuz aylık kârı arttı ve analistler hedeflerini yükseltti.",
+ "code": "CCOLA",
  "items": [
   {
-   "title": "S&P, Coca-Cola İçecek'in not görünümünü pozitife çevirdi",
    "date": "2026-11-12",
-   "source": "Ekonomist (KAP)",
-   "url": "https://www.ekonomist.com.tr/kap-haberleri/kredi-derecelendirmesi/304501",
-   "what": "S&P notu BB+ olarak teyit etti, görünümü 'durağan'dan 'pozitif'e yükseltti.",
+   "effect": "up",
    "meaning": "Not artışı ihtimali arttı; borçlanma maliyeti düşebilir.",
-   "effect": "up"
+   "source": "Ekonomist (KAP)",
+   "title": "S&P, Coca-Cola İçecek'in not görünümünü pozitife çevirdi",
+   "url": "https://www.ekonomist.com.tr/kap-haberleri/kredi-derecelendirmesi/304501",
+   "what": "S&P notu BB+ olarak teyit etti, görünümü 'durağan'dan 'pozitif'e yükseltti."
   }
- ]
+ ],
+ "summary": "Kredi kuruluşu S&P şirketin not görünümünü olumluya çevirdi. Dokuz aylık kârı arttı ve analistler hedeflerini yükseltti."
 }

@@ -1,43 +1,43 @@
 {
- "at": "2026-11-18T19:30:00Z",
+ "at": "2026-11-19T18:55:00Z",
  "code": "TOASO",
  "items": [
   {
-   "date": "2026-11-17",
-   "effect": "down",
-   "meaning": "Türkiye'den Avrupa'ya araç ihraç eden otomotiv şirketleri (Koç grubundaki Ford Otosan ve Tofaş gibi) için önemli bir risk; düzenlemenin son hali bu şirketlerin ihracatını etkileyebilir.",
-   "source": "Hisse.net (Bloomberg kaynaklı)",
-   "title": "Ford Avrupa'dan AB'ye uyarı: Türkiye 'Made in Europe' dışında kalmamalı",
-   "url": "https://www.hisse.net/haber/ford-dan-ab-ye-turkiye-uyarisi-otomotiv-sektoru-zarar-gorebilir-107614",
-   "what": "Ford Avrupa Başkanı Jim Baumbick, AB'nin teşvik ve kamu ihalelerini yerli üretime bağlayan 'Made in Europe' planında Türkiye, İngiltere ve Fas'ın dışarıda bırakılmasının Avrupa otomotivine zarar vereceğini söyledi. Türkiye'de üretilen Ford Transit, mevcut taslağa göre bu kapsama girmiyor; konu 20 Kasım'daki AB-İngiltere zirvesinde gündemde olacak."
+   "date": "2026-11-05",
+   "effect": "mixed",
+   "meaning": "Şirket geçen yıla göre çok daha fazla kâr ediyor ve borcunu azaltıyor. Ama hedeflerin düşürülmesi önümüzdeki aylarda satışların zayıf kalabileceğini gösteriyor.",
+   "source": "Paratic",
+   "title": "Tofaş'ın (TOASO) 9 aylık karı yüzde 189 yükseldi",
+   "url": "https://paratic.com/tofasin-toaso-9-aylik-kari-yuzde-189-yukseldi/",
+   "what": "Tofaş ilk 9 ayda 10,9 milyar TL net kâr açıkladı, bu geçen yılın yaklaşık 3 katı. Net borç %18 azaldı, ancak şirket 2026 satış ve üretim hedeflerini düşürdü."
   },
   {
    "date": "2026-11-06",
    "effect": "up",
-   "meaning": "Kurumlar fiyatı hedeflere göre çok düşük buluyor.",
-   "source": "YatırımX",
-   "title": "8 kurumdan bilanço sonrası hedef fiyat",
-   "url": "https://www.yatirimx.com.tr/sirket-haberleri/tofas-bilancosunu-acikladi-8-kurumdan-toaso-icin-hedef-fiyat/27790",
-   "what": "8 aracı kurum 400–530 TL aralığında hedef açıkladı; çoğu 'al/endeks üstü'."
-  },
-  {
-   "date": "2026-11-05",
-   "effect": "mixed",
-   "meaning": "Kar güçlü ama satışlar daralan pazarda geriliyor.",
+   "meaning": "Kâr beklentinin çok üstünde geldi, bu hisse için olumlu. Ancak satış gelirlerinin düşmesi işin hacminin daraldığını gösteriyor.",
    "source": "Bloomberg HT",
-   "title": "3Ç26 net kar beklentinin çok üstünde",
+   "title": "Tofaş'tan beklentileri aşan kâr performansı",
    "url": "https://www.bloomberght.com/tofas-tan-beklentileri-asan-kar-performansi-3793718",
-   "what": "3Ç'de 4,3 mlr TL net kar açıklandı (beklenti 2,5 mlr); hasılat yıllık %26 düştü."
+   "what": "Tofaş üçüncü çeyrekte 4,3 milyar TL net kâr açıkladı, piyasa 2,5 milyar TL bekliyordu. Çeyrek hasılatı ise geçen yıla göre %26 azalarak 86,4 milyar TL oldu."
   },
   {
-   "date": "2026-11-05",
-   "effect": "down",
-   "meaning": "Yılın kalanında hacimlerin zayıf kalması bekleniyor.",
-   "source": "Foreks",
-   "title": "2026 satış/ihracat/üretim beklentisi düşürüldü",
-   "url": "https://www.foreks.com/haber/detay/6aecc17195131d72027d7c26/PICNEWS/tr/tofas-2026-satis-ihracat-ve-uretim-beklentilerini-dusurdu-05-11-26/",
-   "what": "Tofaş 2026 iç satış, ihracat ve üretim tahminlerini aşağı çekti; yatırım beklentisi ~250 mn EUR'da korundu."
+   "date": "2026-11-06",
+   "effect": "up",
+   "meaning": "Analistler hisseyi bugünkü fiyatından belirgin şekilde değerli görüyor. Hedefler bir tahmindir, gerçekleşme garantisi yoktur.",
+   "source": "Rota Borsa",
+   "title": "Tofaş Otomobil (TOASO) hisse hedef fiyat 2027! 8 aracı kurum açıkladı",
+   "url": "https://rotaborsa.com/tofas-otomobil-toaso-hisse-hedef-fiyat-2027-8-araci-kurum-acikladi/",
+   "what": "Bilanço sonrası 8 aracı kurum hedef fiyatlarını açıkladı; hedefler 400 TL ile 530 TL arasında. Kurumların çoğu 'al' veya 'endeks üstü getiri' önerisini sürdürdü."
+  },
+  {
+   "date": "2026-11-16",
+   "effect": "mixed",
+   "meaning": "Sektör genelinde ihracat zayıflarken Tofaş yurt dışına satışlarını neredeyse ikiye katladı. Bu, iç pazardaki daralmayı kısmen dengeliyor.",
+   "source": "Midas",
+   "title": "Otomotivde ihracat ayrıştı",
+   "url": "https://www.getmidas.com/midasin-kulaklari/otomotivde-ihracat-ayristi-p-917155",
+   "what": "Ocak-Ekim döneminde Türkiye'nin toplam araç ihracatı adet bazında %9,4 geriledi, ancak Tofaş ihracatını 32.259 adetten 61.747 adede çıkardı. Yurt içi pazar %15,3 daraldı."
   }
  ],
- "summary": "Kârı beklentinin çok üstünde geldi ama şirket satış beklentisini düşürdü; Avrupa'nın yerli üretim kuralı ihracat için risk."
+ "summary": "Çeyrek kârı beklentinin çok üstünde geldi ama şirket yıl satış beklentisini düşürdü. Bazı kurumlar hedef fiyatını yükseltti."
 }

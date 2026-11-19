@@ -1,34 +1,34 @@
 {
- "code": "ASELS",
  "at": "2026-11-19T08:15:00Z",
- "summary": "Roketsan ile 1,28 milyar avroluk yeni sözleşmeler imzaladı. Sipariş birikimi güçlü ama hisse kârına göre pahalı.",
+ "code": "ASELS",
  "items": [
   {
-   "title": "ASELSAN, ROKETSAN ile 1,28 milyar avroluk sözleşmeler imzaladı",
    "date": "2026-11-16",
-   "source": "USC Markets",
-   "url": "https://www.uscmarkets.com/haberler/asels-roketsan-fuze-veri-bagi-arayici-baslik-1-28-milyar-avro",
-   "what": "Füze veri bağı ve arayıcı başlık için 1,28 milyar avroluk iş.",
+   "effect": "up",
    "meaning": "Sipariş defteri daha da büyüdü.",
-   "effect": "up"
+   "source": "USC Markets",
+   "title": "ASELSAN, ROKETSAN ile 1,28 milyar avroluk sözleşmeler imzaladı",
+   "url": "https://www.uscmarkets.com/haberler/asels-roketsan-fuze-veri-bagi-arayici-baslik-1-28-milyar-avro",
+   "what": "Füze veri bağı ve arayıcı başlık için 1,28 milyar avroluk iş."
   },
   {
-   "title": "Borsada 46 hisseye hedef fiyat: THYAO, ASELS ve TUPRS",
    "date": "2026-11-08",
-   "source": "hisse.net",
-   "url": "https://www.hisse.net/haber/amp/borsada-46-hisseye-hedef-fiyat-thyao-asels-ve-tuprs-icin-rakamlar-aciklandi-106021",
-   "what": "KuveytTürk Yatırım ASELS için 540 TL hedef ve 'al' verdi.",
+   "effect": "up",
    "meaning": "Kurumlar bilanço sonrası hedefleri yukarı taşıyor.",
-   "effect": "up"
+   "source": "hisse.net",
+   "title": "Borsada 46 hisseye hedef fiyat: THYAO, ASELS ve TUPRS",
+   "url": "https://www.hisse.net/haber/amp/borsada-46-hisseye-hedef-fiyat-thyao-asels-ve-tuprs-icin-rakamlar-aciklandi-106021",
+   "what": "KuveytTürk Yatırım ASELS için 540 TL hedef ve 'al' verdi."
   },
   {
-   "title": "Aselsan neden düşüyor? (5 Kasım 2026)",
    "date": "2026-11-05",
-   "source": "Politikam",
-   "url": "https://www.politikam.com/aselsan-neden-dusuyor-asels-hisse-fiyati-5-kasim-2026",
-   "what": "Hisse bir günde yaklaşık %7 düştü (353,75 -> 329 TL); şirkete özel haber yoktu.",
+   "effect": "down",
    "meaning": "Genel piyasa ve teknoloji satışlarının etkisi; şirket temeli değişmedi.",
-   "effect": "down"
+   "source": "Politikam",
+   "title": "Aselsan neden düşüyor? (5 Kasım 2026)",
+   "url": "https://www.politikam.com/aselsan-neden-dusuyor-asels-hisse-fiyati-5-kasim-2026",
+   "what": "Hisse bir günde yaklaşık %7 düştü (353,75 -> 329 TL); şirkete özel haber yoktu."
   }
- ]
+ ],
+ "summary": "Roketsan ile 1,28 milyar avroluk yeni sözleşmeler imzaladı. Sipariş birikimi güçlü ama hisse kârına göre pahalı."
 }

@@ -1,43 +1,43 @@
 {
- "at": "2026-11-18T19:30:00Z",
+ "at": "2026-11-19T18:55:00Z",
  "code": "YKBNK",
  "items": [
   {
-   "date": "2026-11-18",
-   "effect": "mixed",
-   "meaning": "Olağan borç geri ödemesi; özel bir anlamı yok.",
-   "source": "KAP / getmidas",
-   "title": "Tahvil itfaları ve faiz ödemeleri",
-   "url": "https://www.getmidas.com/canli-borsa/ykbnk-hisse/haber/",
-   "what": "3,49 milyar TL nominal nitelikli yatırımcı tahvili itfa edildi, ~1,4 milyar TL faiz ödendi (tarih yaklaşık)."
+   "date": "2026-11-11",
+   "effect": "up",
+   "meaning": "Bir aracı kurum hissenin önümüzdeki dönemde değer kazanabileceğini düşünüyor; yine de bu bir tahmindir.",
+   "source": "hisse.net",
+   "title": "Ünlü & Co model portföy: Yapı Kredi için AL, hedef 54 TL",
+   "url": "https://www.hisse.net/haber/unlu-co-dev-holdingi-model-portfoyunden-cikardi-106576",
+   "what": "Ünlü & Co 11 Kasım raporunda Yapı Kredi için AL tavsiyesini sürdürdü ve hedef fiyatı 54 TL olarak verdi (%40 getiri potansiyeli)."
+  },
+  {
+   "date": "2026-11-19",
+   "effect": "up",
+   "meaning": "Kurum Yapı Kredi'ye olan güvenini koruyor; hisse için olumlu bir işaret.",
+   "source": "Paratic",
+   "title": "Ünlü & Co'nun banka tercihi değişti: Akbank gitti, Vakıfbank geldi",
+   "url": "https://paratic.com/unlu-conun-banka-tercihi-degisti-akbank-gitti-vakifbank-geldi/",
+   "what": "Ünlü & Co model portföyünde iki banka stratejisini sürdürürken Yapı Kredi'yi portföyde tuttu."
   },
   {
    "date": "2026-11-10",
    "effect": "up",
-   "meaning": "Yurt dışı fonlamaya erişim sürüyor; bankanın güvenilirliğine işaret.",
-   "source": "KAP / getmidas",
-   "title": "933 mn USD sendikasyon kredisi",
+   "meaning": "Yabancı bankaların Yapı Kredi'ye büyük tutarda borç vermesi, bankaya güvenin sürdüğünü ve kaynak bulmakta zorlanmadığını gösterir.",
+   "source": "Midas (KAP)",
+   "title": "Yapı Kredi sendikasyon kredisi",
    "url": "https://www.getmidas.com/canli-borsa/ykbnk-hisse/haber/",
-   "what": "18 ülkeden 40 bankanın katılımıyla yaklaşık 933 milyon dolarlık sendikasyon kredisi imzalandı (tarih göreli, yaklaşık)."
+   "what": "Yapı Kredi, 18 ülkeden 40 finans kuruluşuyla yaklaşık 933 milyon dolarlık sendikasyon kredisi anlaşması imzaladı."
   },
   {
-   "date": "2026-11-10",
+   "date": "2026-11-08",
    "effect": "mixed",
-   "meaning": "Rutin borçlanma, hisseye etkisi sınırlı.",
-   "source": "KAP / getmidas",
-   "title": "50,2 mn USD tahvil ihracı (GMTN)",
-   "url": "https://www.getmidas.com/canli-borsa/ykbnk-hisse/haber/",
-   "what": "Hollanda'da GMTN programı kapsamında 3 yıl vadeli 50,2 milyon dolarlık tahvil ihraç edildi (tarih yaklaşık)."
-  },
-  {
-   "date": "2026-11-05",
-   "effect": "mixed",
-   "meaning": "Hukuki bir belirsizlik var ama etkisi şimdilik sınırlı görünüyor.",
-   "source": "KAP / fintables",
-   "title": "Genel kurul iptal davası duruşması",
-   "url": "https://fintables.com/borsa-haber-akisi/0256638b-75b1-4ff5-a10f-81db981a6049/ykb-ortaklik-aleyhine-dava-acilmasi-veya-davaya-iliskin-gelismeler",
-   "what": "Bir pay sahibinin 12 Mart 2026 genel kurul kararlarının iptali için açtığı davanın ilk duruşması 5 Kasım 2026'ya belirlenmişti; sonuç bulunamadı."
+   "meaning": "Analistler hisseyi mevcut fiyatın üzerinde değerliyor; ancak bilanço sonrası bazı kurumlar hedeflerini önceki seviyelerden düşürdü.",
+   "source": "hisse.net",
+   "title": "Borsada 46 hisseye hedef fiyat! THYAO, ASELS ve TUPRS için rakamlar açıklandı",
+   "url": "https://www.hisse.net/haber/borsada-46-hisseye-hedef-fiyat-thyao-asels-ve-tuprs-icin-rakamlar-aciklandi-106021",
+   "what": "2-6 Kasım haftasında Yapı Kredi için hedef fiyatlar 46,93 TL (Halk Yatırım) ile 54,30 TL (Deniz Yatırım) arasında açıklandı."
   }
  ],
- "summary": "Çeyrek kârı geçen yıla göre belirgin düştü ve bazı analistler hedefini indirdi; yurt dışından kredi bulmaya devam ediyor."
+ "summary": "Banka yurt dışından yaklaşık 933 milyon dolar kredi buldu. Çeyrek kârı geriledi ve analistler hedeflerini düşürdü."
 }

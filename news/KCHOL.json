@@ -1,34 +1,34 @@
 {
- "code": "KCHOL",
  "at": "2026-11-19T08:15:00Z",
- "summary": "Üçüncü çeyrek kârı rafineri katkısıyla katlandı ve analistler hedeflerini yükseltti. Yönetim kurulunda bir bağımsız üye istifa etti.",
+ "code": "KCHOL",
  "items": [
   {
-   "title": "Koç Holding yönetiminde istifa",
    "date": "2026-11-17",
-   "source": "Rota Borsa",
-   "url": "https://rotaborsa.com/?p=497422",
-   "what": "Bağımsız YK üyesi Ömer Önhon istifa etti; yerine Thierry Breton atanacak (SPK onayı bekleniyor).",
+   "effect": "mixed",
    "meaning": "Yönetimde rutin bir değişiklik; şirketin işine doğrudan etkisi beklenmez.",
-   "effect": "mixed"
+   "source": "Rota Borsa",
+   "title": "Koç Holding yönetiminde istifa",
+   "url": "https://rotaborsa.com/?p=497422",
+   "what": "Bağımsız YK üyesi Ömer Önhon istifa etti; yerine Thierry Breton atanacak (SPK onayı bekleniyor)."
   },
   {
-   "title": "Koç Holding'den beklentiyi aşan kâr: hedef fiyatlar revize edildi",
    "date": "2026-11-11",
-   "source": "Borsa Gündem",
-   "url": "https://www.borsagundem.com.tr/koc-holdingden-beklentiyi-asan-kar-artisi-hedef-fiyatlar-revize-edildi",
-   "what": "8 kurum hedef verdi (295-364 TL); Tacirler 337→364, İş 308→340, Deniz 321→336 TL'ye yükseltti.",
+   "effect": "up",
    "meaning": "Analistler hisseyi ucuz buluyor, hedefler yukarı çekildi.",
-   "effect": "up"
+   "source": "Borsa Gündem",
+   "title": "Koç Holding'den beklentiyi aşan kâr: hedef fiyatlar revize edildi",
+   "url": "https://www.borsagundem.com.tr/koc-holdingden-beklentiyi-asan-kar-artisi-hedef-fiyatlar-revize-edildi",
+   "what": "8 kurum hedef verdi (295-364 TL); Tacirler 337→364, İş 308→340, Deniz 321→336 TL'ye yükseltti."
   },
   {
-   "title": "Koç Holding'in net kârı üçüncü çeyrekte 34,9 milyar TL'ye yükseldi",
    "date": "2026-11-09",
-   "source": "Bloomberg HT",
-   "url": "https://www.bloomberght.com/koc-holding-in-net-kri-ucuncu-ceyrekte-34-9-milyar-tl-ye-yukseldi-3794008",
-   "what": "Çeyreklik net kâr 9,9 mlr TL'den 34,9 mlr TL'ye çıktı; beklenti ~25 mlr TL idi.",
+   "effect": "up",
    "meaning": "Kârın çoğu Tüpraş'tan geldi; Arçelik zarar yazdı, otomotiv ve banka zayıf.",
-   "effect": "up"
+   "source": "Bloomberg HT",
+   "title": "Koç Holding'in net kârı üçüncü çeyrekte 34,9 milyar TL'ye yükseldi",
+   "url": "https://www.bloomberght.com/koc-holding-in-net-kri-ucuncu-ceyrekte-34-9-milyar-tl-ye-yukseldi-3794008",
+   "what": "Çeyreklik net kâr 9,9 mlr TL'den 34,9 mlr TL'ye çıktı; beklenti ~25 mlr TL idi."
   }
- ]
+ ],
+ "summary": "Üçüncü çeyrek kârı rafineri katkısıyla katlandı ve analistler hedeflerini yükseltti. Yönetim kurulunda bir bağımsız üye istifa etti."
 }

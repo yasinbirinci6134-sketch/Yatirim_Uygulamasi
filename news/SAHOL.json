@@ -1,34 +1,34 @@
 {
- "code": "SAHOL",
  "at": "2026-11-19T08:15:00Z",
- "summary": "Üçüncü çeyrek kârı beklentiyi aştı ve banka dışı şirketlerin kârlılığı arttı. Analistlerin hedefleri fiyatın çok üstünde.",
+ "code": "SAHOL",
  "items": [
   {
-   "title": "Sabancı'dan 9 ayda 19,6 milyar TL kâr",
    "date": "2026-11-05",
-   "source": "Dünya",
-   "url": "https://www.dunya.com/ekonomi/sabancidan-9-ayda-196-milyar-tl-kar-bes-yillik-yatirimlari-10-milyar-dolara-ulasti-haberi-846515",
-   "what": "9 ayda 19,6 milyar TL kâr; satışlar %17 düştü, net borç %28 azaldı.",
+   "effect": "mixed",
    "meaning": "Kâr ve borç tarafı iyi, satış tarafı zayıf.",
-   "effect": "mixed"
+   "source": "Dünya",
+   "title": "Sabancı'dan 9 ayda 19,6 milyar TL kâr",
+   "url": "https://www.dunya.com/ekonomi/sabancidan-9-ayda-196-milyar-tl-kar-bes-yillik-yatirimlari-10-milyar-dolara-ulasti-haberi-846515",
+   "what": "9 ayda 19,6 milyar TL kâr; satışlar %17 düştü, net borç %28 azaldı."
   },
   {
-   "title": "Sabancı Holding'in banka dışı FAVÖK marjı %16,0'ya yükseldi",
    "date": "2026-11-05",
-   "source": "Foreks",
-   "url": "https://www.foreks.com/haber/detay/6aec0bff4b1852391445c1ae/FRKS/tr/sabanci-holding-in-banka-disi-favok-marji-yillik-bazda-318-baz-puan-artisla-16-0-ya-yukseldi-05-11-26/",
-   "what": "Banka dışı işlerde kârlılık marjı 3,2 puan arttı.",
+   "effect": "up",
    "meaning": "Sanayi/enerji tarafı daha verimli çalışıyor.",
-   "effect": "up"
+   "source": "Foreks",
+   "title": "Sabancı Holding'in banka dışı FAVÖK marjı %16,0'ya yükseldi",
+   "url": "https://www.foreks.com/haber/detay/6aec0bff4b1852391445c1ae/FRKS/tr/sabanci-holding-in-banka-disi-favok-marji-yillik-bazda-318-baz-puan-artisla-16-0-ya-yukseldi-05-11-26/",
+   "what": "Banka dışı işlerde kârlılık marjı 3,2 puan arttı."
   },
   {
-   "title": "Sabancı Holding (SAHOL) hedef fiyat: 7 aracı kurum açıkladı",
    "date": "2026-11-05",
-   "source": "Rota Borsa",
-   "url": "https://rotaborsa.com/sabanci-holding-sahol-hisse-hedef-fiyat-2027-7-araci-kurum-acikladi/",
-   "what": "7 kurum 132-183 TL arası hedef verdi, çoğu 'al'.",
+   "effect": "up",
    "meaning": "Kurumlara göre hisse çok iskontolu.",
-   "effect": "up"
+   "source": "Rota Borsa",
+   "title": "Sabancı Holding (SAHOL) hedef fiyat: 7 aracı kurum açıkladı",
+   "url": "https://rotaborsa.com/sabanci-holding-sahol-hisse-hedef-fiyat-2027-7-araci-kurum-acikladi/",
+   "what": "7 kurum 132-183 TL arası hedef verdi, çoğu 'al'."
   }
- ]
+ ],
+ "summary": "Üçüncü çeyrek kârı beklentiyi aştı ve banka dışı şirketlerin kârlılığı arttı. Analistlerin hedefleri fiyatın çok üstünde."
 }

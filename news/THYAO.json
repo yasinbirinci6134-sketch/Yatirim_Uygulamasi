@@ -1,25 +1,25 @@
 {
- "at": "2026-11-18T19:30:00Z",
+ "at": "2026-11-19T18:55:00Z",
  "code": "THYAO",
  "items": [
   {
-   "date": "2026-11-17",
-   "effect": "up",
-   "meaning": "Yabancı kurumsal alım ilgisi sürüyor.",
-   "source": "getmidas (KAP)",
-   "title": "BofA payını %3,15'e çıkardı",
-   "url": "https://www.getmidas.com/canli-borsa/thyao-hisse/haber/",
-   "what": "Bank of America 12 Kasım'da 317,89–324,50 TL'den 3,73 mn adet THYAO aldı, dolaylı payı %3,15'e çıktı."
-  },
-  {
    "date": "2026-11-09",
    "effect": "mixed",
-   "meaning": "Trafik büyümesi yavaşladı ama doluluk oranı yüksek.",
-   "source": "getmidas (KAP)",
-   "title": "Ekim yolcu sayısı %0,6 geriledi",
-   "url": "https://www.getmidas.com/canli-borsa/thyao-hisse/haber/",
-   "what": "Ekim'de 8,5 mn yolcu taşındı (-%0,6 yoy); Ocak-Ekim +%4,6 ile 81,5 mn, doluluk %86,3."
+   "meaning": "Yolcu sayısı hafif düştü ama uçaklar daha dolu uçuyor, bu verimlilik açısından iyi. Ocak-Ekim toplamında yolcu sayısı hâlâ %4,6 artışta.",
+   "source": "Foreks",
+   "title": "THY'nin yolcu sayısı Ekim ayında %0,6 azaldı",
+   "url": "https://www.foreks.com/haber/detay/6af1dd1595131d72027d9c94/FRKS/tr/thy-nin-yolcu-sayisi-ekim-ayinda-0-6-azaldi-09-11-26/",
+   "what": "THY Ekim'de 8,5 milyon yolcu taşıdı, geçen yıla göre %0,6 az. Doluluk oranı ise 1,6 puan artarak %86,3'e çıktı, kargo %2,8 arttı."
+  },
+  {
+   "date": "2026-11-11",
+   "effect": "mixed",
+   "meaning": "Analistlerin çoğu hisseyi hâlâ ucuz görüyor, ancak bazı kurumlar artan yakıt maliyetleri nedeniyle hedeflerini düşürdü. Görüşler eskisine göre daha temkinli.",
+   "source": "Rota Borsa",
+   "title": "Türk Hava Yolları (THYAO) Hisse Hedef Fiyatları 2026",
+   "url": "https://rotaborsa.com/turk-hava-yollari-thy-hedef-fiyatlari/",
+   "what": "3. çeyrek bilançosu sonrası 10 aracı kurum THYAO için hedef fiyat açıkladı; hedefler 330 TL ile 490 TL arasında. QNB hedefini 450 TL'den 400 TL'ye düşürürken İş Yatırım 455 TL'den 490 TL'ye yükseltti."
   }
  ],
- "summary": "Çeyrek kârı beklentiyi aştı ama yakıt maliyeti kâr marjını daralttı; yabancı bir banka şirketteki payını artırdı."
+ "summary": "Ekimde yolcu sayısı hafif düştü ama doluluk arttı. Yakıt maliyeti kârı sıkıştırıyor ve bazı kurumlar hedefini düşürdü."
 }

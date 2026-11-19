@@ -1,61 +1,61 @@
 {
- "code": "ALARK",
  "at": "2026-11-19T08:15:00Z",
- "summary": "Dokuz ayda kâra geçti ama ara temettü dağıtmayacak. Alarko Carrier hisselerinin alımı ve bir fabrikada üretimin durdurulması gündemde.",
+ "code": "ALARK",
  "items": [
   {
-   "title": "Alarko Carrier pay alımı için finansal duran varlık edinimi bildirimi",
    "date": "2026-11-13",
-   "source": "Ekonomist (KAP)",
-   "url": "https://www.ekonomist.com.tr/kap-haberleri/finansal-duran-varlik-edinimi/304913",
-   "what": "Alarko Carrier'ın %42,03 payının Carrier'dan alınması Rekabet Kurumu onayına bağlı.",
+   "effect": "mixed",
    "meaning": "Holding iştirakteki payını artırıyor; nakit çıkışı da var.",
-   "effect": "mixed"
+   "source": "Ekonomist (KAP)",
+   "title": "Alarko Carrier pay alımı için finansal duran varlık edinimi bildirimi",
+   "url": "https://www.ekonomist.com.tr/kap-haberleri/finansal-duran-varlik-edinimi/304913",
+   "what": "Alarko Carrier'ın %42,03 payının Carrier'dan alınması Rekabet Kurumu onayına bağlı."
   },
   {
-   "title": "GCM Yatırım Alarko Holding için 178 TL hedef fiyat belirledi",
    "date": "2026-11-10",
-   "source": "Foreks",
-   "url": "https://www.foreks.com/haber/detay/6af311a04b1852391445fcc5/FRKS/tr/hisse-degerlendirmesi-gcm-yatirim-alarko-holding-icin-178-tl-hedef-fiyat-belirledi-10-11-26/",
-   "what": "GCM bilanço sonrası 178 TL hedef verdi.",
+   "effect": "up",
    "meaning": "Kurumlar hissede yüksek potansiyel görüyor.",
-   "effect": "up"
-  },
-  {
-   "title": "Alarko Holding (ALARK) hedef fiyat: 3 aracı kurum açıkladı",
-   "date": "2026-11-10",
-   "source": "Rota Borsa",
-   "url": "https://rotaborsa.com/alarko-holding-alark-hisse-hedef-fiyat-2027-3-araci-kurum-acikladi/",
-   "what": "İş, Deniz ve Tacirler 170-189,69 TL hedef ve 'al' tavsiyesini korudu.",
-   "meaning": "Bilanço sonrası kurumların görüşü değişmedi.",
-   "effect": "up"
-  },
-  {
-   "title": "Alarko Holding 9 ayda 7,28 milyar TL kâra geçti",
-   "date": "2026-11-09",
-   "source": "CNBC-e",
-   "url": "https://www.cnbce.com/sirket-bilancolari/alarko-holding-alark-kara-gecti-iste-9-aylik-net-kar-ve-3-ceyrek-bilancosu-h41404",
-   "what": "9 aylık net kâr 7,28 milyar TL, geçen yıl zarar vardı; 3. çeyrek kârı beklentinin üstünde.",
-   "meaning": "Kâr toparlanıyor ama 3. çeyrek kârı yıllık bazda düştü.",
-   "effect": "up"
-  },
-  {
-   "title": "Alarko Holding 9 aylık dönem için kâr payı avansı dağıtmayacak",
-   "date": "2026-11-09",
-   "source": "USC Markets",
-   "url": "https://www.uscmarkets.com/haberler/alark-2026-9-aylik-kar-payi-avansi-dagitilmayacak",
-   "what": "Yönetim kurulu ara temettü vermeme kararı aldı.",
-   "meaning": "Temettü bekleyen yatırımcı için küçük olumsuzluk.",
-   "effect": "down"
-  },
-  {
-   "title": "Alarko Carrier Gebze fabrikasında üretimi sonlandırıyor",
-   "date": "2026-11-06",
    "source": "Foreks",
-   "url": "https://www.foreks.com/haber/detay/6aed617d95131d72027d81d8/FRKS/tr/alarko-carrier-gebze-fabrikasi-ndaki-uretim-faaliyetlerinin-sonlandirilmasi-ve-organizasyonel-etkileri-hakkinda-bilgilendirme-yapti-06-11-26/",
-   "what": "Grup şirketi Alarko Carrier Gebze'de üretimi bitiriyor, 183 kişi işten çıkacak, tazminat yaklaşık 293 milyon TL.",
+   "title": "GCM Yatırım Alarko Holding için 178 TL hedef fiyat belirledi",
+   "url": "https://www.foreks.com/haber/detay/6af311a04b1852391445fcc5/FRKS/tr/hisse-degerlendirmesi-gcm-yatirim-alarko-holding-icin-178-tl-hedef-fiyat-belirledi-10-11-26/",
+   "what": "GCM bilanço sonrası 178 TL hedef verdi."
+  },
+  {
+   "date": "2026-11-10",
+   "effect": "up",
+   "meaning": "Bilanço sonrası kurumların görüşü değişmedi.",
+   "source": "Rota Borsa",
+   "title": "Alarko Holding (ALARK) hedef fiyat: 3 aracı kurum açıkladı",
+   "url": "https://rotaborsa.com/alarko-holding-alark-hisse-hedef-fiyat-2027-3-araci-kurum-acikladi/",
+   "what": "İş, Deniz ve Tacirler 170-189,69 TL hedef ve 'al' tavsiyesini korudu."
+  },
+  {
+   "date": "2026-11-09",
+   "effect": "up",
+   "meaning": "Kâr toparlanıyor ama 3. çeyrek kârı yıllık bazda düştü.",
+   "source": "CNBC-e",
+   "title": "Alarko Holding 9 ayda 7,28 milyar TL kâra geçti",
+   "url": "https://www.cnbce.com/sirket-bilancolari/alarko-holding-alark-kara-gecti-iste-9-aylik-net-kar-ve-3-ceyrek-bilancosu-h41404",
+   "what": "9 aylık net kâr 7,28 milyar TL, geçen yıl zarar vardı; 3. çeyrek kârı beklentinin üstünde."
+  },
+  {
+   "date": "2026-11-09",
+   "effect": "down",
+   "meaning": "Temettü bekleyen yatırımcı için küçük olumsuzluk.",
+   "source": "USC Markets",
+   "title": "Alarko Holding 9 aylık dönem için kâr payı avansı dağıtmayacak",
+   "url": "https://www.uscmarkets.com/haberler/alark-2026-9-aylik-kar-payi-avansi-dagitilmayacak",
+   "what": "Yönetim kurulu ara temettü vermeme kararı aldı."
+  },
+  {
+   "date": "2026-11-06",
+   "effect": "mixed",
    "meaning": "Maliyet düşürmek için yeniden yapılanma; kısa vadede tek seferlik gider var.",
-   "effect": "mixed"
+   "source": "Foreks",
+   "title": "Alarko Carrier Gebze fabrikasında üretimi sonlandırıyor",
+   "url": "https://www.foreks.com/haber/detay/6aed617d95131d72027d81d8/FRKS/tr/alarko-carrier-gebze-fabrikasi-ndaki-uretim-faaliyetlerinin-sonlandirilmasi-ve-organizasyonel-etkileri-hakkinda-bilgilendirme-yapti-06-11-26/",
+   "what": "Grup şirketi Alarko Carrier Gebze'de üretimi bitiriyor, 183 kişi işten çıkacak, tazminat yaklaşık 293 milyon TL."
   }
- ]
+ ],
+ "summary": "Dokuz ayda kâra geçti ama ara temettü dağıtmayacak. Alarko Carrier hisselerinin alımı ve bir fabrikada üretimin durdurulması gündemde."
 }

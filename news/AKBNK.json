@@ -1,34 +1,25 @@
 {
- "at": "2026-11-18T19:30:00Z",
+ "at": "2026-11-19T18:55:00Z",
  "code": "AKBNK",
  "items": [
   {
-   "date": "2026-11-13",
-   "effect": "up",
-   "meaning": "Sektöre yönelik olumlu bir yabancı kurum görüşü; banka hisselerine ilgiyi artırabilir.",
-   "source": "Midas'ın Kulakları",
-   "title": "HSBC Türk bankalarında görünümü pozitife çevirdi",
-   "url": "https://www.getmidas.com/canli-borsa/akbnk-hisse/haber/",
-   "what": "HSBC, Türk bankaları için görünümünü pozitife çevirdi; marjlarda dönüm noktası beklentisi öne çıktı."
+   "date": "2026-11-19",
+   "effect": "down",
+   "meaning": "Bir aracı kurum kısa vadede Akbank yerine başka bir bankayı daha cazip buluyor; bu hisse için hafif olumsuz bir sinyal.",
+   "source": "Paratic",
+   "title": "Ünlü & Co'nun banka tercihi değişti: Akbank gitti, Vakıfbank geldi",
+   "url": "https://paratic.com/unlu-conun-banka-tercihi-degisti-akbank-gitti-vakifbank-geldi/",
+   "what": "Ünlü & Co, model portföyünden Akbank'ı çıkarıp yerine Vakıfbank'ı ekledi."
   },
   {
-   "date": "2026-11-06",
+   "date": "2026-11-11",
    "effect": "mixed",
-   "meaning": "Rutin bir işlem; hisseye doğrudan etkisi yok.",
-   "source": "KAP / fintables",
-   "title": "Yapılandırılmış borçlanma aracı itfası",
-   "url": "https://fintables.com/borsa-haber-akisi/fbf83c0f-4708-4e6a-8e57-83aea53a6791/akbnk-pay-disinda-sermaye-piyasasi-araci-islemlerine-iliskin-bildirim",
-   "what": "Dayanak varlığı AKBNK olan yapılandırılmış borçlanma aracı 6 Kasım 2026'da itfa edildi."
-  },
-  {
-   "date": "2026-11-04",
-   "effect": "mixed",
-   "meaning": "Piyasa teknik işlemi; şirketle ilgili bir sorun değil.",
-   "source": "KAP",
-   "title": "Takasbank temerrüt alışı (AKBNK.TE)",
-   "url": "https://kap.org.tr/en/api/BildirimPdf/1692044",
-   "what": "Bir üyenin yerine getirmediği yükümlülük nedeniyle AKBNK.TE sırasında temerrüt alımı yapıldı."
+   "meaning": "Uzun vadeli değerleme hâlâ olumlu; ancak aynı kurum 19 Kasım'da hisseyi model portföyden çıkardı.",
+   "source": "hisse.net",
+   "title": "Ünlü & Co model portföy: Akbank için AL, hedef 103,6 TL",
+   "url": "https://www.hisse.net/haber/unlu-co-dev-holdingi-model-portfoyunden-cikardi-106576",
+   "what": "Ünlü & Co 11 Kasım raporunda Akbank için AL tavsiyesi ve 103,6 TL hedef fiyat verdi (%47 getiri potansiyeli)."
   }
  ],
- "summary": "Çeyrek kârı beklentinin biraz altında kaldı ve hedefler indirildi; yabancı bir banka Türk bankalarına bakışını olumluya çevirdi."
+ "summary": "Son iki haftada önemli bir bildirim yok. Analistler çeyrek sonuçlarının ardından hedeflerini biraz düşürdü."
 }

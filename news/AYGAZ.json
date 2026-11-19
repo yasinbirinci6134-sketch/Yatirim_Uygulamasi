@@ -1,43 +1,43 @@
 {
- "code": "AYGAZ",
  "at": "2026-11-19T08:15:00Z",
- "summary": "Üçüncü çeyrek kârı beklentiyi aştı ve hedef fiyatlar yükseldi. Şirket yıl sonunda olağanüstü temettü dağıtmayı önerdi.",
+ "code": "AYGAZ",
  "items": [
   {
-   "title": "Aygaz olağanüstü genel kurulda temettü önerecek",
    "date": "2026-11-18",
-   "source": "Borsacoo (KAP)",
-   "url": "https://borsacoo.com/firma/AYGAZ/bildirimler",
-   "what": "21 Aralık'taki olağanüstü genel kurulda 1,022 mlr TL nakit kâr payı önerilecek, ödeme 23 Aralık'ta başlayacak.",
+   "effect": "up",
    "meaning": "Yıl sonunda ek temettü gelecek (hisse başı net ~3,95 TL, ~%1,5 verim).",
-   "effect": "up"
+   "source": "Borsacoo (KAP)",
+   "title": "Aygaz olağanüstü genel kurulda temettü önerecek",
+   "url": "https://borsacoo.com/firma/AYGAZ/bildirimler",
+   "what": "21 Aralık'taki olağanüstü genel kurulda 1,022 mlr TL nakit kâr payı önerilecek, ödeme 23 Aralık'ta başlayacak."
   },
   {
-   "title": "Aracı kurumlar DOAS, PGSUS ve AYGAZ için hedef fiyatını açıkladı",
    "date": "2026-11-12",
-   "source": "Paratic",
-   "url": "https://paratic.com/araci-kurumlar-doas-pgsus-ve-aygaz-icin-hedef-fiyatini-acikladi/",
-   "what": "Ziraat Yatırım hedefi 450'den 500 TL'ye yükseltti, 'al' tavsiyesini korudu.",
+   "effect": "up",
    "meaning": "En yüksek hedef 500 TL; fiyata göre büyük iskonto var.",
-   "effect": "up"
+   "source": "Paratic",
+   "title": "Aracı kurumlar DOAS, PGSUS ve AYGAZ için hedef fiyatını açıkladı",
+   "url": "https://paratic.com/araci-kurumlar-doas-pgsus-ve-aygaz-icin-hedef-fiyatini-acikladi/",
+   "what": "Ziraat Yatırım hedefi 450'den 500 TL'ye yükseltti, 'al' tavsiyesini korudu."
   },
   {
-   "title": "Petrol şirketinin net kârı arttı, hedef fiyat 385 TL'den yükseldi",
    "date": "2026-11-10",
-   "source": "hisse.net",
-   "url": "https://www.hisse.net/haber/petrol-sirketinin-net-k-ri-artti-hedef-fiyat-385-tl-ye-yukseldi-106360",
-   "what": "İş Yatırım 385→450, Deniz 385→412, Ak 345→358 TL'ye çıkardı; Gedik 375,12 TL'de sabit.",
+   "effect": "up",
    "meaning": "Analistler hedefleri yukarı çekti.",
-   "effect": "up"
+   "source": "hisse.net",
+   "title": "Petrol şirketinin net kârı arttı, hedef fiyat 385 TL'den yükseldi",
+   "url": "https://www.hisse.net/haber/petrol-sirketinin-net-k-ri-artti-hedef-fiyat-385-tl-ye-yukseldi-106360",
+   "what": "İş Yatırım 385→450, Deniz 385→412, Ak 345→358 TL'ye çıkardı; Gedik 375,12 TL'de sabit."
   },
   {
-   "title": "Aygaz'dan 3. çeyrekte 7,22 milyar TL'lik kâr! Bilanço beklentileri aştı",
    "date": "2026-11-06",
-   "source": "CNBC-e",
-   "url": "https://www.cnbce.com/sirket-bilancolari/aygazdan-aygaz-3-ceyrekte-722-milyar-tllik-kar-bilanco-beklentileri-asti-h41230",
-   "what": "3. çeyrek net kârı 7,22 mlr TL; beklentinin ~%29 üstünde.",
+   "effect": "up",
    "meaning": "Kâr güçlü, ancak büyük kısmı Tüpraş'tan gelen pay.",
-   "effect": "up"
+   "source": "CNBC-e",
+   "title": "Aygaz'dan 3. çeyrekte 7,22 milyar TL'lik kâr! Bilanço beklentileri aştı",
+   "url": "https://www.cnbce.com/sirket-bilancolari/aygazdan-aygaz-3-ceyrekte-722-milyar-tllik-kar-bilanco-beklentileri-asti-h41230",
+   "what": "3. çeyrek net kârı 7,22 mlr TL; beklentinin ~%29 üstünde."
   }
- ]
+ ],
+ "summary": "Üçüncü çeyrek kârı beklentiyi aştı ve hedef fiyatlar yükseldi. Şirket yıl sonunda olağanüstü temettü dağıtmayı önerdi."
 }

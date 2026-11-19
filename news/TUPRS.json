@@ -1,43 +1,43 @@
 {
- "code": "TUPRS",
  "at": "2026-11-19T08:15:00Z",
- "summary": "Üçüncü çeyrek kârı beklentiyi aştı ve şirket yıl sonu rafineri kâr beklentisini yükseltti. Analistler bilanço sonrası hedeflerini artırdı.",
+ "code": "TUPRS",
  "items": [
   {
-   "title": "Tüpraş hedef fiyatları bilanço sonrası güncellendi",
    "date": "2026-11-11",
-   "source": "Rota Borsa",
-   "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/",
-   "what": "9 aracı kurumun hedefleri 395-510 TL arası, ortalama ~476 TL; Ziraat hedefini 430'dan 490 TL'ye çıkardı.",
+   "effect": "up",
    "meaning": "Analistler hissede bugünkü fiyata göre belirgin yükseliş potansiyeli görüyor.",
-   "effect": "up"
+   "source": "Rota Borsa",
+   "title": "Tüpraş hedef fiyatları bilanço sonrası güncellendi",
+   "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/",
+   "what": "9 aracı kurumun hedefleri 395-510 TL arası, ortalama ~476 TL; Ziraat hedefini 430'dan 490 TL'ye çıkardı."
   },
   {
-   "title": "Tüpraş 3Ç26 bilanço değerlendirmesi (QNB)",
    "date": "2026-11-07",
-   "source": "QNB Invest",
-   "url": "https://www.qnbinvest.com.tr/investodak/qnbarastirma/tupras-tuprs-3c26-bilanco-degerlendirmesi",
-   "what": "FAVÖK yıllık %246 artışla 88,7 mlr TL; net nakit 4,2 mlr $'a yükseldi.",
+   "effect": "up",
    "meaning": "Borç yok, kasada bol nakit var; temettü kapasitesi güçlü.",
-   "effect": "up"
+   "source": "QNB Invest",
+   "title": "Tüpraş 3Ç26 bilanço değerlendirmesi (QNB)",
+   "url": "https://www.qnbinvest.com.tr/investodak/qnbarastirma/tupras-tuprs-3c26-bilanco-degerlendirmesi",
+   "what": "FAVÖK yıllık %246 artışla 88,7 mlr TL; net nakit 4,2 mlr $'a yükseldi."
   },
   {
-   "title": "Tüpraş beklentileri aşan 3. çeyrek bilançosu açıkladı",
    "date": "2026-11-06",
-   "source": "CNBC-e",
-   "url": "https://www.cnbce.com/sirket-bilancolari/enerji-devi-tuprastan-tuprs-beklentileri-asan-bilanco-iste-detaylar-h41222",
-   "what": "3. çeyrekte 68,7 milyar TL net kâr; 9 aylık kâr %328, satışlar %51 arttı.",
+   "effect": "up",
    "meaning": "Kâr beklentinin (~60,6 mlr TL) yaklaşık %14 üstünde geldi; şirket çok güçlü bir çeyrek geçirdi.",
-   "effect": "up"
+   "source": "CNBC-e",
+   "title": "Tüpraş beklentileri aşan 3. çeyrek bilançosu açıkladı",
+   "url": "https://www.cnbce.com/sirket-bilancolari/enerji-devi-tuprastan-tuprs-beklentileri-asan-bilanco-iste-detaylar-h41222",
+   "what": "3. çeyrekte 68,7 milyar TL net kâr; 9 aylık kâr %328, satışlar %51 arttı."
   },
   {
-   "title": "Tüpraş 2026 rafineri marjı beklentisini yükseltti",
    "date": "2026-11-06",
-   "source": "USC Markets",
-   "url": "https://www.uscmarkets.com/haberler/tuprs-2026-net-rafineri-marji-beklentisi-20-22-dolar",
-   "what": "Net rafineri marjı beklentisi 13-15 $/varilden 20-22 $/varile çıkarıldı.",
+   "effect": "up",
    "meaning": "Şirket yılın geri kalanında da yüksek kârlılık bekliyor.",
-   "effect": "up"
+   "source": "USC Markets",
+   "title": "Tüpraş 2026 rafineri marjı beklentisini yükseltti",
+   "url": "https://www.uscmarkets.com/haberler/tuprs-2026-net-rafineri-marji-beklentisi-20-22-dolar",
+   "what": "Net rafineri marjı beklentisi 13-15 $/varilden 20-22 $/varile çıkarıldı."
   }
- ]
+ ],
+ "summary": "Üçüncü çeyrek kârı beklentiyi aştı ve şirket yıl sonu rafineri kâr beklentisini yükseltti. Analistler bilanço sonrası hedeflerini artırdı."
 }

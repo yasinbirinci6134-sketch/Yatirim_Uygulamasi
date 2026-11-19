@@ -1,52 +1,43 @@
 {
- "at": "2026-11-18T19:30:00Z",
+ "at": "2026-11-19T18:55:00Z",
  "code": "VAKBN",
  "items": [
   {
-   "date": "2026-11-17",
-   "effect": "up",
-   "meaning": "Uzun vadeli ucuz dış fonlama bankanın likiditesini güçlendirir.",
-   "source": "KAP / getmidas",
-   "title": "Asya Kalkınma Bankası'ndan 500 mn USD kredi",
-   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
-   "what": "ADB ile 400 mn USD'si 20 yıl, 100 mn USD'si 5 yıl vadeli toplam 500 milyon dolarlık kredi anlaşması imzalandı."
-  },
-  {
-   "date": "2026-11-17",
-   "effect": "up",
-   "meaning": "Ek uzun vadeli fonlama; olumlu ama sınırlı etki.",
-   "source": "KAP / getmidas",
-   "title": "Dünya Bankası destekli 242,5 mn USD kredi",
-   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
-   "what": "İkiz Dönüşüm Projesi kapsamında KOBİ'lerin yeşil ve dijital dönüşümü için 242,5 milyon dolarlık kredi anlaşması imzalandı."
-  },
-  {
-   "date": "2026-11-09",
+   "date": "2026-11-06",
    "effect": "mixed",
-   "meaning": "Rutin kısa vadeli borçlanma.",
-   "source": "KAP / getmidas",
-   "title": "Finansman bonosu ihracı",
-   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
-   "what": "1,07 milyar TL nominal 91 gün vadeli bono, yıllık %31,50 basit faizle nitelikli yatırımcılara satıldı."
+   "meaning": "Banka beklenenden fazla kazandı, bu olumlu; fakat sermaye tamponunun incelmesi ve batık kredilerdeki artış izlenmesi gereken riskler.",
+   "source": "Midas",
+   "title": "Vakıfbank 3Ç26: Kâr Beklentiyi Aştı, Sonuç Bankacılık Faaliyetlerinden Geldi",
+   "url": "https://www.getmidas.com/midasin-kulaklari/vakifbank-3c26-kar-beklentiyi-asti-sonuc-bankacilik-faaliyetlerinden-geldi-p-892415",
+   "what": "Vakıfbank'ın 3. çeyrek solo net kârı 15,43 milyar TL ile beklentinin %7,6 üzerinde geldi; yıllık artış %29,8. Ancak sermaye yeterlilik oranı düştü ve takipteki krediler arttı."
   },
   {
-   "date": "2026-11-05",
-   "effect": "down",
-   "meaning": "Kârın bir kısmı karşılık çözülmesinden geliyor; kâr kalitesi sorgulanabilir.",
-   "source": "KAP / getmidas",
-   "title": "3Ç26 finansallarına şartlı denetim görüşü",
-   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
-   "what": "Denetçi, 8 milyar TL serbest karşılık iptalinin TMS 37'ye uymadığı gerekçesiyle konsolide ve solo tablolara şartlı görüş verdi."
+   "date": "2026-11-19",
+   "effect": "up",
+   "meaning": "Bir aracı kurum Vakıfbank'ı kısa vadede diğer bankalardan daha cazip buluyor; hisse için olumlu bir işaret.",
+   "source": "Paratic",
+   "title": "Ünlü & Co'nun banka tercihi değişti: Akbank gitti, Vakıfbank geldi",
+   "url": "https://paratic.com/unlu-conun-banka-tercihi-degisti-akbank-gitti-vakifbank-geldi/",
+   "what": "Ünlü & Co, Vakıfbank'ı model portföyüne ekledi ve hedef fiyatı 41,2 TL olarak belirledi."
   },
   {
-   "date": "2026-11-05",
-   "effect": "mixed",
-   "meaning": "Kâr beklentiyi aştı, ancak 8 mlr TL karşılık iptali bu artışı destekledi.",
-   "source": "CNBC-e / KAP",
-   "title": "3Ç26 net kâr 18,1 mlr TL, beklenti üstü",
-   "url": "https://www.cnbce.com/sirket-bilancolari/vakifbanktan-vakbn-154-milyar-tl-net-kar-bilanco-beklentileri-asti-h41132",
-   "what": "3. çeyrek ana ortaklık net kârı 18,13 milyar TL (3Ç25: 13,95 mlr), Matriks beklentisi 14,48 mlr TL'nin üzerinde."
+   "date": "2026-11-16",
+   "effect": "up",
+   "meaning": "Uluslararası kurumlardan uzun vadeli ucuz kaynak bulmak bankanın kredi verme gücünü artırır.",
+   "source": "Midas (KAP)",
+   "title": "Vakıfbank'tan uluslararası kredi anlaşmaları",
+   "url": "https://www.getmidas.com/canli-borsa/vakbn-hisse/haber/",
+   "what": "Vakıfbank, Asya Kalkınma Bankası ile 500 milyon dolarlık ve Dünya Bankası destekli 242,5 milyon dolarlık uzun vadeli kredi anlaşmaları imzaladı."
+  },
+  {
+   "date": "2026-11-08",
+   "effect": "up",
+   "meaning": "Analistlerin çoğu hissenin mevcut fiyatın (~33 TL) üzerinde değer taşıdığını düşünüyor.",
+   "source": "hisse.net",
+   "title": "Borsada 46 hisseye hedef fiyat! THYAO, ASELS ve TUPRS için rakamlar açıklandı",
+   "url": "https://www.hisse.net/haber/borsada-46-hisseye-hedef-fiyat-thyao-asels-ve-tuprs-icin-rakamlar-aciklandi-106021",
+   "what": "2-6 Kasım haftasında Vakıfbank için hedef fiyatlar 39 TL (Ak Yatırım) ile 54,20 TL (Ziraat Yatırım) arasında verildi."
   }
  ],
- "summary": "Çeyrek kârı beklentiyi aştı ama denetçi bir karşılık iptaline şerh düştü; yurt dışından uygun kredi sağlamaya devam ediyor."
+ "summary": "Banka uluslararası kuruluşlardan uygun koşullu kredi buldu ve çeyrek kârı beklentiyi aştı. Denetçinin bir karşılık iptaline itirazı ise dikkat gerektiriyor."
 }
