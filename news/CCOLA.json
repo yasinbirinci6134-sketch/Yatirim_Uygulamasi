@@ -1,16 +1,1 @@
-{
- "at": "2026-11-19T08:15:00Z",
- "code": "CCOLA",
- "items": [
-  {
-   "date": "2026-11-12",
-   "effect": "up",
-   "meaning": "Not artışı ihtimali arttı; borçlanma maliyeti düşebilir.",
-   "source": "Ekonomist (KAP)",
-   "title": "S&P, Coca-Cola İçecek'in not görünümünü pozitife çevirdi",
-   "url": "https://www.ekonomist.com.tr/kap-haberleri/kredi-derecelendirmesi/304501",
-   "what": "S&P notu BB+ olarak teyit etti, görünümü 'durağan'dan 'pozitif'e yükseltti."
-  }
- ],
- "summary": "Kredi kuruluşu S&P şirketin not görünümünü olumluya çevirdi. Dokuz aylık kârı arttı ve analistler hedeflerini yükseltti."
-}
+{"at": "2026-11-20T07:55:00Z", "code": "CCOLA", "items": [{"date": "2026-11-12", "effect": "up", "meaning": "Şirketin borç ödeme gücü daha güvenilir görülüyor; borçlanma maliyeti ileride düşebilir.", "source": "USC Markets / KAP", "title": "S&P, Coca-Cola İçecek'in (CCOLA) BB+ notunu teyit etti, görünümü durağandan pozitife yükseltti", "url": "https://www.uscmarkets.com/haberler/ccola-sp-kredi-notu-bb-arti-teyit-gorunum-pozitif-kasim-2026", "what": "S&P kredi notunu BB+ olarak korudu, görünümü pozitife çevirdi; 2027'de metrikler iyileşirse not artırımı gelebilir."}], "summary": "Coca-Cola İçecek'in 3. çeyreği Türkiye'deki zayıflık nedeniyle sönük geçti ama borcu hızla azaldı ve analist hedefleri yükseldi. Son iki haftanın tek yeni haberi S&P'nin kredi notu görünümünü pozitife çevirmesi; bu hafif olumlu."}
