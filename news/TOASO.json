@@ -1,1 +1,16 @@
-{"at": "2026-11-23T18:47:55Z", "code": "TOASO", "items": [], "summary": "Fabrika ve yönetim kadrosunda yeni atamalar yapıldı. Son iki haftada başka önemli haber yok."}
+{
+  "at": "2026-11-24T18:55:00Z",
+  "code": "TOASO",
+  "items": [
+    {
+      "date": "2026-11-20",
+      "effect": "mixed",
+      "meaning": "Planlı bir görev değişimi; şirketin kârlılığına doğrudan etkisi beklenmez.",
+      "source": "KAP (Midas)",
+      "title": "Tofaş'ta fabrika, insan kaynakları ve kalite direktörlüklerine yeni atamalar",
+      "url": "https://www.getmidas.com/canli-borsa/toaso-hisse/haber/",
+      "what": "İki direktörün yıl sonunda emekli olması nedeniyle O. Sarıca fabrika, C. Ertem Çimen insan kaynakları, G. Şık Savaş kalite direktörü olarak atandı."
+    }
+  ],
+  "summary": "Son iki haftada şirkete özgü tek önemli gelişme fabrika, insan kaynakları ve kalite direktörlüklerine yapılan yeni atamalar oldu; bu, işleyişi etkileyecek büyük bir haber değil."
+}

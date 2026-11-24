@@ -1,1 +1,43 @@
-{"at": "2026-11-23T18:47:55Z", "code": "BIMAS", "items": [{"date": "2026-11-09", "effect": "up", "meaning": "Kâr beklentinin belirgin üstünde geldi; ancak satış büyümesi yavaş ve kâr marjı hafif geriledi.", "source": "CNBC-e", "title": "BİM'in (BIMAS) kârı yüzde 79 arttı! Üçüncü çeyrekte 10,4 milyar TL net kâr", "url": "https://www.cnbce.com/sirket-bilancolari/bimin-bimas-kari-yuzde-79-artti-ucuncu-ceyrekte-104-milyar-tl-net-kar-h41400", "what": "BİM üçüncü çeyrekte 10,4 milyar TL net kâr açıkladı, beklenti 8,8 milyar TL idi. Satışlar %5 artarak 245,7 milyar TL oldu."}, {"date": "2026-11-10", "effect": "up", "meaning": "Analistlerin büyük kısmı hissenin bugünkü fiyatından yukarı potansiyel taşıdığını düşünüyor.", "source": "Rota Borsa", "title": "Bim Birleşik Mağazalar (BIMAS) hisse hedef fiyat 2027! 12 aracı kurum açıkladı", "url": "https://rotaborsa.com/bim-birlesik-magazalar-bimas-hisse-hedef-fiyat-2027-12-araci-kurum-acikladi/", "what": "Bilanço sonrası 12 aracı kurum hedef fiyat açıkladı; hedefler 427 TL ile 565,90 TL arasında. Kurumların çoğu 'al' tavsiyesi veriyor."}, {"date": "2026-11-13", "effect": "up", "meaning": "Bir kurum daha beklentisini yukarı çekti; olumlu bir sinyal.", "source": "Rota Borsa", "title": "Bim Birleşik Mağazalar (BIMAS) için yeni hedef fiyat açıklandı", "url": "https://rotaborsa.com/bim-birlesik-magazalar-bimas-icin-yeni-hedef-fiyat-aciklandi/", "what": "Ak Yatırım hedef fiyatını 524 TL'den 542 TL'ye yükseltti, 'endeks üstü getiri' tavsiyesini korudu."}, {"date": "2026-11-13", "effect": "mixed", "meaning": "Şirket tedarik zincirini güçlendiriyor; satın alma bedeli açıklanmadığı için etkisi sınırlı görünüyor.", "source": "Evrensel", "title": "BİM kuruyemiş tedarikçisini satın aldı", "url": "https://www.evrensel.net/haber/6009318/bim-kuruyemis-tedarikcisini-satin-aldi", "what": "Rekabet Kurumu, kuruyemiş üreticisi Milhans Gıda'nın tüm hisselerinin BİM'e geçmesine taahhütlerle izin verdi. Milhans, BİM'in özel markalı ürünlerinin önemli tedarikçilerinden."}, {"date": "2026-11-18", "effect": "up", "meaning": "Hem hedef hem tavsiye yükseltildi; analist görüşü daha olumlu hale geldi.", "source": "Para Ajansı", "title": "Gedik Yatırım'dan BİM Hissesi İçin 620 TL Hedef Fiyat", "url": "https://paraajansi.com.tr/sirket-haberleri/gedik-yatirimdan-bim-hissesi-icin-620-tl-hedef-fiyat-22231829h", "what": "Gedik Yatırım hedef fiyatını 530 TL'den 620 TL'ye çıkardı ve tavsiyesini 'endekse paralel'den 'endeks üstü getiri'ye yükseltti. FAVÖK tahminlerini de artırdı."}], "summary": "Dokuz aylık kâr güçlü arttı ve analistler hedeflerini yükseltti. Satış büyümesi enflasyonun gerisinde."}
+{
+  "at": "2026-11-24T18:55:00Z",
+  "code": "BIMAS",
+  "items": [
+    {
+      "date": "2026-11-18",
+      "effect": "up",
+      "meaning": "Analist görüşü olumluya döndü.",
+      "source": "Foreks",
+      "title": "Gedik Yatırım BIMAS hedefini 530 TL'den 620 TL'ye, tavsiyesini 'endeks üstü getiri'ye yükseltti",
+      "url": "https://www.foreks.com/haber/detay/6afd397395131d72027df5dd/FRKS/tr/gedik-yatirim-bimas-bim-icin-hedef-fiyatini-530-tl-den-620-tl-ye-tavsiyesini-endekse-paralel-getiri-den-endeks-ustu-getiriye-yukseltti-18-11-26/",
+      "what": "2026–2027 ciro ve FAVÖK tahminleri yukarı çekildi; yeni hedef %57 potansiyel gösteriyor."
+    },
+    {
+      "date": "2026-11-13",
+      "effect": "up",
+      "meaning": "Kâr sürprizi hedeflere yansıyor, ancak bir kısmı faaliyet dışı kalemlerden.",
+      "source": "Foreks",
+      "title": "Ak Yatırım BİM hedef fiyatını 524 TL'den 542 TL'ye yükseltti",
+      "url": "https://www.foreks.com/haber/detay/6af6ef8095131d72027dd024/FRKS/tr/hisse-degerlendirmesi-ak-yatirim-bim-icin-hedef-fiyatini-524-tl-den-542-tl-ye-yukseltti-tavsiyesini-endeks-ustu-getiri-olarak-korudu-13-11-26/",
+      "what": "Net kâr konsensüsün %18 üstünde; düşük vergi ve 4,2 mr TL yatırım geliri etkili."
+    },
+    {
+      "date": "2026-11-10",
+      "effect": "up",
+      "meaning": "Analist uzlaşısı güçlü biçimde olumlu.",
+      "source": "Rota Borsa",
+      "title": "BİM için bilanço sonrası 12 aracı kurumdan hedef fiyat",
+      "url": "https://rotaborsa.com/bim-birlesik-magazalar-bimas-hisse-hedef-fiyat-2027-12-araci-kurum-acikladi/",
+      "what": "12 kurumun hedefleri 427–566 TL aralığında, çoğunluk 'al'."
+    },
+    {
+      "date": "2026-11-10",
+      "effect": "mixed",
+      "meaning": "Kâr güçlü ama satış büyümesi enflasyonun gerisinde, marj hafif geriledi.",
+      "source": "Foreks",
+      "title": "BİM bilançosu açıklandı: net kâr yüzde 52 arttı",
+      "url": "https://www.foreks.com/haber/detay/6af2a63395131d72027da771/PICNEWS/tr/bim-bilancosu-aciklandi-net-kar-yuzde-52-artti-10-11-26/",
+      "what": "3Ç satışlar +%5 (245,7 mr TL), net kâr 10,39 mr TL; FAVÖK marjı %7,4→%7,2; net nakit 42,7 mr TL."
+    }
+  ],
+  "summary": "Üçüncü çeyrek kârı beklentileri aştı ve ardından birçok aracı kurum hedef fiyatını yükseltti. Gedik Yatırım tavsiyesini de 'endeks üstü getiri'ye çıkardı."
+}

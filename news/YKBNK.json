@@ -1,1 +1,34 @@
-{"code": "YKBNK", "at": "2026-11-24T07:44:17Z", "summary": "Son iki haftada banka yurt dışından kredi buldu ve bono ihraç etti. Bankalara yabancı ilgisi biraz arttı.", "items": [{"title": "Yapı Kredi 4,07 milyar TL'lik bono ihraç etti", "date": "2026-11-20", "source": "Midas / KAP", "url": "https://www.getmidas.com/canli-borsa/ykbnk-hisse/haber/", "what": "Nitelikli yatırımcılara 368 gün vadeli, %40 faizli 4,07 milyar TL bono satıldı.", "meaning": "Rutin borçlanma; hisseye etkisi sınırlı.", "effect": "mixed"}, {"title": "HSBC Türk bankalarında görünümü pozitife çevirdi", "date": "2026-11-13", "source": "Midas", "url": "https://www.getmidas.com/canli-borsa/ykbnk-hisse/haber/", "what": "HSBC Türk bankaları için görüşünü olumluya çevirdi.", "meaning": "Sektör geneline olumlu bakış; marj toparlanması beklentisi.", "effect": "up"}, {"title": "Yapı Kredi 933 milyon dolarlık sendikasyon kredisi imzaladı", "date": "2026-11-10", "source": "Midas / KAP", "url": "https://www.getmidas.com/canli-borsa/ykbnk-hisse/haber/", "what": "Banka, 18 ülkeden 40 kuruluştan yaklaşık 933 milyon dolar sendikasyon kredisi aldı (tarih yaklaşık).", "meaning": "Yurt dışından fon bulma gücü sürüyor; olağan bir finansman işlemi.", "effect": "up"}]}
+{
+  "at": "2026-11-24T07:44:17Z",
+  "code": "YKBNK",
+  "items": [
+    {
+      "date": "2026-11-20",
+      "effect": "mixed",
+      "meaning": "Rutin borçlanma; hisseye etkisi sınırlı.",
+      "source": "Midas / KAP",
+      "title": "Yapı Kredi 4,07 milyar TL'lik bono ihraç etti",
+      "url": "https://www.getmidas.com/canli-borsa/ykbnk-hisse/haber/",
+      "what": "Nitelikli yatırımcılara 368 gün vadeli, %40 faizli 4,07 milyar TL bono satıldı."
+    },
+    {
+      "date": "2026-11-13",
+      "effect": "up",
+      "meaning": "Sektör geneline olumlu bakış; marj toparlanması beklentisi.",
+      "source": "Midas",
+      "title": "HSBC Türk bankalarında görünümü pozitife çevirdi",
+      "url": "https://www.getmidas.com/canli-borsa/ykbnk-hisse/haber/",
+      "what": "HSBC Türk bankaları için görüşünü olumluya çevirdi."
+    },
+    {
+      "date": "2026-11-10",
+      "effect": "up",
+      "meaning": "Yurt dışından fon bulma gücü sürüyor; olağan bir finansman işlemi.",
+      "source": "Midas / KAP",
+      "title": "Yapı Kredi 933 milyon dolarlık sendikasyon kredisi imzaladı",
+      "url": "https://www.getmidas.com/canli-borsa/ykbnk-hisse/haber/",
+      "what": "Banka, 18 ülkeden 40 kuruluştan yaklaşık 933 milyon dolar sendikasyon kredisi aldı (tarih yaklaşık)."
+    }
+  ],
+  "summary": "Son iki haftada banka yurt dışından kredi buldu ve bono ihraç etti. Bankalara yabancı ilgisi biraz arttı."
+}

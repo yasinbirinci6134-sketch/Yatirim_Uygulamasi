@@ -1,1 +1,25 @@
-{"at": "2026-11-23T18:47:55Z", "code": "GARAN", "items": [{"date": "2026-11-18", "effect": "up", "meaning": "Banka kendi hissesini piyasadan topluyor; bu hisseye talep desteği sağlar ve yönetimin hisseyi ucuz bulduğunu gösterir.", "source": "CNBC-e", "title": "Garanti BBVA (GARAN) KAP'a duyurdu: 319,6 milyon TL'lik hisse geri alımı", "url": "https://www.cnbce.com/borsa/garanti-bbva-garan-kapa-duyurdu-3196-milyon-tllik-hisse-geri-alimi-h42131", "what": "Garanti BBVA 18 Kasım'da yaklaşık 2,16 milyon payını ortalama 148,01 TL'den 319,6 milyon TL'ye geri aldı. 3 Kasım'da başlayan programda geri alınan paylar sermayenin %0,41'ine ulaştı."}, {"date": "2026-11-13", "effect": "up", "meaning": "Büyük yabancı kurumun olumlu görüşü bankalara yabancı yatırımcı ilgisini artırabilir.", "source": "Foreks", "title": "HSBC, Türk bankalarına yönelik görünümünü pozitife yükseltti", "url": "https://www.foreks.com/haber/detay/6af6cf514b1852391446204e/PICNEWS/tr/hsbc-turk-bankalarina-yonelik-gorunumunu-pozitife-yukseltti-13-11-26/", "what": "HSBC, faiz normalleşmesinin net faiz marjlarını destekleyeceğini öne sürerek Türk bankaları görünümünü nötrden pozitife çevirdi. Raporda Garanti'nin 3. çeyrekte marjını belirgin artırdığı vurgulandı."}], "summary": "Banka her gün kendi hisselerini geri alıyor ve sorunlu kredi satışı yaptı. Bir yabancı banka Türk bankalarına bakışını iyileştirdi."}
+{
+  "at": "2026-11-24T18:55:00Z",
+  "code": "GARAN",
+  "items": [
+    {
+      "date": "2026-11-18",
+      "effect": "up",
+      "meaning": "Bankanın kendi hissesine güvenini gösterir ve fiyatı destekler.",
+      "source": "CNBC-e",
+      "title": "Garanti BBVA 319,6 milyon TL'lik hisse geri alımı yaptı",
+      "url": "https://www.cnbce.com/borsa/garanti-bbva-garan-kapa-duyurdu-3196-milyon-tllik-hisse-geri-alimi-h42131",
+      "what": "Banka 18 Kasım'da ortalama 148,01 TL'den 2,16 milyon hisse aldı; programda toplam alım sermayenin yüzde 0,41'ine ulaştı (üst sınır 11 milyar TL)."
+    },
+    {
+      "date": "2026-11-13",
+      "effect": "up",
+      "meaning": "Yabancı yatırımcıların Türk bankalarına ilgisi artabilir; ancak banka bazında hedef fiyat verilmedi.",
+      "source": "Bloomberg HT",
+      "title": "HSBC Türk bankaları için görünümünü pozitife yükseltti",
+      "url": "https://www.bloomberght.com/hsbc-turk-bankalari-icin-gorunumunu-pozitife-yukseltti-3794559",
+      "what": "HSBC, faiz indirimlerinin bankaların kâr marjını destekleyeceğini düşünerek Türk bankalarına bakışını nötrden olumluya çevirdi."
+    }
+  ],
+  "summary": "Banka 3 Kasım'da başlattığı programla her gün kendi hisselerini geri alıyor. HSBC de Türk bankalarına bakışını olumluya çevirdi."
+}

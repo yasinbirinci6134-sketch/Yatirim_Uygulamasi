@@ -1,1 +1,43 @@
-{"at": "2026-11-23T07:55:00Z", "code": "ALARK", "items": [{"date": "2026-11-10", "effect": "up", "meaning": "Analistler hissede %60'ın üzerinde potansiyel görüyor.", "source": "Rota Borsa", "title": "Aracı kurumlardan 170-190 TL hedef", "url": "https://rotaborsa.com/alarko-holding-alark-hisse-hedef-fiyat-2027-3-araci-kurum-acikladi/", "what": "İş Yatırım 189,69 TL, Deniz ve Tacirler 170 TL hedefle AL tavsiyesini sürdürdü."}, {"date": "2026-11-10", "effect": "up", "meaning": "Bir kurum daha yüksek potansiyel öngörüyor.", "source": "Foreks", "title": "GCM'den 178 TL hedef", "url": "https://www.foreks.com/haber/detay/6af311a04b1852391445fcc5/FRKS/tr/hisse-degerlendirmesi-gcm-yatirim-alarko-holding-icin-178-tl-hedef-fiyat-belirledi-10-11-26/", "what": "GCM Yatırım 3. çeyrek sonrası Alarko için 12 aylık hedef fiyatı 178 TL olarak belirledi."}, {"date": "2026-11-09", "effect": "down", "meaning": "Kısa vadede nakit temettü beklentisi olanlar için olumsuz.", "source": "USC Markets", "title": "Ara temettü dağıtılmayacak", "url": "https://www.uscmarkets.com/haberler/alark-2026-9-aylik-kar-payi-avansi-dagitilmayacak", "what": "Yönetim kurulu 2026 ilk 9 ay için kâr payı avansı dağıtmama kararı aldı."}, {"date": "2026-11-13", "effect": "mixed", "meaning": "İştirak üzerindeki kontrol artıyor; küçük ortaklara zorunlu alım teklifi gelecek.", "source": "Endeks24", "title": "Alarko Carrier alımına rekabet onayı", "url": "https://www.endeks24.com/alarko-holding-alark-alarko-carrier-aliminda-rekabet-kurumu-onayini-aldi", "what": "Alarko Holding, Carrier'ın Alarko Carrier'daki %42 payını 16,8 milyon dolara alması için Rekabet Kurumu onayını aldı. Pay %84'e çıkacak."}], "summary": "Çeyrek kârı düştü ama beklentiyi aştı; Alarko Carrier'daki ortağın payını satın alma işlemine onay çıktı. Enerji kolundaki zarar ve borç seviyesi izlenmeli."}
+{
+  "at": "2026-11-23T07:55:00Z",
+  "code": "ALARK",
+  "items": [
+    {
+      "date": "2026-11-10",
+      "effect": "up",
+      "meaning": "Analistler hissede %60'ın üzerinde potansiyel görüyor.",
+      "source": "Rota Borsa",
+      "title": "Aracı kurumlardan 170-190 TL hedef",
+      "url": "https://rotaborsa.com/alarko-holding-alark-hisse-hedef-fiyat-2027-3-araci-kurum-acikladi/",
+      "what": "İş Yatırım 189,69 TL, Deniz ve Tacirler 170 TL hedefle AL tavsiyesini sürdürdü."
+    },
+    {
+      "date": "2026-11-10",
+      "effect": "up",
+      "meaning": "Bir kurum daha yüksek potansiyel öngörüyor.",
+      "source": "Foreks",
+      "title": "GCM'den 178 TL hedef",
+      "url": "https://www.foreks.com/haber/detay/6af311a04b1852391445fcc5/FRKS/tr/hisse-degerlendirmesi-gcm-yatirim-alarko-holding-icin-178-tl-hedef-fiyat-belirledi-10-11-26/",
+      "what": "GCM Yatırım 3. çeyrek sonrası Alarko için 12 aylık hedef fiyatı 178 TL olarak belirledi."
+    },
+    {
+      "date": "2026-11-09",
+      "effect": "down",
+      "meaning": "Kısa vadede nakit temettü beklentisi olanlar için olumsuz.",
+      "source": "USC Markets",
+      "title": "Ara temettü dağıtılmayacak",
+      "url": "https://www.uscmarkets.com/haberler/alark-2026-9-aylik-kar-payi-avansi-dagitilmayacak",
+      "what": "Yönetim kurulu 2026 ilk 9 ay için kâr payı avansı dağıtmama kararı aldı."
+    },
+    {
+      "date": "2026-11-13",
+      "effect": "mixed",
+      "meaning": "İştirak üzerindeki kontrol artıyor; küçük ortaklara zorunlu alım teklifi gelecek.",
+      "source": "Endeks24",
+      "title": "Alarko Carrier alımına rekabet onayı",
+      "url": "https://www.endeks24.com/alarko-holding-alark-alarko-carrier-aliminda-rekabet-kurumu-onayini-aldi",
+      "what": "Alarko Holding, Carrier'ın Alarko Carrier'daki %42 payını 16,8 milyon dolara alması için Rekabet Kurumu onayını aldı. Pay %84'e çıkacak."
+    }
+  ],
+  "summary": "Çeyrek kârı düştü ama beklentiyi aştı; Alarko Carrier'daki ortağın payını satın alma işlemine onay çıktı. Enerji kolundaki zarar ve borç seviyesi izlenmeli."
+}

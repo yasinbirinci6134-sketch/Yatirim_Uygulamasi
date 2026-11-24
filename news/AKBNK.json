@@ -1,1 +1,25 @@
-{"at": "2026-11-23T18:47:55Z", "code": "AKBNK", "items": [{"date": "2026-11-13", "effect": "mixed", "meaning": "Sektöre yönelik olumlu yabancı görüş hisseyi destekleyebilir, ancak Akbank'ta kârlılık toparlanması henüz kanıtlanmadı.", "source": "Foreks", "title": "HSBC, Türk bankalarına yönelik görünümünü pozitife yükseltti", "url": "https://www.foreks.com/haber/detay/6af6cf514b1852391446204e/PICNEWS/tr/hsbc-turk-bankalarina-yonelik-gorunumunu-pozitife-yukseltti-13-11-26/", "what": "HSBC, Türk bankaları için görünümünü nötrden pozitife çevirdi ve marjlarda dönüm noktasına gelindiğini belirtti. Aynı raporda Akbank'ın net faiz geliri artsa da 3. çeyrek kârının yıllık bazda gerilediği not edildi."}], "summary": "Bir yabancı banka Türk bankalarına bakışını iyileştirdi ama Akbank'ın kâr toparlanması gecikebilir."}
+{
+  "at": "2026-11-24T18:55:00Z",
+  "code": "AKBNK",
+  "items": [
+    {
+      "date": "2026-11-13",
+      "effect": "up",
+      "meaning": "Yabancı yatırımcıların Türk bankalarına ilgisi artabilir; ancak banka bazında hedef fiyat verilmedi.",
+      "source": "Bloomberg HT",
+      "title": "HSBC Türk bankaları için görünümünü pozitife yükseltti",
+      "url": "https://www.bloomberght.com/hsbc-turk-bankalari-icin-gorunumunu-pozitife-yukseltti-3794559",
+      "what": "HSBC, faiz indirimlerinin bankaların kâr marjını destekleyeceğini düşünerek Türk bankalarına bakışını nötrden olumluya çevirdi."
+    },
+    {
+      "date": "2026-11-18",
+      "effect": "mixed",
+      "meaning": "Rutin bir finansman işlemi; hisseye etkisi sınırlı.",
+      "source": "Borsacoo (KAP)",
+      "title": "Akbank yurt dışında 50 milyon dolarlık tahvil sattı",
+      "url": "https://borsacoo.com/firma/AKBNK/bildirimler?kaynak=gonderdi",
+      "what": "Banka, 4 milyar dolarlık yurt dışı borçlanma programı kapsamında 50 milyon dolarlık tahvil ihracını tamamladı."
+    }
+  ],
+  "summary": "Son iki haftada Akbank'a özgü önemli bir gelişme yok; HSBC'nin Türk bankalarına bakışını olumluya çevirmesi sektörü destekledi."
+}

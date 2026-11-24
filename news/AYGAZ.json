@@ -1,1 +1,61 @@
-{"code": "AYGAZ", "at": "2026-11-24T07:44:17Z", "summary": "Şirket hisse başına 4,65 TL brüt temettü önerdi ve güçlü bilanço sonrası kurumlar hedeflerini yükseltti. Fiyat ise son haftalarda sert düştü.", "items": [{"title": "Bilançosunda kârı artarken faaliyet nakdi azalan 26 BIST şirketi", "date": "2026-11-19", "source": "hisse.net", "url": "https://www.hisse.net/haber/bilancosunda-k-ri-artarken-faaliyet-nakdi-azalan-26-bist-sirketi-107878", "what": "Aygaz'ın 9 aylık kârı 3,57'den 11,89 mlr TL'ye çıkarken faaliyet nakit akışı 2,57 mlr TL'den -37 mn TL'ye döndü.", "meaning": "Kâr kâğıt üzerinde güçlü ama ana işten nakit girişi zayıf.", "effect": "down"}, {"title": "Aygaz'dan pay başına brüt 4,65 TL temettü önerisi", "date": "2026-11-18", "source": "KAP / Ekonomist", "url": "https://www.ekonomist.com.tr/kap-haberleri/kar-payi-dagitim-islemlerine-iliskin-bildirim/306714", "what": "Yönetim kurulu yaklaşık 1,02 milyar TL nakit temettü önerdi (hisse başına brüt 4,65 TL). 21 Aralık 2026'daki olağanüstü genel kurul onaylarsa ödeme Aralık sonunda başlar.", "meaning": "Hissedara para dağıtılacak. Güncel fiyata göre getirisi yaklaşık yüzde 1,9; küçük ama olumlu. Onay genel kurula bağlı.", "effect": "up"}, {"title": "Aygaz, Kolay Gelsin sermaye artırımına katılıyor", "date": "2026-11-18", "source": "KAP / Ekonomist", "url": "https://www.ekonomist.com.tr/kap-haberleri/ozel-durum-aciklamasi-genel/306712", "what": "Aygaz, yüzde 27,5 ortağı olduğu Kolay Gelsin'in sermaye artırımında 412,5 milyon TL nakit koyacak (30 Kasım'a kadar).", "meaning": "Şirket iştirakine para aktarıyor; tutar küçük (piyasa değerinin %1'inden az) ama nakit çıkışı. Aygaz'ın kendi bedelli artırımı yok.", "effect": "mixed"}, {"title": "Borsada Aygaz kararı: yüzde 465 temettü teklifi geldi", "date": "2026-11-18", "source": "hisse.net", "url": "https://www.hisse.net/haber/amp/borsada-aygaz-karari-yuzde-465-temettu-teklifi-geldi-107758", "what": "Yönetim hisse başına brüt 4,65 TL (toplam ~1,02 mlr TL) ara temettü önerdi; genel kurul 21 Aralık, hak kullanım 23 Aralık.", "meaning": "Ortaklara ekstra nakit dağıtılacak; verim ~%1,8 ile küçük ama olumlu.", "effect": "up"}, {"title": "Aygaz iştiraki Kolay Gelsin'e 412,5 milyon TL sermaye koyacak", "date": "2026-11-18", "source": "KAP / ekonomist.com.tr", "url": "https://www.ekonomist.com.tr/kap-haberleri/ozel-durum-aciklamasi-genel/306712", "what": "Kolay Gelsin Dağıtım'ın sermayesi 50 mn TL'den 1,55 mlr TL'ye çıkacak; Aygaz payına düşen 412,5 mn TL'yi 30.11'e kadar nakit ödeyecek.", "meaning": "Aygaz kargo iştirakine para yatırıyor; büyüme için ama nakit çıkışı demek.", "effect": "mixed"}, {"title": "Ziraat Yatırım, Aygaz için hedef fiyatını 500 TL'ye yükseltti", "date": "2026-11-12", "source": "Paratic", "url": "https://paratic.com/ziraat-yatirim-aygaz-icin-hedef-fiyatini-500-tlye-yukseltti/", "what": "Ziraat hedefi 450'den 500 TL'ye çıkardı, Al dedi; EYAŞ hariç kâr büyümesinin ~%7 olduğunu belirtti.", "meaning": "Kurum iyimser ama kârın asıl kaynağının Tüpraş olduğunu vurguluyor.", "effect": "up"}]}
+{
+  "at": "2026-11-24T07:44:17Z",
+  "code": "AYGAZ",
+  "items": [
+    {
+      "date": "2026-11-19",
+      "effect": "down",
+      "meaning": "Kâr kâğıt üzerinde güçlü ama ana işten nakit girişi zayıf.",
+      "source": "hisse.net",
+      "title": "Bilançosunda kârı artarken faaliyet nakdi azalan 26 BIST şirketi",
+      "url": "https://www.hisse.net/haber/bilancosunda-k-ri-artarken-faaliyet-nakdi-azalan-26-bist-sirketi-107878",
+      "what": "Aygaz'ın 9 aylık kârı 3,57'den 11,89 mlr TL'ye çıkarken faaliyet nakit akışı 2,57 mlr TL'den -37 mn TL'ye döndü."
+    },
+    {
+      "date": "2026-11-18",
+      "effect": "up",
+      "meaning": "Hissedara para dağıtılacak. Güncel fiyata göre getirisi yaklaşık yüzde 1,9; küçük ama olumlu. Onay genel kurula bağlı.",
+      "source": "KAP / Ekonomist",
+      "title": "Aygaz'dan pay başına brüt 4,65 TL temettü önerisi",
+      "url": "https://www.ekonomist.com.tr/kap-haberleri/kar-payi-dagitim-islemlerine-iliskin-bildirim/306714",
+      "what": "Yönetim kurulu yaklaşık 1,02 milyar TL nakit temettü önerdi (hisse başına brüt 4,65 TL). 21 Aralık 2026'daki olağanüstü genel kurul onaylarsa ödeme Aralık sonunda başlar."
+    },
+    {
+      "date": "2026-11-18",
+      "effect": "mixed",
+      "meaning": "Şirket iştirakine para aktarıyor; tutar küçük (piyasa değerinin %1'inden az) ama nakit çıkışı. Aygaz'ın kendi bedelli artırımı yok.",
+      "source": "KAP / Ekonomist",
+      "title": "Aygaz, Kolay Gelsin sermaye artırımına katılıyor",
+      "url": "https://www.ekonomist.com.tr/kap-haberleri/ozel-durum-aciklamasi-genel/306712",
+      "what": "Aygaz, yüzde 27,5 ortağı olduğu Kolay Gelsin'in sermaye artırımında 412,5 milyon TL nakit koyacak (30 Kasım'a kadar)."
+    },
+    {
+      "date": "2026-11-18",
+      "effect": "up",
+      "meaning": "Ortaklara ekstra nakit dağıtılacak; verim ~%1,8 ile küçük ama olumlu.",
+      "source": "hisse.net",
+      "title": "Borsada Aygaz kararı: yüzde 465 temettü teklifi geldi",
+      "url": "https://www.hisse.net/haber/amp/borsada-aygaz-karari-yuzde-465-temettu-teklifi-geldi-107758",
+      "what": "Yönetim hisse başına brüt 4,65 TL (toplam ~1,02 mlr TL) ara temettü önerdi; genel kurul 21 Aralık, hak kullanım 23 Aralık."
+    },
+    {
+      "date": "2026-11-18",
+      "effect": "mixed",
+      "meaning": "Aygaz kargo iştirakine para yatırıyor; büyüme için ama nakit çıkışı demek.",
+      "source": "KAP / ekonomist.com.tr",
+      "title": "Aygaz iştiraki Kolay Gelsin'e 412,5 milyon TL sermaye koyacak",
+      "url": "https://www.ekonomist.com.tr/kap-haberleri/ozel-durum-aciklamasi-genel/306712",
+      "what": "Kolay Gelsin Dağıtım'ın sermayesi 50 mn TL'den 1,55 mlr TL'ye çıkacak; Aygaz payına düşen 412,5 mn TL'yi 30.11'e kadar nakit ödeyecek."
+    },
+    {
+      "date": "2026-11-12",
+      "effect": "up",
+      "meaning": "Kurum iyimser ama kârın asıl kaynağının Tüpraş olduğunu vurguluyor.",
+      "source": "Paratic",
+      "title": "Ziraat Yatırım, Aygaz için hedef fiyatını 500 TL'ye yükseltti",
+      "url": "https://paratic.com/ziraat-yatirim-aygaz-icin-hedef-fiyatini-500-tlye-yukseltti/",
+      "what": "Ziraat hedefi 450'den 500 TL'ye çıkardı, Al dedi; EYAŞ hariç kâr büyümesinin ~%7 olduğunu belirtti."
+    }
+  ],
+  "summary": "Şirket hisse başına 4,65 TL brüt temettü önerdi ve güçlü bilanço sonrası kurumlar hedeflerini yükseltti. Fiyat ise son haftalarda sert düştü."
+}

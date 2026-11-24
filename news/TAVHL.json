@@ -1,1 +1,25 @@
-{"at": "2026-11-23T07:55:00Z", "code": "TAVHL", "items": [{"date": "2026-11-10", "effect": "mixed", "meaning": "Yolcu büyümesi yavaşladı; trafik yatay seyrediyor.", "source": "Foreks", "title": "TAV 10 ayda 100 milyon yolcuyu aştı", "url": "https://www.foreks.com/haber/detay/6af2bceb9cc90f0fc225f795/PICNEWS/tr/tav-havalimanlari-10-ayda-100-milyon-yolcu-sinirini-asti-10-11-26/", "what": "Ekim'de 11,57 milyon yolcu ağırlandı, geçen yılla neredeyse aynı. Ocak-Ekim toplamı %2 artışla 100,9 milyon oldu."}, {"date": "2026-11-13", "effect": "mixed", "meaning": "Küçük ölçekli ama payını artırdığı bir varlık; etkisi sınırlı.", "source": "Fintables / KAP", "title": "TAV Batumi'de ek pay alımı", "url": "https://fintables.com/borsa-haber-akisi/3283cc1e-973e-476f-b546-068729d874e0/tavhl-finansal-duran-varlik-edinimi", "what": "TAV, Batumi havalimanı işletmesinde Aeroser'e ait %24 payı 3 milyon dolara satın aldı, işlem 13 Kasım'da tamamlandı."}], "summary": "Şirket bu yıl için yolcu ve kâr beklentisini düşürdü ama Batum havalimanındaki payını artırdı. Analist hedefleri hâlâ bugünkü fiyatın belirgin üstünde."}
+{
+  "at": "2026-11-23T07:55:00Z",
+  "code": "TAVHL",
+  "items": [
+    {
+      "date": "2026-11-10",
+      "effect": "mixed",
+      "meaning": "Yolcu büyümesi yavaşladı; trafik yatay seyrediyor.",
+      "source": "Foreks",
+      "title": "TAV 10 ayda 100 milyon yolcuyu aştı",
+      "url": "https://www.foreks.com/haber/detay/6af2bceb9cc90f0fc225f795/PICNEWS/tr/tav-havalimanlari-10-ayda-100-milyon-yolcu-sinirini-asti-10-11-26/",
+      "what": "Ekim'de 11,57 milyon yolcu ağırlandı, geçen yılla neredeyse aynı. Ocak-Ekim toplamı %2 artışla 100,9 milyon oldu."
+    },
+    {
+      "date": "2026-11-13",
+      "effect": "mixed",
+      "meaning": "Küçük ölçekli ama payını artırdığı bir varlık; etkisi sınırlı.",
+      "source": "Fintables / KAP",
+      "title": "TAV Batumi'de ek pay alımı",
+      "url": "https://fintables.com/borsa-haber-akisi/3283cc1e-973e-476f-b546-068729d874e0/tavhl-finansal-duran-varlik-edinimi",
+      "what": "TAV, Batumi havalimanı işletmesinde Aeroser'e ait %24 payı 3 milyon dolara satın aldı, işlem 13 Kasım'da tamamlandı."
+    }
+  ],
+  "summary": "Şirket bu yıl için yolcu ve kâr beklentisini düşürdü ama Batum havalimanındaki payını artırdı. Analist hedefleri hâlâ bugünkü fiyatın belirgin üstünde."
+}

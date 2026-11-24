@@ -1,1 +1,25 @@
-{"at": "2026-11-23T18:47:55Z", "code": "KCHOL", "items": [{"date": "2026-11-09", "effect": "up", "meaning": "Şirket beklenenden çok daha fazla kâr etti; ancak geçen yılın kârı çok düşük olduğu için artış oranı abartılı görünüyor.", "source": "CNBC-e", "title": "Koç Holding (KCHOL) 3. çeyrekte beklentileri aştı", "url": "https://www.cnbce.com/sirket-bilancolari/koc-holding-kchol-3-ceyrekte-beklentileri-asti-iste-dev-holdingin-3-ceyrek-bilancosu-h41391", "what": "Koç Holding üçüncü çeyrekte 34,9 milyar TL net kâr açıkladı; analist beklentisi yaklaşık 25 milyar TL idi. Dokuz aylık kâr %203 artışla 56,4 milyar TL oldu."}, {"date": "2026-11-10", "effect": "up", "meaning": "Analistler hisseyi bugünkü fiyatın çok üzerinde değerliyor ve bilanço sonrası beklentilerini yukarı çekti.", "source": "Rota Borsa", "title": "Koç Holding (KCHOL) hisse hedef fiyat 2027! 8 aracı kurum açıkladı", "url": "https://rotaborsa.com/koc-holding-kchol-hisse-hedef-fiyat-2027-8-araci-kurum-acikladi/", "what": "Bilanço sonrası 8 aracı kurum hedef fiyat açıkladı; Tacirler 337'den 364 TL'ye, İş Yatırım 308'den 340 TL'ye, GCM 313'ten 320 TL'ye yükseltti. Hedefler 295-364 TL aralığında."}, {"date": "2026-11-17", "effect": "mixed", "meaning": "Yönetimde olağan bir değişiklik; şirketin işleyişine doğrudan büyük bir etkisi beklenmez.", "source": "Ekonomist / KAP", "title": "Koç Holding bağımsız yönetim kurulu üyesi değişikliği (KAP)", "url": "https://www.ekonomist.com.tr/kap-haberleri/ozel-durum-aciklamasi-genel/305886", "what": "Bağımsız yönetim kurulu üyesi Ömer Önhon kendi isteğiyle görevden ayrıldı. Boşalan koltuğa Thierry Breton getirildi."}], "summary": "Bağımsız bir yönetim kurulu üyesi değişti ve analistler hedeflerini yüksek tutuyor. Fiyat son üç ayda geriledi."}
+{
+  "at": "2026-11-24T18:55:00Z",
+  "code": "KCHOL",
+  "items": [
+    {
+      "date": "2026-11-10",
+      "effect": "up",
+      "meaning": "Güçlü 3. çeyrek sonrası analistler değerlemeyi yukarı çekti.",
+      "source": "Rota Borsa",
+      "title": "Koç Holding için 8 aracı kurumdan hedef fiyat: Tacirler, İş ve GCM hedef yükseltti",
+      "url": "https://rotaborsa.com/koc-holding-kchol-hisse-hedef-fiyat-2027-8-araci-kurum-acikladi/",
+      "what": "Hedefler 295–364 TL aralığında; Tacirler 337→364, İş 308→340, GCM 313→320 TL."
+    },
+    {
+      "date": "2026-11-17",
+      "effect": "mixed",
+      "meaning": "Yönetim yapısında olağan değişiklik; faaliyete etkisi sınırlı.",
+      "source": "KAP / Midas",
+      "title": "Bağımsız yönetim kurulu üyesi Ömer Önhon görevinden ayrıldı",
+      "url": "https://www.getmidas.com/canli-borsa/kchol-hisse/haber/",
+      "what": "Bağımsız üye kendi isteğiyle ayrıldı; yerine Thierry Breton için SPK'ya başvuru yapıldı."
+    }
+  ],
+  "summary": "Bilanço sonrası 8 aracı kurum hedeflerini açıkladı, üçü hedefini yükseltti. Bir bağımsız yönetim kurulu üyesi istifa etti, yerine aday gösterildi."
+}
