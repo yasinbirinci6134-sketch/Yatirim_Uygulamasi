@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-24T07:44:17Z",
+  "at": "2026-11-25T07:50:00Z",
   "code": "TCKRC",
   "items": [
     {
@@ -12,15 +12,6 @@
       "what": "Şirket 173 milyon TL'lik ihaleyi kazandı ve sözleşmeyi imzaladı (tarih Midas'ta göreli, yaklaşık)."
     },
     {
-      "date": "2026-11-20",
-      "effect": "up",
-      "meaning": "İş kesinleşti; ciroya katkı yapacak.",
-      "source": "Midas KAP",
-      "title": "173 milyon TL'lik ihale ve sözleşme",
-      "url": "https://www.getmidas.com/canli-borsa/tckrc-hisse/haber/",
-      "what": "Şirket Karayolları 4. Bölge'nin 173 milyon TL'lik otokorkuluk ihalesini kazandı ve sözleşmeyi imzaladı."
-    },
-    {
       "date": "2026-11-17",
       "effect": "up",
       "meaning": "Sipariş birikimi artıyor; gelir görünürlüğü iyi.",
@@ -28,24 +19,6 @@
       "title": "Karayolları 12. Bölge ihalesi (212 mn TL)",
       "url": "https://www.getmidas.com/canli-borsa/tckrc-hisse/haber/",
       "what": "212 milyon TL'lik ihale kazanıldı (ihale 12 Kasım)."
-    },
-    {
-      "date": "2026-11-17",
-      "effect": "up",
-      "meaning": "Yeni iş, gelecek dönem gelirlerini destekler.",
-      "source": "Foreks",
-      "title": "Karayolları'ndan 212 milyon TL'lik ihale",
-      "url": "https://www.foreks.com/haber/detay/6afc36b695131d72027debc0/FRKS/tr/kirac-galvaniz-karayollari-12-bolge-mudurlugu-ihalesini-kazandi-17-11-26/",
-      "what": "Kıraç Galvaniz, Karayolları 12. Bölge Müdürlüğü'nün 212 milyon TL'lik çelik otokorkuluk ihalesini kazandı."
-    },
-    {
-      "date": "2026-11-12",
-      "effect": "up",
-      "meaning": "Sipariş haberi, olumlu.",
-      "source": "KAP/Midas",
-      "title": "Karayolları 4. Bölge ihalesi (173 mn TL)",
-      "url": "https://www.getmidas.com/canli-borsa/tckrc-hisse/haber/",
-      "what": "173 milyon TL'lik ihale kazanıldı (ihale 23 Ekim)."
     },
     {
       "date": "2026-11-11",
