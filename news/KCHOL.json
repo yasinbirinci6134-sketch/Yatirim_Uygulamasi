@@ -1,25 +1,16 @@
 {
-  "at": "2026-11-24T18:55:00Z",
-  "code": "KCHOL",
-  "items": [
-    {
-      "date": "2026-11-10",
-      "effect": "up",
-      "meaning": "Güçlü 3. çeyrek sonrası analistler değerlemeyi yukarı çekti.",
-      "source": "Rota Borsa",
-      "title": "Koç Holding için 8 aracı kurumdan hedef fiyat: Tacirler, İş ve GCM hedef yükseltti",
-      "url": "https://rotaborsa.com/koc-holding-kchol-hisse-hedef-fiyat-2027-8-araci-kurum-acikladi/",
-      "what": "Hedefler 295–364 TL aralığında; Tacirler 337→364, İş 308→340, GCM 313→320 TL."
-    },
-    {
-      "date": "2026-11-17",
-      "effect": "mixed",
-      "meaning": "Yönetim yapısında olağan değişiklik; faaliyete etkisi sınırlı.",
-      "source": "KAP / Midas",
-      "title": "Bağımsız yönetim kurulu üyesi Ömer Önhon görevinden ayrıldı",
-      "url": "https://www.getmidas.com/canli-borsa/kchol-hisse/haber/",
-      "what": "Bağımsız üye kendi isteğiyle ayrıldı; yerine Thierry Breton için SPK'ya başvuru yapıldı."
-    }
-  ],
-  "summary": "Bilanço sonrası 8 aracı kurum hedeflerini açıkladı, üçü hedefini yükseltti. Bir bağımsız yönetim kurulu üyesi istifa etti, yerine aday gösterildi."
+ "code": "KCHOL",
+ "at": "2026-11-25T18:55:00Z",
+ "summary": "Son iki haftada yalnızca bir yönetim kurulu değişikliği duyuruldu; hisse bugün yüzde 3'e yakın düşerek ayın en düşük seviyesine indi.",
+ "items": [
+  {
+   "title": "Koç Holding yönetim kurulunda değişiklik",
+   "date": "2026-11-17",
+   "source": "Midas (KAP)",
+   "url": "https://www.getmidas.com/canli-borsa/kchol-hisse/haber/",
+   "what": "Bağımsız yönetim kurulu üyesi Ömer Önhon görevinden ayrıldı; yerine eski AB Komiseri Thierry Breton'un atanması için SPK'ya başvuruldu.",
+   "meaning": "Rutin bir yönetim değişikliği; şirketin işleyişine ya da kârına doğrudan etkisi beklenmez.",
+   "effect": "mixed"
+  }
+ ]
 }

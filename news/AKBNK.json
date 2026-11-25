@@ -1,25 +1,16 @@
 {
-  "at": "2026-11-24T18:55:00Z",
-  "code": "AKBNK",
-  "items": [
-    {
-      "date": "2026-11-13",
-      "effect": "up",
-      "meaning": "Yabancı yatırımcıların Türk bankalarına ilgisi artabilir; ancak banka bazında hedef fiyat verilmedi.",
-      "source": "Bloomberg HT",
-      "title": "HSBC Türk bankaları için görünümünü pozitife yükseltti",
-      "url": "https://www.bloomberght.com/hsbc-turk-bankalari-icin-gorunumunu-pozitife-yukseltti-3794559",
-      "what": "HSBC, faiz indirimlerinin bankaların kâr marjını destekleyeceğini düşünerek Türk bankalarına bakışını nötrden olumluya çevirdi."
-    },
-    {
-      "date": "2026-11-18",
-      "effect": "mixed",
-      "meaning": "Rutin bir finansman işlemi; hisseye etkisi sınırlı.",
-      "source": "Borsacoo (KAP)",
-      "title": "Akbank yurt dışında 50 milyon dolarlık tahvil sattı",
-      "url": "https://borsacoo.com/firma/AKBNK/bildirimler?kaynak=gonderdi",
-      "what": "Banka, 4 milyar dolarlık yurt dışı borçlanma programı kapsamında 50 milyon dolarlık tahvil ihracını tamamladı."
-    }
-  ],
-  "summary": "Son iki haftada Akbank'a özgü önemli bir gelişme yok; HSBC'nin Türk bankalarına bakışını olumluya çevirmesi sektörü destekledi."
+ "code": "AKBNK",
+ "at": "2026-11-25T18:55:00Z",
+ "summary": "Son iki haftada bankaya özgü önemli bir gelişme yok. Hisse bugün tüm banka hisseleriyle birlikte yüzde 5 civarında düştü.",
+ "items": [
+  {
+   "title": "Borsa sert düştü, en çok bankalar kaybetti",
+   "date": "2026-11-25",
+   "source": "Anadolu Ajansı",
+   "url": "https://www.aa.com.tr/tr/ekonomi/borsa-gunu-dususle-tamamladi/4137729",
+   "what": "BIST 100 endeksi günü yüzde 2,83 düşüşle kapattı; banka hisseleri ortalama yüzde 4,46 değer kaybetti. ABD'de enflasyon verisinin yükselmesi, ABD merkez bankasının faizi artırmaya devam edeceği beklentisini güçlendirdi.",
+   "meaning": "Düşüş şirkete özgü bir kötü haberden değil, küresel ve genel piyasa satışından kaynaklandı; kısa vadede banka hisselerinde dalgalanma artabilir.",
+   "effect": "down"
+  }
+ ]
 }

@@ -1,16 +1,16 @@
 {
-  "at": "2026-11-25T07:50:00Z",
-  "code": "ALBRK",
-  "items": [
-    {
-      "date": "2026-11-16",
-      "effect": "mixed",
-      "meaning": "Banka uzun vadeli fonlama sağladı.",
-      "source": "Midas KAP",
-      "title": "10 milyar TL kira sertifikası satışı",
-      "url": "https://www.getmidas.com/canli-borsa/albrk-hisse/haber/",
-      "what": "Bereket Varlık Kiralama aracılığıyla 10 milyar TL, yaklaşık 2 yıl vadeli değişken getirili kira sertifikası satıldı."
-    }
-  ],
-  "summary": "Kâr beklentinin üstünde geldi ve bir aracı kurum hedefini yükseltti. Denetçinin kârın bir kısmına itirazı ise kâr kalitesine dair soru işareti bırakıyor."
+ "at": "2026-11-25T07:50:00Z",
+ "code": "ALBRK",
+ "items": [
+  {
+   "date": "2026-11-16",
+   "effect": "mixed",
+   "meaning": "Banka uzun vadeli fonlama sağladı.",
+   "source": "Midas KAP",
+   "title": "10 milyar TL kira sertifikası satışı",
+   "url": "https://www.getmidas.com/canli-borsa/albrk-hisse/haber/",
+   "what": "Bereket Varlık Kiralama aracılığıyla 10 milyar TL, yaklaşık 2 yıl vadeli değişken getirili kira sertifikası satıldı."
+  }
+ ],
+ "summary": "Kâr beklentinin üstünde geldi ve bir aracı kurum hedefini yükseltti. Denetçinin kârın bir kısmına itirazı ise kâr kalitesine dair soru işareti bırakıyor."
 }

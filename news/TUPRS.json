@@ -1,34 +1,16 @@
 {
-  "at": "2026-11-24T18:55:00Z",
-  "code": "TUPRS",
-  "items": [
-    {
-      "date": "2026-11-11",
-      "effect": "up",
-      "meaning": "Analistler rekor çeyrek sonrası hissede belirgin yükseliş potansiyeli görüyor.",
-      "source": "Rota Borsa",
-      "title": "Ziraat Yatırım TUPRS hedef fiyatını 490 TL olarak açıkladı; güncel hedef listesi 10 kuruma çıktı",
-      "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/",
-      "what": "Bilanço sonrası 10 kurumun hedefleri 395–510 TL aralığında, çoğu 'al' tavsiyesi."
-    },
-    {
-      "date": "2026-11-10",
-      "effect": "up",
-      "meaning": "Bilanço sonrası hedef güncellemeleri yukarı yönlü.",
-      "source": "Rota Borsa",
-      "title": "QNB İnvest TUPRS için 480 TL hedef, 'endeks üstü getiri' tavsiyesi",
-      "url": "https://rotaborsa.com/tupras-tuprs-hisseleri-icin-bilanco-sonrasi-hedef-fiyatlar-guncellendi-2/",
-      "what": "QNB İnvest 9 Kasım raporuyla 480 TL hedef açıkladı (son fiyat 331,75 TL'ye göre %44,7 prim)."
-    },
-    {
-      "date": "2026-11-24",
-      "effect": "mixed",
-      "meaning": "Rafineri marjları ve stok değerlemesi açısından karışık etki; piyasa enerji hisselerini satıyor.",
-      "source": "Midas",
-      "title": "Petrol üç ayın dibinde",
-      "url": "https://www.getmidas.com/canli-borsa/tuprs-hisse/haber/",
-      "what": "Ham petrol fiyatları son üç ayın en düşük seviyesine geriledi."
-    }
-  ],
-  "summary": "Bilanço sonrası aracı kurumlar hedeflerini yükseltti ve ortalama hedef 476 TL civarına çıktı. Petrol fiyatlarının üç ayın dibine inmesi ise hisse üzerinde baskı yaratıyor."
+ "code": "TUPRS",
+ "at": "2026-11-25T18:55:00Z",
+ "summary": "Son iki haftada şirkete özgü önemli bir bildirim yok; aracı kurumlar rekor bilanço sonrası hedeflerini yukarı taşıdı.",
+ "items": [
+  {
+   "title": "Aracı kurumlar Tüpraş için hedef fiyatları yükseltti",
+   "date": "2026-11-11",
+   "source": "Rota Borsa",
+   "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/",
+   "what": "Bilanço sonrası 9 aracı kurum Tüpraş için 395 ile 510 TL arasında hedef fiyat açıkladı; en sonuncusu Ziraat Yatırım 490 TL ile 11 Kasım'da geldi.",
+   "meaning": "Uzmanlar hisseyi bugünkü fiyatın belirgin üstünde görüyor ve ağustostaki tahminlerine göre beklentilerini yukarı çekti.",
+   "effect": "up"
+  }
+ ]
 }

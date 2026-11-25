@@ -1,25 +1,25 @@
 {
-  "at": "2026-11-24T18:55:00Z",
-  "code": "GARAN",
-  "items": [
-    {
-      "date": "2026-11-18",
-      "effect": "up",
-      "meaning": "Bankanın kendi hissesine güvenini gösterir ve fiyatı destekler.",
-      "source": "CNBC-e",
-      "title": "Garanti BBVA 319,6 milyon TL'lik hisse geri alımı yaptı",
-      "url": "https://www.cnbce.com/borsa/garanti-bbva-garan-kapa-duyurdu-3196-milyon-tllik-hisse-geri-alimi-h42131",
-      "what": "Banka 18 Kasım'da ortalama 148,01 TL'den 2,16 milyon hisse aldı; programda toplam alım sermayenin yüzde 0,41'ine ulaştı (üst sınır 11 milyar TL)."
-    },
-    {
-      "date": "2026-11-13",
-      "effect": "up",
-      "meaning": "Yabancı yatırımcıların Türk bankalarına ilgisi artabilir; ancak banka bazında hedef fiyat verilmedi.",
-      "source": "Bloomberg HT",
-      "title": "HSBC Türk bankaları için görünümünü pozitife yükseltti",
-      "url": "https://www.bloomberght.com/hsbc-turk-bankalari-icin-gorunumunu-pozitife-yukseltti-3794559",
-      "what": "HSBC, faiz indirimlerinin bankaların kâr marjını destekleyeceğini düşünerek Türk bankalarına bakışını nötrden olumluya çevirdi."
-    }
-  ],
-  "summary": "Banka 3 Kasım'da başlattığı programla her gün kendi hisselerini geri alıyor. HSBC de Türk bankalarına bakışını olumluya çevirdi."
+ "code": "GARAN",
+ "at": "2026-11-25T18:55:00Z",
+ "summary": "Garanti BBVA kendi hisselerini her gün geri almayı sürdürüyor. Hisse bugün banka hisselerindeki genel satışla geriledi.",
+ "items": [
+  {
+   "title": "Garanti BBVA kendi hisselerini geri almayı sürdürüyor",
+   "date": "2026-11-18",
+   "source": "CNBC-e",
+   "url": "https://www.cnbce.com/borsa/garanti-bbva-garan-kapa-duyurdu-3196-milyon-tllik-hisse-geri-alimi-h42131",
+   "what": "Banka 18 Kasım'da yaklaşık 319,6 milyon liralık kendi hissesini ortalama 148 liradan geri aldı; 4 Kasım'da başlayan programda geri alınan pay sermayenin yüzde 0,41'ine ulaştı.",
+   "meaning": "Şirketin kendi hissesini alması, yönetimin hisseyi ucuz bulduğuna işaret eder ve fiyata destek olabilir.",
+   "effect": "up"
+  },
+  {
+   "title": "Borsa sert düştü, en çok bankalar kaybetti",
+   "date": "2026-11-25",
+   "source": "Anadolu Ajansı",
+   "url": "https://www.aa.com.tr/tr/ekonomi/borsa-gunu-dususle-tamamladi/4137729",
+   "what": "BIST 100 endeksi günü yüzde 2,83 düşüşle kapattı; banka hisseleri ortalama yüzde 4,46 değer kaybetti. ABD'de enflasyon verisinin yükselmesi, ABD merkez bankasının faizi artırmaya devam edeceği beklentisini güçlendirdi.",
+   "meaning": "Düşüş şirkete özgü bir kötü haberden değil, küresel ve genel piyasa satışından kaynaklandı; kısa vadede banka hisselerinde dalgalanma artabilir.",
+   "effect": "down"
+  }
+ ]
 }
