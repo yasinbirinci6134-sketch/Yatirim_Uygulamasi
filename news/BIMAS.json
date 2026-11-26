@@ -1,25 +1,25 @@
 {
- "code": "BIMAS",
  "at": "2026-11-25T18:55:00Z",
- "summary": "Son iki haftada iki aracı kurum BİM için hedef fiyatını yükseltti. Hisse bugün piyasa genelindeki satışla birlikte geriledi.",
+ "code": "BIMAS",
  "items": [
   {
-   "title": "Gedik Yatırım BİM için hedefini 620 liraya yükseltti",
    "date": "2026-11-18",
-   "source": "Rota Borsa",
-   "url": "https://rotaborsa.com/?p=497579",
-   "what": "Gedik Yatırım, BİM hissesi için 12 aylık hedef fiyatını 530 liradan 620 liraya çıkardı ve görüşünü 'piyasa ortalamasına paralel'den 'piyasanın üstünde getiri'ye yükseltti.",
+   "effect": "up",
    "meaning": "Bir aracı kurum şirketin geleceğine daha olumlu bakmaya başladı; bu, hisseye olan ilgiyi destekleyebilir.",
-   "effect": "up"
+   "source": "Rota Borsa",
+   "title": "Gedik Yatırım BİM için hedefini 620 liraya yükseltti",
+   "url": "https://rotaborsa.com/?p=497579",
+   "what": "Gedik Yatırım, BİM hissesi için 12 aylık hedef fiyatını 530 liradan 620 liraya çıkardı ve görüşünü 'piyasa ortalamasına paralel'den 'piyasanın üstünde getiri'ye yükseltti."
   },
   {
-   "title": "Ak Yatırım BİM hedefini 542 liraya çıkardı",
    "date": "2026-11-13",
-   "source": "Rota Borsa",
-   "url": "",
-   "what": "Ak Yatırım, BİM için hedef fiyatını 524 liradan 542 liraya yükseltti ve 'piyasanın üstünde getiri' tavsiyesini korudu.",
+   "effect": "up",
    "meaning": "Üçüncü çeyrek sonuçlarından sonra analistlerin beklentisi yukarı yönlü güncelleniyor.",
-   "effect": "up"
+   "source": "Rota Borsa",
+   "title": "Ak Yatırım BİM hedefini 542 liraya çıkardı",
+   "url": "",
+   "what": "Ak Yatırım, BİM için hedef fiyatını 524 liradan 542 liraya yükseltti ve 'piyasanın üstünde getiri' tavsiyesini korudu."
   }
- ]
+ ],
+ "summary": "Son iki haftada iki aracı kurum BİM için hedef fiyatını yükseltti. Hisse bugün piyasa genelindeki satışla birlikte geriledi."
 }

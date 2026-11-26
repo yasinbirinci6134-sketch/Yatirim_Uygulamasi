@@ -1,16 +1,16 @@
 {
- "code": "TUPRS",
  "at": "2026-11-25T18:55:00Z",
- "summary": "Son iki haftada şirkete özgü önemli bir bildirim yok; aracı kurumlar rekor bilanço sonrası hedeflerini yukarı taşıdı.",
+ "code": "TUPRS",
  "items": [
   {
-   "title": "Aracı kurumlar Tüpraş için hedef fiyatları yükseltti",
    "date": "2026-11-11",
-   "source": "Rota Borsa",
-   "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/",
-   "what": "Bilanço sonrası 9 aracı kurum Tüpraş için 395 ile 510 TL arasında hedef fiyat açıkladı; en sonuncusu Ziraat Yatırım 490 TL ile 11 Kasım'da geldi.",
+   "effect": "up",
    "meaning": "Uzmanlar hisseyi bugünkü fiyatın belirgin üstünde görüyor ve ağustostaki tahminlerine göre beklentilerini yukarı çekti.",
-   "effect": "up"
+   "source": "Rota Borsa",
+   "title": "Aracı kurumlar Tüpraş için hedef fiyatları yükseltti",
+   "url": "https://rotaborsa.com/tupras-tuprs-guncel-hedef-fiyatlari/",
+   "what": "Bilanço sonrası 9 aracı kurum Tüpraş için 395 ile 510 TL arasında hedef fiyat açıkladı; en sonuncusu Ziraat Yatırım 490 TL ile 11 Kasım'da geldi."
   }
- ]
+ ],
+ "summary": "Son iki haftada şirkete özgü önemli bir bildirim yok; aracı kurumlar rekor bilanço sonrası hedeflerini yukarı taşıdı."
 }

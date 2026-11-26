@@ -1,25 +1,25 @@
 {
- "code": "CCOLA",
  "at": "2026-11-25T18:55:00Z",
- "summary": "Kredi derecelendirme kuruluşu S&P şirketin görünümünü iyileştirdi; bunun dışında yalnızca olağan bir borçlanma işlemi oldu.",
+ "code": "CCOLA",
  "items": [
   {
-   "title": "S&P, Coca-Cola İçecek'in görünümünü pozitife çevirdi",
    "date": "2026-11-12",
-   "source": "Midas (KAP)",
-   "url": "https://www.getmidas.com/canli-borsa/ccola-hisse/haber/",
-   "what": "Uluslararası kredi derecelendirme kuruluşu S&P şirketin kredi notunu BB+ olarak korudu, not görünümünü durağandan pozitife yükseltti.",
+   "effect": "up",
    "meaning": "Şirketin borç ödeme gücüne güven arttı; ileride not artışı gelebilir ve borçlanma maliyeti düşebilir.",
-   "effect": "up"
+   "source": "Midas (KAP)",
+   "title": "S&P, Coca-Cola İçecek'in görünümünü pozitife çevirdi",
+   "url": "https://www.getmidas.com/canli-borsa/ccola-hisse/haber/",
+   "what": "Uluslararası kredi derecelendirme kuruluşu S&P şirketin kredi notunu BB+ olarak korudu, not görünümünü durağandan pozitife yükseltti."
   },
   {
-   "title": "Coca-Cola İçecek 2 milyar TL'lik kısa vadeli borçlanma yaptı",
    "date": "2026-11-18",
-   "source": "Midas (KAP)",
-   "url": "https://www.getmidas.com/canli-borsa/ccola-hisse/haber/",
-   "what": "Şirket 60 gün vadeli, 2 milyar TL tutarında finansman bonosu (kısa vadeli borç senedi) sattı; vade 18 Ocak 2027.",
+   "effect": "mixed",
    "meaning": "Olağan nakit yönetimi işlemi; şirketin durumuna büyük etkisi beklenmez.",
-   "effect": "mixed"
+   "source": "Midas (KAP)",
+   "title": "Coca-Cola İçecek 2 milyar TL'lik kısa vadeli borçlanma yaptı",
+   "url": "https://www.getmidas.com/canli-borsa/ccola-hisse/haber/",
+   "what": "Şirket 60 gün vadeli, 2 milyar TL tutarında finansman bonosu (kısa vadeli borç senedi) sattı; vade 18 Ocak 2027."
   }
- ]
+ ],
+ "summary": "Kredi derecelendirme kuruluşu S&P şirketin görünümünü iyileştirdi; bunun dışında yalnızca olağan bir borçlanma işlemi oldu."
 }

@@ -1,16 +1,16 @@
 {
- "code": "TOASO",
  "at": "2026-11-25T18:55:00Z",
- "summary": "Son iki haftada yalnızca yönetim atamaları duyuruldu; hisse bugün yüzde 6'ya yakın düştü, bunun için şirkete özgü bir haber bulunamadı.",
+ "code": "TOASO",
  "items": [
   {
-   "title": "Tofaş'ta üst yönetimde yeni atamalar",
    "date": "2026-11-20",
-   "source": "Midas (KAP)",
-   "url": "https://www.getmidas.com/canli-borsa/toaso-hisse/haber/",
-   "what": "Fabrika ve kalite direktörleri yıl sonunda emekli oluyor; fabrika, insan kaynakları ve kalite direktörlüklerine yeni isimler atandı.",
+   "effect": "mixed",
    "meaning": "Planlı bir görev değişikliği; şirketin kârına doğrudan etkisi beklenmez.",
-   "effect": "mixed"
+   "source": "Midas (KAP)",
+   "title": "Tofaş'ta üst yönetimde yeni atamalar",
+   "url": "https://www.getmidas.com/canli-borsa/toaso-hisse/haber/",
+   "what": "Fabrika ve kalite direktörleri yıl sonunda emekli oluyor; fabrika, insan kaynakları ve kalite direktörlüklerine yeni isimler atandı."
   }
- ]
+ ],
+ "summary": "Son iki haftada yalnızca yönetim atamaları duyuruldu; hisse bugün yüzde 6'ya yakın düştü, bunun için şirkete özgü bir haber bulunamadı."
 }

@@ -1,6 +1,16 @@
 {
- "at": "2026-11-25T07:50:00Z",
+ "at": "2026-11-26T07:50:00Z",
  "code": "MPARK",
- "items": [],
- "summary": "Son iki haftada şirkete özgü önemli bir gelişme yok."
+ "items": [
+  {
+   "date": "2026-11-05",
+   "effect": "up",
+   "meaning": "Analist şirketin değerinin bugünkü fiyatın epey üstünde olduğunu düşünüyor; yine de hedefler gerçekleşmeyebilir.",
+   "source": "Foreks",
+   "title": "Oyak Yatırım MLP Sağlık hedef fiyatını 658,42 TL'ye yükseltti",
+   "url": "https://www.foreks.com/haber/detay/6aec27ec1d7c6051898e37d9/FRKS/tr/hisse-degerlendirmesi-oyak-yatirim-mlp-saglik-icin-hedef-fiyatini-633-10-tl-den-658-42-tl-ye-revize-etti-tavsiyesini-endeks-ustu-getiri-olarak-korudu-05-11-26/",
+   "what": "Oyak Yatırım hedef fiyatı 633,10 TL'den 658,42 TL'ye çıkardı ve 'endeks üstü getiri' tavsiyesini korudu."
+  }
+ ],
+ "summary": "İki aracı kurum üçüncü çeyrek sonuçlarının ardından hedef fiyatını yükseltti ya da al tavsiyesi verdi. Bu, analistlerin şirketin büyümesine güvendiğini gösteriyor."
 }

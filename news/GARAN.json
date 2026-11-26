@@ -1,25 +1,25 @@
 {
- "code": "GARAN",
  "at": "2026-11-25T18:55:00Z",
- "summary": "Garanti BBVA kendi hisselerini her gün geri almayı sürdürüyor. Hisse bugün banka hisselerindeki genel satışla geriledi.",
+ "code": "GARAN",
  "items": [
   {
-   "title": "Garanti BBVA kendi hisselerini geri almayı sürdürüyor",
    "date": "2026-11-18",
-   "source": "CNBC-e",
-   "url": "https://www.cnbce.com/borsa/garanti-bbva-garan-kapa-duyurdu-3196-milyon-tllik-hisse-geri-alimi-h42131",
-   "what": "Banka 18 Kasım'da yaklaşık 319,6 milyon liralık kendi hissesini ortalama 148 liradan geri aldı; 4 Kasım'da başlayan programda geri alınan pay sermayenin yüzde 0,41'ine ulaştı.",
+   "effect": "up",
    "meaning": "Şirketin kendi hissesini alması, yönetimin hisseyi ucuz bulduğuna işaret eder ve fiyata destek olabilir.",
-   "effect": "up"
+   "source": "CNBC-e",
+   "title": "Garanti BBVA kendi hisselerini geri almayı sürdürüyor",
+   "url": "https://www.cnbce.com/borsa/garanti-bbva-garan-kapa-duyurdu-3196-milyon-tllik-hisse-geri-alimi-h42131",
+   "what": "Banka 18 Kasım'da yaklaşık 319,6 milyon liralık kendi hissesini ortalama 148 liradan geri aldı; 4 Kasım'da başlayan programda geri alınan pay sermayenin yüzde 0,41'ine ulaştı."
   },
   {
-   "title": "Borsa sert düştü, en çok bankalar kaybetti",
    "date": "2026-11-25",
-   "source": "Anadolu Ajansı",
-   "url": "https://www.aa.com.tr/tr/ekonomi/borsa-gunu-dususle-tamamladi/4137729",
-   "what": "BIST 100 endeksi günü yüzde 2,83 düşüşle kapattı; banka hisseleri ortalama yüzde 4,46 değer kaybetti. ABD'de enflasyon verisinin yükselmesi, ABD merkez bankasının faizi artırmaya devam edeceği beklentisini güçlendirdi.",
+   "effect": "down",
    "meaning": "Düşüş şirkete özgü bir kötü haberden değil, küresel ve genel piyasa satışından kaynaklandı; kısa vadede banka hisselerinde dalgalanma artabilir.",
-   "effect": "down"
+   "source": "Anadolu Ajansı",
+   "title": "Borsa sert düştü, en çok bankalar kaybetti",
+   "url": "https://www.aa.com.tr/tr/ekonomi/borsa-gunu-dususle-tamamladi/4137729",
+   "what": "BIST 100 endeksi günü yüzde 2,83 düşüşle kapattı; banka hisseleri ortalama yüzde 4,46 değer kaybetti. ABD'de enflasyon verisinin yükselmesi, ABD merkez bankasının faizi artırmaya devam edeceği beklentisini güçlendirdi."
   }
- ]
+ ],
+ "summary": "Garanti BBVA kendi hisselerini her gün geri almayı sürdürüyor. Hisse bugün banka hisselerindeki genel satışla geriledi."
 }
