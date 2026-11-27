@@ -1,6 +1,1 @@
-{
- "at": "2026-11-26T18:50:00Z",
- "code": "TUPRS",
- "items": [],
- "summary": "Son iki haftada Tüpraş'a özgü önemli bir bildirim yok; hisse bugün piyasayla birlikte %1,65 yükseldi."
-}
+{"code": "TUPRS", "at": "2026-11-27T07:55:00Z", "summary": "Son iki haftada şirkete özgü önemli bir bildirim yok; petrol fiyatlarındaki düşüş ve borsadaki satış fiyatı etkiledi.", "items": [{"title": "Borsa İstanbul'da sert satış: bankalar %4,5 düştü", "date": "2026-11-25", "source": "aposto.com", "url": "https://aposto.com/piyasalar/kapanis/2026-11-25", "what": "BIST 100 endeksi 25 Kasım'da %2,83 düşüşle 10.655,70 puana geriledi; bankacılık endeksi %4,46, sınai endeksi %2,41 kaybetti. Aynı gün dolar/TL 50,67, Brent petrol 94,61 dolardı.", "meaning": "Küresel satış dalgası ve yurt içi belirsizlik en çok banka hisselerini vurdu. Kısa vadede oynaklık yüksek; tek hisseye yoğunlaşmak riskli.", "effect": "down"}]}

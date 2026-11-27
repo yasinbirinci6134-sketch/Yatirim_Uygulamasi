@@ -1,16 +1,1 @@
-{
- "at": "2026-11-25T07:50:00Z",
- "code": "ALARK",
- "items": [
-  {
-   "date": "2026-11-13",
-   "effect": "mixed",
-   "meaning": "İştirak üzerindeki kontrol artıyor; küçük ortaklara zorunlu alım teklifi gelecek.",
-   "source": "Endeks24",
-   "title": "Alarko Carrier alımına rekabet onayı",
-   "url": "https://www.endeks24.com/alarko-holding-alark-alarko-carrier-aliminda-rekabet-kurumu-onayini-aldi",
-   "what": "Alarko Holding, Carrier'ın Alarko Carrier'daki %42 payını 16,8 milyon dolara alması için Rekabet Kurumu onayını aldı. Pay %84'e çıkacak."
-  }
- ],
- "summary": "Alarko Carrier'daki ortağın payını satın alma işlemine rekabet onayı çıktı. Çeyrek kârı düştü; enerji kolundaki zarar ve borç seviyesi izlenmeli."
-}
+{"code": "ALARK", "at": "2026-11-27T07:55:00Z", "summary": "Şirket, Alarko Carrier'daki payını artırmak için Rekabet Kurumu onayı aldı.", "items": [{"title": "Finansal Duran Varlık Edinimi: Alarko Carrier payı için Rekabet Kurumu onayı", "date": "2026-11-13", "source": "KAP (getmidas/ekofin)", "url": "https://www.getmidas.com/canli-borsa/alark-hisse/haber/", "what": "Alarko Holding, Carrier HVACR Investment B.V.'nin elindeki %42,03'lük Alarko Carrier payını satın almak için Rekabet Kurumu onayını aldı. Holdingin payı %84,06'ya çıkacak.", "meaning": "Kârlı bir iştirakin neredeyse tamamı holdingin olacak. Ancak bu alım zorunlu pay alım teklifi ve nakit çıkışı da getiriyor.", "effect": "mixed"}]}
